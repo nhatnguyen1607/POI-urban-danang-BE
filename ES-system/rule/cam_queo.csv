@@ -1,0 +1,61 @@
+﻿STT,Loại cấm,Đang đi trên đường,Cấm rẽ vào đường
+1,Cấm quẹo phải,Đường Minh Mạng,Đường Lê Văn Hiến
+2,Cấm quẹo phải,Đường Lê Văn Hiến,Đường Minh Mạng
+3,Cấm quẹo phải,Đường Trần Hưng Đạo,Đường không tên
+4,Cấm quay đầu,Đường Tránh Nam Hải Vân-Túy Loan,Đường Tránh Nam Hải Vân-Túy Loan
+5,Cấm quẹo phải,Đường Nguyễn Hữu Thọ,Đường Trịnh Đình Thảo
+6,Cấm quẹo phải,Đường Trịnh Đình Thảo,Đường Nguyễn Hữu Thọ
+7,Cấm quẹo phải,Đường Nguyễn Hữu Thọ,Đường Lê Đại Hành
+8,Cấm quẹo phải,Đường Lê Đại Hành,Đường Nguyễn Hữu Thọ
+9,Cấm quay đầu,Đường Nguyễn Trung Trực,Đường Bùi Dương Lịch
+10,Cấm quẹo phải,Đường Lê Đức Thọ,Đường Yết Kiêu
+11,Cấm quẹo phải,Đường Yết Kiêu,Đường Lê Đức Thọ
+12,Cấm quẹo phải,Đường Yết Kiêu,Đường Lê Đức Thọ
+13,Cấm quẹo phải,Đường Lê Đức Thọ,Đường Yết Kiêu
+14,Cấm quay đầu,Đường Lý Thái Tông,Đường Lý Thái Tông
+15,Cấm quẹo trái,Đường Trần Hưng Đạo,Đường không tên
+16,Cấm quay đầu,Đường Nam Trân,Đường Nam Trân
+17,Cấm quẹo phải,Đường Trần Thị Lý,Đường không tên
+18,Cấm quẹo phải,Đường Hoàng Thị Loan,Đường Nguyễn Sinh Sắc
+19,Cấm quẹo phải,Đường Nguyễn Sinh Sắc,Đường Hoàng Thị Loan
+20,Cấm quẹo phải,Đường Nguyễn Sinh Sắc,Đường Hoàng Thị Loan
+21,Cấm quẹo phải,Đường Hoàng Thị Loan,Đường Nguyễn Sinh Sắc
+22,Cấm quẹo trái,Đường Hoàng Thị Loan,Đường Nguyễn Sinh Sắc
+23,Cấm quay đầu,Đường Xô Viết Nghệ Tĩnh,Đường Xô Viết Nghệ Tĩnh
+24,Cấm quay đầu,Đường không tên,Đường không tên
+25,Cấm quẹo phải,Đường 2 Tháng 9,Đường Núi Thành
+26,Cấm quẹo phải,Cầu vượt Ngã ba Huế,Đường Nguyễn Như Hạnh
+27,Cấm quay đầu,Đường Tôn Đức Thắng,Đường Tôn Đức Thắng
+28,Cấm quay đầu,Đường Tôn Đức Thắng,Đường Tôn Đức Thắng
+29,Cấm quẹo phải,Đường Võ Nguyên Giáp,Đường Hoàng Kế Viêm
+30,Cấm quẹo phải,Đường Lê Văn Hiến,Đường Nguyễn Hữu Cầu
+31,Cấm quẹo phải,Đường Lê Văn Hiến,Đường Nguyễn Đức Thuận
+32,Cấm quẹo phải,Đường Cách Mạng Tháng Tám,Đường không tên
+33,Cấm quẹo phải,Đường Cách Mạng Tháng Tám,Đường không tên
+34,Cấm quẹo phải,Đường Trần Phú,Đường Nguyễn Văn Linh
+35,Cấm quay đầu,Đường Xô Viết Nghệ Tĩnh,Đường Xô Viết Nghệ Tĩnh
+36,Cấm quay đầu,Đường Lê Độ,Đường Lê Độ
+37,Cấm quay đầu,Đường 2 Tháng 9,Đường 2 Tháng 9
+38,Cấm quẹo phải,Nguyễn Lương Bằng,Đường Dâm Thánh 1
+39,N/A,Đường Võ Chí Công,Đường Nguyễn Ân
+40,N/A,Đường Võ Chí Công,Đường 29 Tháng 3
+41,Cấm quẹo phải,Đường không tên,Đường Trường Sơn
+42,Cấm quay đầu,Đường Lê Duẩn,Đường Lê Duẩn
+43,Cấm quay đầu,Đường Lê Duẩn,Đường Lê Duẩn
+44,Cấm quay đầu,Đường Nguyễn Văn Linh,Đường Nguyễn Văn Linh
+45,Chỉ được quẹo phải,Đường không tên,Đường Cao Sơn Pháo
+46,Cấm quẹo phải,Đường Xô Viết Nghệ Tĩnh,Đường Nguyễn Hữu Thọ
+47,Cấm quẹo phải,Đường Nguyễn Hữu Thọ,Đường Xô Viết Nghệ Tĩnh
+48,Cấm quay đầu,Đường Nguyễn Văn Linh,Đường Nguyễn Văn Linh
+49,Cấm quẹo trái,Đường Tôn Đức Thắng,Đường Âu Cơ
+50,Cấm đi thẳng,Đường Vũ Duy Thanh,Đường không tên
+51,Cấm quay đầu,Đường Nguyễn Văn Linh,Đường Nguyễn Văn Linh
+52,N/A,Đường Lý Thái Tổ,Đường Hùng Vương
+53,N/A,Đường Thăng Long,Đường Lê Thanh Nghị
+54,Cấm quẹo trái,Đường Quy Mỹ,Đường Nguyễn Hanh
+55,Cấm quay đầu,Đường Nguyễn Văn Linh,Đường không tên
+56,Cấm quẹo phải,Đường 2 Tháng 9,Đường Nguyễn Văn Linh
+57,Cấm quay đầu,Đường 2 Tháng 9,Đường 2 Tháng 9
+58,Cấm quay đầu,Võ Nguyên Giáp,Võ Nguyên Giáp
+59,Cấm quẹo trái,Võ Nguyên Giáp,Ngô Thì Sĩ
+60,Cấm quẹo trái,Võ Nguyên Giáp,Đường Hoàng Kế Viêm
