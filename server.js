@@ -9,7 +9,11 @@ const { initExpertSystem, findOptimalRoute } = require('./ES-system/expert_syste
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+
+// Parse JSON but skip multipart/form-data (handled by multer)
+app.use(express.json({
+  skip: (req) => req.is('multipart/form-data')
+}));
 
 const upload = multer({ dest: 'uploads/' });
 
