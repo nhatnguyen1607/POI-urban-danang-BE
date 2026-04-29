@@ -17,16 +17,7 @@ try:
     from PIL import Image
     import pandas as pd
 
-    # Add the poi-urban-danang/src directory to sys.path so we can import encoder
-    src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'poi-urban-danang', 'src'))
-    if src_path not in sys.path:
-        sys.path.append(src_path)
-    
-    # We might need to add poi-urban-danang itself if they didn't put encoder in src
-    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'poi-urban-danang'))
-    if root_path not in sys.path:
-        sys.path.append(root_path)
-
+    # Import encoder from local directory (no need to look in ../poi-urban-danang)
     from encoder.multimodal_encoder import MultimodalEncoder
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
