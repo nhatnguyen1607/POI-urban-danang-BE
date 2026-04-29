@@ -15,4 +15,4 @@
 # Đầu tiên chặn tất cả file .pth
 *.pth
 # Sau đó "mở chặn" duy nhất cho file model của version 4
-!/model/v4/models_saved/*.pth
+/model/v4/models_saved/*.pth
