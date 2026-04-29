@@ -11,39 +11,64 @@ parser.add_argument('--image', type=str, default='')
 args = parser.parse_args()
 
 try:
+    print(f"[DEBUG] Loading dependencies...", file=sys.stderr)
+    
     import torch
+    print(f"[DEBUG] PyTorch loaded: {torch.__version__}", file=sys.stderr)
+    
     import torch.nn.functional as F
     from torchvision import transforms
     from PIL import Image
     import pandas as pd
+    
+    print(f"[DEBUG] All base dependencies loaded", file=sys.stderr)
 
     # Import encoder from local directory (no need to look in ../poi-urban-danang)
     from encoder.multimodal_encoder import MultimodalEncoder
+    
+    print(f"[DEBUG] MultimodalEncoder imported successfully", file=sys.stderr)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"[DEBUG] Device: {device}", file=sys.stderr)
     
     # Locate model path based on version
     model_dir = os.path.join(os.path.dirname(__file__), 'model', args.version, 'models_saved')
+    print(f"[DEBUG] Looking for model in: {model_dir}", file=sys.stderr)
+    
     # find the .pth file in this directory
     model_path = None
     if os.path.exists(model_dir):
-        for f in os.listdir(model_dir):
+        files = os.listdir(model_dir)
+        print(f"[DEBUG] Files in model_dir: {files}", file=sys.stderr)
+        for f in files:
             if f.endswith('.pth'):
                 model_path = os.path.join(model_dir, f)
+                print(f"[DEBUG] Found model file: {model_path}", file=sys.stderr)
                 break
+    else:
+        print(f"[DEBUG] Model directory does not exist: {model_dir}", file=sys.stderr)
     
     if not model_path:
         raise Exception(f"No .pth model found in {model_dir}")
 
     # Load data for features
     data_path = os.path.join(os.path.dirname(__file__), 'data', 'poi_data_ggmap.csv')
+    print(f"[DEBUG] Loading data from: {data_path}", file=sys.stderr)
     df = pd.read_csv(data_path, encoding='utf-8')
     all_texts = df['LLM_Input_Text'].fillna('').tolist()
+    print(f"[DEBUG] Loaded {len(all_texts)} POI texts", file=sys.stderr)
 
-    model = MultimodalEncoder().to(device)
+    print(f"[DEBUG] Creating MultimodalEncoder model...", file=sys.stderr)
+    # Extract version number from args (v1, v2, v3, v4 -> 1, 2, 3, 4)
+    version_num = int(args.version.replace('v', '')) if 'v' in args.version else int(args.version)
+    model = MultimodalEncoder(version=version_num).to(device)
+    print(f"[DEBUG] Model created successfully (version={version_num})", file=sys.stderr)
+    
+    print(f"[DEBUG] Loading model weights from {model_path}...", file=sys.stderr)
     state = torch.load(model_path, map_location=device, weights_only=True)
     model.load_state_dict(state, strict=False)
     model.eval()
+    print(f"[DEBUG] Model weights loaded successfully", file=sys.stderr)
 
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -118,9 +143,15 @@ try:
         print(json.dumps(results))
 
 except Exception as e:
+    import traceback
+    error_msg = str(e)
+    tb_str = traceback.format_exc()
+    print(f"[ERROR] {error_msg}", file=sys.stderr)
+    print(f"[TRACEBACK]\n{tb_str}", file=sys.stderr)
+    
     # Fallback to mock data if torch fails or model doesn't exist so frontend still works
     mock_results = [
-        { "id": 1, "name": f"Mock: Khu vực Hải Châu (Version {args.version})", "score": 98.5, "district": "Hải Châu", "lat": 16.071, "lon": 108.245, "desc": "Giả lập: Lỗi khi load PyTorch hoặc Model, hiển thị data giả. Lỗi: " + str(e)[:100] },
-        { "id": 2, "name": "Mock: Khu vực Sơn Trà", "score": 92.1, "district": "Sơn Trà", "lat": 16.035, "lon": 108.225, "desc": "Giả lập do lỗi backend AI..." }
+        { "id": 1, "name": f"Mock: Khu vực Hải Châu (Version {args.version})", "score": 98.5, "district": "Hải Châu", "lat": 16.071, "lon": 108.245, "desc": f"Lỗi model: {error_msg[:150]}" },
+        { "id": 2, "name": "Mock: Khu vực Sơn Trà", "score": 92.1, "district": "Sơn Trà", "lat": 16.035, "lon": 108.225, "desc": "Vui lòng kiểm tra log backend..." }
     ]
     print(json.dumps(mock_results))

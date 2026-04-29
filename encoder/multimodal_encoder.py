@@ -15,14 +15,19 @@ THAY ĐỔI SO VỚI PHIÊN BẢN CŨ:
 
 import os
 from typing import List, Optional, Union
+import sys
 
-import torch
-import torch.nn as nn
-import yaml
-from torchvision import models
-from torchvision.transforms.functional import to_pil_image
-from transformers import CLIPModel, CLIPProcessor
-import torch.nn.functional as F
+try:
+    import torch
+    import torch.nn as nn
+    import yaml
+    from torchvision import models
+    from torchvision.transforms.functional import to_pil_image
+    from transformers import CLIPModel, CLIPProcessor
+    import torch.nn.functional as F
+except ImportError as e:
+    print(f"[ERROR] Import error: {e}", file=sys.stderr)
+    raise
 
 
 # Ánh xạ version → mô tả để in log

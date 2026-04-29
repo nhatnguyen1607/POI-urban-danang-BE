@@ -3,7 +3,7 @@ torch==2.1.2
 torchvision==0.16.2
 
 # Transformers for CLIP
-transformers>=4.30.0
+transformers==4.36.2
 
 # Data Processing
 pandas>=2.0.0
@@ -12,8 +12,10 @@ pandas>=2.0.0
 Pillow>=10.0.0
 
 # Utilities
-numpy>=1.24.0  # Required by torch/torchvision
+numpy>=1.24.0
 
 # YAML for config
 pyyaml>=6.0
+
+
 
