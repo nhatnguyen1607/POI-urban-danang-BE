@@ -10,6 +10,8 @@
 # 3. Chặn các định dạng file nặng không cần thiết (nếu có)
 *.h5
 *.onnx
+*.pycache
+encoder/__pycache__/
 
 # 4. Cấu hình cho Model v4:
 # Đầu tiên chặn tất cả file .pth
