@@ -2,19 +2,12 @@
 /node_modules/
 .env
 
-# 2. Chặn toàn bộ thư mục model_saved của tất cả các version để tiết kiệm dung lượng
-/model/v1/models_saved/
-/model/v2/models_saved/
-/model/v3/models_saved/
+# 2. Chặn toàn bộ thư mục models_saved của tất cả các version
+/model/*/models_saved/
 
-# 3. Chặn các định dạng file nặng không cần thiết (nếu có)
+# 3. Chặn các định dạng file nặng không cần thiết
 *.h5
 *.onnx
+*.pth
 *.pycache
 encoder/__pycache__/
-
-# 4. Cấu hình cho Model v4:
-# Đầu tiên chặn tất cả file .pth
-*.pth
-# Sau đó "mở chặn" duy nhất cho file model của version 4
-/model/v4/models_saved/*.pth
