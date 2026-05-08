@@ -10,6 +10,7 @@ class InferenceEngine {
   }
 
   validateRoute(routeData) {
+    console.log(`\n=================== BẮT ĐẦU ĐÁNH GIÁ LỘ TRÌNH ===================`);
     const currentTime = new Date();
     const steps = routeData.steps || [];
     
@@ -127,11 +128,12 @@ class InferenceEngine {
 
     for (const rule of matchingRules) {
       // Ứng dụng Fuzzy Logic vào đây để đánh giá tuyến đường
-      const fuzzyResult = FuzzyLogic.applyFuzzyTimeRestriction(rule, currentTime);
+      const fuzzyResult = FuzzyLogic.applyFuzzyTimeRestriction(rule, currentTime, segment.roadName, this.reteNetwork);
       if (fuzzyResult.fuzzyLabel) {
         fuzzyInsights.push({
           road: segment.roadName,
           label: fuzzyResult.fuzzyLabel,
+          score: fuzzyResult.score,
         });
       }
 

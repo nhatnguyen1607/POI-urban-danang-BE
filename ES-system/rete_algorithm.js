@@ -14,24 +14,54 @@ class ReteNetwork {
       timeRestrictions: new Map(), // roadName -> rule[]
       oneWayStreets: new Map(),    // roadName -> rule[]
     };
+    this.roadProfiles = new Map(); // Thêm bộ nhớ mới
     this.loaded = false;
   }
 
   async load() {
     const ruleDir = path.join(__dirname, 'rule');
 
-    const [turnRules, timeRules, oneWayRules] = await Promise.all([
+    const [turnRules, timeRules, oneWayRules, profiles] = await Promise.all([
       this._readCSV(path.join(ruleDir, 'cam_queo.csv')),
       this._readCSV(path.join(ruleDir, 'cam_theo_gio.csv')),
       this._readCSV(path.join(ruleDir, 'duong_1_chieu.csv')),
+      this._readCSV(path.join(ruleDir, 'road_profiles.csv')).catch(() => []) // Catch error if file doesn't exist
     ]);
 
     this._buildTurnNetwork(turnRules);
     this._buildTimeNetwork(timeRules);
     this._buildOneWayNetwork(oneWayRules);
+    this.loadRoadProfiles(profiles);
 
     this.loaded = true;
     console.log(`[ES] Rete Network compiled! Rules indexed for fast matching.`);
+  }
+
+  loadRoadProfiles(profiles) {
+    if (!profiles || profiles.length === 0) return;
+    profiles.forEach(row => {
+      // segment_id có thể là ID đoạn đường hoặc Tên đường
+      const key = this._normalizeRoadName(row.segment_id);
+      this.roadProfiles.set(key, {
+        peak_1_start: parseFloat(row.peak_1_start),
+        peak_1_end: parseFloat(row.peak_1_end),
+        peak_2_start: parseFloat(row.peak_2_start),
+        peak_2_end: parseFloat(row.peak_2_end),
+        density_level: row.density_level
+      });
+    });
+  }
+
+  getProfile(segmentId) {
+    const defaultProfile = { peak_1_start: 7.0, peak_1_end: 8.5, peak_2_start: 17.0, peak_2_end: 18.5, density_level: 'Low' };
+    if (!segmentId) return defaultProfile;
+    
+    // Tìm kiếm mờ (fuzzy match) trên tên đường
+    const keys = this._findFuzzyKeys(segmentId, this.roadProfiles.keys());
+    if (keys.length > 0) {
+        return this.roadProfiles.get(keys[0]);
+    }
+    return defaultProfile;
   }
 
   _buildTurnNetwork(turnRules) {
