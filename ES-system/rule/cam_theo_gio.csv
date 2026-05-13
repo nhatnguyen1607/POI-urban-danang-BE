@@ -1,0 +1,22 @@
+﻿STT,Tên đường,Khung giờ,Loại cấm
+1,Đường Võ Nguyên Giáp,"05:00- 07:00,16:00 - 20:00",Tốc độ tối đa 40 km/h
+2,Đường Phan Văn Định,"06:30-08:30,16:30-18:30",Tải trọng tối đa 2.5 tấn
+3,Đường Lý Nam Đế,18:00-23:59,Cấm xe cơ giới
+4,Đường Tôn Đức Thắng,06:30-08:30 AND 16:30-18:30,Cấm xe tải
+5,Cầu vượt Ngã ba Huế,"06:30-08:30,16:00-19:00",Tải trọng tối đa 2.5 tấn
+6,Đường Điện Biên Phủ,"06:30-08:30,16:00-19:00",Tải trọng tối đa 2.5 tấn
+7,Đường Vũ Trọng Hoàng,06:30-08:30 AND 16:30-18:30,Cấm xe tải
+8,Đường Đống Đa,"06:30-08:30,16:00-19:00",Tải trọng tối đa 2.5 tấn
+9,Đường Đống Đa,17:00-18:30,Cấm xe khách/xe buýt
+10,Ngô Quyền,16:30-20:00,Cấm xe tải
+11,Võ Nguyên Giáp,05:00- 07:00,Tốc độ tối đa 40 km/h
+12,Đường Ngô Quyền,16:30-20:00,Cấm xe tải
+13,Đường Trường Sa,"05:00- 07:00,16:00 - 20:00",Tốc độ tối đa 40 km/h
+14,Đường Núi Thành,"06:00-07:30,16:00-17:30",Tải trọng tối đa 2.5 tấn
+15,Võ Nguyên Giáp,"05:00- 07:00,16:00 - 20:00",Tốc độ tối đa 40 km/h
+16,Đường Nguyễn Lương Bằng,"06:30-08:30,16:30-18:30",Cấm xe tải
+17,Đường Nguyễn Lương Bằng,"06:30-8:30, 16:30-18:30",Cấm xe tải
+18,Hầm chui Điện Biên Phủ,"06:30-08:30,16:00-19:00",Tải trọng tối đa 2.5 tấn
+19,Đường Hà Huy Tập,"06:30-08:30,16:00-19:00",Tải trọng tối đa 2.5 tấn
+20,Cầu Thuận Phước,weight > 1,Cấm xe tải
+21,Phan Văn Định,"06:30-08:30,16:30-18:30",Tải trọng tối đa 2.5 tấn

@@ -1,0 +1,7 @@
+model/**/*.pth filter=lfs diff=lfs merge=lfs -text
+data/*.csv filter=lfs diff=lfs merge=lfs -text
+**/*.png filter=lfs diff=lfs merge=lfs -text
+**/*.jpg filter=lfs diff=lfs merge=lfs -text
+**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+**/*.pth filter=lfs diff=lfs merge=lfs -text
+model/v4/models_saved/*.pth filter=lfs diff=lfs merge=lfs -text

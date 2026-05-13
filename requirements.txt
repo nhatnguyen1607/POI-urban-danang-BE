@@ -1,0 +1,21 @@
+# Utilities (install first, before torch)
+numpy==1.24.3
+
+# PyTorch and Computer Vision
+torch==2.1.2
+torchvision==0.16.2
+
+# Transformers for CLIP
+transformers==4.36.2
+
+# Data Processing
+pandas>=2.0.0
+
+# Image Processing
+Pillow>=10.0.0
+
+# YAML for config
+pyyaml>=6.0
+
+
+

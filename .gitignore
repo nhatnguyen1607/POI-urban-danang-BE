@@ -1,0 +1,14 @@
+# 1. Chặn các thư mục thư viện và file build
+/node_modules/
+.env
+
+# 2. Chặn toàn bộ thư mục models_saved của v1, v2, v3 nhưng giữ v4
+/model/v1/models_saved/
+/model/v2/models_saved/
+/model/v3/models_saved/
+
+# 3. Chặn các định dạng file nặng không cần thiết (trừ v4 models)
+*.h5
+*.onnx
+*.pycache
+encoder/__pycache__/

@@ -1,0 +1,4 @@
+model:
+  embed_dim: 64
+  clip_model: "openai/clip-vit-base-patch32"
+  resnet_model: "resnet50"
