@@ -49,19 +49,23 @@ class FuzzyLogic {
     const r4 = Math.min(muPeakHour, muPoiMedium);                   // Cao điểm + POI vừa → VỪA
     const r5 = Math.min(1 - muPeakHour, muPoiHigh, muRainHeavy);    // Ngoài giờ + POI cao + Mưa to → CAO
     const r6 = Math.min(1 - muPeakHour, muPoiHigh);                 // Ngoài giờ + POI cao → VỪA
-    const r7 = Math.min(muPeakHour, muPoiLow);                      // Cao điểm + POI thấp → VỪA-THẤP
+    const r7 = Math.min(muPeakHour, muPoiLow);                      // Cao điểm + POI thấp → VỪA (do mật độ thấp nhưng rơi vào cao điểm)
     const r8 = Math.min(1 - muPeakHour, muPoiLow);                  // Ngoài giờ + POI thấp → THẤP
+    const r9 = Math.min(1 - muPeakHour, muPoiMedium);               // Ngoài giờ + POI vừa → THẤP
 
     // Aggregation: gộp kết quả luật theo mức output
     const muOutHigh   = Math.max(r1, r2, r3, r5);
     const muOutMedium = Math.max(r4, r6, r7);
-    const muOutLow    = r8;
+    const muOutLow    = Math.max(r8, r9);
 
     // ===== PHI MỜ HÓA (Centroid Defuzzification) =====
     const defuzzifiedValue = this.defuzzifyCentroid(muOutLow, muOutMedium, muOutHigh);
 
     // Log debug
-    console.log(`\n--- [MỜ HOÁ] ${segmentId} | POI: ${poiDensity} | Loại: ${roadClass} ---`);
+    const classMap = { 'primary': 'Trục chính/Quốc lộ', 'secondary': 'Đường nội thành', 'residential': 'Đường dân cư' };
+    const classVn = classMap[roadClass] || roadClass;
+
+    console.log(`\n--- [MỜ HOÁ] ${segmentId} | POI: ${poiDensity} | Loại: ${classVn} ---`);
     console.log(`  Giờ: ${hour.toFixed(2)}H | Mưa: ${rain}mm | μPeak=${muPeakHour.toFixed(2)} μPOI_H=${muPoiHigh.toFixed(2)} μRain_H=${muRainHeavy.toFixed(2)} → Điểm: ${defuzzifiedValue.toFixed(1)}/100`);
 
     // Kết luận

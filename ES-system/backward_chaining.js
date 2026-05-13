@@ -128,7 +128,7 @@ class InferenceEngine {
       const bearingDiff = Math.abs(allowedBearing - segmentBearing);
       const normalizedDiff = bearingDiff > 180 ? 360 - bearingDiff : bearingDiff;
 
-      console.log(`[ONE_WAY DEBUG] ${segment.roadName}: allowed=${allowedBearing.toFixed(1)} segment=${segmentBearing.toFixed(1)} diff=${normalizedDiff.toFixed(1)} dist=${segment.distance}m`);
+      // console.log(`[ONE_WAY DEBUG] ${segment.roadName}: allowed=${allowedBearing.toFixed(1)} segment=${segmentBearing.toFixed(1)} diff=${normalizedDiff.toFixed(1)} dist=${segment.distance}m`);
 
       if (normalizedDiff <= 90) {
         // Có đoạn one-way cùng hướng → xe đang ở làn đúng
