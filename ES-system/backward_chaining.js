@@ -5,8 +5,9 @@ const FuzzyLogic = require('./fuzzy_logic');
 // ============================================================================
 
 class InferenceEngine {
-  constructor(reteNetwork) {
+  constructor(reteNetwork, poiEngine) {
     this.reteNetwork = reteNetwork;
+    this.poiEngine = poiEngine;
   }
 
   validateRoute(routeData, weather) {
@@ -41,8 +42,8 @@ class InferenceEngine {
         }
       }
 
-      // 2. Time restrictions + Fuzzy Logic
-      const timeResult = this._checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights, weather);
+      // 2. Time restrictions (crisp rules only)
+      const timeResult = this._checkTimeRestriction(segment, currentTime, ruleTrace);
       if (timeResult) {
         const key = `time:${timeResult.road}`;
         if (!warnedKeys.has(key)) {
@@ -61,6 +62,21 @@ class InferenceEngine {
             warnings.push(turnResult);
           }
         }
+      }
+
+      // 4. Fuzzy Logic đa biến — đánh giá MỌI đoạn đường
+      const fuzzyKey = `fuzzy:${segment.roadName}`;
+      if (!warnedKeys.has(fuzzyKey)) {
+        warnedKeys.add(fuzzyKey);
+        const poiDensity = this.poiEngine.getDensity(segment.roadName, segment.startLat, segment.startLng);
+        const trafficEval = FuzzyLogic.evaluateTrafficCondition(
+          currentTime, segment.roadName, poiDensity, weather, segment.roadClass
+        );
+        fuzzyInsights.push({
+          road: segment.roadName,
+          label: trafficEval.label,
+          score: trafficEval.score,
+        });
       }
     }
 
@@ -141,7 +157,7 @@ class InferenceEngine {
     return null;
   }
 
-  _checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights, weather) {
+  _checkTimeRestriction(segment, currentTime, ruleTrace) {
     if (!segment.roadName) return null;
 
     const matchingRules = this.reteNetwork.matchTimeRestriction(segment.roadName);
@@ -155,16 +171,6 @@ class InferenceEngine {
     const currentMinutes = hour * 60 + minute;
 
     for (const rule of matchingRules) {
-      // Ứng dụng Fuzzy Logic vào đây để đánh giá tuyến đường
-      const fuzzyResult = FuzzyLogic.applyFuzzyTimeRestriction(rule, currentTime, segment.roadName, this.reteNetwork, weather);
-      if (fuzzyResult.fuzzyLabel) {
-        fuzzyInsights.push({
-          road: segment.roadName,
-          label: fuzzyResult.fuzzyLabel,
-          score: fuzzyResult.score,
-        });
-      }
-
       // Luật crisp cho cấm cứng
       for (const range of rule.timeRanges) {
         const startMinutes = range.startHour * 60 + range.startMin;
@@ -217,11 +223,33 @@ class InferenceEngine {
       roadName: step.name,
       distance: step.distance || 0,
       bearingAfter: step.maneuver?.bearing_after != null ? step.maneuver.bearing_after : null,
+      roadClass: this._inferRoadClass(step),
       startLat: step.maneuver?.location?.[1] || 0,
       startLng: step.maneuver?.location?.[0] || 0,
       endLat: step.intersections?.[step.intersections.length - 1]?.location?.[1] || step.maneuver?.location?.[1] || 0,
       endLng: step.intersections?.[step.intersections.length - 1]?.location?.[0] || step.maneuver?.location?.[0] || 0,
     }));
+  }
+
+  /** Suy luận loại đường từ OSRM metadata (Graceful Degradation) */
+  _inferRoadClass(step) {
+    // 1. Kiểm tra ref (QL1A, ĐT602...)
+    const ref = (step.ref || '').toUpperCase();
+    if (ref.includes('QL') || ref.includes('AH')) return 'primary';
+    if (ref.includes('ĐT') || ref.includes('DT')) return 'secondary';
+
+    // 2. Kiểm tra intersections classes (nếu OSRM cung cấp)
+    const classes = step.intersections?.[0]?.classes || [];
+    if (classes.includes('motorway') || classes.includes('trunk') || classes.includes('primary')) return 'primary';
+    if (classes.includes('secondary') || classes.includes('tertiary')) return 'secondary';
+    if (classes.includes('residential') || classes.includes('service')) return 'residential';
+
+    // 3. Suy luận từ tên đường
+    const name = (step.name || '').toLowerCase();
+    if (name.includes('đại lộ') || name.includes('quốc lộ')) return 'primary';
+    if (name.includes('cầu') || name.includes('hầm chui')) return 'primary';
+
+    return 'secondary'; // Mặc định cho đường nội thành có tên
   }
 
   _isSegmentNearOneWayRule(segment, rule) {

@@ -1,6 +1,7 @@
 const ReteNetwork = require('./rete_algorithm');
 const InferenceEngine = require('./backward_chaining');
 const FuzzyLogic = require('./fuzzy_logic');
+const POIDensityEngine = require('./poi_density_engine');
 const { fetchWeatherData } = require('./weather_service');
 
 // ============================================================================
@@ -8,19 +9,25 @@ const { fetchWeatherData } = require('./weather_service');
 //  Tích hợp:
 //  - Backward Chaining (Suy diễn lùi)
 //  - Rete Algorithm (Mạng lưới lưu trữ nhanh)
-//  - Fuzzy Logic (Lập luận mờ)
+//  - Fuzzy Logic đa biến (Lập luận mờ: Giờ + POI + Thời tiết)
+//  - POI Density Engine (Suy luận mật độ từ dữ liệu)
 // ============================================================================
 
 // Singleton
 const reteNetwork = new ReteNetwork();
-const engine = new InferenceEngine(reteNetwork);
+const poiEngine = new POIDensityEngine();
+let engine = null;
 
 /**
  * Initialize the Expert System (call once at server startup)
  */
 async function initExpertSystem() {
-  await reteNetwork.load();
-  return { reteNetwork, engine, FuzzyLogic };
+  await Promise.all([
+    reteNetwork.load(),
+    poiEngine.load(),
+  ]);
+  engine = new InferenceEngine(reteNetwork, poiEngine);
+  return { reteNetwork, engine, FuzzyLogic, poiEngine };
 }
 
 /**
@@ -142,5 +149,6 @@ module.exports = {
   findOptimalRoute,
   ReteNetwork,
   InferenceEngine,
-  FuzzyLogic
+  FuzzyLogic,
+  POIDensityEngine
 };
