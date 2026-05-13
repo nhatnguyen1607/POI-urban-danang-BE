@@ -1,0 +1,13 @@
+# 1. Chặn các thư mục thư viện và file build
+/node_modules/
+.env
+
+# 2. Chặn toàn bộ thư mục models_saved (chứa .pth) nhưng giữ reports
+/model/*/models_saved/
+
+# 3. Chặn các định dạng file nặng không cần thiết (trừ reports)
+*.h5
+*.onnx
+*.pth
+*.pycache
+encoder/__pycache__/
