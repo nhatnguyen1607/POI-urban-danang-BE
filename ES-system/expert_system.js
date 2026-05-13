@@ -1,6 +1,7 @@
 const ReteNetwork = require('./rete_algorithm');
 const InferenceEngine = require('./backward_chaining');
 const FuzzyLogic = require('./fuzzy_logic');
+const { fetchWeatherData } = require('./weather_service');
 
 // ============================================================================
 //  HỆ CHUYÊN GIA TỔNG HỢP (Expert System Facade)
@@ -61,12 +62,14 @@ async function findOptimalRoute(originLat, originLng, destLat, destLng) {
     await reteNetwork.load();
   }
 
+  const weather = await fetchWeatherData(originLat, originLng); // Lấy thời tiết tại điểm đi
+
   // Step 1: Fetch multiple real routes from OSRM
   const routesData = await fetchOSRMRoute(originLat, originLng, destLat, destLng);
 
   // Step 2 & 3: Run backward chaining inference engine on all alternatives and build response
   const processedRoutes = routesData.map(routeData => {
-    const esResult = engine.validateRoute(routeData);
+    const esResult = engine.validateRoute(routeData, weather);
     const steps = routeData.steps
       .filter(s => s.name && s.distance > 0)
       .map(s => ({

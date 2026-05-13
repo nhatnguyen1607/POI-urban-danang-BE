@@ -7,11 +7,16 @@ class FuzzyLogic {
    * Đánh giá mức độ ùn tắc hiện tại trên đoạn đường
    * Output: "Khu vực hơi đông", "Khả năng kẹt xe cao", "Bình thường"
    */
-  static evaluateTrafficCondition(currentTime, segmentId, reteNetwork, restrictionType = '') {
+  static evaluateTrafficCondition(currentTime, segmentId, reteNetwork, restrictionType = '', weatherData = { rain_1h: 0 }) {
     const hour = currentTime.getHours() + currentTime.getMinutes() / 60;
     
     // 1. Xin Rete Network thông tin POI của đoạn đường này
     const profile = reteNetwork.getProfile(segmentId);
+    const rain = weatherData.rain_1h;
+
+    // Tính độ mờ thời tiết
+    const muRainLight = this.degreeOfMembership(rain, 0, 0, 2, 5);
+    const muRainHeavy = this.degreeOfMembership(rain, 2, 5, 50, 100);
     
     let rushDegree = 0;
 
@@ -44,18 +49,22 @@ class FuzzyLogic {
         rushDegree = rawRushDegree; // High
     }
     
+    // Kết hợp các biến: Thời tiết ảnh hưởng thêm đến mức độ kẹt xe
+    let weatherImpact = muRainHeavy * 0.4 + muRainLight * 0.1;
+    let finalRushDegree = Math.min(1.0, rushDegree + weatherImpact);
+
     // 3. Phi mờ hóa (Defuzzification) - Tính trọng tâm
     // Giả sử có 3 mức độ kẹt xe: Thấp (0-40), Vừa (20-80), Cao (60-100)
-    // Ta lấy degree của từng mức dựa trên rushDegree tổng
-    const muHigh = Math.max(0, rushDegree - 0.5) * 2; 
-    const muMedium = rushDegree > 0.3 && rushDegree <= 0.75 ? 1 : (rushDegree > 0.75 ? 1 - (rushDegree-0.75)*4 : rushDegree * 3);
-    const muLow = Math.max(0, 1 - rushDegree * 2);
+    // Ta lấy degree của từng mức dựa trên finalRushDegree tổng
+    const muHigh = Math.max(0, finalRushDegree - 0.5) * 2; 
+    const muMedium = finalRushDegree > 0.3 && finalRushDegree <= 0.75 ? 1 : (finalRushDegree > 0.75 ? 1 - (finalRushDegree-0.75)*4 : finalRushDegree * 3);
+    const muLow = Math.max(0, 1 - finalRushDegree * 2);
     
     const defuzzifiedValue = this.defuzzifyCentroid(muLow, muMedium, muHigh);
 
     // In giá trị mờ hóa và phi mờ hóa ra console với format dễ nhìn
     console.log(`\n--- [MỜ HOÁ] Đoạn đường: ${segmentId} (${profile.density_level}) ---`);
-    console.log(`Giờ: ${hour.toFixed(2)}H | Độ kẹt (Rush): ${rushDegree.toFixed(2)} | Điểm trọng tâm: ${defuzzifiedValue.toFixed(1)}/100`);
+    console.log(`Giờ: ${hour.toFixed(2)}H | Mưa: ${rain}mm | Độ kẹt (Rush): ${finalRushDegree.toFixed(2)} | Điểm trọng tâm: ${defuzzifiedValue.toFixed(1)}/100`);
 
     // 4. Kết luận
     if (defuzzifiedValue > 70) {
@@ -107,8 +116,8 @@ class FuzzyLogic {
   /**
    * Tính toán và đưa ra kết luận mờ dựa trên luật cấm
    */
-  static applyFuzzyTimeRestriction(rule, currentTime, segmentId, reteNetwork) {
-    const trafficEval = this.evaluateTrafficCondition(currentTime, segmentId, reteNetwork, rule.restrictionType);
+  static applyFuzzyTimeRestriction(rule, currentTime, segmentId, reteNetwork, weatherData) {
+    const trafficEval = this.evaluateTrafficCondition(currentTime, segmentId, reteNetwork, rule.restrictionType, weatherData);
     return {
       warning: true,
       fuzzyLabel: trafficEval.label,

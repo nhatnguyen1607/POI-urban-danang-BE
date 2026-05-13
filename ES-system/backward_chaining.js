@@ -9,7 +9,7 @@ class InferenceEngine {
     this.reteNetwork = reteNetwork;
   }
 
-  validateRoute(routeData) {
+  validateRoute(routeData, weather) {
     console.log(`\n=================== BẮT ĐẦU ĐÁNH GIÁ LỘ TRÌNH ===================`);
     const currentTime = new Date();
     const steps = routeData.steps || [];
@@ -42,7 +42,7 @@ class InferenceEngine {
       }
 
       // 2. Time restrictions + Fuzzy Logic
-      const timeResult = this._checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights);
+      const timeResult = this._checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights, weather);
       if (timeResult) {
         const key = `time:${timeResult.road}`;
         if (!warnedKeys.has(key)) {
@@ -87,19 +87,41 @@ class InferenceEngine {
       return null;
     }
 
+    if (segment.distance < 15) {
+      ruleTrace.push({ step: 'CHECK_ONE_WAY', road: segment.roadName, result: true, description: `✓ ${segment.roadName}: Bỏ qua kiểm tra ngược chiều (đoạn chuyển tiếp quá ngắn: ${segment.distance}m)` });
+      return null;
+    }
+
+    // Kiểm tra TẤT CẢ các đoạn one-way gần đó
+    // Trên đường chia dải (divided highway), mỗi làn là 1 đoạn one-way riêng
+    // Nếu CÓ bất kỳ đoạn nào cùng hướng → xe đang ở làn đúng → OK
+    let hasMatchingDirection = false;
+    let worstViolation = null;
+
     for (const rule of matchingRules) {
       const isNearby = this._isSegmentNearOneWayRule(segment, rule);
       if (!isNearby) continue;
 
       const allowedBearing = this._bearing(rule.startLat, rule.startLng, rule.endLat, rule.endLng);
-      const segmentBearing = this._bearing(segment.startLat, segment.startLng, segment.endLat, segment.endLng);
+      
+      // Ưu tiên dùng bearing_after từ OSRM (hướng đi thực tế sau khi rẽ)
+      const segmentBearing = segment.bearingAfter != null
+        ? segment.bearingAfter
+        : this._bearing(segment.startLat, segment.startLng, segment.endLat, segment.endLng);
       
       const bearingDiff = Math.abs(allowedBearing - segmentBearing);
       const normalizedDiff = bearingDiff > 180 ? 360 - bearingDiff : bearingDiff;
 
-      if (normalizedDiff > 120) {
-        ruleTrace.push({ step: 'CHECK_ONE_WAY', road: segment.roadName, result: false, description: `✗ ${segment.roadName}: Đi ngược chiều đường một chiều!` });
-        return {
+      console.log(`[ONE_WAY DEBUG] ${segment.roadName}: allowed=${allowedBearing.toFixed(1)} segment=${segmentBearing.toFixed(1)} diff=${normalizedDiff.toFixed(1)} dist=${segment.distance}m`);
+
+      if (normalizedDiff <= 90) {
+        // Có đoạn one-way cùng hướng → xe đang ở làn đúng
+        hasMatchingDirection = true;
+        break;
+      }
+
+      if (normalizedDiff > 150 && !worstViolation) {
+        worstViolation = {
           type: 'ONE_WAY_VIOLATION',
           severity: 'high',
           road: segment.roadName,
@@ -108,12 +130,18 @@ class InferenceEngine {
         };
       }
     }
+
+    // Chỉ báo lỗi nếu KHÔNG có đoạn nào cùng hướng
+    if (!hasMatchingDirection && worstViolation) {
+      ruleTrace.push({ step: 'CHECK_ONE_WAY', road: segment.roadName, result: false, description: `✗ ${segment.roadName}: Đi ngược chiều đường một chiều!` });
+      return worstViolation;
+    }
     
     ruleTrace.push({ step: 'CHECK_ONE_WAY', road: segment.roadName, result: true, description: `✓ ${segment.roadName}: Đi đúng hướng đường một chiều` });
     return null;
   }
 
-  _checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights) {
+  _checkTimeRestriction(segment, currentTime, ruleTrace, fuzzyInsights, weather) {
     if (!segment.roadName) return null;
 
     const matchingRules = this.reteNetwork.matchTimeRestriction(segment.roadName);
@@ -128,7 +156,7 @@ class InferenceEngine {
 
     for (const rule of matchingRules) {
       // Ứng dụng Fuzzy Logic vào đây để đánh giá tuyến đường
-      const fuzzyResult = FuzzyLogic.applyFuzzyTimeRestriction(rule, currentTime, segment.roadName, this.reteNetwork);
+      const fuzzyResult = FuzzyLogic.applyFuzzyTimeRestriction(rule, currentTime, segment.roadName, this.reteNetwork, weather);
       if (fuzzyResult.fuzzyLabel) {
         fuzzyInsights.push({
           road: segment.roadName,
@@ -187,6 +215,8 @@ class InferenceEngine {
   _extractSegments(steps) {
     return steps.filter(step => step.name && step.name.trim() !== '').map(step => ({
       roadName: step.name,
+      distance: step.distance || 0,
+      bearingAfter: step.maneuver?.bearing_after != null ? step.maneuver.bearing_after : null,
       startLat: step.maneuver?.location?.[1] || 0,
       startLng: step.maneuver?.location?.[0] || 0,
       endLat: step.intersections?.[step.intersections.length - 1]?.location?.[1] || step.maneuver?.location?.[1] || 0,
