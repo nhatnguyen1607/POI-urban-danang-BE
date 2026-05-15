@@ -2,9 +2,6 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
 
-// ============================================================================
-//  RETE ALGORITHM - Nhanh chóng khớp mẫu thông qua Mạng lưới bộ nhớ
-// ============================================================================
 
 class ReteNetwork {
   constructor() {

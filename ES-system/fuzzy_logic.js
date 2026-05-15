@@ -7,20 +7,11 @@
 // ============================================================================
 
 class FuzzyLogic {
-  /**
-   * Đánh giá mức độ ùn tắc bằng hệ mờ đa biến
-   * @param {Date} currentTime
-   * @param {string} segmentId - Tên đoạn đường
-   * @param {number} poiDensity - Số lượng POI thực tế (giá trị liên tục)
-   * @param {Object} weatherData - { rain_1h: number }
-   * @param {string} roadClass - 'primary' | 'secondary' | 'residential'
-   */
   static evaluateTrafficCondition(currentTime, segmentId, poiDensity, weatherData = { rain_1h: 0 }, roadClass = 'secondary') {
     const hour = currentTime.getHours() + currentTime.getMinutes() / 60;
     const rain = weatherData.rain_1h;
 
     // ===== BIẾN ĐẦU VÀO 1: Giờ cao điểm (Peak Hour) =====
-    // Khung giờ được suy luận từ loại đường (OSRM metadata)
     const peak = this._getPeakConfig(roadClass);
 
     const peak1Degree = this.degreeOfMembership(hour,
@@ -39,7 +30,7 @@ class FuzzyLogic {
 
     // ===== BIẾN ĐẦU VÀO 3: Thời tiết (Weather) =====
     const muRainLight = this.degreeOfMembership(rain, 0, 0, 2, 5);
-    const muRainHeavy = this.degreeOfMembership(rain, 2, 5, 50, 100);
+    const muRainHeavy = this.degreeOfMembership(rain, 2, 5, 50, 100); 
 
     // ===== LUẬT MỜ TỔNG HỢP (Fuzzy Rule Base) =====
     // Toán tử AND = MIN, OR = MAX (Mamdani)
@@ -61,14 +52,12 @@ class FuzzyLogic {
     // ===== PHI MỜ HÓA (Centroid Defuzzification) =====
     const defuzzifiedValue = this.defuzzifyCentroid(muOutLow, muOutMedium, muOutHigh);
 
-    // Log debug
     const classMap = { 'primary': 'Trục chính/Quốc lộ', 'secondary': 'Đường nội thành', 'residential': 'Đường dân cư' };
     const classVn = classMap[roadClass] || roadClass;
 
     console.log(`\n--- [MỜ HOÁ] ${segmentId} | POI: ${poiDensity} | Loại: ${classVn} ---`);
-    console.log(`  Giờ: ${hour.toFixed(2)}H | Mưa: ${rain}mm | μPeak=${muPeakHour.toFixed(2)} μPOI_H=${muPoiHigh.toFixed(2)} μRain_H=${muRainHeavy.toFixed(2)} → Điểm: ${defuzzifiedValue.toFixed(1)}/100`);
+    console.log(`  Giờ: ${hour.toFixed(2)}H | Mưa: ${rain}mm | μPeak=${muPeakHour.toFixed(2)} | μPOI(L,M,H)=${muPoiLow.toFixed(2)},${muPoiMedium.toFixed(2)},${muPoiHigh.toFixed(2)} | μRain(L,H)=${muRainLight.toFixed(2)},${muRainHeavy.toFixed(2)} → Điểm: ${defuzzifiedValue.toFixed(1)}/100`);
 
-    // Kết luận
     if (defuzzifiedValue > 70) {
       return { level: 'cao', label: `Khả năng kẹt xe cao (${poiDensity} POI khu vực)`, score: defuzzifiedValue };
     } else if (defuzzifiedValue > 30) {
@@ -78,7 +67,6 @@ class FuzzyLogic {
   }
 
   /**
-   * Suy luận khung giờ cao điểm theo loại đường (Graceful Degradation)
    * primary (QL, trục chính): cao điểm dài, traffic cao
    * secondary (đường nội thành): cao điểm chuẩn
    * residential (đường dân cư): cao điểm ngắn
@@ -94,14 +82,11 @@ class FuzzyLogic {
     }
   }
 
-  /**
-   * Tính trọng tâm (Centroid Defuzzification)
-   */
   static defuzzifyCentroid(degreeLow, degreeMedium, degreeHigh) {
     let numerator = 0;
     let denominator = 0;
     
-    for (let x = 0; x <= 100; x += 5) {
+    for (let x = 0; x <= 100; x += 1) {
       const outLow = this.degreeOfMembership(x, -20, 0, 20, 40);
       const outMedium = this.degreeOfMembership(x, 20, 40, 60, 80);
       const outHigh = this.degreeOfMembership(x, 60, 80, 100, 120);
@@ -120,9 +105,6 @@ class FuzzyLogic {
     return numerator / denominator;
   }
 
-  /**
-   * Hàm thành viên hình thang mờ (Trapezoidal Membership Function)
-   */
   static degreeOfMembership(x, a, b, c, d) {
     if (x <= a || x >= d) return 0;
     if (x >= b && x <= c) return 1;

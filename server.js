@@ -135,9 +135,12 @@ app.post('/api/recommend', upload.single('image'), (req, res) => {
 
   const scriptPath = path.join(__dirname, 'inference.py');
 
-  const pythonExecutable = fs.existsSync(path.resolve(__dirname, '../poi-urban-danang/.venv/Scripts/python.exe'))
-    ? path.resolve(__dirname, '../poi-urban-danang/.venv/Scripts/python.exe')
-    : 'python';
+  const localVenv = path.join(__dirname, 'venv', 'Scripts', 'python.exe');
+  const externalVenv = path.resolve(__dirname, '../poi-urban-danang/.venv/Scripts/python.exe');
+
+  const pythonExecutable = fs.existsSync(localVenv)
+    ? localVenv
+    : (fs.existsSync(externalVenv) ? externalVenv : 'python');
 
   const pythonProcess = spawn(pythonExecutable, [
     scriptPath,

@@ -132,7 +132,7 @@ try:
             
             results.append({
                 "id": str(poi_id),
-                "name": f"Khu vực gần {poi_name}",
+                "name": f"{poi_name}",
                 "district": district,
                 "lat": float(lat_val),
                 "lon": float(lon_val),
