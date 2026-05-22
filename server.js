@@ -78,8 +78,8 @@ app.get('/api/eda', async (req, res) => {
     // We mock districts if it's not in the CSV directly (from address)
     const numDistricts = 7; 
 
-    // Return first 50 items for table to avoid huge payload
-    const sampleData = data.slice(0, 50).map(row => ({
+    // Return all items
+    const sampleData = data.map(row => ({
       id: row.place_id || row.RestaurantID || Math.random().toString(36).substring(7),
       name: row.name || row['Restaurant Name'],
       address: row.address || row.Address,
