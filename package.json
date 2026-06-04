@@ -4,6 +4,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
+    "generate:synthetic": "node scripts/generate_synthetic_dataset.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

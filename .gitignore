@@ -7,6 +7,8 @@
 # Runtime/local files
 .env
 /storage/uploads/
+/storage/feedback/
+/storage/*.log
 
 # Heavy model artifacts
 /artifacts/model/

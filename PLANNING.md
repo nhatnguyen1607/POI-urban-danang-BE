@@ -48,6 +48,8 @@ POST /api/agent/recommend-poi
 POST /api/agent/create-itinerary
 POST /api/agent/update-itinerary
 POST /api/agent/business-location
+POST /api/agent/feedback
+POST /api/agent/business-insight
 POST /api/route/matrix
 GET  /api/weather/forecast
 ```
@@ -100,6 +102,19 @@ Phase 3:
 Phase 4:
 - Them action connector layer: map, phone, website, Grab handoff.
 
+Phase 5:
+- Ghi feedback nguoi dung vao `storage/feedback/agent-feedback.jsonl`.
+- Dung feedback de train/rerank lai recommendation: POI duoc them vao lich trinh la positive signal, POI bi dislike/xoa la negative signal.
+- Khong goi la online training trong MVP neu chua co pipeline fine-tune; goi dung la learning loop/feedback memory.
+
+Phase 6:
+- Tai cau truc Business Agent thanh Decision Support System.
+- Them LLM data-to-text insights dua tren evidence pack, khong dung LLM de bia so lieu.
+- Tao grounded synthetic data pipeline de test/fine-tune agent.
+- Chuan hoa POI JSON Schema v1 cho RAG, frontend va scorer.
+
+Tai lieu chi tiet: `docs/architecture/BUSINESS_AGENT_SYNTHETIC_DATA_POI_SCHEMA.md`.
+
 ## Quy uoc code backend
 
 - File JS dung camelCase.
@@ -118,4 +133,65 @@ feat(be): add agent orchestrator contract
 feat(be): add business location scorer
 feat(route): integrate route matrix service
 fix(be): fallback to local poi when places api fails
+```
+
+## Cach chay du an BE
+
+### Cai dat
+
+```bash
+cd D:\POI-urban-danang-BE
+npm install
+```
+
+Neu can chay inference AI nang, cai Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Chay server
+
+```bash
+npm start
+```
+
+Mac dinh backend chay tai:
+
+```text
+http://localhost:7860
+```
+
+### Endpoint MVP can test
+
+```text
+GET  /api/eda
+POST /api/agent/recommend-poi
+POST /api/agent/create-itinerary
+POST /api/agent/update-itinerary
+POST /api/agent/business-location
+POST /api/agent/business-insight
+POST /api/agent/feedback
+POST /api/route/matrix
+GET  /api/weather/forecast?lat=16.0544&lon=108.2022
+```
+
+Vi du test nhanh:
+
+```bash
+curl -X POST http://localhost:7860/api/agent/recommend-poi ^
+  -H "Content-Type: application/json" ^
+  -d "{\"query\":\"toi muon cafe yen tinh gan bien\"}"
+```
+
+Tao synthetic dataset MVP:
+
+```bash
+npm run generate:synthetic
+```
+
+Output:
+
+```text
+data/synthetic/urbanagent_synthetic_v1.jsonl
 ```

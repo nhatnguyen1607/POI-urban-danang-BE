@@ -6,6 +6,13 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
 const { initExpertSystem, findOptimalRoute } = require('./expert_system/expert_system');
+const { recommendPOIs } = require('./services/poiRetrievalService');
+const { createItinerary } = require('./services/itineraryPlannerService');
+const { scoreBusinessLocations } = require('./services/businessLocationScorer');
+const { getForecast } = require('./services/weatherService');
+const { estimateMatrix } = require('./services/routeMatrixService');
+const { recordFeedback } = require('./services/feedbackService');
+const { generateBusinessInsights } = require('./services/businessInsightGenerator');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
@@ -131,6 +138,96 @@ app.get('/api/metrics/training-loss', async (req, res) => {
   }
 });
 
+// ============================================================================
+//  URBAN AGENT MVP: Traveler + Business role endpoints
+// ============================================================================
+app.post('/api/agent/recommend-poi', async (req, res) => {
+  try {
+    const { query, context, limit } = req.body;
+    if (!query || !String(query).trim()) {
+      return res.status(400).json({ error: 'Missing query' });
+    }
+    const result = await recommendPOIs({ query, context, limit });
+    res.json(result);
+  } catch (error) {
+    console.error('[Agent Recommend Error]', error);
+    res.status(500).json({ error: 'Failed to recommend POIs', details: error.message });
+  }
+});
+
+app.post('/api/agent/create-itinerary', async (req, res) => {
+  try {
+    const { query, context, transport, limit } = req.body;
+    if (!query || !String(query).trim()) {
+      return res.status(400).json({ error: 'Missing query' });
+    }
+    const result = await createItinerary({ query, context, transport, limit });
+    res.json(result);
+  } catch (error) {
+    console.error('[Agent Itinerary Error]', error);
+    res.status(500).json({ error: 'Failed to create itinerary', details: error.message });
+  }
+});
+
+app.post('/api/agent/update-itinerary', async (req, res) => {
+  try {
+    const { itinerary = [], action, poi } = req.body;
+    let updated = Array.isArray(itinerary) ? [...itinerary] : [];
+    if (action === 'add_poi' && poi) {
+      updated.push({
+        order: updated.length + 1,
+        poi,
+        reason: 'Nguoi dung them thu cong vao lich trinh.',
+      });
+    }
+    if (action === 'remove_poi' && poi?.id) {
+      updated = updated.filter((item) => item.poi?.id !== poi.id);
+    }
+    updated = updated.map((item, index) => ({ ...item, order: index + 1 }));
+    res.json({ itinerary: updated, warnings: [], note: 'MVP update itinerary locally on backend.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update itinerary', details: error.message });
+  }
+});
+
+app.post('/api/agent/business-location', async (req, res) => {
+  try {
+    const { concept, limit } = req.body;
+    if (!concept || !String(concept).trim()) {
+      return res.status(400).json({ error: 'Missing business concept' });
+    }
+    const result = await scoreBusinessLocations({ concept, limit });
+    res.json(result);
+  } catch (error) {
+    console.error('[Business Agent Error]', error);
+    res.status(500).json({ error: 'Failed to score business locations', details: error.message });
+  }
+});
+
+app.post('/api/agent/business-insight', async (req, res) => {
+  try {
+    const { concept, limit, language } = req.body;
+    if (!concept || !String(concept).trim()) {
+      return res.status(400).json({ error: 'Missing business concept' });
+    }
+    const result = await generateBusinessInsights({ concept, limit, language });
+    res.json(result);
+  } catch (error) {
+    console.error('[Business Insight Error]', error);
+    res.status(500).json({ error: 'Failed to generate business insights', details: error.message });
+  }
+});
+
+app.post('/api/agent/feedback', async (req, res) => {
+  try {
+    const result = await recordFeedback(req.body);
+    res.json(result);
+  } catch (error) {
+    console.error('[Agent Feedback Error]', error);
+    res.status(500).json({ error: 'Failed to record feedback', details: error.message });
+  }
+});
+
 app.post('/api/recommend', upload.single('image'), (req, res) => {
   const concept = req.body.concept;
   const version = req.body.modelVersion || 'v4';
@@ -210,6 +307,36 @@ app.post('/api/route', async (req, res) => {
   } catch (error) {
     console.error('[ES Route Error]', error);
     res.status(500).json({ error: 'Failed to find route', details: error.message });
+  }
+});
+
+app.post('/api/route/matrix', (req, res) => {
+  try {
+    const { origin, destinations, transport } = req.body;
+    if (!origin || !Array.isArray(destinations)) {
+      return res.status(400).json({ error: 'Missing origin or destinations' });
+    }
+    res.json({ routes: estimateMatrix({ origin, destinations, transport }) });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to estimate route matrix', details: error.message });
+  }
+});
+
+app.get('/api/weather/forecast', async (req, res) => {
+  try {
+    const lat = Number.parseFloat(req.query.lat);
+    const lon = Number.parseFloat(req.query.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return res.status(400).json({ error: 'Missing lat/lon' });
+    }
+    const result = await getForecast({ lat, lon });
+    res.json(result);
+  } catch (error) {
+    res.status(502).json({
+      error: 'Failed to fetch weather',
+      details: error.message,
+      fallback: 'Weather score skipped; continue with local POI and route signals.',
+    });
   }
 });
 

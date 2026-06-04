@@ -15,7 +15,7 @@ class POIDensityEngine {
   }
 
   async load() {
-    const dataDir = path.join(__dirname, '..', 'data');
+    const dataDir = path.join(__dirname, '..', '..', 'data');
 
     const [foodyPois, ggmapPois] = await Promise.all([
       this._readCSV(path.join(dataDir, 'poi_data_foody.csv')),
