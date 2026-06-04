@@ -157,11 +157,11 @@ app.post('/api/agent/recommend-poi', async (req, res) => {
 
 app.post('/api/agent/create-itinerary', async (req, res) => {
   try {
-    const { query, context, transport, limit } = req.body;
+    const { query, context, transport, limit, durationMinutes } = req.body;
     if (!query || !String(query).trim()) {
       return res.status(400).json({ error: 'Missing query' });
     }
-    const result = await createItinerary({ query, context, transport, limit });
+    const result = await createItinerary({ query, context, transport, limit, durationMinutes });
     res.json(result);
   } catch (error) {
     console.error('[Agent Itinerary Error]', error);

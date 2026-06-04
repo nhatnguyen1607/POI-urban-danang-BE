@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-06-04T14:27:46.057Z",
+  "output_file": "D:\\POI-urban-danang-BE\\data\\training\\agent_representation_pairs_v1.jsonl",
+  "poi_count": 5858,
+  "synthetic_samples": 3,
+  "feedback_events": 22,
+  "record_count": 47,
+  "by_record_type": {
+    "query_positive_poi": 5,
+    "query_negative_poi": 15,
+    "persona_memory_positive": 5,
+    "feedback_event": 22
+  },
+  "next_training_target": "Use this JSONL in poi_urban to fine-tune embedding/reranker/representation models."
+}

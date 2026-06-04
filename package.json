@@ -5,6 +5,13 @@
   "scripts": {
     "start": "node src/server.js",
     "generate:synthetic": "node scripts/generate_synthetic_dataset.js",
+    "evaluate:agent": "node scripts/evaluate_agent.js",
+    "build:memory": "node scripts/build_agent_memory.js",
+    "train:reranker": "node scripts/train_reranker.js",
+    "export:representation-data": "node scripts/export_representation_training_data.js",
+    "visualize:evaluation": "node scripts/visualize_agent_evaluation.js",
+    "research:agent": "npm run generate:synthetic && npm run evaluate:learning && npm run visualize:evaluation",
+    "evaluate:learning": "node scripts/evaluate_learning_loop.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

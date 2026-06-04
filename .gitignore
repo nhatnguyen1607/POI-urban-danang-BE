@@ -12,6 +12,9 @@
 
 # Heavy model artifacts
 /artifacts/model/
+/artifacts/reranker/
+/artifacts/memory/
+/reports/evaluation/
 *.h5
 *.onnx
 *.pth

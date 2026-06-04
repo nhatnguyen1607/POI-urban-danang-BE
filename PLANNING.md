@@ -195,3 +195,114 @@ Output:
 ```text
 data/synthetic/urbanagent_synthetic_v1.jsonl
 ```
+
+Danh gia agent tren synthetic dataset:
+
+```bash
+npm run evaluate:agent
+```
+
+Output:
+
+```text
+reports/evaluation/agent_eval_latest.json
+```
+
+Train reranker tu synthetic + feedback:
+
+```bash
+npm run build:memory
+npm run train:reranker
+```
+
+Output:
+
+```text
+artifacts/memory/agent_memory_v1.json
+artifacts/reranker/agent_reranker_v1.json
+```
+
+Sau khi artifact nay ton tai, `recommendPOIs` se tu dong ap dung boost/penalty neu phu hop.
+
+Export du lieu train representation/fine-tune cho repo `poi_urban`:
+
+```bash
+npm run export:representation-data
+```
+
+Output:
+
+```text
+data/training/agent_representation_pairs_v1.jsonl
+data/training/agent_representation_pairs_v1.summary.json
+```
+
+File nay gom query-positive POI, query-negative POI, persona memory va feedback event.
+Day la cau noi de `poi_urban` train embedding/reranker/model representation that.
+
+Danh gia learning loop truoc/sau training:
+
+```bash
+npm run evaluate:learning
+```
+
+Quy trinh nay se:
+
+```text
+1. Tam tat reranker hien co.
+2. Evaluate baseline.
+3. Build memory tu synthetic + feedback.
+4. Train reranker tu synthetic + feedback + memory.
+5. Evaluate lai voi persona context.
+6. Ghi report before/after.
+```
+
+Output:
+
+```text
+reports/evaluation/learning_loop_eval_latest.json
+```
+
+Sinh hinh truc quan sau khi evaluate:
+
+```bash
+npm run visualize:evaluation
+```
+
+Output:
+
+```text
+reports/evaluation/figures/learning_before_after.svg
+reports/evaluation/figures/learning_summary_card.svg
+```
+
+Chay tron bo pipeline nghien cuu agent MVP:
+
+```bash
+npm run research:agent
+```
+
+Y nghia cac chi so chinh:
+
+```text
+exactPoiHitRate       POI ky vong co xuat hien trong ket qua hay khong
+recallAtReturnedK     Ty le POI ky vong nam trong danh sach tra ve
+intentCoverage        Muc do ket qua phu hop intent nguoi dung
+precisionAtExpectedK  Chat luong sap xep o top dau
+f1                    Can bang precision/recall
+delta                 Muc thay doi sau memory + reranker training
+```
+
+Luu y nghien cuu:
+
+```text
+Backend hien chi train learning loop/reranker nhe de phuc vu agent runtime.
+Fine-tune embedding hoac train representation model that nen dat trong repo poi_urban,
+sau do export artifact embedding/model sang backend de phuc vu API.
+```
+
+Tai lieu chien luoc:
+
+```text
+docs/architecture/AGENT_RESEARCH_TRAINING_STRATEGY.md
+```

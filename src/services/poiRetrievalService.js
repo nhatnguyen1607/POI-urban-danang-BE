@@ -8,6 +8,7 @@ const {
   distanceScore,
   reviewSignal,
 } = require('./scoringUtils');
+const { applyReranker } = require('./rerankerService');
 
 const DANANG_CENTER = { lat: 16.0544, lon: 108.2022 };
 
@@ -90,8 +91,13 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
   const pois = await loadPOIs();
   const scored = pois
     .map((poi) => scorePOI(poi, query, context))
+    .map((item) => applyReranker(item, query, context))
     .filter((item) => item.score > 0.08)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      const scoreDelta = b.score - a.score;
+      if (scoreDelta !== 0) return scoreDelta;
+      return (b.reranker?.delta || 0) - (a.reranker?.delta || 0);
+    })
     .slice(0, limit)
     .map(toRecommendation);
 
