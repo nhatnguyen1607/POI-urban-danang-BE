@@ -3,6 +3,10 @@ import os
 import json
 import argparse
 
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+MODEL_ROOT = os.path.join(ROOT_DIR, 'artifacts', 'model')
+DATA_ROOT = os.path.join(ROOT_DIR, 'data')
+
 # Parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--version', type=str, default='v4')
@@ -32,7 +36,7 @@ try:
     print(f"[DEBUG] Device: {device}", file=sys.stderr)
     
     # Locate model path based on version
-    model_dir = os.path.join(os.path.dirname(__file__), 'model', args.version, 'models_saved')
+    model_dir = os.path.join(MODEL_ROOT, args.version, 'models_saved')
     print(f"[DEBUG] Looking for model in: {model_dir}", file=sys.stderr)
     
     # find the .pth file in this directory
@@ -52,7 +56,7 @@ try:
         raise Exception(f"No .pth model found in {model_dir}")
 
     # Load data for features
-    data_path = os.path.join(os.path.dirname(__file__), 'data', 'poi_data_ggmap.csv')
+    data_path = os.path.join(DATA_ROOT, 'poi_data_ggmap.csv')
     print(f"[DEBUG] Loading data from: {data_path}", file=sys.stderr)
     df = pd.read_csv(data_path, encoding='utf-8')
     all_texts = df['LLM_Input_Text'].fillna('').tolist()

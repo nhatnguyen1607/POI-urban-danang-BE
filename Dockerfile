@@ -32,4 +32,4 @@ ENV PORT=7860
 ENV PYTHONUNBUFFERED=1
 
 # Lệnh khởi chạy
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]

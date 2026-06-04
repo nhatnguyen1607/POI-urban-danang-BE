@@ -5,7 +5,15 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
-const { initExpertSystem, findOptimalRoute } = require('./ES-system/expert_system');
+const { initExpertSystem, findOptimalRoute } = require('./expert_system/expert_system');
+
+const ROOT_DIR = path.resolve(__dirname, '..');
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const MODEL_DIR = path.join(ROOT_DIR, 'artifacts', 'model');
+const STORAGE_DIR = path.join(ROOT_DIR, 'storage');
+const UPLOAD_DIR = path.join(STORAGE_DIR, 'uploads');
+
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const app = express();
 app.use(cors());
@@ -15,7 +23,7 @@ app.use(express.json({
   skip: (req) => req.is('multipart/form-data')
 }));
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: UPLOAD_DIR });
 
 // Endpoint to serve figures dynamically by version
 app.get('/api/figures/:version/:filename', (req, res) => {
@@ -23,7 +31,7 @@ app.get('/api/figures/:version/:filename', (req, res) => {
   if (!['v1', 'v2', 'v3', 'v4'].includes(version)) {
     return res.status(400).send('Invalid version');
   }
-  const filePath = path.join(__dirname, 'model', version, 'reports', 'figures', filename);
+  const filePath = path.join(MODEL_DIR, version, 'reports', 'figures', filename);
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
@@ -47,7 +55,7 @@ app.get('/api/eda', async (req, res) => {
   try {
     const source = req.query.source || 'ggmap';
     const fileName = source === 'foody' ? 'poi_data_foody.csv' : 'poi_data_ggmap.csv';
-    const filePath = path.join(__dirname, 'data', fileName);
+    const filePath = path.join(DATA_DIR, fileName);
     
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Data file not found' });
@@ -111,7 +119,7 @@ app.get('/api/metrics/training-loss', async (req, res) => {
     if (!['v1', 'v2', 'v3', 'v4'].includes(version)) {
       return res.status(400).json({ error: 'Invalid model version' });
     }
-    const filePath = path.join(__dirname, 'model', version, 'reports', 'metrics', `training_loss_${version}.csv`);
+    const filePath = path.join(MODEL_DIR, version, 'reports', 'metrics', `training_loss_${version}.csv`);
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Metrics file not found' });
     }
@@ -135,8 +143,8 @@ app.post('/api/recommend', upload.single('image'), (req, res) => {
 
   const scriptPath = path.join(__dirname, 'inference.py');
 
-  const pythonExecutable = fs.existsSync(path.resolve(__dirname, '../poi-urban-danang/.venv/Scripts/python.exe'))
-    ? path.resolve(__dirname, '../poi-urban-danang/.venv/Scripts/python.exe')
+  const pythonExecutable = fs.existsSync(path.resolve(ROOT_DIR, '../poi-urban-danang/.venv/Scripts/python.exe'))
+    ? path.resolve(ROOT_DIR, '../poi-urban-danang/.venv/Scripts/python.exe')
     : 'python';
 
   const pythonProcess = spawn(pythonExecutable, [
