@@ -13,6 +13,7 @@ const { getForecast } = require('./services/weatherService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { recordFeedback } = require('./services/feedbackService');
 const { generateBusinessInsights } = require('./services/businessInsightGenerator');
+const { getAgentTrainingStatus } = require('./services/trainingStatusService');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
@@ -225,6 +226,14 @@ app.post('/api/agent/feedback', async (req, res) => {
   } catch (error) {
     console.error('[Agent Feedback Error]', error);
     res.status(500).json({ error: 'Failed to record feedback', details: error.message });
+  }
+});
+
+app.get('/api/agent/training-status', (req, res) => {
+  try {
+    res.json(getAgentTrainingStatus());
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to read agent training status', details: error.message });
   }
 });
 

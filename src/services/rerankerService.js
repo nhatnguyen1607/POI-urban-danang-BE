@@ -57,6 +57,14 @@ function getIntentBoost(reranker, query, poi) {
   }, 0);
 }
 
+function getIntentPoiPenalty(reranker, query, poi) {
+  const intents = detectIntents(query);
+  const penalties = reranker?.intentPoiPenalties || {};
+  return intents.reduce((sum, intent) => {
+    return sum + valueFromMap(penalties[intent.id], poi.id);
+  }, 0);
+}
+
 function applyReranker(scoredItem, query, context = {}) {
   const reranker = loadReranker();
   const profile = getProfile(context);
@@ -66,7 +74,7 @@ function applyReranker(scoredItem, query, context = {}) {
   const poiBoost = valueFromMap(reranker?.poiWeights, poi.id);
   const categoryBoost = getCategoryBoost(reranker, poi);
   const intentBoost = getIntentBoost(reranker, query, poi);
-  const penalty = valueFromMap(reranker?.poiPenalties, poi.id);
+  const penalty = valueFromMap(reranker?.poiPenalties, poi.id) + getIntentPoiPenalty(reranker, query, poi);
   const memoryPoiBoost = scorePoiPreference(profile, poi.id);
   const memoryCategoryBoost = scoreCategoryPreference(profile, poi.category);
   const learningRate = reranker?.learningRate || 0.08;
@@ -81,6 +89,7 @@ function applyReranker(scoredItem, query, context = {}) {
     score,
     reranker: {
       artifactVersion: reranker?.version || null,
+      integrationMode: reranker?.researchModel?.integrationMode || 'runtime_json_reranker',
       memoryVersion: profile?.version || null,
       memoryKey: profile?.profileId || null,
       poiBoost,

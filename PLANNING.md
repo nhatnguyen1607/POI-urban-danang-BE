@@ -269,6 +269,33 @@ Sinh hinh truc quan sau khi evaluate:
 npm run visualize:evaluation
 ```
 
+Lenh gon cho backend runtime artifact:
+
+```bash
+npm run train:agent-runtime
+```
+
+Lenh nay chay:
+
+```text
+1. build memory tu synthetic + feedback
+2. train runtime JSON reranker
+3. evaluate learning loop before/after
+4. sinh hinh truc quan evaluation
+```
+
+Ket qua gan nhat sau khi tune intent-specific penalty:
+
+```text
+precisionAtExpectedK 0.0236 -> 0.0514
+recallAtReturnedK    0.0764 -> 0.0806
+exactPoiHitRate      0.1417 -> 0.1583
+intentCoverage       0.8028 -> 0.8028
+```
+
+Hai-tower/SupCon trong `poi_urban` co chi so rat cao tren synthetic grouped holdout.
+Khong nen claim "dat tuyet doi"; can noi ro day la grounded synthetic benchmark, chua phai external real-user benchmark.
+
 Output:
 
 ```text
@@ -280,6 +307,46 @@ Chay tron bo pipeline nghien cuu agent MVP:
 
 ```bash
 npm run research:agent
+```
+
+Pipeline train agent day du hon:
+
+```bash
+cd D:\POI-urban-danang-BE
+npm run generate:synthetic -- --count=120
+npm run export:representation-data
+
+cd D:\poi_urban
+python research_pipeline/train_agent_representation_reranker.py
+python research_pipeline/train_agent_two_tower_representation.py --epochs 80
+
+cd D:\POI-urban-danang-BE
+npm run evaluate:learning
+npm run visualize:evaluation
+npm start
+```
+
+Frontend se doc training status tu:
+
+```text
+GET /api/agent/training-status
+```
+
+Panel `Agent learning` tren UrbanAgent hien:
+
+```text
+synthetic sample count
+training record count
+backend learning-loop recall
+two-tower representation AUC
+```
+
+Luu y tich hop:
+
+```text
+Hien frontend hien metric training va backend runtime van dung JS reranker/memory.
+Two-tower checkpoint trong poi_urban la research artifact.
+Buoc tich hop sau la export embedding/index hoac scoring service tu checkpoint nay sang backend retrieval API.
 ```
 
 Y nghia cac chi so chinh:

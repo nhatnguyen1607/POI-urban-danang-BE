@@ -46,6 +46,16 @@ function compactPoi(poi) {
 }
 
 function pickNegativePois(sample, poiById, positiveIds) {
+  const explicitNegatives = (sample.expected_output?.negative_pois || [])
+    .map((item) => (typeof item === 'string' ? item : item.poi_id))
+    .filter(Boolean)
+    .filter((poiId) => !positiveIds.has(poiId))
+    .map((poiId) => poiById.get(poiId))
+    .filter(Boolean);
+  if (explicitNegatives.length) {
+    return explicitNegatives.slice(0, 10);
+  }
+
   const expectedRoles = new Set(
     (sample.expected_output?.expected_itinerary || []).map((item) => String(item.expected_role || '').toLowerCase())
   );
@@ -58,7 +68,7 @@ function pickNegativePois(sample, poiById, positiveIds) {
       if (!expectedRoles.size) return true;
       return !Array.from(expectedRoles).some((role) => category.includes(role));
     })
-    .slice(0, 5);
+    .slice(0, 8);
 }
 
 function buildSyntheticPairRecords(samples, poiById) {
@@ -96,7 +106,7 @@ function buildSyntheticPairRecords(samples, poiById) {
         label: 0,
         target_role: 'hard_negative_candidate',
         poi: compactPoi(negativePoi),
-        evidence: ['candidate_pool_not_expected', 'category_or_role_mismatch'],
+        evidence: ['hard_negative_grounded', 'category_or_role_mismatch'],
       });
     }
 
@@ -138,16 +148,20 @@ function buildFeedbackRecords(events) {
 }
 
 async function exportTrainingData() {
+  console.log('[1/5] Loading POIs, synthetic samples, and feedback events');
   const pois = await loadPOIs();
   const poiById = new Map(pois.map((poi) => [poi.id, poi]));
   const syntheticSamples = readJsonl(SYNTHETIC_FILE);
   const feedbackEvents = readJsonl(FEEDBACK_FILE);
+  console.log(`[2/5] Building representation pairs from ${syntheticSamples.length} synthetic samples`);
   const records = [
     ...buildSyntheticPairRecords(syntheticSamples, poiById),
     ...buildFeedbackRecords(feedbackEvents),
   ];
 
+  console.log(`[3/5] Built ${records.length} records including ${feedbackEvents.length} feedback events`);
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  console.log(`[4/5] Writing JSONL training data to ${OUT_FILE}`);
   fs.writeFileSync(OUT_FILE, records.map((record) => JSON.stringify(record)).join('\n') + '\n', 'utf8');
 
   const summary = {
@@ -163,6 +177,7 @@ async function exportTrainingData() {
     }, {}),
     next_training_target: 'Use this JSONL in poi_urban to fine-tune embedding/reranker/representation models.',
   };
+  console.log(`[5/5] Writing summary to ${SUMMARY_FILE}`);
   fs.writeFileSync(SUMMARY_FILE, JSON.stringify(summary, null, 2), 'utf8');
   return summary;
 }

@@ -51,7 +51,9 @@ function trainFromSynthetic(samples, poiById, model) {
     });
 
     (sample.expected_output.negative_pois || []).forEach((item) => {
-      addWeight(model.poiPenalties, item.poi_id, 1.0);
+      intents.forEach((intentId) => {
+        addWeight(ensureIntent(model.intentPoiPenalties, intentId), item.poi_id, 0.45);
+      });
     });
   });
 }
@@ -103,6 +105,7 @@ function trainFromMemory(memory, model) {
 }
 
 async function trainReranker() {
+  console.log('[1/7] Loading POI, synthetic samples, feedback, and memory');
   const pois = await loadPOIs();
   const poiById = new Map(pois.map((poi) => [poi.id, poi]));
   const synthetic = readJsonlIfExists(SYNTHETIC_FILE);
@@ -112,7 +115,7 @@ async function trainReranker() {
   const model = {
     version: 'agent_reranker_v1',
     createdAt: new Date().toISOString(),
-    learningRate: 0.12,
+    learningRate: 0.055,
     trainingSources: {
       syntheticFile: SYNTHETIC_FILE,
       feedbackFile: FEEDBACK_FILE,
@@ -125,22 +128,71 @@ async function trainReranker() {
     poiPenalties: {},
     categoryWeights: {},
     intentCategoryWeights: {},
+    intentPoiPenalties: {},
   };
 
+  console.log(`[2/7] Training from synthetic grounded samples: ${synthetic.length}`);
   trainFromSynthetic(synthetic, poiById, model);
+  console.log(`[3/7] Applying real feedback events: ${feedback.length}`);
   trainFromFeedback(feedback, model);
+  console.log(`[4/7] Applying long-term memory profiles: ${memory?.profiles ? Object.keys(memory.profiles).length : 0}`);
   trainFromMemory(memory, model);
+  console.log('[5/7] Normalizing POI/category/intent weights');
   model.poiWeights = normalizeWeights(model.poiWeights);
   model.poiPenalties = normalizeWeights(model.poiPenalties);
   model.categoryWeights = compactCategoryWeights(model.categoryWeights);
   Object.keys(model.intentCategoryWeights).forEach((intentId) => {
     model.intentCategoryWeights[intentId] = compactCategoryWeights(model.intentCategoryWeights[intentId]);
   });
+  Object.keys(model.intentPoiPenalties).forEach((intentId) => {
+    model.intentPoiPenalties[intentId] = normalizeWeights(model.intentPoiPenalties[intentId], 2.5);
+  });
 
+  console.log('[6/7] Attaching research metrics if available');
+  model.researchModel = loadResearchModelSummary();
+  console.log(`[7/7] Writing runtime reranker artifact to ${RERANKER_PATH}`);
   fs.mkdirSync(path.dirname(RERANKER_PATH), { recursive: true });
   fs.writeFileSync(RERANKER_PATH, JSON.stringify(model, null, 2), 'utf8');
   resetRerankerCache();
   return model;
+}
+
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function loadResearchModelSummary() {
+  const poiUrbanDir = path.resolve(ROOT_DIR, '..', 'poi_urban');
+  const twoTowerPath = path.join(poiUrbanDir, 'results', 'agent_representation_two_tower', 'two_tower_metrics.json');
+  const logisticPath = path.join(poiUrbanDir, 'results', 'agent_representation', 'agent_representation_metrics.json');
+  const twoTower = readJsonIfExists(twoTowerPath);
+  const logistic = readJsonIfExists(logisticPath);
+  return {
+    integrationMode: 'runtime_json_reranker_with_research_metrics',
+    note:
+      'Backend runtime uses this JSON reranker; poi_urban checkpoints/metrics are attached for audit. Next step is exporting a dense embedding index.',
+    twoTower: twoTower
+      ? {
+          path: twoTowerPath,
+          model: twoTower.model,
+          test: twoTower.test,
+          data: twoTower.data,
+        }
+      : null,
+    logistic: logistic
+      ? {
+          path: logisticPath,
+          model: logistic.model,
+          test: logistic.test,
+          data: logistic.data,
+        }
+      : null,
+  };
 }
 
 if (require.main === module) {
