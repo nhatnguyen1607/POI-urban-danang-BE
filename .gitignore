@@ -4,32 +4,55 @@
 /.venv/
 /venv/
 
-# Runtime/local files
+# Secrets and local runtime files
 .env
 /storage/uploads/
 /storage/feedback/
 /storage/*.log
 
-# Heavy model artifacts
+# Generated reports, metrics, and visualizations
+/reports/
+
+# Generated office deliverables
+/docs/pisi_2026/*.docx
+/docs/pisi_2026/*.pptx
+/docs/pisi_2026/*.pdf
+/docs/architecture/
+# Generated model artifacts
 /artifacts/model/
 /artifacts/reranker/
 /artifacts/memory/
-/reports/evaluation/
+/artifacts/embeddings/
+/artifacts/**/*.pt
+/artifacts/**/*.pth
+/artifacts/**/*.bin
 *.h5
 *.onnx
 *.pth
+
+# Local/generated data
+/data/*.csv
+/data/*.xlsx
+/data/*.json
+/data/synthetic/
+/data/training/
 
 # Python cache
 *.pycache
 __pycache__/
 **/__pycache__/
-docs/pisi_2026/
+
 # OS/editor noise
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# Local expert-system rule data
 src/expert_system/rule/cam_queo.csv
 src/expert_system/rule/cam_theo_gio.csv
 src/expert_system/rule/duong_1_chieu.csv
 src/expert_system/rule/road_profiles.csv
+docs/pisi_2026/PISI_2026_cau_tra_loi_form.md
+docs/pisi_2026/PISI_2026_dinh_huong_phat_trien_Danang_UrbanAgent_AI.md
+docs/pisi_2026/PISI_2026_kich_ban_video.md
