@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://danang-urbanagent.ai/schema/poi.schema.json",
+  "title": "DanangUrbanAgentPOI",
+  "type": "object",
+  "required": ["poi_id", "name", "category", "location", "source", "scoring"],
+  "properties": {
+    "poi_id": { "type": "string" },
+    "source": {
+      "type": "object",
+      "required": ["provider", "source_id", "last_seen_at"],
+      "properties": {
+        "provider": { "type": "string", "enum": ["ggmap", "foody", "manual", "synthetic"] },
+        "source_id": { "type": "string" },
+        "source_url": { "type": ["string", "null"] },
+        "last_seen_at": { "type": "string", "format": "date-time" },
+        "data_confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "name": { "type": "string" },
+    "normalized_name": { "type": "string" },
+    "category": {
+      "type": "object",
+      "required": ["primary", "normalized"],
+      "properties": {
+        "primary": { "type": "string" },
+        "secondary": { "type": "array", "items": { "type": "string" } },
+        "normalized": { "type": "string" },
+        "category_weights": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "required": ["lat", "lon"],
+      "properties": {
+        "lat": { "type": "number" },
+        "lon": { "type": "number" },
+        "address": { "type": ["string", "null"] },
+        "street": { "type": ["string", "null"] },
+        "ward": { "type": ["string", "null"] },
+        "district": { "type": ["string", "null"] },
+        "city": { "type": "string", "default": "Da Nang" },
+        "geohash": { "type": ["string", "null"] },
+        "grid_id": { "type": ["string", "null"] }
+      }
+    },
+    "frontend": {
+      "type": "object",
+      "properties": {
+        "display_title": { "type": "string" },
+        "short_description": { "type": ["string", "null"] },
+        "images": { "type": "array", "items": { "type": "object" } },
+        "opening_hours": { "type": "object" },
+        "contact": { "type": "object" },
+        "price": { "type": "object" }
+      }
+    },
+    "semantic": {
+      "type": "object",
+      "properties": {
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "review_keywords": { "type": "array", "items": { "type": "string" } },
+        "summary_vi": { "type": ["string", "null"] },
+        "summary_en": { "type": ["string", "null"] },
+        "rag_document": { "type": "string" },
+        "embedding_text": { "type": "string" }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "rating": { "type": ["number", "null"] },
+        "rating_scale": { "type": "number" },
+        "review_count": { "type": ["integer", "null"] },
+        "sentiment_score": { "type": ["number", "null"], "minimum": -1, "maximum": 1 },
+        "freshness_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "properties": {
+        "rating_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "review_volume_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "price_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "demand_proxy_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "accessibility_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "competition_weight": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "complementary_weight": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "vectors": {
+      "type": "object",
+      "properties": {
+        "text_embedding_id": { "type": ["string", "null"] },
+        "image_embedding_id": { "type": ["string", "null"] },
+        "geo_embedding_id": { "type": ["string", "null"] },
+        "multimodal_embedding_id": { "type": ["string", "null"] },
+        "embedding_version": { "type": ["string", "null"] }
+      }
+    },
+    "audit": { "type": "object" }
+  }
+}

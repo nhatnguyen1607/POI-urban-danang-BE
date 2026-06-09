@@ -1,14 +1,58 @@
-# 1. Chặn các thư mục thư viện và file build
+# Dependencies and local environments
 /node_modules/
+/venv_new/
+/.venv/
+/venv/
+
+# Secrets and local runtime files
 .env
+/storage/uploads/
+/storage/feedback/
+/storage/*.log
 
-# 2. Chặn toàn bộ thư mục models_saved của v1, v2, v3 nhưng giữ v4
-/model/v1/models_saved/
-/model/v2/models_saved/
-/model/v3/models_saved/
+# Generated reports, metrics, and visualizations
+/reports/
 
-# 3. Chặn các định dạng file nặng không cần thiết (trừ v4 models)
+# Generated office deliverables
+/docs/pisi_2026/*.docx
+/docs/pisi_2026/*.pptx
+/docs/pisi_2026/*.pdf
+/docs/architecture/
+# Generated model artifacts
+/artifacts/model/
+/artifacts/reranker/
+/artifacts/memory/
+/artifacts/embeddings/
+/artifacts/**/*.pt
+/artifacts/**/*.pth
+/artifacts/**/*.bin
 *.h5
 *.onnx
+*.pth
+
+# Local/generated data
+/data/*.csv
+/data/*.xlsx
+/data/*.json
+/data/synthetic/
+/data/training/
+
+# Python cache
 *.pycache
-encoder/__pycache__/
+__pycache__/
+**/__pycache__/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local expert-system rule data
+src/expert_system/rule/cam_queo.csv
+src/expert_system/rule/cam_theo_gio.csv
+src/expert_system/rule/duong_1_chieu.csv
+src/expert_system/rule/road_profiles.csv
+docs/pisi_2026/PISI_2026_cau_tra_loi_form.md
+docs/pisi_2026/PISI_2026_dinh_huong_phat_trien_Danang_UrbanAgent_AI.md
+docs/pisi_2026/PISI_2026_kich_ban_video.md
