@@ -27,7 +27,21 @@ function normalizeName(value) {
   return cleanString(value, 300)
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function buildSearchKeywords(...values) {
+  const tokens = normalizeName(values.filter(Boolean).join(' '))
+    .split(' ')
+    .filter((token) => token.length >= 2);
+  const prefixes = tokens.flatMap((token) => {
+    const max = Math.min(token.length, 12);
+    return Array.from({ length: Math.max(max - 1, 0) }, (_, index) => token.slice(0, index + 2));
+  });
+  return Array.from(new Set([...tokens, ...prefixes])).slice(0, 120);
 }
 
 function validRole(role) {
@@ -166,8 +180,10 @@ function normalizePoi(input = {}) {
     source: ['foody', 'google_maps', 'manual', 'seller'].includes(input.source) ? input.source : 'manual',
     name,
     normalizedName: normalizeName(name),
+    normalizedAddress: normalizeName(address),
     category,
     tags: cleanArray(input.tags || [category], 30),
+    searchKeywords: buildSearchKeywords(name, address, district, category, semanticText),
     location: {
       lat: lat ?? 16.0544,
       lng: lng ?? 108.2022,
@@ -177,6 +193,10 @@ function normalizePoi(input = {}) {
     },
     rating: numberOrZero(input.rating || input['Overall Rating']),
     reviewCount: numberOrZero(input.reviewCount || input.Total_Reviews_Scraped || input['User Rating Count']),
+    ratingSum: numberOrZero(input.ratingSum),
+    timesAddedToItinerary: numberOrZero(input.timesAddedToItinerary),
+    timesVisited: numberOrZero(input.timesVisited),
+    timesRouted: numberOrZero(input.timesRouted),
     ...(input.priceLevel !== undefined ? { priceLevel: numberOrZero(input.priceLevel) } : {}),
     ...(input.description ? { description: cleanString(input.description, 2000) } : {}),
     semanticText,

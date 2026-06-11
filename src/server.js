@@ -12,6 +12,8 @@ const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { recordFeedback } = require('./services/feedbackService');
+const { recommendContextualPOIs } = require('./services/contextualPoiRecommenderService');
+const { rebuildUserPreferences } = require('./services/userPreferenceService');
 const { generateBusinessInsights } = require('./services/businessInsightGenerator');
 const { getAgentTrainingStatus } = require('./services/trainingStatusService');
 const { loadPOIs } = require('./services/poiDataService');
@@ -315,6 +317,37 @@ app.post('/api/agent/recommend-poi', optionalFirebaseAuth, async (req, res) => {
   } catch (error) {
     console.error('[Agent Recommend Error]', error);
     res.status(500).json({ error: 'Failed to recommend POIs', details: error.message });
+  }
+});
+
+app.post('/api/recommend-pois', optionalFirebaseAuth, async (req, res) => {
+  try {
+    const userId = req.body.userId || req.user?.uid || null;
+    const currentLocation = req.body.currentLocation || req.body.location;
+    const currentContext = req.body.currentContext || {};
+    const result = await recommendContextualPOIs({
+      userId,
+      currentLocation,
+      currentContext,
+      limit: req.body.limit,
+    });
+    res.json(result);
+  } catch (error) {
+    console.error('[Contextual Recommend Error]', error);
+    res.status(errorStatus(error)).json({ error: 'Failed to recommend contextual POIs', details: error.message });
+  }
+});
+
+app.post('/api/user-preferences/rebuild', requireFirebaseAuth, async (req, res) => {
+  try {
+    const userId = req.body.userId || req.user.uid;
+    if (userId !== req.user.uid && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Cannot rebuild another user profile' });
+    }
+    const profile = await rebuildUserPreferences(userId);
+    res.json({ saved: true, profile });
+  } catch (error) {
+    res.status(errorStatus(error)).json({ error: 'Failed to rebuild user preferences', details: error.message });
   }
 });
 

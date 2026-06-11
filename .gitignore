@@ -1,5 +1,7 @@
 # Dependencies and local environments
 /node_modules/
+/functions/node_modules/
+/functions/lib/
 /venv_new/
 /.venv/
 /venv/
@@ -56,3 +58,5 @@ src/expert_system/rule/road_profiles.csv
 docs/pisi_2026/PISI_2026_cau_tra_loi_form.md
 docs/pisi_2026/PISI_2026_dinh_huong_phat_trien_Danang_UrbanAgent_AI.md
 docs/pisi_2026/PISI_2026_kich_ban_video.md
+docs/pisi_2026/BAO_CAO_TONG_THE_DU_AN_Danang_UrbanAgent_AI.md
+poi-urban-firebase-adminsdk-fbsvc-3613b15e7b.json
