@@ -97,8 +97,8 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
     actions: [
       {
         type: 'handoff',
-        label: 'Mo ban do de xac nhan tuyen',
-        note: 'MVP chuan bi tuyen va de nguoi dung xac nhan tren ung dung ban do/Grab.',
+        label: 'Mở bản đồ để xác nhận tuyến',
+        note: 'MVP chuẩn bị tuyến và để người dùng xác nhận trên ứng dụng bản đồ/Grab.',
       },
     ],
   };

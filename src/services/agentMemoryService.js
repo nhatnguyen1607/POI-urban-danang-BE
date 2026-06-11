@@ -32,6 +32,19 @@ function resolveMemoryKey(context = {}) {
 }
 
 function getProfile(context = {}) {
+  if (context.agentMemory) {
+    return {
+      profileId: context.agentMemory.userId || context.userId || 'firestore',
+      version: context.agentMemory.version || 'firestore',
+      memoryRate: Number(context.agentMemory.memoryRate) || 0.12,
+      preferences: {
+        categoryAffinity: context.agentMemory.categoryAffinity || {},
+        categoryPenalty: context.agentMemory.categoryPenalty || {},
+        poiAffinity: context.agentMemory.poiAffinity || {},
+        poiPenalty: context.agentMemory.poiPenalty || {},
+      },
+    };
+  }
   const memory = loadMemory();
   if (!memory) return null;
   const key = resolveMemoryKey(context);

@@ -11,7 +11,7 @@ async function getForecast({ lat, lon }) {
     current: data.current,
     warning:
       precipitation > 0
-        ? 'Dang co mua/luong mua, agent nen uu tien diem indoor hoac tuyen ngan.'
+        ? 'Đang có mưa/lượng mưa, agent nên ưu tiên điểm indoor hoặc tuyến ngắn.'
         : '',
   };
 }
