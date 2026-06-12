@@ -312,7 +312,12 @@ app.post('/api/agent/recommend-poi', optionalFirebaseAuth, async (req, res) => {
     if (!query || !String(query).trim()) {
       return res.status(400).json({ error: 'Missing query' });
     }
-    const result = await recommendPOIs({ query, context, limit });
+    const agentMemory = req.user?.uid ? await getAgentMemory(req.user.uid).catch(() => null) : null;
+    const result = await recommendPOIs({
+      query,
+      context: { ...(context || {}), userId: req.user?.uid || context?.userId || null, agentMemory },
+      limit,
+    });
     res.json(result);
   } catch (error) {
     console.error('[Agent Recommend Error]', error);

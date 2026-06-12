@@ -4,7 +4,7 @@ const INTENTS = [
   {
     id: 'cafe',
     label: 'Cafe',
-    queryTerms: ['cafe', 'ca phe', 'coffee', 'dessert', 'tra sua', 'hoc bai', 'yen tinh'],
+    queryTerms: ['cafe', 'ca phe', 'coffee', 'coffe', 'dessert', 'tra sua', 'hoc bai', 'yen tinh'],
     categoryTerms: ['cafe', 'ca phe', 'coffee', 'dessert', 'tra sua'],
   },
   {

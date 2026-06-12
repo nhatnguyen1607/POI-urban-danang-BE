@@ -1,4 +1,5 @@
 const { buildBusinessEvidencePack } = require('./businessEvidenceService');
+const { parseBusinessConcept } = require('./businessConceptParserService');
 
 function pct(value) {
   return `${Math.round((value || 0) * 100)}%`;
@@ -119,6 +120,7 @@ function validateInsight(area, insight) {
 
 async function generateBusinessInsights({ concept, limit = 5, language = 'vi' }) {
   const pack = await buildBusinessEvidencePack({ concept, limit });
+  const parsedConstraints = parseBusinessConcept(concept, language);
   const areas = pack.areas.map((area) => {
     const insight = generateLocalInsight(area, language);
     return {
@@ -132,12 +134,23 @@ async function generateBusinessInsights({ concept, limit = 5, language = 'vi' })
   return {
     ...pack,
     language,
+    parsedConstraints,
     areas,
+    stagePipeline: [
+      { id: 1, name: 'Business Concept Input', status: 'complete' },
+      { id: 2, name: 'Concept Parser', status: 'complete', output: parsedConstraints },
+      { id: 3, name: 'Candidate Area Scorer', status: 'complete', safeguard: 'Mathematical scoring only; no LLM text.' },
+      { id: 4, name: 'Evidence Pack Builder', status: 'complete', safeguard: 'Evidence IDs are attached to every table row and POI.' },
+      { id: 5, name: 'Business Insight Generator', status: 'complete', safeguard: 'LLM/data-to-text may only interpret evidence JSON.' },
+      { id: 6, name: 'Report Dashboard', status: 'ready' },
+    ],
     guardrails: {
       hallucinationChecked: true,
       unsupportedClaims: areas.flatMap((area) => area.guardrail.unsupportedClaims),
       passed: areas.every((area) => area.guardrail.passed),
       mode: 'local_data_to_text',
+      mathBeforeLlm: true,
+      evidenceOnlyInterpretation: true,
       note: 'MVP uses deterministic grounded data-to-text. A real LLM can replace this layer after API credentials are configured.',
     },
   };

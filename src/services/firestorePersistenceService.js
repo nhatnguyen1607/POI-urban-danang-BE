@@ -105,11 +105,26 @@ function normalizeCustomerPreferences(input = {}) {
   const budgetLevel = ['low', 'medium', 'high'].includes(input.budgetLevel) ? input.budgetLevel : 'medium';
   const mobilityValues = Array.isArray(input.mobility) ? input.mobility : input.mobility ? [input.mobility] : [];
   const mobility = mobilityValues.filter((item) => ['walking', 'motorbike', 'car', 'grab'].includes(item));
+  const minPrice = Math.max(0, Number(input.expectedPriceVnd?.min ?? input.priceRangeVnd?.min ?? 20000) || 20000);
+  const maxPrice = Math.max(minPrice, Number(input.expectedPriceVnd?.max ?? input.priceRangeVnd?.max ?? 150000) || 150000);
   return {
+    explicitSignalVersion: cleanString(input.explicitSignalVersion || 'account_personalization_v2', 80),
+    persona: cleanString(input.persona || input.personaBaseline || 'tourist', 80),
     likedCategories: cleanArray(input.likedCategories),
     dislikedCategories: cleanArray(input.dislikedCategories),
-    likedTags: [],
+    likedTags: cleanArray(input.likedTags),
     dislikedTags: cleanArray(input.dislikedTags),
+    tasteProfile: {
+      sceneryVibes: cleanArray(input.tasteProfile?.sceneryVibes || input.sceneryVibes),
+      activitiesPurposes: cleanArray(input.tasteProfile?.activitiesPurposes || input.activitiesPurposes),
+      companionContexts: cleanArray(input.tasteProfile?.companionContexts || input.companionContexts),
+    },
+    expectedPriceVnd: {
+      min: minPrice,
+      max: maxPrice,
+      currency: 'VND',
+    },
+    negativeFilters: cleanArray(input.negativeFilters || input.constraints?.avoidTags),
     budgetLevel,
     mobility: mobility.length ? Array.from(new Set(mobility)) : ['motorbike'],
     preferredLanguage: validLanguage(input.preferredLanguage),
@@ -122,18 +137,33 @@ function buildAgentMemoryFromPreferences(userId, preferences = {}) {
   cleanArray(preferences.likedCategories).forEach((category) => {
     categoryAffinity[category] = Math.max(categoryAffinity[category] || 0, 1);
   });
+  cleanArray(preferences.likedTags).forEach((tag) => {
+    categoryAffinity[tag] = Math.max(categoryAffinity[tag] || 0, 0.75);
+  });
   cleanArray(preferences.dislikedCategories).forEach((category) => {
     categoryPenalty[category] = Math.max(categoryPenalty[category] || 0, 1);
   });
+  cleanArray(preferences.dislikedTags).forEach((tag) => {
+    categoryPenalty[tag] = Math.max(categoryPenalty[tag] || 0, 0.9);
+  });
+  cleanArray(preferences.negativeFilters).forEach((tag) => {
+    categoryPenalty[tag] = Math.max(categoryPenalty[tag] || 0, 1);
+  });
   return {
     userId,
+    persona: preferences.persona || 'tourist',
     categoryAffinity,
     categoryPenalty,
     poiAffinity: {},
     poiPenalty: {},
+    explicitSignals: {
+      tasteProfile: preferences.tasteProfile || {},
+      expectedPriceVnd: preferences.expectedPriceVnd || {},
+      negativeFilters: preferences.negativeFilters || [],
+    },
     personaSummary: Object.keys(categoryAffinity).length ? `Ưu tiên ${Object.keys(categoryAffinity).join(', ')}.` : '',
     updatedAt: now(),
-    version: 'v1',
+    version: 'v2_explicit',
   };
 }
 
@@ -155,7 +185,31 @@ async function saveCustomerProfile(input) {
     updatedAt: now(),
   };
   await db.collection('customerProfiles').doc(userId).set(doc, { merge: true });
-  await db.collection('agentMemories').doc(userId).set(buildAgentMemoryFromPreferences(userId, preferences), { merge: true });
+  const agentMemory = buildAgentMemoryFromPreferences(userId, preferences);
+  await db.collection('agentMemories').doc(userId).set(agentMemory, { merge: true });
+  await db.collection('user_preferences').doc(userId).set({
+    userId,
+    source: 'explicit_account_hub',
+    persona: preferences.persona,
+    explicitSignals: {
+      persona: preferences.persona,
+      tasteProfile: preferences.tasteProfile,
+      expectedPriceVnd: preferences.expectedPriceVnd,
+      negativeFilters: preferences.negativeFilters,
+      likedTags: preferences.likedTags,
+      dislikedTags: preferences.dislikedTags,
+      likedCategories: preferences.likedCategories,
+      dislikedCategories: preferences.dislikedCategories,
+    },
+    vectorSeed: {
+      categoryAffinity: agentMemory.categoryAffinity,
+      categoryPenalty: agentMemory.categoryPenalty,
+      budgetMinVnd: preferences.expectedPriceVnd.min,
+      budgetMaxVnd: preferences.expectedPriceVnd.max,
+    },
+    updatedAt: now(),
+    version: 'v2_explicit',
+  }, { merge: true });
   return { saved: true, firestoreSynced: true, profile: doc };
 }
 

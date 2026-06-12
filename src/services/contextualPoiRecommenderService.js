@@ -72,6 +72,35 @@ function mapScore(map, key) {
   return clamp01(Number(map[key] || 0) / max);
 }
 
+const EXPLICIT_TAG_KEYWORDS = {
+  beach_view: ['bien', 'beach', 'sea', 'ngam bien'],
+  riverfront: ['song', 'river', 'ven song', 'han'],
+  hidden_gems: ['hidden', 'an minh', 'hem', 'local', 'yen tinh'],
+  amusement_parks: ['khu vui choi', 'amusement', 'park', 'cong vien'],
+  rooftop_city_view: ['rooftop', 'city view', 'view', 'tang thuong'],
+  deep_work_study: ['hoc bai', 'study', 'work', 'cowork', 'yen tinh', 'cafe'],
+  casual_socializing: ['gap go', 'social', 'ban be', 'cafe', 'restaurant'],
+  weekend_chill: ['chill', 'weekend', 'thu gian', 'cafe', 'beach'],
+  late_night_hangouts: ['dem', 'night', 'late', 'bar', 'nhau'],
+  solo: ['solo', 'mot minh', 'quiet', 'yen tinh'],
+  dating_romantic: ['hen ho', 'romantic', 'lang man', 'view'],
+  friends_gathering: ['ban be', 'group', 'nhom', 'nhau', 'quan an'],
+  family_friendly: ['family', 'gia dinh', 'tre em', 'nha hang'],
+  student: ['hoc bai', 'study', 'sinh vien', 'cafe', 'budget'],
+  remote_worker: ['work', 'cowork', 'wifi', 'yen tinh', 'cafe'],
+  tourist: ['tourist', 'du lich', 'check in', 'beach'],
+  local_explorer: ['local', 'hidden', 'an minh', 'quan an', 'hem'],
+};
+
+function explicitHitScore(poi, keys = []) {
+  const haystack = cleanKey(`${poi.name} ${poi.category} ${poi.semanticText} ${poi.district}`);
+  const hits = keys.reduce((sum, key) => {
+    const terms = EXPLICIT_TAG_KEYWORDS[key] || [key];
+    return sum + (terms.some((term) => haystack.includes(cleanKey(term))) ? 1 : 0);
+  }, 0);
+  return clamp01(hits / Math.max(keys.length || 1, 1));
+}
+
 function personalizationScore(poi, profile, context) {
   if (!profile) return 0.35;
   const category = cleanKey(poi.category);
@@ -93,14 +122,26 @@ function personalizationScore(poi, profile, context) {
     : dwellTarget < 25 && /takeaway|bakery|tea|juice|fast/i.test(`${poi.category} ${poi.name}`)
       ? 0.8
       : 0.5;
+  const explicit = profile.explicitSignals || {};
+  const taste = explicit.tasteProfile || {};
+  const explicitKeys = [
+    profile.persona,
+    ...(taste.sceneryVibes || []),
+    ...(taste.activitiesPurposes || []),
+    ...(taste.companionContexts || []),
+    ...(explicit.likedTags || []),
+    ...(explicit.likedCategories || []),
+  ].filter(Boolean);
+  const explicitScore = explicitHitScore(poi, explicitKeys);
 
   return clamp01(
-    categoryScore * 0.26 +
-      contextCategory * 0.24 +
-      purposeScore * 0.18 +
-      moodScore * 0.12 +
-      contextMood * 0.08 +
-      categoryDwellFit * 0.12,
+    categoryScore * 0.20 +
+      contextCategory * 0.19 +
+      explicitScore * 0.22 +
+      purposeScore * 0.15 +
+      moodScore * 0.09 +
+      contextMood * 0.06 +
+      categoryDwellFit * 0.09,
   );
 }
 
