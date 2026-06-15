@@ -9,6 +9,7 @@ const {
   reviewSignal,
 } = require('./scoringUtils');
 const { applyReranker } = require('./rerankerService');
+const { runSemanticRetrieval } = require('./semanticModelService');
 
 const DANANG_CENTER = { lat: 16.0544, lon: 108.2022 };
 
@@ -101,7 +102,7 @@ function explicitNegativePenalty(poi, context = {}) {
   return keywordHitScore(poi, filters);
 }
 
-function scorePOI(poi, query, context = {}) {
+function scorePOI(poi, query, context = {}, semanticScore = null) {
   const normalizedQuery = normalizeText(query);
   const intent = detectIntent(query);
   const userLocation = context.location || DANANG_CENTER;
@@ -117,14 +118,23 @@ function scorePOI(poi, query, context = {}) {
   const preference = explicitPreferenceScore(poi, context);
   const memoryCategoryPenalty = categoryPenaltyScore(poi, context);
   const explicitPenalty = explicitNegativePenalty(poi, context);
-  const finalScore = clamp01(
-    semantic * 0.28 +
+  const hasModelSemantic = Number.isFinite(semanticScore);
+  const baseScore = hasModelSemantic
+    ? semantic * 0.20 +
+      category * 0.20 +
+      preference * 0.17 +
+      rating * 0.12 +
+      distance * 0.08 +
+      review * 0.05 +
+      semanticScore * 0.18
+    : semantic * 0.28 +
       category * 0.22 +
       preference * 0.18 +
       rating * 0.13 +
       distance * 0.11 +
-      review * 0.08 -
-      Math.min(memoryCategoryPenalty * 0.08 + explicitPenalty * 0.16, 0.34),
+      review * 0.08;
+  const finalScore = clamp01(
+    baseScore - Math.min(memoryCategoryPenalty * 0.08 + explicitPenalty * 0.16, 0.34),
   );
 
   const warnings = [];
@@ -135,7 +145,17 @@ function scorePOI(poi, query, context = {}) {
   return {
     poi,
     score: finalScore,
-    signals: { semantic, category, preference, rating, distance, review, distanceKm, explicitPenalty },
+    signals: {
+      semantic,
+      modelSemantic: hasModelSemantic ? semanticScore : null,
+      category,
+      preference,
+      rating,
+      distance,
+      review,
+      distanceKm,
+      explicitPenalty,
+    },
     warnings,
     intent,
   };
@@ -175,10 +195,49 @@ function toRecommendation(scored) {
 }
 
 async function recommendPOIs({ query, context = {}, limit = 8 }) {
+  const semanticConfig = context.semanticModel || {};
+  const semanticEnabled = semanticConfig.enabled === true;
   const pois = await loadPOIs();
+  const candidateLimit = semanticConfig.candidateLimit || 200;
+  const semanticCandidates = semanticEnabled
+    ? pois
+        .filter((poi) => !isPoiDisliked(poi, context))
+        .map((poi) => scorePOI(poi, query, context))
+        .map((item) => applyReranker(item, query, context))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, candidateLimit)
+        .map(({ poi }) => ({
+          _agent_id: String(poi.id),
+          RestaurantID: String(poi.id),
+          'Restaurant Name': poi.name,
+          Category: poi.category,
+          District: poi.district,
+          Lat: poi.lat,
+          Lon: poi.lon,
+          LLM_Input_Text: poi.text || `${poi.name}. ${poi.category}. ${poi.district}.`,
+        }))
+    : [];
+  const semanticCandidateIds = new Set(semanticCandidates.map((candidate) => candidate._agent_id));
+  const semanticTool = semanticEnabled
+    ? await runSemanticRetrieval({
+        query,
+        version: semanticConfig.version || 'v4',
+        topK: Math.min(semanticConfig.topK || candidateLimit, semanticCandidates.length),
+        candidateLimit,
+        timeoutMs: semanticConfig.timeoutMs || 45000,
+        candidates: semanticCandidates,
+      })
+    : {
+        enabled: false,
+        available: false,
+        version: semanticConfig.version || null,
+        reason: 'Semantic model tool was not requested.',
+        scores: new Map(),
+      };
   const scored = pois
     .filter((poi) => !isPoiDisliked(poi, context))
-    .map((poi) => scorePOI(poi, query, context))
+    .filter((poi) => !semanticTool.available || semanticCandidateIds.has(String(poi.id)))
+    .map((poi) => scorePOI(poi, query, context, semanticTool.scores.get(String(poi.id))))
     .map((item) => applyReranker(item, query, context))
     .filter((item) => item.score > 0.08)
     .sort((a, b) => {
@@ -186,6 +245,7 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
       if (scoreDelta !== 0) return scoreDelta;
       return (b.reranker?.delta || 0) - (a.reranker?.delta || 0);
     })
+    .filter((item, index, items) => items.findIndex((candidate) => candidate.poi.id === item.poi.id) === index)
     .slice(0, limit)
     .map(toRecommendation);
 
@@ -193,6 +253,14 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
     role: 'traveler',
     query,
     results: scored,
+    semanticTool: {
+      enabled: semanticTool.enabled,
+      available: semanticTool.available,
+      version: semanticTool.version,
+      resultCount: semanticTool.resultCount || 0,
+      reason: semanticTool.reason,
+      role: 'optional_perception_tool',
+    },
     warnings: scored.length ? [] : ['Chưa tìm thấy POI phù hợp, hãy thử mô tả rõ hơn.'],
   };
 }

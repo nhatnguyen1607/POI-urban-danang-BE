@@ -11,6 +11,7 @@ const { createItinerary } = require('./services/itineraryPlannerService');
 const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
 const { estimateMatrix } = require('./services/routeMatrixService');
+const { resolvePythonExecutable } = require('./services/semanticModelService');
 const { recordFeedback } = require('./services/feedbackService');
 const { recommendContextualPOIs } = require('./services/contextualPoiRecommenderService');
 const { rebuildUserPreferences } = require('./services/userPreferenceService');
@@ -603,9 +604,7 @@ app.post('/api/recommend', upload.single('image'), (req, res) => {
 
   const scriptPath = path.join(__dirname, 'inference.py');
 
-  const pythonExecutable = fs.existsSync(path.resolve(ROOT_DIR, '../poi-urban-danang/.venv/Scripts/python.exe'))
-    ? path.resolve(ROOT_DIR, '../poi-urban-danang/.venv/Scripts/python.exe')
-    : 'python';
+  const pythonExecutable = resolvePythonExecutable();
 
   const pythonProcess = spawn(pythonExecutable, [
     scriptPath,

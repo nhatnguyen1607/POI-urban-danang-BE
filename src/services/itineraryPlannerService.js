@@ -93,6 +93,7 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
     totalPlanMinutes,
     requestedDurationMinutes: Number.parseInt(durationMinutes || context.durationMinutes, 10) || null,
     warnings: recommendation.warnings,
+    semanticTool: recommendation.semanticTool,
     detectedIntents: intents.map((intent) => ({ id: intent.id, label: intent.label })),
     actions: [
       {

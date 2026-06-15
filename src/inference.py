@@ -12,6 +12,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--version', type=str, default='v4')
 parser.add_argument('--text', type=str, required=True)
 parser.add_argument('--image', type=str, default='')
+parser.add_argument('--top-k', type=int, default=5)
+parser.add_argument('--candidate-limit', type=int, default=200)
+parser.add_argument('--strict-errors', action='store_true')
+parser.add_argument('--stdin-candidates', action='store_true')
 args = parser.parse_args()
 
 try:
@@ -44,21 +48,34 @@ try:
     if os.path.exists(model_dir):
         files = os.listdir(model_dir)
         print(f"[DEBUG] Files in model_dir: {files}", file=sys.stderr)
-        for f in files:
-            if f.endswith('.pth'):
-                model_path = os.path.join(model_dir, f)
-                print(f"[DEBUG] Found model file: {model_path}", file=sys.stderr)
-                break
+        preferred_files = [f for f in files if f == 'multimodal_best.pth']
+        fallback_files = sorted(
+            f for f in files
+            if f.endswith('.pth') and 'multimodal' in f.lower()
+        )
+        candidates = preferred_files or fallback_files
+        if candidates:
+            model_path = os.path.join(model_dir, candidates[0])
+            print(f"[DEBUG] Found model file: {model_path}", file=sys.stderr)
     else:
         print(f"[DEBUG] Model directory does not exist: {model_dir}", file=sys.stderr)
     
     if not model_path:
         raise Exception(f"No .pth model found in {model_dir}")
 
-    # Load data for features
-    data_path = os.path.join(DATA_ROOT, 'poi_data_ggmap.csv')
-    print(f"[DEBUG] Loading data from: {data_path}", file=sys.stderr)
-    df = pd.read_csv(data_path, encoding='utf-8')
+    # Load either the agent shortlist from stdin or the legacy Google Maps dataset.
+    if args.stdin_candidates:
+        candidate_rows = json.load(sys.stdin)
+        if not isinstance(candidate_rows, list) or not candidate_rows:
+            raise Exception("stdin candidates must be a non-empty JSON list")
+        df = pd.DataFrame(candidate_rows)
+        if 'LLM_Input_Text' not in df.columns:
+            raise Exception("stdin candidates must include LLM_Input_Text")
+        print(f"[DEBUG] Loaded {len(df)} agent candidates from stdin", file=sys.stderr)
+    else:
+        data_path = os.path.join(DATA_ROOT, 'poi_data_ggmap.csv')
+        print(f"[DEBUG] Loading data from: {data_path}", file=sys.stderr)
+        df = pd.read_csv(data_path, encoding='utf-8')
     all_texts = df['LLM_Input_Text'].fillna('').tolist()
     print(f"[DEBUG] Loaded {len(all_texts)} POI texts", file=sys.stderr)
 
@@ -93,7 +110,8 @@ try:
         # (In production we would precompute these features)
         all_poi_features = []
         batch_size = 32
-        limit_texts = all_texts[:200] 
+        candidate_limit = max(1, min(args.candidate_limit, len(all_texts)))
+        limit_texts = all_texts[:candidate_limit]
         
         for i in range(0, len(limit_texts), batch_size):
             batch_texts = limit_texts[i:i+batch_size]
@@ -104,7 +122,7 @@ try:
         all_poi_features = torch.cat(all_poi_features, dim=0)
         similarities = F.cosine_similarity(concept_feature, all_poi_features, dim=-1)
         
-        top_k = min(5, len(limit_texts))
+        top_k = max(1, min(args.top_k, len(limit_texts)))
         top_scores, top_indices = torch.topk(similarities, top_k)
         
         results = []
@@ -132,7 +150,7 @@ try:
             if pd.isna(lon_val): lon_val = 108.2022
             
             # ID: try place_id first, then RestaurantID
-            poi_id = poi.get('place_id') or poi.get('RestaurantID') or idx
+            poi_id = poi.get('_agent_id') or poi.get('place_id') or poi.get('RestaurantID') or idx
             
             results.append({
                 "id": str(poi_id),
@@ -153,6 +171,9 @@ except Exception as e:
     print(f"[ERROR] {error_msg}", file=sys.stderr)
     print(f"[TRACEBACK]\n{tb_str}", file=sys.stderr)
     
+    if args.strict_errors:
+        sys.exit(1)
+
     # Fallback to mock data if torch fails or model doesn't exist so frontend still works
     mock_results = [
         { "id": 1, "name": f"Mock: Khu vực Hải Châu (Version {args.version})", "score": 98.5, "district": "Hải Châu", "lat": 16.071, "lon": 108.245, "desc": f"Lỗi model: {error_msg[:150]}" },
