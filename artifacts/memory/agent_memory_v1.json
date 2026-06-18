@@ -1,0 +1,3305 @@
+{
+  "version": "agent_memory_v1",
+  "createdAt": "2026-06-09T02:46:44.217Z",
+  "sources": {
+    "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+    "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
+    "syntheticSamples": 96,
+    "feedbackEvents": 0
+  },
+  "profiles": {
+    "global": {
+      "profileId": "global",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "global",
+      "observations": [],
+      "preferences": {
+        "categoryAffinity": {},
+        "categoryPenalty": {},
+        "poiAffinity": {},
+        "poiPenalty": {},
+        "tags": {}
+      },
+      "reflection": "Chua co so thich danh muc ro rang; chua co tin hieu khong thich ro rang.",
+      "observationCount": 0,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    },
+    "persona_29da751c6c87": {
+      "profileId": "persona_29da751c6c87",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "student",
+      "observations": [
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-419",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-76",
+          "category": "Café/Dessert, Shop Online",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-261",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-21",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-112",
+          "category": "Quán nhậu",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-158",
+          "category": "Shop Online",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-391",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-26",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-128",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-442",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-449",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-45",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-21",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-292",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-139",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-256",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-20",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-228",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-429",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-277",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-60",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-45",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-343",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-26",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-528",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-128",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-89",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-377",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        }
+      ],
+      "preferences": {
+        "categoryAffinity": {
+          "an uong": 10.5,
+          "cafe": 8.4,
+          "quan an": 14.4,
+          "cafe/dessert": 10.4,
+          "hai san": 4.2,
+          "diem di choi": 6.3,
+          "quan nhau": 3.7,
+          "shop online": 0.8,
+          "an vat/via he": 4.8,
+          "nha hang": 4
+        },
+        "categoryPenalty": {
+          "shop online": 9.6,
+          "nha hang": 18.8,
+          "quan nhau": 9.6,
+          "tiem banh": 5.2,
+          "quan an": 18,
+          "an vat/via he": 2,
+          "trung tam vui choi danh cho tre em": 0.8,
+          "cafe/dessert": 14.4,
+          "nha hang mon chay": 2.4,
+          "nha hang gia dinh": 0.4,
+          "quan bar cocktail": 1.6,
+          "an chay": 0.4,
+          "bar/pub": 0.8
+        },
+        "poiAffinity": {
+          "foody-490": 2,
+          "foody-506": 1,
+          "foody-148": 3,
+          "foody-419": 1,
+          "foody-76": 1,
+          "foody-261": 1,
+          "foody-21": 2,
+          "foody-459": 2,
+          "foody-112": 1,
+          "foody-158": 1,
+          "foody-391": 1,
+          "foody-26": 2,
+          "foody-499": 1,
+          "foody-128": 2,
+          "foody-442": 1,
+          "foody-324": 1,
+          "foody-449": 1,
+          "foody-45": 2,
+          "foody-285": 4,
+          "foody-155": 2,
+          "foody-292": 1,
+          "foody-139": 1,
+          "foody-256": 1,
+          "foody-20": 1,
+          "foody-228": 1,
+          "foody-429": 1,
+          "foody-277": 1,
+          "foody-60": 1,
+          "foody-343": 1,
+          "foody-528": 1,
+          "foody-120": 1,
+          "foody-89": 1,
+          "foody-377": 1
+        },
+        "poiPenalty": {
+          "foody-0": 4,
+          "foody-41": 1,
+          "foody-398": 1,
+          "foody-239": 3,
+          "foody-546": 2,
+          "foody-347": 1,
+          "foody-43": 3,
+          "foody-228": 2,
+          "foody-383": 4,
+          "foody-433": 2,
+          "foody-2": 3,
+          "foody-272": 2,
+          "foody-485": 2,
+          "foody-129": 1,
+          "foody-18": 1,
+          "foody-396": 2,
+          "foody-497": 1,
+          "foody-69": 1,
+          "foody-6": 1,
+          "foody-74": 2,
+          "foody-483": 2,
+          "0x31421900577b7869:0xcbc3e6e561e7e3ea": 2,
+          "foody-523": 5,
+          "foody-515": 2,
+          "foody-65": 4,
+          "foody-489": 1,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "foody-76": 2,
+          "foody-432": 1,
+          "foody-60": 1,
+          "foody-5": 2,
+          "foody-285": 2,
+          "foody-73": 3,
+          "foody-435": 1,
+          "foody-111": 2,
+          "foody-124": 2,
+          "foody-62": 1,
+          "foody-123": 1,
+          "foody-519": 3,
+          "foody-377": 3,
+          "foody-172": 2,
+          "foody-318": 2,
+          "foody-45": 3,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 4,
+          "foody-443": 3,
+          "foody-535": 1,
+          "0x314217914baef6f1:0xdd737494f0847aa": 2,
+          "foody-310": 1,
+          "foody-155": 1,
+          "foody-48": 1,
+          "foody-336": 1,
+          "foody-80": 2,
+          "foody-459": 3,
+          "foody-363": 1,
+          "foody-33": 1,
+          "foody-534": 2,
+          "foody-256": 1,
+          "foody-164": 1,
+          "foody-149": 2,
+          "foody-366": 1,
+          "foody-447": 3,
+          "foody-250": 1,
+          "foody-331": 1,
+          "0x31421b003738e793:0x83689e823df7ee5a": 1,
+          "foody-84": 1,
+          "foody-257": 1,
+          "foody-499": 2,
+          "foody-241": 1,
+          "foody-360": 1,
+          "foody-29": 1,
+          "foody-407": 1,
+          "foody-437": 1,
+          "foody-82": 2,
+          "foody-203": 3,
+          "foody-139": 3,
+          "foody-112": 1,
+          "foody-152": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 4,
+          "foody-266": 1,
+          "foody-276": 2,
+          "foody-219": 1,
+          "foody-323": 1,
+          "foody-158": 2,
+          "foody-100": 1,
+          "foody-8": 2,
+          "foody-429": 1,
+          "foody-471": 3,
+          "foody-448": 2,
+          "foody-115": 2,
+          "foody-324": 1,
+          "foody-400": 3,
+          "foody-549": 2,
+          "foody-282": 2,
+          "foody-406": 2,
+          "foody-157": 2,
+          "foody-409": 1,
+          "foody-11": 1,
+          "foody-461": 2,
+          "foody-426": 1,
+          "foody-116": 1,
+          "foody-237": 1,
+          "foody-442": 1,
+          "foody-108": 1,
+          "foody-313": 1,
+          "foody-93": 2,
+          "foody-259": 1,
+          "foody-521": 1,
+          "foody-252": 1,
+          "foody-314": 3,
+          "foody-335": 1,
+          "foody-271": 1,
+          "foody-503": 1,
+          "foody-21": 1,
+          "foody-230": 1,
+          "foody-26": 2,
+          "foody-307": 1,
+          "foody-77": 1,
+          "foody-147": 1,
+          "foody-119": 1,
+          "foody-364": 1,
+          "foody-89": 1,
+          "foody-23": 1,
+          "foody-455": 1,
+          "foody-413": 1,
+          "foody-295": 1,
+          "foody-452": 1
+        },
+        "tags": {
+          "quiet": 10.5,
+          "study": 10.5,
+          "wifi": 10.5,
+          "moderate_price": 10.5
+        }
+      },
+      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, cafe/dessert.",
+      "observationCount": 45,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    },
+    "persona_dc7b0dfaef3a": {
+      "profileId": "persona_dc7b0dfaef3a",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "tourist",
+      "observations": [
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-449",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-204",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-119",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-76",
+          "category": "Café/Dessert, Shop Online",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-452",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-236",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-279",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-548",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-60",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-11",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-377",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-21",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-487",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-432",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-76",
+          "category": "Café/Dessert, Shop Online",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-20",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-50",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-272",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-128",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-497",
+          "category": "Quán ăn",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-24",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-366",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-119",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-391",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-239",
+          "category": "Quán nhậu",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-33",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-343",
+          "category": "Quán ăn",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        }
+      ],
+      "preferences": {
+        "categoryAffinity": {
+          "an uong": 10.5,
+          "cafe": 8.4,
+          "quan an": 19.2,
+          "cafe/dessert": 12,
+          "hai san": 4.2,
+          "diem di choi": 6.3,
+          "nha hang": 2.4,
+          "quan nhau": 2.9,
+          "an vat/via he": 1.6
+        },
+        "categoryPenalty": {
+          "nha hang": 18,
+          "tiem banh": 5.2,
+          "quan nhau": 10.4,
+          "shop online": 11.2,
+          "nha hang mon chay": 3.6,
+          "an vat/via he": 2.8,
+          "quan an": 16.4,
+          "bar/pub": 0.8,
+          "buffet": 0.4,
+          "cafe/dessert": 13.2,
+          "an chay": 0.4,
+          "nha hang gia dinh": 0.8,
+          "quan bar cocktail": 0.8
+        },
+        "poiAffinity": {
+          "foody-449": 1,
+          "foody-534": 3,
+          "foody-204": 1,
+          "foody-285": 2,
+          "foody-119": 2,
+          "foody-76": 2,
+          "foody-452": 1,
+          "foody-236": 1,
+          "foody-279": 1,
+          "foody-499": 4,
+          "foody-548": 1,
+          "foody-60": 1,
+          "foody-11": 1,
+          "foody-377": 1,
+          "foody-140": 2,
+          "foody-21": 1,
+          "foody-487": 1,
+          "foody-432": 1,
+          "foody-506": 1,
+          "foody-20": 1,
+          "foody-50": 1,
+          "foody-272": 1,
+          "foody-128": 1,
+          "foody-497": 1,
+          "foody-459": 2,
+          "foody-148": 1,
+          "foody-24": 1,
+          "foody-366": 1,
+          "foody-391": 1,
+          "foody-120": 2,
+          "foody-239": 1,
+          "foody-33": 1,
+          "foody-343": 1,
+          "foody-155": 1
+        },
+        "poiPenalty": {
+          "foody-377": 4,
+          "foody-347": 3,
+          "foody-139": 3,
+          "foody-158": 3,
+          "0x314217914baef6f1:0xdd737494f0847aa": 7,
+          "foody-429": 2,
+          "foody-152": 4,
+          "foody-489": 2,
+          "foody-0": 3,
+          "foody-546": 1,
+          "foody-56": 1,
+          "foody-313": 3,
+          "foody-336": 1,
+          "foody-69": 1,
+          "foody-271": 2,
+          "foody-46": 2,
+          "foody-164": 2,
+          "foody-363": 2,
+          "foody-23": 2,
+          "foody-406": 2,
+          "foody-121": 2,
+          "foody-239": 2,
+          "foody-433": 1,
+          "foody-332": 1,
+          "foody-41": 1,
+          "foody-457": 2,
+          "foody-451": 1,
+          "foody-310": 1,
+          "foody-323": 1,
+          "foody-278": 2,
+          "foody-463": 1,
+          "foody-73": 4,
+          "foody-60": 1,
+          "foody-115": 1,
+          "foody-76": 1,
+          "foody-123": 1,
+          "foody-373": 2,
+          "foody-252": 3,
+          "foody-65": 6,
+          "foody-276": 2,
+          "foody-174": 1,
+          "foody-82": 2,
+          "foody-447": 1,
+          "foody-172": 2,
+          "foody-519": 4,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "foody-465": 1,
+          "foody-9": 1,
+          "foody-250": 1,
+          "foody-219": 1,
+          "foody-478": 5,
+          "foody-304": 1,
+          "foody-257": 1,
+          "foody-111": 1,
+          "foody-292": 3,
+          "foody-272": 1,
+          "foody-335": 1,
+          "foody-534": 1,
+          "foody-499": 1,
+          "foody-549": 1,
+          "foody-40": 1,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 2,
+          "foody-483": 2,
+          "foody-204": 2,
+          "foody-331": 1,
+          "foody-424": 1,
+          "foody-237": 1,
+          "foody-236": 1,
+          "foody-343": 2,
+          "foody-79": 1,
+          "foody-11": 1,
+          "foody-497": 3,
+          "foody-129": 1,
+          "foody-345": 2,
+          "foody-136": 1,
+          "foody-45": 2,
+          "foody-173": 2,
+          "foody-521": 1,
+          "0x31421b003738e793:0x83689e823df7ee5a": 2,
+          "foody-135": 2,
+          "foody-448": 3,
+          "foody-535": 1,
+          "foody-8": 1,
+          "foody-471": 1,
+          "foody-228": 1,
+          "foody-515": 2,
+          "foody-266": 3,
+          "foody-523": 2,
+          "foody-203": 1,
+          "foody-432": 1,
+          "foody-482": 2,
+          "foody-62": 1,
+          "foody-5": 1,
+          "foody-435": 1,
+          "foody-124": 2,
+          "foody-157": 2,
+          "foody-112": 1,
+          "foody-77": 2,
+          "foody-148": 1,
+          "foody-116": 1,
+          "foody-548": 1,
+          "foody-120": 1,
+          "foody-409": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 2,
+          "foody-149": 3,
+          "foody-413": 1,
+          "foody-230": 1,
+          "foody-279": 1,
+          "foody-256": 1,
+          "foody-307": 2,
+          "foody-277": 1,
+          "foody-449": 1,
+          "foody-295": 1,
+          "foody-282": 1,
+          "foody-141": 1,
+          "foody-287": 1,
+          "foody-324": 1,
+          "foody-455": 1,
+          "foody-366": 1,
+          "foody-364": 1,
+          "foody-53": 1,
+          "foody-80": 1,
+          "foody-259": 1,
+          "foody-314": 1,
+          "foody-452": 1,
+          "foody-459": 1,
+          "foody-114": 1,
+          "foody-285": 1
+        },
+        "tags": {
+          "near_beach": 10.5,
+          "seafood": 10.5,
+          "check_in": 10.5,
+          "high_rating": 10.5
+        }
+      },
+      "reflection": "Uu tien quan an, cafe/dessert, an uong, cafe; han che nha hang, quan an, cafe/dessert.",
+      "observationCount": 45,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    },
+    "persona_ec9ee2650c2b": {
+      "profileId": "persona_ec9ee2650c2b",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "young_professional",
+      "observations": [
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-328",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-60",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-45",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-158",
+          "category": "Shop Online",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-53",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-127",
+          "category": "Café/Dessert",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-279",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-482",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-452",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-228",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-343",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-111",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-172",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-158",
+          "category": "Shop Online",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-287",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-287",
+          "category": "Café/Dessert",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-11",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-279",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-419",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-236",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-174",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-158",
+          "category": "Shop Online",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-20",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-24",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-149",
+          "category": "Nhà hàng",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-158",
+          "category": "Shop Online",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-119",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-279",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-14",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-89",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-403",
+          "category": "Quán ăn",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-366",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-343",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        }
+      ],
+      "preferences": {
+        "categoryAffinity": {
+          "an uong": 10.5,
+          "cafe": 8.4,
+          "an vat/via he": 0.8,
+          "cafe/dessert": 10.4,
+          "hai san": 4.2,
+          "diem di choi": 6.3,
+          "nha hang": 4.8,
+          "shop online": 3.2,
+          "quan an": 16.8,
+          "quan nhau": 2.1
+        },
+        "categoryPenalty": {
+          "nha hang": 21.6,
+          "quan nhau": 10.4,
+          "shop online": 7.2,
+          "quan an": 16.8,
+          "an vat/via he": 4.4,
+          "nha hang mon chay": 0.8,
+          "tiem banh": 6,
+          "cafe/dessert": 14.4,
+          "an chay": 0.8,
+          "bar/pub": 0.4,
+          "quan bar cocktail": 0.4,
+          "buffet": 0.4,
+          "trung tam vui choi danh cho tre em": 0.4
+        },
+        "poiAffinity": {
+          "foody-328": 1,
+          "foody-60": 1,
+          "foody-45": 1,
+          "foody-158": 4,
+          "foody-53": 1,
+          "foody-127": 1,
+          "foody-459": 1,
+          "foody-490": 2,
+          "foody-279": 3,
+          "foody-499": 3,
+          "foody-164": 1,
+          "foody-482": 1,
+          "foody-452": 1,
+          "foody-228": 1,
+          "foody-343": 2,
+          "foody-120": 1,
+          "foody-111": 1,
+          "foody-172": 1,
+          "foody-287": 2,
+          "foody-11": 1,
+          "foody-419": 1,
+          "foody-324": 1,
+          "foody-236": 1,
+          "foody-174": 1,
+          "foody-20": 1,
+          "foody-24": 1,
+          "foody-149": 1,
+          "foody-285": 2,
+          "foody-119": 1,
+          "foody-148": 1,
+          "foody-14": 1,
+          "foody-89": 1,
+          "foody-403": 1,
+          "foody-366": 1
+        },
+        "poiPenalty": {
+          "foody-483": 2,
+          "foody-519": 4,
+          "foody-413": 1,
+          "foody-149": 3,
+          "foody-282": 2,
+          "foody-400": 2,
+          "foody-152": 4,
+          "foody-433": 4,
+          "foody-429": 1,
+          "foody-535": 4,
+          "foody-18": 2,
+          "foody-114": 3,
+          "foody-343": 1,
+          "foody-452": 1,
+          "foody-109": 1,
+          "foody-424": 1,
+          "foody-313": 1,
+          "foody-20": 2,
+          "foody-503": 1,
+          "foody-328": 1,
+          "foody-82": 2,
+          "0x314217914baef6f1:0xdd737494f0847aa": 1,
+          "foody-394": 2,
+          "foody-465": 2,
+          "foody-409": 1,
+          "foody-0": 3,
+          "foody-347": 3,
+          "foody-523": 3,
+          "foody-74": 2,
+          "foody-332": 3,
+          "foody-261": 2,
+          "foody-366": 2,
+          "foody-53": 3,
+          "foody-76": 3,
+          "foody-448": 4,
+          "foody-100": 1,
+          "foody-324": 2,
+          "foody-515": 2,
+          "foody-111": 3,
+          "foody-157": 5,
+          "foody-250": 2,
+          "foody-323": 1,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 1,
+          "foody-521": 2,
+          "foody-383": 2,
+          "foody-549": 4,
+          "foody-443": 2,
+          "foody-124": 1,
+          "foody-310": 1,
+          "foody-108": 3,
+          "foody-256": 1,
+          "foody-241": 2,
+          "foody-237": 1,
+          "foody-239": 2,
+          "foody-236": 1,
+          "foody-534": 3,
+          "foody-23": 1,
+          "foody-29": 2,
+          "foody-457": 1,
+          "foody-219": 2,
+          "foody-398": 1,
+          "foody-406": 1,
+          "foody-266": 2,
+          "foody-461": 1,
+          "foody-499": 1,
+          "foody-14": 1,
+          "foody-6": 1,
+          "foody-2": 1,
+          "foody-538": 1,
+          "foody-33": 1,
+          "foody-56": 1,
+          "foody-298": 2,
+          "foody-41": 1,
+          "foody-276": 4,
+          "foody-65": 2,
+          "foody-391": 1,
+          "foody-508": 1,
+          "foody-119": 1,
+          "foody-88": 1,
+          "foody-58": 1,
+          "foody-24": 1,
+          "foody-397": 2,
+          "foody-112": 2,
+          "foody-447": 1,
+          "foody-141": 1,
+          "foody-127": 1,
+          "foody-471": 1,
+          "foody-174": 2,
+          "foody-43": 4,
+          "foody-158": 2,
+          "foody-336": 1,
+          "foody-363": 2,
+          "foody-257": 1,
+          "foody-548": 3,
+          "foody-93": 1,
+          "foody-304": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 1,
+          "foody-45": 1,
+          "foody-271": 1,
+          "foody-11": 1,
+          "foody-490": 1,
+          "foody-116": 1,
+          "foody-442": 1,
+          "foody-426": 1,
+          "foody-121": 1,
+          "foody-9": 1,
+          "foody-40": 1,
+          "foody-228": 3,
+          "foody-451": 1,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "foody-435": 1,
+          "foody-62": 1,
+          "foody-123": 1,
+          "foody-278": 1,
+          "foody-5": 1,
+          "foody-204": 1,
+          "foody-331": 1,
+          "foody-39": 1,
+          "0x31421900577b7869:0xcbc3e6e561e7e3ea": 1,
+          "foody-84": 1,
+          "foody-69": 1,
+          "foody-230": 1,
+          "foody-482": 1,
+          "foody-487": 1,
+          "foody-285": 1,
+          "foody-292": 1,
+          "foody-247": 1
+        },
+        "tags": {
+          "dessert": 10.5,
+          "premium": 10.5,
+          "meeting": 10.5,
+          "central": 10.5
+        }
+      },
+      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, cafe/dessert.",
+      "observationCount": 45,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    },
+    "persona_ee443d486270": {
+      "profileId": "persona_ee443d486270",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "family",
+      "observations": [
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-482",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-172",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-24",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-485",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-40",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-128",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-287",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-336",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-413",
+          "category": "Nhà hàng",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-20",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-127",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-448",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-343",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-482",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-272",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-252",
+          "category": "Quán nhậu",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-497",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-256",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Tao lich trinh 2 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-21",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-149",
+          "category": "Nhà hàng",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-26",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-53",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-287",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh toi nay co hai san, diem check-in va cafe gan bien trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-373",
+          "category": "Café/Dessert",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Goi y noi gap ban co banh ngot, cafe dep va de di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-328",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-250",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-485",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 6 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh 6 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        }
+      ],
+      "preferences": {
+        "categoryAffinity": {
+          "an uong": 9.8,
+          "cafe": 7.7,
+          "quan an": 14.4,
+          "cafe/dessert": 9.6,
+          "hai san": 3.5,
+          "diem di choi": 5.6,
+          "nha hang": 3.2,
+          "quan nhau": 4.5,
+          "an vat/via he": 3.2
+        },
+        "categoryPenalty": {
+          "nha hang": 17.6,
+          "quan nhau": 10,
+          "buffet": 0.4,
+          "shop online": 8,
+          "quan bar cocktail": 1.6,
+          "quan an": 14.4,
+          "an vat/via he": 2,
+          "tiem banh": 5.2,
+          "nha hang mon chay": 2,
+          "cafe/dessert": 14.8
+        },
+        "poiAffinity": {
+          "foody-148": 2,
+          "foody-482": 2,
+          "foody-172": 1,
+          "foody-164": 3,
+          "foody-155": 1,
+          "foody-24": 1,
+          "foody-485": 2,
+          "foody-499": 1,
+          "foody-40": 1,
+          "foody-459": 2,
+          "foody-128": 1,
+          "foody-287": 2,
+          "foody-336": 1,
+          "foody-413": 1,
+          "foody-20": 1,
+          "foody-127": 1,
+          "foody-448": 1,
+          "foody-343": 1,
+          "foody-285": 2,
+          "foody-272": 1,
+          "foody-120": 1,
+          "foody-252": 1,
+          "foody-497": 1,
+          "foody-256": 1,
+          "foody-534": 1,
+          "foody-21": 1,
+          "foody-149": 1,
+          "foody-26": 1,
+          "foody-53": 1,
+          "foody-373": 1,
+          "foody-490": 1,
+          "foody-328": 1,
+          "foody-250": 1
+        },
+        "poiPenalty": {
+          "foody-448": 2,
+          "foody-112": 2,
+          "foody-451": 1,
+          "foody-40": 1,
+          "foody-65": 4,
+          "foody-546": 1,
+          "foody-158": 2,
+          "foody-93": 3,
+          "0x31421901d2e25265:0xada0ea668734ab97": 4,
+          "foody-409": 4,
+          "foody-17": 1,
+          "foody-279": 2,
+          "foody-503": 1,
+          "foody-56": 1,
+          "foody-548": 2,
+          "foody-11": 2,
+          "foody-79": 2,
+          "foody-129": 2,
+          "foody-272": 1,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "foody-398": 1,
+          "foody-124": 1,
+          "foody-478": 2,
+          "foody-443": 2,
+          "foody-310": 1,
+          "foody-259": 1,
+          "foody-433": 2,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 3,
+          "foody-228": 1,
+          "foody-76": 2,
+          "foody-394": 2,
+          "foody-8": 1,
+          "foody-399": 1,
+          "foody-123": 1,
+          "foody-366": 4,
+          "foody-127": 1,
+          "foody-332": 3,
+          "foody-318": 2,
+          "foody-149": 1,
+          "foody-447": 4,
+          "foody-432": 2,
+          "foody-266": 5,
+          "foody-157": 2,
+          "foody-141": 2,
+          "foody-4": 1,
+          "foody-5": 1,
+          "foody-252": 1,
+          "foody-0": 1,
+          "0x314203edbc5948b1:0x230c1b6da03672e6": 3,
+          "foody-41": 1,
+          "foody-139": 1,
+          "foody-377": 1,
+          "foody-535": 2,
+          "foody-442": 1,
+          "foody-239": 2,
+          "foody-292": 1,
+          "foody-14": 1,
+          "foody-461": 1,
+          "foody-285": 1,
+          "foody-298": 1,
+          "foody-482": 3,
+          "foody-155": 1,
+          "foody-120": 1,
+          "foody-429": 4,
+          "foody-45": 2,
+          "foody-523": 1,
+          "foody-295": 2,
+          "foody-84": 1,
+          "foody-20": 2,
+          "foody-537": 1,
+          "foody-336": 1,
+          "foody-50": 2,
+          "foody-307": 1,
+          "foody-515": 3,
+          "foody-383": 2,
+          "foody-276": 1,
+          "foody-331": 1,
+          "foody-74": 2,
+          "0x314217914baef6f1:0xdd737494f0847aa": 2,
+          "foody-287": 2,
+          "foody-62": 2,
+          "foody-347": 1,
+          "foody-73": 2,
+          "foody-435": 1,
+          "foody-361": 1,
+          "foody-174": 1,
+          "foody-43": 1,
+          "foody-82": 1,
+          "foody-80": 1,
+          "foody-323": 1,
+          "foody-152": 1,
+          "foody-203": 1,
+          "foody-455": 1,
+          "foody-261": 1,
+          "foody-53": 1,
+          "foody-250": 2,
+          "foody-77": 2,
+          "foody-33": 1,
+          "foody-426": 1,
+          "foody-114": 1,
+          "foody-21": 1,
+          "foody-277": 1,
+          "foody-452": 1,
+          "foody-121": 1,
+          "foody-282": 1,
+          "foody-257": 1,
+          "foody-44": 1,
+          "foody-18": 1,
+          "foody-313": 1,
+          "foody-230": 1,
+          "foody-26": 1,
+          "foody-247": 1,
+          "foody-9": 2,
+          "foody-549": 1,
+          "foody-314": 1,
+          "foody-465": 1,
+          "foody-172": 1,
+          "foody-89": 1,
+          "foody-324": 1,
+          "foody-135": 1,
+          "foody-471": 1,
+          "foody-489": 1,
+          "foody-534": 1,
+          "foody-115": 1
+        },
+        "tags": {
+          "family_friendly": 9.5,
+          "clean": 9.5,
+          "easy_route": 9.5,
+          "safe": 9.5
+        }
+      },
+      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, cafe/dessert, quan an.",
+      "observationCount": 41,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    },
+    "persona_211d48776472": {
+      "profileId": "persona_211d48776472",
+      "version": "agent_memory_v1",
+      "memoryRate": 0.14,
+      "segment": "business_owner",
+      "observations": [
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-449",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-429",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-60",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-313",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-26",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-541",
+          "category": "Quán ăn, Quán nhậu",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-497",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-256",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-73",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-403",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-448",
+          "category": "Nhà hàng",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-287",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-499",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-74",
+          "category": "Shop Online",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-73",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-482",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-497",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 3 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-272",
+          "category": "Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-282",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-403",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-257",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-377",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-487",
+          "category": "Ăn vặt/vỉa hè",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        }
+      ],
+      "preferences": {
+        "categoryAffinity": {
+          "an uong": 7,
+          "cafe": 5.6,
+          "quan an": 11.2,
+          "cafe/dessert": 6.4,
+          "hai san": 2.8,
+          "diem di choi": 4.2,
+          "nha hang": 2.4,
+          "quan nhau": 2.2,
+          "an vat/via he": 2.4,
+          "shop online": 0.8
+        },
+        "categoryPenalty": {
+          "an chay": 0.4,
+          "nha hang mon chay": 0.4,
+          "quan nhau": 8.4,
+          "nha hang": 13.2,
+          "shop online": 5.2,
+          "tiem banh": 4.4,
+          "quan an": 10.4,
+          "an vat/via he": 3.2,
+          "cafe/dessert": 8,
+          "buffet": 0.8,
+          "bar/pub": 0.8,
+          "quan bar cocktail": 0.4,
+          "nha hang gia dinh": 0.4
+        },
+        "poiAffinity": {
+          "foody-449": 1,
+          "foody-285": 2,
+          "foody-429": 1,
+          "foody-140": 1,
+          "foody-155": 1,
+          "foody-60": 1,
+          "foody-313": 1,
+          "foody-26": 1,
+          "foody-541": 1,
+          "foody-497": 2,
+          "foody-256": 1,
+          "foody-73": 2,
+          "foody-403": 2,
+          "foody-448": 1,
+          "foody-164": 1,
+          "foody-120": 1,
+          "foody-287": 1,
+          "foody-499": 1,
+          "foody-74": 1,
+          "foody-482": 1,
+          "foody-272": 1,
+          "foody-282": 1,
+          "foody-459": 1,
+          "foody-257": 1,
+          "foody-377": 1,
+          "foody-487": 1
+        },
+        "poiPenalty": {
+          "foody-219": 1,
+          "0x314217914baef6f1:0xdd737494f0847aa": 1,
+          "foody-304": 1,
+          "foody-252": 3,
+          "foody-174": 2,
+          "foody-409": 1,
+          "foody-203": 1,
+          "0x314203edbc5948b1:0x230c1b6da03672e6": 1,
+          "foody-377": 1,
+          "foody-295": 1,
+          "foody-18": 1,
+          "foody-120": 1,
+          "foody-29": 1,
+          "foody-69": 2,
+          "foody-407": 1,
+          "foody-335": 1,
+          "foody-23": 2,
+          "foody-452": 2,
+          "foody-487": 1,
+          "foody-139": 1,
+          "foody-413": 2,
+          "foody-483": 1,
+          "foody-173": 1,
+          "foody-152": 1,
+          "foody-394": 3,
+          "foody-136": 1,
+          "foody-65": 2,
+          "foody-112": 1,
+          "foody-266": 3,
+          "foody-93": 2,
+          "foody-147": 1,
+          "foody-447": 2,
+          "foody-74": 2,
+          "foody-433": 5,
+          "foody-76": 2,
+          "foody-373": 1,
+          "foody-332": 3,
+          "foody-115": 3,
+          "foody-149": 2,
+          "foody-391": 1,
+          "foody-124": 2,
+          "foody-43": 2,
+          "foody-100": 1,
+          "foody-259": 1,
+          "foody-323": 1,
+          "foody-397": 1,
+          "foody-515": 2,
+          "foody-443": 1,
+          "foody-157": 1,
+          "foody-451": 2,
+          "foody-228": 1,
+          "foody-398": 2,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "foody-204": 2,
+          "foody-158": 1,
+          "foody-33": 1,
+          "foody-490": 2,
+          "foody-2": 1,
+          "foody-257": 1,
+          "foody-230": 1,
+          "foody-237": 1,
+          "foody-277": 1,
+          "foody-14": 1,
+          "foody-406": 2,
+          "foody-521": 1,
+          "foody-45": 1,
+          "foody-9": 3,
+          "foody-549": 1,
+          "foody-548": 1,
+          "foody-21": 1,
+          "foody-26": 1,
+          "foody-241": 1,
+          "foody-256": 2,
+          "foody-414": 1,
+          "foody-129": 1,
+          "foody-108": 1,
+          "foody-313": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 1,
+          "foody-519": 1,
+          "foody-478": 1,
+          "foody-282": 2,
+          "foody-89": 1,
+          "foody-82": 1,
+          "foody-489": 1,
+          "foody-88": 2,
+          "foody-155": 1,
+          "foody-482": 2,
+          "foody-62": 1,
+          "foody-429": 1,
+          "foody-347": 1,
+          "foody-123": 1,
+          "foody-523": 1,
+          "foody-310": 1,
+          "foody-239": 1,
+          "0x31421b003738e793:0x83689e823df7ee5a": 1,
+          "foody-343": 1,
+          "foody-506": 1,
+          "foody-271": 1,
+          "foody-537": 1,
+          "foody-292": 1,
+          "foody-497": 1
+        },
+        "tags": {
+          "demand_signal": 7,
+          "complementary_poi": 7,
+          "low_competition": 7
+        }
+      },
+      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, quan nhau.",
+      "observationCount": 30,
+      "updatedAt": "2026-06-09T02:46:44.217Z"
+    }
+  }
+}
