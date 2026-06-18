@@ -18,7 +18,7 @@ class ReteNetwork {
   }
 
   async load() {
-    const ruleDir = path.join(__dirname, 'rule');
+    const ruleDir = this._resolveRuleDir();
 
     const [turnRules, timeRules, oneWayRules] = await Promise.all([
       this._readCSV(path.join(ruleDir, 'cam_queo.csv')),
@@ -115,6 +115,24 @@ class ReteNetwork {
   }
 
   // --- Helper Methods ---
+
+  _resolveRuleDir() {
+    const requiredFiles = ['cam_queo.csv', 'cam_theo_gio.csv', 'duong_1_chieu.csv'];
+    const candidates = [
+      path.join(__dirname, 'rule'),
+      path.resolve(__dirname, '..', '..', 'ES-system', 'rule'),
+    ];
+
+    const ruleDir = candidates.find((dir) =>
+      requiredFiles.every((fileName) => fs.existsSync(path.join(dir, fileName)))
+    );
+
+    if (!ruleDir) {
+      throw new Error(`Expert system rule files not found. Checked: ${candidates.join(', ')}`);
+    }
+
+    return ruleDir;
+  }
 
   _findFuzzyKeys(targetName, keysIterable) {
     const target = this._normalizeRoadName(targetName);
