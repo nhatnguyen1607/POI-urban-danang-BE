@@ -359,7 +359,8 @@ app.post('/api/user-preferences/rebuild', requireFirebaseAuth, async (req, res) 
 
 app.post('/api/agent/create-itinerary', requireFirebaseAuth, async (req, res) => {
   try {
-    const { query, context, transport, limit, durationMinutes } = req.body;
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const { query, context, transport, limit, durationMinutes } = body;
     if (!query || !String(query).trim()) {
       return res.status(400).json({ error: 'Missing query' });
     }
