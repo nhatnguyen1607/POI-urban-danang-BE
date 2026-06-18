@@ -6,9 +6,13 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
 
+function isClosedPipeError(error) {
+  return ['EPIPE', 'EOF', 'ECONNRESET', 'ERR_STREAM_DESTROYED'].includes(error?.code);
+}
+
 function ignoreBrokenPipe(stream) {
   stream.on('error', (error) => {
-    if (error.code !== 'EPIPE') throw error;
+    if (!isClosedPipeError(error)) throw error;
   });
 }
 
@@ -16,12 +20,12 @@ ignoreBrokenPipe(process.stdout);
 ignoreBrokenPipe(process.stderr);
 
 process.on('uncaughtException', (error) => {
-  if (error?.code === 'EPIPE') return;
+  if (isClosedPipeError(error)) return;
   throw error;
 });
 
 process.on('unhandledRejection', (reason) => {
-  if (reason?.code === 'EPIPE') return;
+  if (isClosedPipeError(reason)) return;
   throw reason;
 });
 
