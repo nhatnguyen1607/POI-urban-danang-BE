@@ -1,11 +1,22 @@
----
-title: Back End POI Urban Danang
-emoji: 📍
-colorFrom: blue
-colorTo: green
-sdk: docker
-pinned: false
----
+# Danang UrbanAgent AI - Backend
 
-# POI Urban Danang Backend
-Đây là hệ thống backend chạy Node.js và Python cho dự án POI Urban Danang.
+Backend Node.js/Python cho Danang UrbanAgent AI.
+
+## Cau truc chinh
+
+```text
+src/                 API server, Python inference, expert system, encoder
+data/                Du lieu POI local
+artifacts/model/     Bao cao/metric/model artifacts theo version
+config/              Cau hinh local
+storage/uploads/     File upload runtime
+scripts/             Script tien xu ly/tao tai lieu
+docs/pisi_2026/      Ho so PISI
+```
+
+## Chay local
+
+```bash
+npm install
+npm start
+```
