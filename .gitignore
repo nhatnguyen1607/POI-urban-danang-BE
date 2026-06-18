@@ -39,6 +39,32 @@
 /data/synthetic/
 /data/training/
 
+# Runtime learning artifacts for deployed agent.
+!/artifacts/
+!/artifacts/memory/
+/artifacts/memory/*
+!/artifacts/memory/agent_memory_v1.json
+!/artifacts/reranker/
+/artifacts/reranker/*
+!/artifacts/reranker/agent_reranker_v1.json
+
+# Lightweight training-status metadata for the frontend panel.
+!/data/synthetic/
+/data/synthetic/*
+!/data/synthetic/urbanagent_synthetic_v1.summary.json
+!/data/training/
+/data/training/*
+!/data/training/agent_representation_pairs_v1.summary.json
+!/reports/
+/reports/*
+!/reports/evaluation/
+/reports/evaluation/*
+!/reports/evaluation/learning_loop_eval_latest.json
+!/reports/evaluation/figures/
+/reports/evaluation/figures/*
+!/reports/evaluation/figures/learning_before_after.svg
+!/reports/evaluation/figures/learning_summary_card.svg
+
 # Python cache
 *.pycache
 __pycache__/

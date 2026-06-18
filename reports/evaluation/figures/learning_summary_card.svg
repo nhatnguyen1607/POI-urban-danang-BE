@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620">
+<rect width="100%" height="100%" fill="#020617"/>
+<text x="56" y="62" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="850">How We Know The Agent Learned</text>
+<text x="56" y="96" fill="#94a3b8" font-family="Inter, Arial, sans-serif" font-size="16">Memory + feedback training should improve retrieval quality before any neural fine-tuning.</text>
+<rect x="56" y="150" width="310" height="250" rx="22" fill="#0f172a" stroke="#1e293b"/>
+<text x="80" y="194" fill="#cbd5e1" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Exact POI Hit Rate</text>
+<text x="80" y="260" fill="#64748b" font-family="Inter, Arial, sans-serif" font-size="16">Before: 0.1771</text>
+<text x="80" y="318" fill="#22d3ee" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="850">0.2500</text>
+<text x="80" y="360" fill="#34d399" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Delta +0.0729</text>
+<rect x="400" y="150" width="310" height="250" rx="22" fill="#0f172a" stroke="#1e293b"/>
+<text x="424" y="194" fill="#cbd5e1" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Recall@ReturnedK</text>
+<text x="424" y="260" fill="#64748b" font-family="Inter, Arial, sans-serif" font-size="16">Before: 0.0955</text>
+<text x="424" y="318" fill="#22d3ee" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="850">0.1319</text>
+<text x="424" y="360" fill="#34d399" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Delta +0.0364</text>
+<rect x="744" y="150" width="310" height="250" rx="22" fill="#0f172a" stroke="#1e293b"/>
+<text x="768" y="194" fill="#cbd5e1" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Intent Coverage</text>
+<text x="768" y="260" fill="#64748b" font-family="Inter, Arial, sans-serif" font-size="16">Before: 0.8090</text>
+<text x="768" y="318" fill="#22d3ee" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="850">0.8090</text>
+<text x="768" y="360" fill="#34d399" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Delta +0.0000</text>
+<rect x="56" y="448" width="1008" height="96" rx="18" fill="#082f49" stroke="#0e7490"/>
+<text x="84" y="486" fill="#e0f2fe" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750">Research/product message</text>
+<text x="84" y="520" fill="#bae6fd" font-family="Inter, Arial, sans-serif" font-size="15">The agent contribution is not just routing: it learns long-term user/persona preferences, then reranks Danang POIs with measurable before/after gains.</text>
+</svg>

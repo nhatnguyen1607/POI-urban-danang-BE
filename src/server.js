@@ -15,6 +15,16 @@ function ignoreBrokenPipe(stream) {
 ignoreBrokenPipe(process.stdout);
 ignoreBrokenPipe(process.stderr);
 
+process.on('uncaughtException', (error) => {
+  if (error?.code === 'EPIPE') return;
+  throw error;
+});
+
+process.on('unhandledRejection', (reason) => {
+  if (reason?.code === 'EPIPE') return;
+  throw reason;
+});
+
 const { initExpertSystem, findOptimalRoute } = require('./expert_system/expert_system');
 const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');

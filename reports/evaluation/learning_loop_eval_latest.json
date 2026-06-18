@@ -1,0 +1,46 @@
+{
+  "createdAt": "2026-06-09T02:47:19.674Z",
+  "before": {
+    "sampleCount": 96,
+    "precisionAtExpectedK": 0.0399,
+    "recallAtReturnedK": 0.0955,
+    "f1": 0.0417,
+    "intentCoverage": 0.809,
+    "exactPoiHitRate": 0.1771
+  },
+  "after": {
+    "sampleCount": 96,
+    "precisionAtExpectedK": 0.0764,
+    "recallAtReturnedK": 0.1319,
+    "f1": 0.0781,
+    "intentCoverage": 0.809,
+    "exactPoiHitRate": 0.25
+  },
+  "delta": {
+    "precisionAtExpectedK": 0.0365,
+    "recallAtReturnedK": 0.0364,
+    "f1": 0.0364,
+    "intentCoverage": 0,
+    "exactPoiHitRate": 0.0729
+  },
+  "memory": {
+    "profileCount": 6,
+    "sources": {
+      "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+      "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
+      "syntheticSamples": 96,
+      "feedbackEvents": 0
+    }
+  },
+  "reranker": {
+    "artifact": "E:\\ki6\\CĐ2\\back-end\\artifacts\\reranker\\agent_reranker_v1.json",
+    "trainingSources": {
+      "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+      "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
+      "memoryFile": "E:\\ki6\\CĐ2\\back-end\\artifacts\\memory\\agent_memory_v1.json",
+      "syntheticSamples": 96,
+      "feedbackEvents": 0,
+      "memoryProfiles": 6
+    }
+  }
+}
