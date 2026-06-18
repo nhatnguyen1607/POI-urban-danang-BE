@@ -24,12 +24,13 @@ function stayMinutesForStop(index, totalStops, durationMinutes) {
 }
 
 async function createItinerary({ query, context = {}, transport = 'motorbike', limit = 5, durationMinutes }) {
-  const effectiveLimit = limitFromDuration(durationMinutes || context.durationMinutes, limit);
-  const recommendation = await recommendPOIs({ query, context, limit: Math.max(effectiveLimit * 5, 18) });
+  const safeContext = context && typeof context === 'object' ? context : {};
+  const effectiveLimit = limitFromDuration(durationMinutes || safeContext.durationMinutes, limit);
+  const recommendation = await recommendPOIs({ query, context: safeContext, limit: Math.max(effectiveLimit * 5, 18) });
   const intents = detectIntents(query);
   const start = {
-    lat: context.location?.lat || 16.0544,
-    lon: context.location?.lon || context.location?.lng || 108.2022,
+    lat: safeContext.location?.lat || 16.0544,
+    lon: safeContext.location?.lon || safeContext.location?.lng || 108.2022,
   };
 
   const selectedMap = new Map();
@@ -71,7 +72,7 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
       suggestedStayMinutes: stayMinutesForStop(
         index,
         selected.slice(0, effectiveLimit).length,
-        durationMinutes || context.durationMinutes,
+        durationMinutes || safeContext.durationMinutes,
       ),
       reason: poi.reason,
     };
@@ -91,7 +92,7 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
     totalTravelMinutes,
     totalStayMinutes,
     totalPlanMinutes,
-    requestedDurationMinutes: Number.parseInt(durationMinutes || context.durationMinutes, 10) || null,
+    requestedDurationMinutes: Number.parseInt(durationMinutes || safeContext.durationMinutes, 10) || null,
     warnings: recommendation.warnings,
     semanticTool: recommendation.semanticTool,
     detectedIntents: intents.map((intent) => ({ id: intent.id, label: intent.label })),
