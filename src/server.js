@@ -5,6 +5,16 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
+
+function ignoreBrokenPipe(stream) {
+  stream.on('error', (error) => {
+    if (error.code !== 'EPIPE') throw error;
+  });
+}
+
+ignoreBrokenPipe(process.stdout);
+ignoreBrokenPipe(process.stderr);
+
 const { initExpertSystem, findOptimalRoute } = require('./expert_system/expert_system');
 const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');
