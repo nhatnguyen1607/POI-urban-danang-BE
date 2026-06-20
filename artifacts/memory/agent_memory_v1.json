@@ -1,11 +1,11 @@
 {
   "version": "agent_memory_v1",
-  "createdAt": "2026-06-09T02:46:44.217Z",
+  "createdAt": "2026-06-06T06:04:34.517Z",
   "sources": {
-    "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
-    "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
-    "syntheticSamples": 96,
-    "feedbackEvents": 0
+    "syntheticFile": "D:\\POI-urban-danang-BE\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+    "feedbackFile": "D:\\POI-urban-danang-BE\\storage\\feedback\\agent-feedback.jsonl",
+    "syntheticSamples": 120,
+    "feedbackEvents": 61
   },
   "profiles": {
     "global": {
@@ -13,17 +13,405 @@
       "version": "agent_memory_v1",
       "memoryRate": 0.14,
       "segment": "global",
-      "observations": [],
+      "observations": [
+        {
+          "type": "smoke",
+          "query": "test",
+          "timestamp": "2026-06-04T07:48:07.906Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:49:21.226Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x314219db1e2d789b:0x972468829e25c65e",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:49:31.195Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x314219db1e2d789b:0x972468829e25c65e",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:49:33.222Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:49:42.885Z"
+        },
+        {
+          "type": "add_to_itinerary",
+          "poiId": "0x3142176e744031dd:0x2146b06e3808f729",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:49:51.929Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x3142176e744031dd:0x2146b06e3808f729",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:50:00.549Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x314217004fb7d1c3:0x5cda50e42df0c63b",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T12:58:10.808Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T13:51:35.638Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x314217004fb7d1c3:0x5cda50e42df0c63b",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T13:51:47.495Z"
+        },
+        {
+          "type": "agent_run_business_insight",
+          "query": "I want to open a study cafe for students in Danang.",
+          "timestamp": "2026-06-04T13:52:08.236Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T13:52:25.668Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:03:58.530Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:04:16.492Z"
+        },
+        {
+          "type": "poi_useful",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:32.177Z"
+        },
+        {
+          "type": "poi_useful",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:32.607Z"
+        },
+        {
+          "type": "poi_not_fit",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:33.116Z"
+        },
+        {
+          "type": "poi_useful",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:33.453Z"
+        },
+        {
+          "type": "poi_not_fit",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:33.694Z"
+        },
+        {
+          "type": "poi_useful",
+          "poiId": "foody-450",
+          "category": "Café/Dessert",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:33.955Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x3142176e744031dd:0x2146b06e3808f729",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:38.991Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "0x31421931cd9d8a55:0x68b44815832c21cc",
+          "category": "Quán cà phê",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-04T14:08:46.113Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:16:34.146Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:16:36.633Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:16:39.775Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:16:55.647Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:16:59.746Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:35:16.589Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:35:26.635Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:44:13.387Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:44:24.819Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:45:09.364Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:45:11.806Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:45:37.915Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:45:41.716Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:49:14.109Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Create an evening itinerary with a restaurant, a quiet beach-side cafe, and motorbike routing.",
+          "timestamp": "2026-06-06T03:49:16.107Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:49:26.881Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:49:29.385Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:49:39.837Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:50:05.473Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:53:25.427Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:53:33.336Z"
+        },
+        {
+          "type": "poi_useful",
+          "poiId": "foody-8",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:54:15.922Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-8",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:54:18.862Z"
+        },
+        {
+          "type": "add_to_itinerary",
+          "poiId": "foody-8",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:54:20.655Z"
+        },
+        {
+          "type": "full_itinerary_route_requested",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T03:54:23.861Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T05:59:13.980Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-106",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T05:59:33.353Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-72",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T05:59:52.055Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:04.994Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-106",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:07.936Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-72",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:12.994Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:21.712Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-67",
+          "category": "Ăn vặt/vỉa hè, Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:25.930Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-103",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:30.722Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-106",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán cafe yên tĩnh gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:00:38.640Z"
+        },
+        {
+          "type": "agent_run_traveler",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán nhậu gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:02:54.532Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-460",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán nhậu gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:02:57.589Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-60",
+          "category": "Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán nhậu gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:03:00.529Z"
+        },
+        {
+          "type": "route_requested",
+          "poiId": "foody-67",
+          "category": "Ăn vặt/vỉa hè, Café/Dessert",
+          "query": "Tạo cho tôi một lộ trình đi chơi tối nay có quán ăn, quán nhậu gần biển, đi bằng xe máy.",
+          "timestamp": "2026-06-06T06:03:03.204Z"
+        }
+      ],
       "preferences": {
-        "categoryAffinity": {},
-        "categoryPenalty": {},
-        "poiAffinity": {},
-        "poiPenalty": {},
+        "categoryAffinity": {
+          "quan ca phe": 2.8,
+          "cafe/dessert": 6.3,
+          "an vat/via he": 0.7
+        },
+        "categoryPenalty": {
+          "cafe/dessert": 0.7
+        },
+        "poiAffinity": {
+          "0x314219db1e2d789b:0x972468829e25c65e": 0.5,
+          "foody-506": 0.75,
+          "0x3142176e744031dd:0x2146b06e3808f729": 1.3,
+          "0x314217004fb7d1c3:0x5cda50e42df0c63b": 0.5,
+          "foody-450": 3.2,
+          "0x31421931cd9d8a55:0x68b44815832c21cc": 0.25,
+          "foody-8": 1.85,
+          "foody-106": 0.75,
+          "foody-72": 0.5,
+          "foody-67": 0.5,
+          "foody-103": 0.25,
+          "foody-460": 0.25,
+          "foody-60": 0.25
+        },
+        "poiPenalty": {
+          "foody-450": 1.6
+        },
         "tags": {}
       },
-      "reflection": "Chua co so thich danh muc ro rang; chua co tin hieu khong thich ro rang.",
-      "observationCount": 0,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "reflection": "Uu tien cafe/dessert, quan ca phe, an vat/via he; han che cafe/dessert.",
+      "observationCount": 61,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     },
     "persona_29da751c6c87": {
       "profileId": "persona_29da751c6c87",
@@ -525,40 +913,205 @@
             "rating_signal",
             "local_csv_grounding"
           ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-69",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-24",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang xe may.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-82",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-318",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-276",
+          "category": "Quán nhậu",
+          "query": "Nhom ban muon an toi roi ghe quan nhau vui nhung duong di khong qua kho.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-20",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-363",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-120",
+          "category": "Quán ăn",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-174",
+          "category": "Nhà hàng",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-363",
+          "category": "Quán ăn",
+          "query": "Tim khu vuc phu hop cho quan hai san phuc vu khach du lich Da Nang.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
         }
       ],
       "preferences": {
         "categoryAffinity": {
-          "an uong": 10.5,
-          "cafe": 8.4,
-          "quan an": 14.4,
-          "cafe/dessert": 10.4,
-          "hai san": 4.2,
-          "diem di choi": 6.3,
-          "quan nhau": 3.7,
+          "an uong": 14,
+          "cafe": 11.2,
+          "quan an": 20,
+          "cafe/dessert": 14.4,
+          "hai san": 5.6,
+          "diem di choi": 8.4,
+          "quan nhau": 5.2,
           "shop online": 0.8,
           "an vat/via he": 4.8,
-          "nha hang": 4
+          "nha hang": 5.6
         },
         "categoryPenalty": {
-          "shop online": 9.6,
-          "nha hang": 18.8,
-          "quan nhau": 9.6,
-          "tiem banh": 5.2,
-          "quan an": 18,
-          "an vat/via he": 2,
+          "shop online": 10.8,
+          "nha hang": 23.2,
+          "quan nhau": 12.8,
+          "tiem banh": 7.6,
+          "quan an": 24,
+          "an vat/via he": 3.6,
           "trung tam vui choi danh cho tre em": 0.8,
-          "cafe/dessert": 14.4,
-          "nha hang mon chay": 2.4,
+          "cafe/dessert": 20.4,
+          "nha hang mon chay": 3.6,
           "nha hang gia dinh": 0.4,
-          "quan bar cocktail": 1.6,
-          "an chay": 0.4,
-          "bar/pub": 0.8
+          "quan bar cocktail": 2.4,
+          "an chay": 1.2,
+          "bar/pub": 1.2
         },
         "poiAffinity": {
           "foody-490": 2,
-          "foody-506": 1,
-          "foody-148": 3,
+          "foody-506": 2,
+          "foody-148": 4,
           "foody-419": 1,
           "foody-76": 1,
           "foody-261": 1,
@@ -571,7 +1124,7 @@
           "foody-499": 1,
           "foody-128": 2,
           "foody-442": 1,
-          "foody-324": 1,
+          "foody-324": 2,
           "foody-449": 1,
           "foody-45": 2,
           "foody-285": 4,
@@ -579,27 +1132,36 @@
           "foody-292": 1,
           "foody-139": 1,
           "foody-256": 1,
-          "foody-20": 1,
+          "foody-20": 2,
           "foody-228": 1,
           "foody-429": 1,
           "foody-277": 1,
           "foody-60": 1,
           "foody-343": 1,
           "foody-528": 1,
-          "foody-120": 1,
+          "foody-120": 2,
           "foody-89": 1,
-          "foody-377": 1
+          "foody-377": 1,
+          "foody-69": 1,
+          "foody-24": 1,
+          "foody-82": 1,
+          "foody-140": 1,
+          "foody-318": 1,
+          "foody-276": 1,
+          "foody-363": 2,
+          "foody-534": 1,
+          "foody-174": 1
         },
         "poiPenalty": {
           "foody-0": 4,
           "foody-41": 1,
-          "foody-398": 1,
+          "foody-398": 2,
           "foody-239": 3,
           "foody-546": 2,
-          "foody-347": 1,
-          "foody-43": 3,
+          "foody-347": 2,
+          "foody-43": 5,
           "foody-228": 2,
-          "foody-383": 4,
+          "foody-383": 5,
           "foody-433": 2,
           "foody-2": 3,
           "foody-272": 2,
@@ -607,13 +1169,13 @@
           "foody-129": 1,
           "foody-18": 1,
           "foody-396": 2,
-          "foody-497": 1,
-          "foody-69": 1,
+          "foody-497": 2,
+          "foody-69": 2,
           "foody-6": 1,
-          "foody-74": 2,
+          "foody-74": 3,
           "foody-483": 2,
           "0x31421900577b7869:0xcbc3e6e561e7e3ea": 2,
-          "foody-523": 5,
+          "foody-523": 6,
           "foody-515": 2,
           "foody-65": 4,
           "foody-489": 1,
@@ -627,51 +1189,51 @@
           "foody-435": 1,
           "foody-111": 2,
           "foody-124": 2,
-          "foody-62": 1,
+          "foody-62": 2,
           "foody-123": 1,
-          "foody-519": 3,
-          "foody-377": 3,
+          "foody-519": 4,
+          "foody-377": 5,
           "foody-172": 2,
-          "foody-318": 2,
+          "foody-318": 4,
           "foody-45": 3,
-          "0x3142171e6e5ebddf:0x6596c23ced8336af": 4,
-          "foody-443": 3,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 5,
+          "foody-443": 4,
           "foody-535": 1,
-          "0x314217914baef6f1:0xdd737494f0847aa": 2,
+          "0x314217914baef6f1:0xdd737494f0847aa": 4,
           "foody-310": 1,
-          "foody-155": 1,
+          "foody-155": 2,
           "foody-48": 1,
           "foody-336": 1,
           "foody-80": 2,
-          "foody-459": 3,
+          "foody-459": 4,
           "foody-363": 1,
           "foody-33": 1,
-          "foody-534": 2,
+          "foody-534": 3,
           "foody-256": 1,
           "foody-164": 1,
-          "foody-149": 2,
+          "foody-149": 3,
           "foody-366": 1,
-          "foody-447": 3,
-          "foody-250": 1,
-          "foody-331": 1,
+          "foody-447": 4,
+          "foody-250": 2,
+          "foody-331": 2,
           "0x31421b003738e793:0x83689e823df7ee5a": 1,
-          "foody-84": 1,
+          "foody-84": 2,
           "foody-257": 1,
           "foody-499": 2,
-          "foody-241": 1,
+          "foody-241": 2,
           "foody-360": 1,
-          "foody-29": 1,
+          "foody-29": 2,
           "foody-407": 1,
           "foody-437": 1,
           "foody-82": 2,
           "foody-203": 3,
           "foody-139": 3,
           "foody-112": 1,
-          "foody-152": 1,
-          "0x31421901d2e25265:0xada0ea668734ab97": 4,
+          "foody-152": 2,
+          "0x31421901d2e25265:0xada0ea668734ab97": 6,
           "foody-266": 1,
           "foody-276": 2,
-          "foody-219": 1,
+          "foody-219": 3,
           "foody-323": 1,
           "foody-158": 2,
           "foody-100": 1,
@@ -683,51 +1245,67 @@
           "foody-324": 1,
           "foody-400": 3,
           "foody-549": 2,
-          "foody-282": 2,
-          "foody-406": 2,
+          "foody-282": 3,
+          "foody-406": 3,
           "foody-157": 2,
           "foody-409": 1,
           "foody-11": 1,
-          "foody-461": 2,
+          "foody-461": 3,
           "foody-426": 1,
           "foody-116": 1,
           "foody-237": 1,
           "foody-442": 1,
-          "foody-108": 1,
+          "foody-108": 2,
           "foody-313": 1,
-          "foody-93": 2,
-          "foody-259": 1,
-          "foody-521": 1,
+          "foody-93": 4,
+          "foody-259": 3,
+          "foody-521": 2,
           "foody-252": 1,
-          "foody-314": 3,
+          "foody-314": 4,
           "foody-335": 1,
           "foody-271": 1,
           "foody-503": 1,
           "foody-21": 1,
           "foody-230": 1,
-          "foody-26": 2,
-          "foody-307": 1,
+          "foody-26": 3,
+          "foody-307": 2,
           "foody-77": 1,
           "foody-147": 1,
           "foody-119": 1,
-          "foody-364": 1,
-          "foody-89": 1,
+          "foody-364": 3,
+          "foody-89": 2,
           "foody-23": 1,
-          "foody-455": 1,
-          "foody-413": 1,
-          "foody-295": 1,
-          "foody-452": 1
+          "foody-455": 2,
+          "foody-413": 3,
+          "foody-295": 2,
+          "foody-452": 1,
+          "foody-20": 1,
+          "foody-548": 1,
+          "foody-114": 1,
+          "foody-298": 1,
+          "foody-537": 1,
+          "foody-40": 1,
+          "foody-399": 1,
+          "foody-261": 2,
+          "foody-391": 1,
+          "foody-24": 1,
+          "foody-394": 1,
+          "foody-506": 1,
+          "foody-109": 1,
+          "foody-14": 1,
+          "foody-487": 1,
+          "foody-140": 1
         },
         "tags": {
-          "quiet": 10.5,
-          "study": 10.5,
-          "wifi": 10.5,
-          "moderate_price": 10.5
+          "quiet": 14,
+          "study": 14,
+          "wifi": 14,
+          "moderate_price": 14
         }
       },
-      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, cafe/dessert.",
-      "observationCount": 45,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "reflection": "Uu tien quan an, cafe/dessert, an uong, cafe; han che quan an, nha hang, cafe/dessert.",
+      "observationCount": 60,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     },
     "persona_dc7b0dfaef3a": {
       "profileId": "persona_dc7b0dfaef3a",
@@ -1229,38 +1807,203 @@
             "rating_signal",
             "local_csv_grounding"
           ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-490",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-534",
+          "category": "Café/Dessert",
+          "query": "Tao lich trinh cho sinh vien: co quan an vua tien va cafe ngoi lau, di bang oto/Grab.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-409",
+          "category": "Nhà hàng",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-432",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-335",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-414",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-40",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-257",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-33",
+          "category": "Quán ăn",
+          "query": "Gia dinh toi muon di an va tham quan nhe nha, uu tien duong de di.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-391",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-69",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-45",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-44",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
         }
       ],
       "preferences": {
         "categoryAffinity": {
-          "an uong": 10.5,
-          "cafe": 8.4,
-          "quan an": 19.2,
-          "cafe/dessert": 12,
-          "hai san": 4.2,
-          "diem di choi": 6.3,
-          "nha hang": 2.4,
-          "quan nhau": 2.9,
-          "an vat/via he": 1.6
+          "an uong": 14,
+          "cafe": 11.2,
+          "quan an": 24.8,
+          "cafe/dessert": 15.2,
+          "hai san": 5.6,
+          "diem di choi": 8.4,
+          "nha hang": 4,
+          "quan nhau": 4.4,
+          "an vat/via he": 2.4
         },
         "categoryPenalty": {
-          "nha hang": 18,
-          "tiem banh": 5.2,
-          "quan nhau": 10.4,
-          "shop online": 11.2,
-          "nha hang mon chay": 3.6,
-          "an vat/via he": 2.8,
-          "quan an": 16.4,
+          "nha hang": 24.4,
+          "tiem banh": 6,
+          "quan nhau": 14.4,
+          "shop online": 14,
+          "nha hang mon chay": 4,
+          "an vat/via he": 3.6,
+          "quan an": 22.8,
           "bar/pub": 0.8,
           "buffet": 0.4,
-          "cafe/dessert": 13.2,
-          "an chay": 0.4,
+          "cafe/dessert": 18.8,
+          "an chay": 0.8,
           "nha hang gia dinh": 0.8,
-          "quan bar cocktail": 0.8
+          "quan bar cocktail": 1.2
         },
         "poiAffinity": {
           "foody-449": 1,
-          "foody-534": 3,
+          "foody-534": 4,
           "foody-204": 1,
           "foody-285": 2,
           "foody-119": 2,
@@ -1273,10 +2016,10 @@
           "foody-60": 1,
           "foody-11": 1,
           "foody-377": 1,
-          "foody-140": 2,
+          "foody-140": 3,
           "foody-21": 1,
           "foody-487": 1,
-          "foody-432": 1,
+          "foody-432": 2,
           "foody-506": 1,
           "foody-20": 1,
           "foody-50": 1,
@@ -1287,43 +2030,53 @@
           "foody-148": 1,
           "foody-24": 1,
           "foody-366": 1,
-          "foody-391": 1,
+          "foody-391": 2,
           "foody-120": 2,
           "foody-239": 1,
-          "foody-33": 1,
+          "foody-33": 2,
           "foody-343": 1,
-          "foody-155": 1
+          "foody-155": 1,
+          "foody-490": 1,
+          "foody-409": 1,
+          "foody-324": 1,
+          "foody-335": 1,
+          "foody-414": 1,
+          "foody-40": 1,
+          "foody-257": 1,
+          "foody-69": 1,
+          "foody-45": 1,
+          "foody-44": 1
         },
         "poiPenalty": {
-          "foody-377": 4,
+          "foody-377": 5,
           "foody-347": 3,
-          "foody-139": 3,
+          "foody-139": 4,
           "foody-158": 3,
           "0x314217914baef6f1:0xdd737494f0847aa": 7,
           "foody-429": 2,
           "foody-152": 4,
-          "foody-489": 2,
-          "foody-0": 3,
+          "foody-489": 3,
+          "foody-0": 4,
           "foody-546": 1,
           "foody-56": 1,
           "foody-313": 3,
           "foody-336": 1,
-          "foody-69": 1,
+          "foody-69": 2,
           "foody-271": 2,
           "foody-46": 2,
-          "foody-164": 2,
+          "foody-164": 3,
           "foody-363": 2,
-          "foody-23": 2,
+          "foody-23": 3,
           "foody-406": 2,
-          "foody-121": 2,
+          "foody-121": 3,
           "foody-239": 2,
-          "foody-433": 1,
+          "foody-433": 2,
           "foody-332": 1,
           "foody-41": 1,
           "foody-457": 2,
           "foody-451": 1,
           "foody-310": 1,
-          "foody-323": 1,
+          "foody-323": 2,
           "foody-278": 2,
           "foody-463": 1,
           "foody-73": 4,
@@ -1332,46 +2085,46 @@
           "foody-76": 1,
           "foody-123": 1,
           "foody-373": 2,
-          "foody-252": 3,
-          "foody-65": 6,
+          "foody-252": 4,
+          "foody-65": 7,
           "foody-276": 2,
-          "foody-174": 1,
+          "foody-174": 2,
           "foody-82": 2,
           "foody-447": 1,
-          "foody-172": 2,
+          "foody-172": 4,
           "foody-519": 4,
-          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 2,
           "foody-465": 1,
-          "foody-9": 1,
-          "foody-250": 1,
-          "foody-219": 1,
+          "foody-9": 3,
+          "foody-250": 3,
+          "foody-219": 2,
           "foody-478": 5,
           "foody-304": 1,
           "foody-257": 1,
           "foody-111": 1,
-          "foody-292": 3,
+          "foody-292": 4,
           "foody-272": 1,
-          "foody-335": 1,
+          "foody-335": 2,
           "foody-534": 1,
           "foody-499": 1,
           "foody-549": 1,
-          "foody-40": 1,
-          "0x3142171e6e5ebddf:0x6596c23ced8336af": 2,
+          "foody-40": 2,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 3,
           "foody-483": 2,
           "foody-204": 2,
           "foody-331": 1,
           "foody-424": 1,
           "foody-237": 1,
-          "foody-236": 1,
+          "foody-236": 3,
           "foody-343": 2,
-          "foody-79": 1,
+          "foody-79": 2,
           "foody-11": 1,
           "foody-497": 3,
           "foody-129": 1,
           "foody-345": 2,
           "foody-136": 1,
           "foody-45": 2,
-          "foody-173": 2,
+          "foody-173": 3,
           "foody-521": 1,
           "0x31421b003738e793:0x83689e823df7ee5a": 2,
           "foody-135": 2,
@@ -1379,61 +2132,80 @@
           "foody-535": 1,
           "foody-8": 1,
           "foody-471": 1,
-          "foody-228": 1,
+          "foody-228": 3,
           "foody-515": 2,
           "foody-266": 3,
           "foody-523": 2,
           "foody-203": 1,
-          "foody-432": 1,
+          "foody-432": 2,
           "foody-482": 2,
           "foody-62": 1,
           "foody-5": 1,
           "foody-435": 1,
-          "foody-124": 2,
-          "foody-157": 2,
-          "foody-112": 1,
+          "foody-124": 3,
+          "foody-157": 3,
+          "foody-112": 2,
           "foody-77": 2,
           "foody-148": 1,
           "foody-116": 1,
           "foody-548": 1,
-          "foody-120": 1,
+          "foody-120": 2,
           "foody-409": 1,
-          "0x31421901d2e25265:0xada0ea668734ab97": 2,
-          "foody-149": 3,
-          "foody-413": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 3,
+          "foody-149": 4,
+          "foody-413": 3,
           "foody-230": 1,
           "foody-279": 1,
           "foody-256": 1,
           "foody-307": 2,
           "foody-277": 1,
-          "foody-449": 1,
-          "foody-295": 1,
-          "foody-282": 1,
-          "foody-141": 1,
+          "foody-449": 2,
+          "foody-295": 2,
+          "foody-282": 2,
+          "foody-141": 2,
           "foody-287": 1,
-          "foody-324": 1,
-          "foody-455": 1,
+          "foody-324": 3,
+          "foody-455": 2,
           "foody-366": 1,
           "foody-364": 1,
           "foody-53": 1,
-          "foody-80": 1,
+          "foody-80": 2,
           "foody-259": 1,
-          "foody-314": 1,
+          "foody-314": 3,
           "foody-452": 1,
           "foody-459": 1,
           "foody-114": 1,
-          "foody-285": 1
+          "foody-285": 1,
+          "foody-442": 1,
+          "foody-18": 1,
+          "foody-50": 1,
+          "foody-396": 1,
+          "foody-383": 1,
+          "foody-443": 1,
+          "foody-399": 1,
+          "foody-100": 2,
+          "foody-391": 1,
+          "foody-144": 1,
+          "foody-147": 1,
+          "foody-4": 1,
+          "0x314203edbc5948b1:0x230c1b6da03672e6": 1,
+          "foody-84": 1,
+          "foody-48": 1,
+          "foody-26": 1,
+          "foody-490": 1,
+          "foody-20": 1,
+          "foody-119": 1
         },
         "tags": {
-          "near_beach": 10.5,
-          "seafood": 10.5,
-          "check_in": 10.5,
-          "high_rating": 10.5
+          "near_beach": 14,
+          "seafood": 14,
+          "check_in": 14,
+          "high_rating": 14
         }
       },
       "reflection": "Uu tien quan an, cafe/dessert, an uong, cafe; han che nha hang, quan an, cafe/dessert.",
-      "observationCount": 45,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "observationCount": 60,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     },
     "persona_ec9ee2650c2b": {
       "profileId": "persona_ec9ee2650c2b",
@@ -1935,28 +2707,50 @@
             "rating_signal",
             "local_csv_grounding"
           ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-452",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-373",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 6 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
         }
       ],
       "preferences": {
         "categoryAffinity": {
-          "an uong": 10.5,
-          "cafe": 8.4,
+          "an uong": 11.2,
+          "cafe": 9.1,
           "an vat/via he": 0.8,
-          "cafe/dessert": 10.4,
+          "cafe/dessert": 11.2,
           "hai san": 4.2,
           "diem di choi": 6.3,
           "nha hang": 4.8,
           "shop online": 3.2,
-          "quan an": 16.8,
+          "quan an": 17.6,
           "quan nhau": 2.1
         },
         "categoryPenalty": {
-          "nha hang": 21.6,
-          "quan nhau": 10.4,
-          "shop online": 7.2,
+          "nha hang": 24,
+          "quan nhau": 10.8,
+          "shop online": 8,
           "quan an": 16.8,
           "an vat/via he": 4.4,
-          "nha hang mon chay": 0.8,
+          "nha hang mon chay": 1.2,
           "tiem banh": 6,
           "cafe/dessert": 14.4,
           "an chay": 0.8,
@@ -1978,7 +2772,7 @@
           "foody-499": 3,
           "foody-164": 1,
           "foody-482": 1,
-          "foody-452": 1,
+          "foody-452": 2,
           "foody-228": 1,
           "foody-343": 2,
           "foody-120": 1,
@@ -1999,7 +2793,8 @@
           "foody-14": 1,
           "foody-89": 1,
           "foody-403": 1,
-          "foody-366": 1
+          "foody-366": 1,
+          "foody-373": 1
         },
         "poiPenalty": {
           "foody-483": 2,
@@ -2008,9 +2803,9 @@
           "foody-149": 3,
           "foody-282": 2,
           "foody-400": 2,
-          "foody-152": 4,
+          "foody-152": 5,
           "foody-433": 4,
-          "foody-429": 1,
+          "foody-429": 2,
           "foody-535": 4,
           "foody-18": 2,
           "foody-114": 3,
@@ -2023,7 +2818,7 @@
           "foody-503": 1,
           "foody-328": 1,
           "foody-82": 2,
-          "0x314217914baef6f1:0xdd737494f0847aa": 1,
+          "0x314217914baef6f1:0xdd737494f0847aa": 2,
           "foody-394": 2,
           "foody-465": 2,
           "foody-409": 1,
@@ -2036,7 +2831,7 @@
           "foody-366": 2,
           "foody-53": 3,
           "foody-76": 3,
-          "foody-448": 4,
+          "foody-448": 5,
           "foody-100": 1,
           "foody-324": 2,
           "foody-515": 2,
@@ -2046,8 +2841,8 @@
           "foody-323": 1,
           "0x3142171e6e5ebddf:0x6596c23ced8336af": 1,
           "foody-521": 2,
-          "foody-383": 2,
-          "foody-549": 4,
+          "foody-383": 3,
+          "foody-549": 5,
           "foody-443": 2,
           "foody-124": 1,
           "foody-310": 1,
@@ -2089,7 +2884,7 @@
           "foody-141": 1,
           "foody-127": 1,
           "foody-471": 1,
-          "foody-174": 2,
+          "foody-174": 3,
           "foody-43": 4,
           "foody-158": 2,
           "foody-336": 1,
@@ -2106,7 +2901,7 @@
           "foody-116": 1,
           "foody-442": 1,
           "foody-426": 1,
-          "foody-121": 1,
+          "foody-121": 2,
           "foody-9": 1,
           "foody-40": 1,
           "foody-228": 3,
@@ -2117,8 +2912,8 @@
           "foody-123": 1,
           "foody-278": 1,
           "foody-5": 1,
-          "foody-204": 1,
-          "foody-331": 1,
+          "foody-204": 2,
+          "foody-331": 2,
           "foody-39": 1,
           "0x31421900577b7869:0xcbc3e6e561e7e3ea": 1,
           "foody-84": 1,
@@ -2131,15 +2926,15 @@
           "foody-247": 1
         },
         "tags": {
-          "dessert": 10.5,
-          "premium": 10.5,
-          "meeting": 10.5,
-          "central": 10.5
+          "dessert": 11,
+          "premium": 11,
+          "meeting": 11,
+          "central": 11
         }
       },
       "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, cafe/dessert.",
-      "observationCount": 45,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "observationCount": 47,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     },
     "persona_ee443d486270": {
       "profileId": "persona_ee443d486270",
@@ -2597,38 +3392,82 @@
             "rating_signal",
             "local_csv_grounding"
           ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-26",
+          "category": "Ăn vặt/vỉa hè, Giao cơm văn phòng",
+          "query": "Mo tiem banh ngot va cafe gan khu sinh vien, can khu co nhu cau nhung doi thu vua phai.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-174",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-419",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
         }
       ],
       "preferences": {
         "categoryAffinity": {
-          "an uong": 9.8,
-          "cafe": 7.7,
-          "quan an": 14.4,
-          "cafe/dessert": 9.6,
-          "hai san": 3.5,
-          "diem di choi": 5.6,
-          "nha hang": 3.2,
+          "an uong": 10.5,
+          "cafe": 8.4,
+          "quan an": 15.2,
+          "cafe/dessert": 10.4,
+          "hai san": 4.2,
+          "diem di choi": 6.3,
+          "nha hang": 4,
           "quan nhau": 4.5,
-          "an vat/via he": 3.2
+          "an vat/via he": 4
         },
         "categoryPenalty": {
-          "nha hang": 17.6,
+          "nha hang": 19.2,
           "quan nhau": 10,
           "buffet": 0.4,
-          "shop online": 8,
-          "quan bar cocktail": 1.6,
-          "quan an": 14.4,
-          "an vat/via he": 2,
-          "tiem banh": 5.2,
-          "nha hang mon chay": 2,
-          "cafe/dessert": 14.8
+          "shop online": 9.2,
+          "quan bar cocktail": 2,
+          "quan an": 16.8,
+          "an vat/via he": 2.8,
+          "tiem banh": 5.6,
+          "nha hang mon chay": 2.4,
+          "cafe/dessert": 15.6
         },
         "poiAffinity": {
           "foody-148": 2,
           "foody-482": 2,
           "foody-172": 1,
           "foody-164": 3,
-          "foody-155": 1,
+          "foody-155": 2,
           "foody-24": 1,
           "foody-485": 2,
           "foody-499": 1,
@@ -2651,12 +3490,14 @@
           "foody-534": 1,
           "foody-21": 1,
           "foody-149": 1,
-          "foody-26": 1,
+          "foody-26": 2,
           "foody-53": 1,
           "foody-373": 1,
           "foody-490": 1,
           "foody-328": 1,
-          "foody-250": 1
+          "foody-250": 1,
+          "foody-174": 1,
+          "foody-419": 1
         },
         "poiPenalty": {
           "foody-448": 2,
@@ -2667,11 +3508,11 @@
           "foody-546": 1,
           "foody-158": 2,
           "foody-93": 3,
-          "0x31421901d2e25265:0xada0ea668734ab97": 4,
+          "0x31421901d2e25265:0xada0ea668734ab97": 5,
           "foody-409": 4,
           "foody-17": 1,
           "foody-279": 2,
-          "foody-503": 1,
+          "foody-503": 2,
           "foody-56": 1,
           "foody-548": 2,
           "foody-11": 2,
@@ -2680,15 +3521,15 @@
           "foody-272": 1,
           "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
           "foody-398": 1,
-          "foody-124": 1,
+          "foody-124": 2,
           "foody-478": 2,
           "foody-443": 2,
           "foody-310": 1,
           "foody-259": 1,
           "foody-433": 2,
           "0x3142171e6e5ebddf:0x6596c23ced8336af": 3,
-          "foody-228": 1,
-          "foody-76": 2,
+          "foody-228": 2,
+          "foody-76": 3,
           "foody-394": 2,
           "foody-8": 1,
           "foody-399": 1,
@@ -2710,18 +3551,18 @@
           "0x314203edbc5948b1:0x230c1b6da03672e6": 3,
           "foody-41": 1,
           "foody-139": 1,
-          "foody-377": 1,
+          "foody-377": 2,
           "foody-535": 2,
-          "foody-442": 1,
+          "foody-442": 2,
           "foody-239": 2,
-          "foody-292": 1,
+          "foody-292": 2,
           "foody-14": 1,
           "foody-461": 1,
           "foody-285": 1,
-          "foody-298": 1,
+          "foody-298": 2,
           "foody-482": 3,
           "foody-155": 1,
-          "foody-120": 1,
+          "foody-120": 2,
           "foody-429": 4,
           "foody-45": 2,
           "foody-523": 1,
@@ -2736,9 +3577,9 @@
           "foody-383": 2,
           "foody-276": 1,
           "foody-331": 1,
-          "foody-74": 2,
-          "0x314217914baef6f1:0xdd737494f0847aa": 2,
-          "foody-287": 2,
+          "foody-74": 3,
+          "0x314217914baef6f1:0xdd737494f0847aa": 3,
+          "foody-287": 3,
           "foody-62": 2,
           "foody-347": 1,
           "foody-73": 2,
@@ -2746,10 +3587,10 @@
           "foody-361": 1,
           "foody-174": 1,
           "foody-43": 1,
-          "foody-82": 1,
+          "foody-82": 2,
           "foody-80": 1,
           "foody-323": 1,
-          "foody-152": 1,
+          "foody-152": 2,
           "foody-203": 1,
           "foody-455": 1,
           "foody-261": 1,
@@ -2760,17 +3601,17 @@
           "foody-426": 1,
           "foody-114": 1,
           "foody-21": 1,
-          "foody-277": 1,
+          "foody-277": 2,
           "foody-452": 1,
           "foody-121": 1,
           "foody-282": 1,
           "foody-257": 1,
           "foody-44": 1,
           "foody-18": 1,
-          "foody-313": 1,
+          "foody-313": 2,
           "foody-230": 1,
           "foody-26": 1,
-          "foody-247": 1,
+          "foody-247": 2,
           "foody-9": 2,
           "foody-549": 1,
           "foody-314": 1,
@@ -2780,20 +3621,21 @@
           "foody-324": 1,
           "foody-135": 1,
           "foody-471": 1,
-          "foody-489": 1,
+          "foody-489": 2,
           "foody-534": 1,
-          "foody-115": 1
+          "foody-115": 1,
+          "foody-39": 1
         },
         "tags": {
-          "family_friendly": 9.5,
-          "clean": 9.5,
-          "easy_route": 9.5,
-          "safe": 9.5
+          "family_friendly": 10.5,
+          "clean": 10.5,
+          "easy_route": 10.5,
+          "safe": 10.5
         }
       },
-      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, cafe/dessert, quan an.",
-      "observationCount": 41,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, cafe/dessert.",
+      "observationCount": 45,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     },
     "persona_211d48776472": {
       "profileId": "persona_211d48776472",
@@ -3130,52 +3972,217 @@
             "rating_signal",
             "local_csv_grounding"
           ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-230",
+          "category": "Quán ăn",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Toi muon an nhe roi tim cafe yen tinh de hoc bai trong 4 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-485",
+          "category": "Quán ăn",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-155",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-285",
+          "category": "Café/Dessert",
+          "query": "Khach du lich muon an hai san roi di choi va ghe cafe dep gan bien.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-324",
+          "category": "Café/Dessert",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-140",
+          "category": "Quán ăn",
+          "query": "Toi can lich trinh nhe co dessert va cafe khong gian dep trong 2 gio.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-506",
+          "category": "Café/Dessert, Quán ăn",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-139",
+          "category": "Quán nhậu",
+          "query": "Lap lich trinh buoi dem co quan an va cho uong bia phu hop nhom ban.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-313",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-164",
+          "category": "Quán ăn",
+          "query": "Tao lich trinh 4 gio cho gia dinh co bua an va diem di choi an toan.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-119",
+          "category": "Café/Dessert",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-148",
+          "category": "Quán ăn",
+          "query": "Phan tich vi tri mo cafe dessert o Da Nang, uu tien POI bo tro va de tiep can.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-448",
+          "category": "Nhà hàng",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
+        },
+        {
+          "type": "synthetic_positive",
+          "poiId": "foody-459",
+          "category": "Quán ăn",
+          "query": "Mo nha hang hai san gan cum du lich, can danh gia demand proxy va canh tranh.",
+          "evidence": [
+            "category_match",
+            "rating_signal",
+            "local_csv_grounding"
+          ]
         }
       ],
       "preferences": {
         "categoryAffinity": {
-          "an uong": 7,
-          "cafe": 5.6,
-          "quan an": 11.2,
-          "cafe/dessert": 6.4,
-          "hai san": 2.8,
-          "diem di choi": 4.2,
-          "nha hang": 2.4,
-          "quan nhau": 2.2,
+          "an uong": 10.5,
+          "cafe": 8.4,
+          "quan an": 16.8,
+          "cafe/dessert": 11.2,
+          "hai san": 4.2,
+          "diem di choi": 6.3,
+          "nha hang": 3.2,
+          "quan nhau": 3.7,
           "an vat/via he": 2.4,
           "shop online": 0.8
         },
         "categoryPenalty": {
-          "an chay": 0.4,
-          "nha hang mon chay": 0.4,
-          "quan nhau": 8.4,
-          "nha hang": 13.2,
-          "shop online": 5.2,
-          "tiem banh": 4.4,
-          "quan an": 10.4,
-          "an vat/via he": 3.2,
-          "cafe/dessert": 8,
+          "an chay": 0.8,
+          "nha hang mon chay": 1.2,
+          "quan nhau": 11.6,
+          "nha hang": 18.4,
+          "shop online": 8,
+          "tiem banh": 6.4,
+          "quan an": 16,
+          "an vat/via he": 5.2,
+          "cafe/dessert": 12.8,
           "buffet": 0.8,
-          "bar/pub": 0.8,
-          "quan bar cocktail": 0.4,
-          "nha hang gia dinh": 0.4
+          "bar/pub": 1.2,
+          "quan bar cocktail": 0.8,
+          "nha hang gia dinh": 0.8
         },
         "poiAffinity": {
           "foody-449": 1,
-          "foody-285": 2,
+          "foody-285": 3,
           "foody-429": 1,
-          "foody-140": 1,
-          "foody-155": 1,
+          "foody-140": 2,
+          "foody-155": 2,
           "foody-60": 1,
-          "foody-313": 1,
+          "foody-313": 2,
           "foody-26": 1,
           "foody-541": 1,
           "foody-497": 2,
           "foody-256": 1,
           "foody-73": 2,
           "foody-403": 2,
-          "foody-448": 1,
-          "foody-164": 1,
+          "foody-448": 2,
+          "foody-164": 2,
           "foody-120": 1,
           "foody-287": 1,
           "foody-499": 1,
@@ -3183,30 +4190,37 @@
           "foody-482": 1,
           "foody-272": 1,
           "foody-282": 1,
-          "foody-459": 1,
+          "foody-459": 2,
           "foody-257": 1,
           "foody-377": 1,
-          "foody-487": 1
+          "foody-487": 1,
+          "foody-230": 1,
+          "foody-324": 2,
+          "foody-485": 1,
+          "foody-506": 1,
+          "foody-139": 1,
+          "foody-119": 1,
+          "foody-148": 1
         },
         "poiPenalty": {
-          "foody-219": 1,
-          "0x314217914baef6f1:0xdd737494f0847aa": 1,
+          "foody-219": 2,
+          "0x314217914baef6f1:0xdd737494f0847aa": 2,
           "foody-304": 1,
-          "foody-252": 3,
+          "foody-252": 4,
           "foody-174": 2,
-          "foody-409": 1,
+          "foody-409": 3,
           "foody-203": 1,
-          "0x314203edbc5948b1:0x230c1b6da03672e6": 1,
-          "foody-377": 1,
+          "0x314203edbc5948b1:0x230c1b6da03672e6": 2,
+          "foody-377": 2,
           "foody-295": 1,
           "foody-18": 1,
           "foody-120": 1,
-          "foody-29": 1,
+          "foody-29": 2,
           "foody-69": 2,
           "foody-407": 1,
           "foody-335": 1,
-          "foody-23": 2,
-          "foody-452": 2,
+          "foody-23": 3,
+          "foody-452": 3,
           "foody-487": 1,
           "foody-139": 1,
           "foody-413": 2,
@@ -3215,62 +4229,62 @@
           "foody-152": 1,
           "foody-394": 3,
           "foody-136": 1,
-          "foody-65": 2,
+          "foody-65": 3,
           "foody-112": 1,
-          "foody-266": 3,
+          "foody-266": 5,
           "foody-93": 2,
           "foody-147": 1,
-          "foody-447": 2,
+          "foody-447": 3,
           "foody-74": 2,
           "foody-433": 5,
           "foody-76": 2,
-          "foody-373": 1,
-          "foody-332": 3,
+          "foody-373": 2,
+          "foody-332": 4,
           "foody-115": 3,
           "foody-149": 2,
           "foody-391": 1,
-          "foody-124": 2,
+          "foody-124": 3,
           "foody-43": 2,
-          "foody-100": 1,
+          "foody-100": 2,
           "foody-259": 1,
           "foody-323": 1,
           "foody-397": 1,
-          "foody-515": 2,
+          "foody-515": 3,
           "foody-443": 1,
           "foody-157": 1,
           "foody-451": 2,
           "foody-228": 1,
           "foody-398": 2,
-          "0x314221e2bb49979f:0x913a06aaeed416dd": 1,
-          "foody-204": 2,
-          "foody-158": 1,
+          "0x314221e2bb49979f:0x913a06aaeed416dd": 2,
+          "foody-204": 3,
+          "foody-158": 2,
           "foody-33": 1,
           "foody-490": 2,
           "foody-2": 1,
           "foody-257": 1,
           "foody-230": 1,
-          "foody-237": 1,
+          "foody-237": 2,
           "foody-277": 1,
           "foody-14": 1,
-          "foody-406": 2,
+          "foody-406": 3,
           "foody-521": 1,
           "foody-45": 1,
-          "foody-9": 3,
+          "foody-9": 5,
           "foody-549": 1,
           "foody-548": 1,
           "foody-21": 1,
-          "foody-26": 1,
-          "foody-241": 1,
+          "foody-26": 2,
+          "foody-241": 2,
           "foody-256": 2,
           "foody-414": 1,
-          "foody-129": 1,
+          "foody-129": 2,
           "foody-108": 1,
           "foody-313": 1,
-          "0x31421901d2e25265:0xada0ea668734ab97": 1,
+          "0x31421901d2e25265:0xada0ea668734ab97": 2,
           "foody-519": 1,
           "foody-478": 1,
-          "foody-282": 2,
-          "foody-89": 1,
+          "foody-282": 3,
+          "foody-89": 2,
           "foody-82": 1,
           "foody-489": 1,
           "foody-88": 2,
@@ -3282,24 +4296,54 @@
           "foody-123": 1,
           "foody-523": 1,
           "foody-310": 1,
-          "foody-239": 1,
-          "0x31421b003738e793:0x83689e823df7ee5a": 1,
+          "foody-239": 2,
+          "0x31421b003738e793:0x83689e823df7ee5a": 2,
           "foody-343": 1,
           "foody-506": 1,
-          "foody-271": 1,
+          "foody-271": 2,
           "foody-537": 1,
           "foody-292": 1,
-          "foody-497": 1
+          "foody-497": 1,
+          "foody-77": 1,
+          "foody-465": 2,
+          "0x3142171e6e5ebddf:0x6596c23ced8336af": 1,
+          "foody-366": 2,
+          "foody-400": 1,
+          "foody-331": 1,
+          "foody-56": 1,
+          "foody-11": 1,
+          "foody-140": 2,
+          "foody-442": 1,
+          "foody-437": 1,
+          "foody-538": 1,
+          "foody-0": 1,
+          "foody-455": 1,
+          "foody-111": 2,
+          "foody-5": 1,
+          "foody-8": 1,
+          "foody-463": 2,
+          "foody-364": 1,
+          "foody-80": 1,
+          "foody-121": 1,
+          "foody-383": 1,
+          "foody-457": 1,
+          "foody-39": 1,
+          "foody-449": 1,
+          "foody-164": 1,
+          "foody-328": 1,
+          "foody-46": 1,
+          "foody-534": 1,
+          "foody-44": 1
         },
         "tags": {
-          "demand_signal": 7,
-          "complementary_poi": 7,
-          "low_competition": 7
+          "demand_signal": 10.5,
+          "complementary_poi": 10.5,
+          "low_competition": 10.5
         }
       },
-      "reflection": "Uu tien quan an, an uong, cafe/dessert, cafe; han che nha hang, quan an, quan nhau.",
-      "observationCount": 30,
-      "updatedAt": "2026-06-09T02:46:44.217Z"
+      "reflection": "Uu tien quan an, cafe/dessert, an uong, cafe; han che nha hang, quan an, cafe/dessert.",
+      "observationCount": 45,
+      "updatedAt": "2026-06-06T06:04:34.517Z"
     }
   }
 }

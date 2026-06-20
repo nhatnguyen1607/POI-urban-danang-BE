@@ -1,45 +1,45 @@
 {
-  "createdAt": "2026-06-09T02:47:19.674Z",
+  "createdAt": "2026-06-06T06:05:14.792Z",
   "before": {
-    "sampleCount": 96,
-    "precisionAtExpectedK": 0.0399,
-    "recallAtReturnedK": 0.0955,
-    "f1": 0.0417,
-    "intentCoverage": 0.809,
-    "exactPoiHitRate": 0.1771
+    "sampleCount": 120,
+    "precisionAtExpectedK": 0.0236,
+    "recallAtReturnedK": 0.0764,
+    "f1": 0.0259,
+    "intentCoverage": 0.8028,
+    "exactPoiHitRate": 0.1417
   },
   "after": {
-    "sampleCount": 96,
-    "precisionAtExpectedK": 0.0764,
-    "recallAtReturnedK": 0.1319,
-    "f1": 0.0781,
-    "intentCoverage": 0.809,
-    "exactPoiHitRate": 0.25
+    "sampleCount": 120,
+    "precisionAtExpectedK": 0.0514,
+    "recallAtReturnedK": 0.0806,
+    "f1": 0.0514,
+    "intentCoverage": 0.8194,
+    "exactPoiHitRate": 0.1583
   },
   "delta": {
-    "precisionAtExpectedK": 0.0365,
-    "recallAtReturnedK": 0.0364,
-    "f1": 0.0364,
-    "intentCoverage": 0,
-    "exactPoiHitRate": 0.0729
+    "precisionAtExpectedK": 0.0278,
+    "recallAtReturnedK": 0.0042,
+    "f1": 0.0255,
+    "intentCoverage": 0.0166,
+    "exactPoiHitRate": 0.0166
   },
   "memory": {
     "profileCount": 6,
     "sources": {
-      "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
-      "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
-      "syntheticSamples": 96,
-      "feedbackEvents": 0
+      "syntheticFile": "D:\\POI-urban-danang-BE\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+      "feedbackFile": "D:\\POI-urban-danang-BE\\storage\\feedback\\agent-feedback.jsonl",
+      "syntheticSamples": 120,
+      "feedbackEvents": 61
     }
   },
   "reranker": {
-    "artifact": "E:\\ki6\\CĐ2\\back-end\\artifacts\\reranker\\agent_reranker_v1.json",
+    "artifact": "D:\\POI-urban-danang-BE\\artifacts\\reranker\\agent_reranker_v1.json",
     "trainingSources": {
-      "syntheticFile": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
-      "feedbackFile": "E:\\ki6\\CĐ2\\back-end\\storage\\feedback\\agent-feedback.jsonl",
-      "memoryFile": "E:\\ki6\\CĐ2\\back-end\\artifacts\\memory\\agent_memory_v1.json",
-      "syntheticSamples": 96,
-      "feedbackEvents": 0,
+      "syntheticFile": "D:\\POI-urban-danang-BE\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+      "feedbackFile": "D:\\POI-urban-danang-BE\\storage\\feedback\\agent-feedback.jsonl",
+      "memoryFile": "D:\\POI-urban-danang-BE\\artifacts\\memory\\agent_memory_v1.json",
+      "syntheticSamples": 120,
+      "feedbackEvents": 61,
       "memoryProfiles": 6
     }
   }

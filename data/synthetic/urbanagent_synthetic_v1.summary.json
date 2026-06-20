@@ -1,10 +1,10 @@
 {
-  "created_at": "2026-06-09T02:44:28.045Z",
-  "output_file": "E:\\ki6\\CĐ2\\back-end\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
-  "sample_count": 96,
+  "created_at": "2026-06-06T05:53:33.441Z",
+  "output_file": "D:\\POI-urban-danang-BE\\data\\synthetic\\urbanagent_synthetic_v1.jsonl",
+  "sample_count": 120,
   "persona_count": 5,
   "scenario_count": 7,
-  "expected_poi_count": 206,
-  "hard_negative_count": 960,
+  "expected_poi_count": 257,
+  "hard_negative_count": 1200,
   "grounding": "Every expected/negative/candidate POI id is validated against local CSV."
 }
