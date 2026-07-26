@@ -64,6 +64,19 @@ Updated: 2026-07-26 01:49:31 +07:00.
   POST endpoint with gzip fallback decoding.
 - Do not change dependencies during audit closure; direct `pg@8.22.0` remains
   accepted for Phase 1 because no production advisory affects the `pg` path.
+- After explicit user approval for Phase 1 security remediation, apply targeted
+  production dependency remediation instead of `npm audit fix`, broad updates,
+  or dependency dedupe.
+- Update direct production dependencies `firebase-admin` to `^14.2.0` and
+  `multer` to `^2.2.0`.
+- Use explicit npm `overrides` for production transitive advisories:
+  `body-parser@2.3.0`, `brace-expansion@5.0.8`, `form-data@2.5.6`,
+  `protobufjs@7.6.5`, `qs@6.15.3`, and `uuid@11.1.1`.
+- Keep `pg@8.22.0` unchanged because no production advisory affects the new
+  PostgreSQL path.
+- Accept `npm.cmd ls --omit=dev --all` `ELSPROBLEMS` override-tree warnings as
+  a remaining review item because `npm audit --omit=dev`, direct dependency
+  listing, syntax checks, and tests pass.
 
 ## Still Open
 
@@ -74,6 +87,6 @@ Updated: 2026-07-26 01:49:31 +07:00.
 - Decide whether the next Phase 1 batch should run a local Postgres/PostGIS
   verification environment, add rollback SQL first, or add endpoint-level tests
   for repository switching first.
-- Track npm CLI audit decompression/registry behavior as environment debt; the
-  current production advisory classification was obtained without modifying
-  dependencies.
+- Track npm override-tree validation warnings under `get-intrinsic` /
+  `call-bind-apply-helpers` as a residual package-manager review item before
+  production release.

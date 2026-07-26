@@ -1,6 +1,6 @@
 # Test Report
 
-Updated: 2026-07-26 08:42:18 +07:00.
+Updated: 2026-07-26 12:52:16 +07:00.
 
 ## Backend
 
@@ -434,3 +434,86 @@ Conclusion:
   surfaces and remain unresolved because this task prohibited dependency changes.
 - No package file, lockfile, application code, migration SQL, tests, frontend
   file, production database, or Firebase data was modified during audit closure.
+
+## Phase 1 Security Remediation
+
+Updated: 2026-07-26 12:52:16 +07:00.
+
+Commands run:
+
+```text
+npm.cmd view multer version versions --json
+npm.cmd view body-parser version versions --json
+npm.cmd view qs version versions --json
+npm.cmd view protobufjs version versions --json
+npm.cmd view form-data version versions --json
+npm.cmd view uuid version versions --json
+npm.cmd view brace-expansion version versions --json
+npm.cmd view firebase-admin version dependencies --json
+npm.cmd install --ignore-scripts
+npm.cmd ls body-parser brace-expansion form-data multer protobufjs qs uuid pg firebase-admin --omit=dev --all
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd test
+node --check src\server.js
+node --check server.js
+node --check src\infrastructure\db\phase1MigrationRunner.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1PostgresIntegration.test.js
+npm.cmd ls --omit=dev --depth=0
+```
+
+Remediation applied:
+
+```text
+firebase-admin: ^14.0.0 -> ^14.2.0
+multer: ^2.1.1 -> ^2.2.0
+override body-parser -> 2.3.0
+override brace-expansion -> 5.0.8
+override form-data -> 2.5.6
+override protobufjs -> 7.6.5
+override qs -> 6.15.3
+override uuid -> 11.1.1
+pg remains 8.22.0
+```
+
+Results:
+
+- `npm.cmd audit --omit=dev`: PASS, `found 0 vulnerabilities`.
+- `npm.cmd audit --omit=dev --json`: PASS.
+  - info: `0`
+  - low: `0`
+  - moderate: `0`
+  - high: `0`
+  - critical: `0`
+  - total: `0`
+  - production dependencies counted by audit metadata: `156`
+  - total dependencies counted by audit metadata: `298`
+- `npm.cmd test`: PASS.
+  - tests: `16`
+  - pass: `15`
+  - fail: `0`
+  - skipped: `1` because the disposable Postgres integration test skips when
+    database environment variables are absent.
+- Syntax checks: PASS for server entrypoints, Phase 1 migration runner,
+  Postgres repository, importer, and Phase 1 integration test.
+- `npm.cmd ls --omit=dev --depth=0`: PASS.
+  - `cors@2.8.6`
+  - `csv-parser@3.2.0`
+  - `express@5.2.1`
+  - `firebase-admin@14.2.0`
+  - `multer@2.2.0`
+  - `pg@8.22.0`
+- `npm.cmd ls --omit=dev --all`: residual `ELSPROBLEMS` warning from npm's
+  override-tree validation under `get-intrinsic` /
+  `call-bind-apply-helpers`; no audit advisory remains.
+
+Safety confirmations:
+
+- No `npm audit fix`, `npm audit fix --force`, `npm update`, `npm upgrade`, or
+  `npm dedupe` was run.
+- No application source code, migration SQL, tests, canonical CSV, manifest,
+  frontend file, production database, or Firebase data was modified.
+- PostgreSQL remains opt-in and CSV remains the default runtime.
+- Phase 1 Batch 3 was not started.

@@ -638,3 +638,68 @@ Key conclusions:
 - Existing advisories affect Express/Multer/Firebase dependency surfaces and
   remain unresolved because dependency changes were explicitly out of scope.
 - Temporary audit script/cache files were removed after classification.
+
+## 2026-07-26 Phase 1 Security Remediation
+
+Time: 2026-07-26 12:52:16 +07:00.
+
+Changed files:
+
+```text
+package.json
+package-lock.json
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Commands run:
+
+```text
+git status --short --branch
+git --no-pager diff --name-status
+git --no-pager diff --stat
+git --no-pager diff -- package.json package-lock.json
+npm.cmd view multer version versions --json
+npm.cmd view body-parser version versions --json
+npm.cmd view qs version versions --json
+npm.cmd view protobufjs version versions --json
+npm.cmd view form-data version versions --json
+npm.cmd view uuid version versions --json
+npm.cmd view brace-expansion version versions --json
+npm.cmd view firebase-admin version dependencies --json
+npm.cmd install --ignore-scripts
+npm.cmd ls body-parser brace-expansion form-data multer protobufjs qs uuid pg firebase-admin --omit=dev --all
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd test
+node --check src\server.js
+node --check server.js
+node --check src\infrastructure\db\phase1MigrationRunner.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1PostgresIntegration.test.js
+npm.cmd ls --omit=dev --depth=0
+```
+
+Key conclusions:
+
+- Targeted production dependency remediation was applied after explicit user
+  approval.
+- Direct dependencies updated: `firebase-admin` to `^14.2.0`, `multer` to
+  `^2.2.0`.
+- Production overrides added for `body-parser`, `brace-expansion`, `form-data`,
+  `protobufjs`, `qs`, and `uuid`.
+- `npm.cmd audit --omit=dev` now passes with `0 vulnerabilities`.
+- `npm.cmd audit --omit=dev --json` now reports total vulnerabilities `0`.
+- Backend default test run passes: `16` tests total, `15` passed, `0` failed,
+  `1` skipped because the disposable Postgres database is absent.
+- Syntax checks pass for server entrypoints, Phase 1 migration runner,
+  Postgres repository, importer, and Phase 1 integration test.
+- `npm.cmd ls --omit=dev --all` still reports npm override-tree
+  `ELSPROBLEMS` under `get-intrinsic` / `call-bind-apply-helpers`; this is
+  documented as a residual review item because audit and tests pass.
+- No `npm audit fix`, broad update, dependency dedupe, application code change,
+  canonical CSV change, production database access, Firebase access, commit,
+  push, or Phase 1 Batch 3 work occurred during this remediation step.

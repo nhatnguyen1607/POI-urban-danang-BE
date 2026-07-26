@@ -1,21 +1,39 @@
 # Current State
 
-Updated: 2026-07-26 12:31:18 +07:00.
+Updated: 2026-07-26 12:52:16 +07:00.
 
 ## Phase
 
-`PHASE_1_DATA_PLATFORM_FOUNDATION_BATCH_2_PASSED`
+`PHASE_1_SECURITY_REMEDIATION_PASSED`
 
 Phase 1 Batch 2 validated the PostgreSQL/PostGIS schema and importer against a
 disposable Docker Compose PostGIS database. Migration, rollback, reapply, real
 write import, idempotency, diagnostics, Postgres repository integration, and
 CSV/Postgres parity passed. No production database or Firebase data was touched.
 
-The Batch 2 security audit gate is now closed. `npm audit --omit=dev` still
-fails in this environment because npm 11.6.2 receives a gzip/binary advisory
-response and tries to parse it as plain JSON, but the advisory payload was
-successfully classified through the official npm Bulk Advisory POST endpoint
-with explicit gzip fallback decoding. No `npm audit fix` was run.
+The Batch 2 security remediation gate is now closed. Targeted production
+dependency remediation was applied without `npm audit fix`, broad dependency
+updates, application behavior changes, production database access, Firebase
+access, or Phase 1 Batch 3 work.
+
+Security remediation result:
+
+- `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
+- `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
+- `pg@8.22.0`: retained; no production advisory found.
+- Direct dependency updates:
+  - `firebase-admin`: `^14.0.0` -> `^14.2.0`.
+  - `multer`: `^2.1.1` -> `^2.2.0`.
+- Production overrides:
+  - `body-parser@2.3.0`
+  - `brace-expansion@5.0.8`
+  - `form-data@2.5.6`
+  - `protobufjs@7.6.5`
+  - `qs@6.15.3`
+  - `uuid@11.1.1`
+- Residual warning: `npm.cmd ls --omit=dev --all` reports `ELSPROBLEMS`
+  for npm's override tree under `get-intrinsic` /
+  `call-bind-apply-helpers`; `npm audit`, syntax checks, and tests pass.
 
 ## Repository Visibility
 
@@ -26,24 +44,14 @@ with explicit gzip fallback decoding. No `npm audit fix` was run.
 
 Backend branch: `phase1/data-platform-foundation`.
 
-Backend status after implementation:
+Backend status after security remediation:
 
+- modified: `package-lock.json`
+- modified: `package.json`
 - modified: `docs/rebuild/CURRENT_STATE.md`
 - modified: `docs/rebuild/DECISIONS.md`
 - modified: `docs/rebuild/TEST_REPORT.md`
 - modified: `docs/rebuild/WORKLOG.md`
-- modified: `package-lock.json`
-- modified: `package.json`
-- modified: `src/services/poiRepository.js`
-- untracked: `docker-compose.phase1.yml`
-- untracked: `migrations/`
-- untracked: `scripts/phase1_db_diagnostics.js`
-- untracked: `scripts/phase1_db_migrate.js`
-- untracked: `scripts/phase1_db_rollback.js`
-- untracked: `scripts/phase1_import_canonical_pois.js`
-- untracked: `src/infrastructure/`
-- untracked: `src/modules/`
-- untracked: `tests/phase1/`
 
 Frontend branch: `main`.
 
@@ -112,13 +120,16 @@ Frontend status:
 
 Backend:
 
-- `npm.cmd test`: PASS, 15 tests passed, 0 failed.
+- `npm.cmd test`: PASS, 16 tests total, 15 passed, 0 failed, 1 skipped
+  when the disposable Postgres database is absent.
 - `node --check` for Phase 1 files and server entrypoints: PASS.
 - `npm.cmd run phase1:import:canonical`: PASS in dry-run mode.
 - `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true`: PASS, 16 tests passed, 0 failed, 0 skipped.
 - `npm.cmd run phase1:db:diagnostics`: PASS.
-- `npm.cmd audit --omit=dev`: FAIL due npm registry invalid JSON/gzip response.
-- Audit closure classifier: PASS through official npm Bulk Advisory POST.
+- `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
+- `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
+- Security remediation: PASS; previous 9 production advisory records are no
+  longer present in npm audit output.
 
 Frontend:
 
@@ -128,19 +139,18 @@ Frontend:
 
 ## Remaining Risks
 
-- `npm audit --omit=dev` still fails in this environment; use the documented
-  official Bulk Advisory POST diagnostic as the current production-only
-  classification until npm CLI/registry decompression behavior is fixed.
-- Production-only advisory classification: 9 advisory records, 1 low, 4
-  moderate, 4 high; 2 direct and 7 transitive; 0 affect the new `pg` path.
+- `npm.cmd ls --omit=dev --all` reports `ELSPROBLEMS` for npm override-tree
+  validation under `get-intrinsic` / `call-bind-apply-helpers`; `npm audit`,
+  direct dependency listing, syntax checks, and tests pass.
 - The disposable write importer was verified, but production migration/import has not been approved or run.
 - The optional Postgres repository adapter is still not enabled by default.
 - Address/admin-boundary spatial joins remain pending because no boundary dataset has been approved.
-- Dependency install reported `12 vulnerabilities`; no `npm audit fix` was run because that would be a broader dependency change.
-- Phase 1 is not complete; this is only the first foundation batch.
+- No `npm audit fix`, `npm update`, `npm upgrade`, or `npm dedupe` was run.
+- Phase 1 is not complete; this remediation closes the Batch 1-2 security
+  gate only.
 
 ## Next Step
 
-Review Batch 2 results, then decide whether Batch 3 should add endpoint-level
-repository-switch tests, rollback packaging, or a local-only migration runbook.
-Do not cut over runtime to PostgreSQL without a separate explicit approval.
+Review the Phase 1 Batch 1-2 pull request with the security remediation
+included. Do not cut over runtime to PostgreSQL and do not start Batch 3
+without separate explicit approval.
