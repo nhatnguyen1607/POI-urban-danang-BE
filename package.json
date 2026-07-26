@@ -16,7 +16,11 @@
     "visualize:evaluation": "node scripts/visualize_agent_evaluation.js",
     "research:agent": "npm run generate:synthetic && npm run export:representation-data && npm run evaluate:learning && npm run visualize:evaluation",
     "evaluate:learning": "node scripts/evaluate_learning_loop.js",
-    "test": "node --test tests/phase0/*.test.js"
+    "phase1:db:diagnostics": "node scripts/phase1_db_diagnostics.js",
+    "phase1:db:migrate": "node scripts/phase1_db_migrate.js",
+    "phase1:db:rollback": "node scripts/phase1_db_rollback.js",
+    "phase1:import:canonical": "node scripts/phase1_import_canonical_pois.js",
+    "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +31,7 @@
     "csv-parser": "^3.2.0",
     "express": "^5.2.1",
     "firebase-admin": "^14.0.0",
-    "multer": "^2.1.1"
+    "multer": "^2.1.1",
+    "pg": "^8.13.1"
   }
 }

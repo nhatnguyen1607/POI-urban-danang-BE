@@ -1,0 +1,20 @@
+services:
+  phase1-postgis:
+    image: postgis/postgis:16-3.5-alpine
+    container_name: urbanagent-phase1-postgis
+    environment:
+      POSTGRES_DB: urbanagent_phase1_test
+      POSTGRES_USER: urbanagent_test
+      POSTGRES_PASSWORD: urbanagent_test_password
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urbanagent_test -d urbanagent_phase1_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - urbanagent_phase1_postgis_data:/var/lib/postgresql/data
+
+volumes:
+  urbanagent_phase1_postgis_data:

@@ -1,10 +1,13 @@
 const { DEFAULT_CITY_ID, CanonicalCsvPoiRepository } = require('./canonicalCsvPoiRepository');
+const { PostgresPoiRepository } = require('../modules/pois/postgresPoiRepository');
 
 let defaultRepository = null;
 
 function getPoiRepository() {
   if (!defaultRepository) {
-    defaultRepository = new CanonicalCsvPoiRepository();
+    defaultRepository = process.env.URBANAGENT_POI_REPOSITORY === 'postgres'
+      ? new PostgresPoiRepository()
+      : new CanonicalCsvPoiRepository();
   }
   return defaultRepository;
 }
