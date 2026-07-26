@@ -1,0 +1,60 @@
+{
+  "input": {
+    "poi_urban_ggmap.csv": {
+      "rows": 21352,
+      "production_poi_rows": 4928,
+      "urban_void_rows": 16424,
+      "sha256": "0d63caa56cb9a197a5c6ff33301f350fbcce7717825a1430f06ae0b2f5ec560f"
+    },
+    "poi_urban_foody.csv": {
+      "rows": 1350,
+      "production_poi_rows": 225,
+      "urban_void_rows": 1125,
+      "sha256": "1a0e863d8d1bc0057ae3399b61255dd7d2c2f642abd78cf3b7fee80738c516e8"
+    }
+  },
+  "cleaning": {
+    "google_unique_source_ids_before_quarantine": 3947,
+    "google_duplicate_extra_rows_removed": 981,
+    "google_coordinate_conflict_entities_quarantined": 1,
+    "foody_unique_entities": 225,
+    "cross_source_high_confidence_merges": 5,
+    "urban_void_rows_excluded_from_production_master": 17549
+  },
+  "output": {
+    "file": "urbanagent_poi_master_v1.csv",
+    "rows": 4166,
+    "columns": 34,
+    "unique_global_ids": 4166,
+    "missing_names": 0,
+    "missing_images": 60,
+    "missing_primary_rating": 312,
+    "invalid_coordinates": 0,
+    "cross_source_merged_rows": 5,
+    "sha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+    "category_distribution": {
+      "restaurant": 1853,
+      "cafe": 1201,
+      "shopping": 370,
+      "bakery": 433,
+      "park": 2,
+      "amenity": 1,
+      "nightlife": 298,
+      "other": 4,
+      "lodging": 2,
+      "wellness": 1,
+      "service": 1
+    }
+  },
+  "quarantine": [
+    {
+      "reason": "same_google_source_id_coordinate_conflict",
+      "source_id": "0x31421bd5af07d08f:0xe243c1d55f6703ff",
+      "global_ids": [
+        "google_maps_3786",
+        "google_maps_5274"
+      ],
+      "max_distance_m": 2672.65
+    }
+  ]
+}

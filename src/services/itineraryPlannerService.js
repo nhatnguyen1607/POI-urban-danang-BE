@@ -1,4 +1,5 @@
-const { recommendPOIs } = require('./poiRetrievalService');
+const { recommendPOIs, validLocation } = require('./poiRetrievalService');
+const { DEFAULT_CITY_ID } = require('./poiDataService');
 const { detectIntents, categoryMatchScore } = require('./intentService');
 const { haversineKm } = require('./scoringUtils');
 
@@ -25,13 +26,15 @@ function stayMinutesForStop(index, totalStops, durationMinutes) {
 
 async function createItinerary({ query, context = {}, transport = 'motorbike', limit = 5, durationMinutes }) {
   const safeContext = context && typeof context === 'object' ? context : {};
+  const cityId = safeContext.cityId || DEFAULT_CITY_ID;
   const effectiveLimit = limitFromDuration(durationMinutes || safeContext.durationMinutes, limit);
-  const recommendation = await recommendPOIs({ query, context: safeContext, limit: Math.max(effectiveLimit * 5, 18) });
+  const recommendation = await recommendPOIs({
+    query,
+    context: { ...safeContext, cityId },
+    limit: Math.max(effectiveLimit * 5, 18),
+  });
   const intents = detectIntents(query);
-  const start = {
-    lat: safeContext.location?.lat || 16.0544,
-    lon: safeContext.location?.lon || safeContext.location?.lng || 108.2022,
-  };
+  const start = validLocation(safeContext.location);
 
   const selectedMap = new Map();
   intents.slice(0, Math.max(1, effectiveLimit)).forEach((intent) => {
@@ -52,22 +55,25 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
   const selected = [...selectedMap.values()]
     .slice(0, effectiveLimit)
     .sort((a, b) => {
+      if (!cursor) return b.score - a.score;
       const da = haversineKm(cursor, { lat: a.lat, lon: a.lon });
       const db = haversineKm(cursor, { lat: b.lat, lon: b.lon });
       return da - db || b.score - a.score;
     });
 
   const itinerary = selected.slice(0, effectiveLimit).map((poi, index) => {
-    const distanceKm = haversineKm(cursor, { lat: poi.lat, lon: poi.lon });
-    const travelMinutes = estimateDurationMinutes(distanceKm, transport);
+    const distanceKm = cursor ? haversineKm(cursor, { lat: poi.lat, lon: poi.lon }) : null;
+    const travelMinutes = distanceKm === null ? null : estimateDurationMinutes(distanceKm, transport);
     cursor = { lat: poi.lat, lon: poi.lon };
     return {
       order: index + 1,
       poi,
       travelFromPrevious: {
-        distanceKm: Number(distanceKm.toFixed(2)),
+        distanceKm: distanceKm === null ? null : Number(distanceKm.toFixed(2)),
         estimatedMinutes: travelMinutes,
         transport,
+        source: distanceKm === null ? 'missing-origin' : 'local-haversine-estimate',
+        distanceKnown: distanceKm !== null,
       },
       suggestedStayMinutes: stayMinutesForStop(
         index,
@@ -79,7 +85,7 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
   });
 
   const totalTravelMinutes = itinerary.reduce(
-    (sum, item) => sum + item.travelFromPrevious.estimatedMinutes,
+    (sum, item) => sum + (item.travelFromPrevious.estimatedMinutes || 0),
     0,
   );
   const totalStayMinutes = itinerary.reduce((sum, item) => sum + (item.suggestedStayMinutes || 0), 0);
@@ -88,12 +94,16 @@ async function createItinerary({ query, context = {}, transport = 'motorbike', l
   return {
     role: 'traveler',
     query,
+    cityId,
     itinerary,
     totalTravelMinutes,
     totalStayMinutes,
     totalPlanMinutes,
     requestedDurationMinutes: Number.parseInt(durationMinutes || safeContext.durationMinutes, 10) || null,
-    warnings: recommendation.warnings,
+    warnings: [
+      ...recommendation.warnings,
+      ...(start ? [] : ['Thiếu vị trí bắt đầu hợp lệ; agent không tự thay bằng tọa độ trung tâm Đà Nẵng.']),
+    ],
     semanticTool: recommendation.semanticTool,
     detectedIntents: intents.map((intent) => ({ id: intent.id, label: intent.label })),
     actions: [

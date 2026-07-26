@@ -73,9 +73,17 @@ try:
             raise Exception("stdin candidates must include LLM_Input_Text")
         print(f"[DEBUG] Loaded {len(df)} agent candidates from stdin", file=sys.stderr)
     else:
-        data_path = os.path.join(DATA_ROOT, 'poi_data_ggmap.csv')
+        data_path = os.path.join(DATA_ROOT, 'canonical', 'urbanagent_poi_master_v1.csv')
         print(f"[DEBUG] Loading data from: {data_path}", file=sys.stderr)
         df = pd.read_csv(data_path, encoding='utf-8')
+        df = df[
+            (df.get('Entity_Type') == 'poi') &
+            (df.get('City_ID') == 'da-nang') &
+            df.get('Global_ID').notna() &
+            df.get('Restaurant Name').notna() &
+            df.get('Lat').notna() &
+            df.get('Lon').notna()
+        ].copy()
     all_texts = df['LLM_Input_Text'].fillna('').tolist()
     print(f"[DEBUG] Loaded {len(all_texts)} POI texts", file=sys.stderr)
 
@@ -130,30 +138,26 @@ try:
             poi = df.iloc[idx]
             
             # Support both old column names (name, address, lat, lng) and new ones (Restaurant Name, District, Lat, Lon)
-            poi_name = poi.get('name') or poi.get('Restaurant Name') or 'Unknown'
-            poi_district = poi.get('District') or 'Đà Nẵng'
+            poi_name = poi.get('Restaurant Name') or poi.get('name') or 'Unknown'
+            poi_district = poi.get('District')
             if pd.isna(poi_name): poi_name = 'Unknown'
-            if pd.isna(poi_district): poi_district = 'Đà Nẵng'
+            district = '' if pd.isna(poi_district) else str(poi_district)
             
             # Address: try 'address' first, then fall back to District
-            address = poi.get('address')
-            if address and pd.notna(address):
-                parts = str(address).split(',')
-                district = parts[-3].strip() if len(parts) >= 3 else parts[-1].strip()
-            else:
-                district = str(poi_district)
+            address = poi.get('Address_Current') or poi.get('Address_Raw') or poi.get('address')
             
             # Coordinates: try lowercase first, then capitalized
-            lat_val = poi.get('lat') or poi.get('Lat') or 16.0544
-            lon_val = poi.get('lng') or poi.get('Lon') or 108.2022
-            if pd.isna(lat_val): lat_val = 16.0544
-            if pd.isna(lon_val): lon_val = 108.2022
+            lat_val = poi.get('Lat') if pd.notna(poi.get('Lat')) else poi.get('lat')
+            lon_val = poi.get('Lon') if pd.notna(poi.get('Lon')) else poi.get('lon') or poi.get('lng')
+            if pd.isna(lat_val) or pd.isna(lon_val):
+                continue
             
             # ID: try place_id first, then RestaurantID
-            poi_id = poi.get('_agent_id') or poi.get('place_id') or poi.get('RestaurantID') or idx
+            poi_id = poi.get('_agent_id') or poi.get('Global_ID') or idx
             
             results.append({
                 "id": str(poi_id),
+                "sourceId": None if pd.isna(poi.get('RestaurantID')) else str(poi.get('RestaurantID')),
                 "name": f"Khu vực gần {poi_name}",
                 "district": district,
                 "lat": float(lat_val),
@@ -176,7 +180,7 @@ except Exception as e:
 
     # Fallback to mock data if torch fails or model doesn't exist so frontend still works
     mock_results = [
-        { "id": 1, "name": f"Mock: Khu vực Hải Châu (Version {args.version})", "score": 98.5, "district": "Hải Châu", "lat": 16.071, "lon": 108.245, "desc": f"Lỗi model: {error_msg[:150]}" },
-        { "id": 2, "name": "Mock: Khu vực Sơn Trà", "score": 92.1, "district": "Sơn Trà", "lat": 16.035, "lon": 108.225, "desc": "Vui lòng kiểm tra log backend..." }
+        { "id": "mock_error_1", "name": f"Mock: model unavailable (Version {args.version})", "score": 0, "district": "", "lat": None, "lon": None, "desc": f"Lỗi model: {error_msg[:150]}" },
+        { "id": "mock_error_2", "name": "Mock: kiểm tra backend model", "score": 0, "district": "", "lat": None, "lon": None, "desc": "Vui lòng kiểm tra log backend..." }
     ]
     print(json.dumps(mock_results))

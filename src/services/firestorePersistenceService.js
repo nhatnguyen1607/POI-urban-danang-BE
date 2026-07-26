@@ -19,8 +19,25 @@ function numberOrZero(value) {
 }
 
 function numberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null;
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
+}
+
+function validCoordinatePair(lat, lng) {
+  return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+}
+
+function normalizeLocationInput(input = {}) {
+  const lat = numberOrNull(input.lat ?? input.Lat);
+  const lng = numberOrNull(input.lng ?? input.lon ?? input.Lon);
+  if (!validCoordinatePair(lat, lng)) return null;
+
+  return {
+    lat,
+    lng,
+    ...(input.label ? { label: cleanString(input.label, 200) } : {}),
+  };
 }
 
 function normalizeName(value) {
@@ -177,10 +194,11 @@ async function saveCustomerProfile(input) {
   const db = requireFirestoreDb();
   const userId = cleanString(input.userId, 160);
   const preferences = normalizeCustomerPreferences(input.preferences);
+  const defaultLocation = normalizeLocationInput(input.defaultLocation);
   const doc = {
     userId,
     preferences,
-    defaultLocation: input.defaultLocation || { lat: 16.0544, lng: 108.2022, label: 'Đà Nẵng' },
+    ...(defaultLocation ? { defaultLocation } : {}),
     ...(input.agentMemorySummary ? { agentMemorySummary: cleanString(input.agentMemorySummary, 2000) } : {}),
     updatedAt: now(),
   };
@@ -220,7 +238,8 @@ function normalizePoi(input = {}) {
   const lat = numberOrNull(input.location?.lat ?? input.lat ?? input.Lat);
   const lng = numberOrNull(input.location?.lng ?? input.location?.lon ?? input.lng ?? input.lon ?? input.Lon);
   const address = cleanString(input.location?.address || input.address || input.Address || '', 600);
-  const district = cleanString(input.location?.district || input.district || input.District || address || 'Đà Nẵng', 200);
+  const district = cleanString(input.location?.district || input.district || input.District || '', 200);
+  const hasCoordinates = validCoordinatePair(lat, lng);
   const semanticText = cleanString(
     input.semanticText ||
       input.text ||
@@ -229,9 +248,21 @@ function normalizePoi(input = {}) {
       `${name}. ${category}. ${district}. ${address}`,
     6000,
   );
+  const rating = numberOrNull(input.rating ?? input['Overall Rating']);
+  const reviewCount = numberOrNull(
+    input.reviewCount ??
+      input.ratingCount ??
+      input.Rating_Count ??
+      input.reviews_count ??
+      input.review_count ??
+      input.Total_Reviews_Scraped ??
+      input['User Rating Count'],
+  );
+  const ratingSum = numberOrNull(input.ratingSum);
+
   return {
     poiId,
-    source: ['foody', 'google_maps', 'manual', 'seller'].includes(input.source) ? input.source : 'manual',
+    source: ['foody', 'google_maps', 'google_maps+foody', 'manual', 'seller'].includes(input.source) ? input.source : 'manual',
     name,
     normalizedName: normalizeName(name),
     normalizedAddress: normalizeName(address),
@@ -239,15 +270,16 @@ function normalizePoi(input = {}) {
     tags: cleanArray(input.tags || [category], 30),
     searchKeywords: buildSearchKeywords(name, address, district, category, semanticText),
     location: {
-      lat: lat ?? 16.0544,
-      lng: lng ?? 108.2022,
+      ...(hasCoordinates ? { lat, lng } : {}),
       geohash: cleanString(input.location?.geohash || input.geohash || '', 120),
       district,
       address,
+      hasCoordinates,
     },
-    rating: numberOrZero(input.rating || input['Overall Rating']),
-    reviewCount: numberOrZero(input.reviewCount || input.Total_Reviews_Scraped || input['User Rating Count']),
-    ratingSum: numberOrZero(input.ratingSum),
+    cityId: cleanString(input.cityId || 'da-nang', 80),
+    rating,
+    reviewCount,
+    ratingSum,
     timesAddedToItinerary: numberOrZero(input.timesAddedToItinerary),
     timesVisited: numberOrZero(input.timesVisited),
     timesRouted: numberOrZero(input.timesRouted),
@@ -563,6 +595,8 @@ module.exports = {
   updateUserRole,
   listUsers,
   updateUserStatus,
+  normalizeLocationInput,
+  normalizePoi,
   getCustomerProfile,
   saveCustomerProfile,
   upsertPoi,

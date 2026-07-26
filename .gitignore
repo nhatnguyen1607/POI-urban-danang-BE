@@ -92,3 +92,7 @@ reports/evaluation/figures/learning_summary_card.svg
 reports/evaluation/figures/learning_before_after.svg
 reports/evaluation/figures/learning_summary_card.svg
 reports/evaluation/figures/learning_before_after.svg
+data/raw/legacy/master_nodes_foody_clean.csv
+data/raw/legacy/master_nodes_google_maps_clean.csv
+data/raw/legacy/poi_urban_foody.csv
+data/raw/legacy/poi_urban_ggmap.csv
