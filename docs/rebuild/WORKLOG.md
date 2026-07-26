@@ -325,3 +325,316 @@ Key conclusions:
 - The canonical runtime CSV is now visible to Git and tracked through Git LFS attributes.
 - The canonical CSV bytes were not changed; the approved SHA-256 still matches.
 - A clean clone will receive the runtime dataset once Phase 0 is committed and pushed with LFS objects.
+
+## 2026-07-26 Phase 1 Data Platform Foundation Batch 1
+
+Mode: Phase 1 started after explicit user approval. Implemented backend data
+foundation only. No Phase 2 work, frontend redesign, production Firebase change,
+database migration execution, canonical CSV edit, or external data-source
+integration was performed.
+
+Changed files:
+
+- `package.json`
+- `package-lock.json`
+- `migrations/phase1/001_core_postgis_schema.sql`
+- `src/infrastructure/db/postgresClient.js`
+- `src/modules/cities/cityConfig.js`
+- `src/modules/pois/canonicalPoiImportPlan.js`
+- `src/modules/pois/postgresPoiRepository.js`
+- `src/services/poiRepository.js`
+- `scripts/phase1_import_canonical_pois.js`
+- `tests/phase1/phase1DataPlatform.test.js`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md`
+
+Commands run:
+
+```text
+Get-Content -LiteralPath AGENTS.md
+Get-Content -LiteralPath D:\POI-urban-danang-FE\AGENTS.md
+Get-Content -LiteralPath URBANAGENT_CODEX_CONTEXT.md
+Get-Content -LiteralPath docs\rebuild\MASTER_PLAN.md
+Get-Content -LiteralPath PLANNING.md
+Get-Content -LiteralPath README.md
+Get-Content -LiteralPath package.json
+Get-Content -LiteralPath docs\rebuild\CURRENT_STATE.md
+Get-Content -LiteralPath D:\POI-urban-danang-FE\PLANNING.md
+Get-Content -LiteralPath D:\POI-urban-danang-FE\package.json
+rg --files src tests scripts config db migrations docs
+git --no-pager status --short --branch
+git switch -c phase1/data-platform-foundation
+npm.cmd install
+npm.cmd test
+node --check src\infrastructure\db\postgresClient.js
+node --check src\modules\cities\cityConfig.js
+node --check src\modules\pois\canonicalPoiImportPlan.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1DataPlatform.test.js
+node --check src\services\poiRepository.js
+node --check src\server.js
+node --check server.js
+npm.cmd run phase1:import:canonical
+cd D:\POI-urban-danang-FE
+npm.cmd run build
+```
+
+Test output:
+
+```text
+tests 15
+pass 15
+fail 0
+```
+
+Import dry-run output:
+
+```text
+applicationPois: 4166
+sourceRecords: 4166
+externalIds: 8337
+aliases: 985
+images: 16246
+reviewSummaries: 4166
+```
+
+Key conclusions:
+
+- Added a self-contained Phase 1 schema migration with PostGIS, pgcrypto,
+  cities, ingestion runs, canonical POIs, source records, external IDs, aliases,
+  images, review summaries, merge candidates, and data quality issues.
+- Added a Da Nang City Pack config while keeping a single approved city.
+- Added a canonical legacy import plan that preserves approved CSV hash and null
+  semantics without modifying the CSV.
+- Added an optional Postgres POI repository adapter while keeping CSV as the
+  default runtime repository.
+- Added tests for migration shape, City Pack config, import planning, null
+  semantics/provenance, and Postgres-to-legacy POI mapping.
+- No migration or write import was run.
+
+## 2026-07-26 Phase 1 Batch 2 Disposable Postgres/PostGIS Integration
+
+Mode: Phase 1 Batch 2. Disposable database verification only. No production
+database, Firebase production, frontend application code, canonical CSV bytes,
+runtime cutover, commit, push, or Batch 3 work was performed.
+
+Changed files:
+
+- `docker-compose.phase1.yml`
+- `migrations/phase1/001_core_postgis_schema.sql`
+- `migrations/phase1/001_core_postgis_schema.down.sql`
+- `package.json`
+- `src/infrastructure/db/phase1MigrationRunner.js`
+- `src/modules/pois/postgresDiagnostics.js`
+- `src/modules/pois/postgresPoiRepository.js`
+- `scripts/phase1_db_diagnostics.js`
+- `scripts/phase1_db_migrate.js`
+- `scripts/phase1_db_rollback.js`
+- `scripts/phase1_import_canonical_pois.js`
+- `tests/phase1/phase1PostgresIntegration.test.js`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md`
+
+Commands run:
+
+```text
+git status --short --branch
+git --no-pager diff --name-status
+git --no-pager diff --stat
+git ls-files --others --exclude-standard
+git --no-pager log --oneline --decorate -5
+docker --version
+wsl.exe docker --version
+wsl.exe docker compose -f docker-compose.phase1.yml version
+node --check src\infrastructure\db\phase1MigrationRunner.js
+node --check src\modules\pois\postgresDiagnostics.js
+node --check scripts\phase1_db_migrate.js
+node --check scripts\phase1_db_rollback.js
+node --check scripts\phase1_db_diagnostics.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1PostgresIntegration.test.js
+npm.cmd test
+wsl.exe docker compose -f docker-compose.phase1.yml up -d
+wsl.exe docker inspect -f "{{.State.Health.Status}}" urbanagent-phase1-postgis
+npm.cmd run phase1:db:migrate
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd run phase1:db:rollback
+node -e <list Phase 1 tables after rollback>
+npm.cmd run phase1:db:migrate
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd test with URBANAGENT_PHASE1_INTEGRATION=true
+Get-FileHash -Algorithm SHA256 -LiteralPath data\canonical\urbanagent_poi_master_v1.csv
+npm.cmd run phase1:import:canonical -- --dry-run
+npm.cmd run phase1:db:diagnostics
+node -e <CSV default runtime check>
+node --check <Phase 1 scripts, services, and tests>
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd audit --omit=dev --registry=http://registry.npmjs.org
+npm.cmd ls pg --omit=dev
+npm.cmd ls --omit=dev --depth=0
+wsl.exe docker compose -f docker-compose.phase1.yml down -v
+wsl.exe docker ps -a --filter name=urbanagent-phase1-postgis
+wsl.exe docker volume ls --filter name=urbanagent_phase1_postgis_data
+```
+
+Verification:
+
+```text
+Docker Compose image: postgis/postgis:16-3.5-alpine
+Container health: healthy
+Migration apply: PASS
+First write import: PASS
+Second write import: PASS
+Rollback: PASS
+Tables after rollback: []
+Reapply migration: PASS
+Final import: PASS
+Full tests with integration: 16 pass, 0 fail, 0 skip
+Canonical SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+CSV default runtime: CanonicalCsvPoiRepository, 4166 POIs
+Container cleanup: PASS
+Volume cleanup: PASS
+```
+
+Final diagnostics:
+
+```text
+poi_entities: 4166
+source_records: 4166
+external_ids: 8337
+aliases: 985
+images: 16246
+review_summaries: 4166
+duplicates: 0
+orphans: 0
+invalid longitude/latitude: 0
+wrong SRID: 0
+coordinate mismatch: 0
+outside Da Nang envelope: 0
+merged provenance rows: 5
+GiST index: poi_entities_location_gix
+```
+
+NPM audit:
+
+```text
+npm.cmd audit --omit=dev: FAIL
+npm.cmd audit --omit=dev --json: FAIL
+npm.cmd audit --omit=dev --registry=http://registry.npmjs.org: FAIL, 426 Upgrade Required
+```
+
+Key conclusions:
+
+- Disposable Postgres/PostGIS integration works end-to-end.
+- Importer write mode is guarded and dry-run remains default.
+- Repeated imports are idempotent for core tables; `ingestion_runs` increments
+  as import history.
+- Rollback removes Phase 1 tables in reverse dependency order without dropping
+  extensions.
+- Postgres repository returns API-compatible POIs and matches selected CSV
+  records for Google-only, Foody-only, merged provenance, null rating, multiple
+  images, and aliases.
+- Application runtime remains CSV by default.
+- Vulnerability classification is still unresolved because npm audit did not
+  return a valid advisory payload.
+
+## 2026-07-26 Phase 1 Batch 2 Security Audit Closure
+
+Mode: security audit closure only. No source code, migration SQL, tests,
+Docker Compose design, frontend files, canonical CSV, manifest, package.json,
+package-lock.json, dependency install/update/dedupe, database workflow rerun,
+Firebase access, commit, push, or Batch 3 work was performed.
+
+Changed files:
+
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md`
+
+Commands run:
+
+```text
+node --version
+npm.cmd --version
+npm.cmd config get registry
+npm.cmd config get userconfig
+npm.cmd config get globalconfig
+npm.cmd config get proxy
+npm.cmd config get https-proxy
+npm.cmd ping --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/ --userconfig=<empty temp npmrc>
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/ --cache=<temp cache> --prefer-online
+wsl.exe sh -lc "npm audit --omit=dev --json --registry=https://registry.npmjs.org/"
+npm.cmd config ls -l | rg -n "audit|compress|gzip|encoding|fetch|registry|proxy"
+node <temp official npm bulk advisory classifier>
+Remove-Item <temp audit artifacts>
+```
+
+Environment:
+
+```text
+Node: v24.11.1
+npm: 11.6.2
+registry: https://registry.npmjs.org/
+proxy: null
+https-proxy: null
+npm ping: PASS
+```
+
+NPM CLI audit result:
+
+```text
+All npm CLI audit attempts failed with invalid JSON/gzip response parsing.
+HTTP fallback failed with 426 Upgrade Required and was not used as audit result.
+```
+
+Official advisory classification:
+
+```text
+Source: npm Bulk Advisory POST endpoint
+Response: HTTP 200, gzip decoded locally
+Production packages checked: 252
+Advisory records: 9
+Severity: 1 low, 4 moderate, 4 high
+Direct: 2
+Transitive: 7
+Affects new pg path: 0
+```
+
+Affected production modules:
+
+```text
+body-parser@2.2.2: low, transitive via express, pg path no
+brace-expansion@2.1.1: high, transitive via firebase-admin/google stack, pg path no
+brace-expansion@2.1.1: high, transitive via firebase-admin/google stack, pg path no
+form-data@2.5.5: high, transitive via firebase-admin/google stack, pg path no
+multer@2.1.1: high, direct, pg path no
+multer@2.1.1: moderate, direct, pg path no
+protobufjs@7.6.3: moderate, transitive via firebase-admin/google stack, pg path no
+qs@6.15.1: moderate, transitive via express/body-parser, pg path no
+uuid@9.0.1: moderate, transitive via firebase-admin/google stack, pg path no
+```
+
+Key conclusions:
+
+- `npm audit --omit=dev` remains broken in this environment due gzip response
+  parsing, despite registry ping success and isolated npm CLI attempts.
+- A usable production-only advisory classification was obtained from the
+  official npm Bulk Advisory POST endpoint.
+- No advisory affects the newly added Phase 1 `pg@8.22.0` path.
+- Existing advisories affect Express/Multer/Firebase dependency surfaces and
+  remain unresolved because dependency changes were explicitly out of scope.
+- Temporary audit script/cache files were removed after classification.

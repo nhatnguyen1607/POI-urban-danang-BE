@@ -1,12 +1,21 @@
 # Current State
 
-Updated: 2026-07-26 01:49:31 +07:00.
+Updated: 2026-07-26 12:31:18 +07:00.
 
 ## Phase
 
-`PHASE_0_AUDIT_FIXES_IMPLEMENTED`
+`PHASE_1_DATA_PLATFORM_FOUNDATION_BATCH_2_PASSED`
 
-Phase 0 blocker fixes have been implemented and verified locally. Phase 1 has not started.
+Phase 1 Batch 2 validated the PostgreSQL/PostGIS schema and importer against a
+disposable Docker Compose PostGIS database. Migration, rollback, reapply, real
+write import, idempotency, diagnostics, Postgres repository integration, and
+CSV/Postgres parity passed. No production database or Firebase data was touched.
+
+The Batch 2 security audit gate is now closed. `npm audit --omit=dev` still
+fails in this environment because npm 11.6.2 receives a gzip/binary advisory
+response and tries to parse it as plain JSON, but the advisory payload was
+successfully classified through the official npm Bulk Advisory POST endpoint
+with explicit gzip fallback decoding. No `npm audit fix` was run.
 
 ## Repository Visibility
 
@@ -15,28 +24,33 @@ Phase 0 blocker fixes have been implemented and verified locally. Phase 1 has no
 
 ## Branches And Working Tree
 
-Backend branch: `main`.
+Backend branch: `phase1/data-platform-foundation`.
 
-Backend status includes the existing Phase 0 working tree plus this fix batch:
+Backend status after implementation:
 
-- modified tracked files include `.gitignore`, restored root legacy CSV pointer files, backend services, `server.js`, `src/server.js`, `package.json`, and docs/context/rules.
-- untracked files include `AGENTS.md`, `URBANAGENT_CODEX_CONTEXT.md`, canonical dataset files, `docs/rebuild/*`, repository abstraction files, and `tests/phase0/phase0CanonicalData.test.js`.
-- The canonical CSV hash still matches the approved dataset.
+- modified: `docs/rebuild/CURRENT_STATE.md`
+- modified: `docs/rebuild/DECISIONS.md`
+- modified: `docs/rebuild/TEST_REPORT.md`
+- modified: `docs/rebuild/WORKLOG.md`
+- modified: `package-lock.json`
+- modified: `package.json`
+- modified: `src/services/poiRepository.js`
+- untracked: `docker-compose.phase1.yml`
+- untracked: `migrations/`
+- untracked: `scripts/phase1_db_diagnostics.js`
+- untracked: `scripts/phase1_db_migrate.js`
+- untracked: `scripts/phase1_db_rollback.js`
+- untracked: `scripts/phase1_import_canonical_pois.js`
+- untracked: `src/infrastructure/`
+- untracked: `src/modules/`
+- untracked: `tests/phase1/`
 
 Frontend branch: `main`.
 
 Frontend status:
 
-- `AGENTS.md` and `URBANAGENT_CODEX_CONTEXT.md` are updated/untracked in the working tree.
-- `poi_urban_web.code-workspace` remains untracked and was not modified by this fix batch.
+- clean: `## main...origin/main`
 - No frontend application source file was changed.
-
-## Context File Status
-
-- BE context: `D:\POI-urban-danang-BE\URBANAGENT_CODEX_CONTEXT.md`
-- FE context: `D:\POI-urban-danang-FE\URBANAGENT_CODEX_CONTEXT.md`
-- SHA-256 for both after sync: `2EC5ACC2E8AF8B1553E94EB17A332C8C6D03675EF74D214DF4AD0D010D28BF0F`
-- Result: context files are byte-identical and now mention the approved canonical dataset.
 
 ## Canonical Dataset Status
 
@@ -44,34 +58,89 @@ Frontend status:
 - Rows: `4166`
 - Unique `Global_ID`: `4166`
 - SHA-256: `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`
-- Runtime repository load count after BOM header fix: `4166`
+- Runtime repository load count: `4166`
 - Header contract: pass
 - City filter `da-nang`: `4166`
-- City filter `hue`: `0`
+
+## Phase 1 Data Platform Status
+
+- Migration file exists: `migrations/phase1/001_core_postgis_schema.sql`.
+- Rollback file exists: `migrations/phase1/001_core_postgis_schema.down.sql`.
+- Disposable Compose file exists: `docker-compose.phase1.yml`.
+- Migration declares PostGIS and pgcrypto extensions.
+- Core tables defined: `cities`, `ingestion_runs`, `poi_entities`,
+  `poi_source_records`, `poi_external_ids`, `poi_aliases`, `poi_images`,
+  `poi_reviews_summary`, `poi_merge_candidates`, `data_quality_issues`.
+- Da Nang City Pack config exists in `src/modules/cities/cityConfig.js`.
+- Canonical import dry-run produces:
+  - application POIs: `4166`
+  - source records: `4166`
+  - external IDs: `8337`
+  - aliases: `985`
+  - images: `16246`
+  - review summaries: `4166`
+- Existing runtime still defaults to CSV through the repository adapter.
+- Postgres runtime can be selected later with `URBANAGENT_POI_REPOSITORY=postgres`
+  after migration/import setup.
+- Disposable database method used: Docker Compose with
+  `postgis/postgis:16-3.5-alpine`, host port `55432`.
+- Migration apply: PASS.
+- First real write import: PASS.
+- Second real write import: PASS; core counts unchanged.
+- Rollback: PASS; Phase 1 tables removed.
+- Reapply and final import: PASS.
+- Final diagnostics:
+  - cities: `1`
+  - POI entities: `4166`
+  - source records: `4166`
+  - external IDs: `8337`
+  - aliases: `985`
+  - images: `16246`
+  - review summaries: `4166`
+  - duplicate checks: `0`
+  - orphan checks: `0`
+  - invalid longitude/latitude: `0`
+  - null geometry: `0`
+  - wrong SRID: `0`
+  - coordinate mismatch: `0`
+  - outside Da Nang envelope: `0`
+  - merged provenance rows: `5`
+  - GiST index: `poi_entities_location_gix`
+- Disposable container and volume cleanup: PASS; no Phase 1 container or volume remains.
 
 ## Build/Test Status
 
 Backend:
 
-- `npm.cmd test`: PASS, 8 tests passed.
-- `node --check` passed for `src/server.js`, `server.js`, Phase 0 services, and `tests/phase0CanonicalData.test.js`.
+- `npm.cmd test`: PASS, 15 tests passed, 0 failed.
+- `node --check` for Phase 1 files and server entrypoints: PASS.
+- `npm.cmd run phase1:import:canonical`: PASS in dry-run mode.
+- `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true`: PASS, 16 tests passed, 0 failed, 0 skipped.
+- `npm.cmd run phase1:db:diagnostics`: PASS.
+- `npm.cmd audit --omit=dev`: FAIL due npm registry invalid JSON/gzip response.
+- Audit closure classifier: PASS through official npm Bulk Advisory POST.
 
 Frontend:
 
-- `npm.cmd run lint`: FAIL, existing baseline `122 problems (119 errors, 3 warnings)`. This task intentionally did not fix broad frontend lint debt.
-- `tsc.cmd --noEmit --pretty false --project tsconfig.app.json`: PASS.
-- `vite.cmd build --outDir C:\tmp\urbanagent-fe-build-phase0-fix --emptyOutDir`: PASS after sandbox escalation for temp output. Warning: JS chunk `1,368.16 kB`.
-- `npm.cmd test`: FAIL because the frontend has no `test` script.
+- `npm.cmd run build`: PASS.
+- Vite warning remains: one JS chunk is `1,368.16 kB`, above the 500 kB warning threshold.
+- Frontend lint and missing frontend test script remain accepted pre-existing debt from Phase 0.
 
 ## Remaining Risks
 
-- Root tracked legacy CSV files are no longer marked deleted; they are restored as Git LFS pointer files and currently show as modified in status with no textual diff.
-- `.gitignore` contains previous Phase 0 changes unrelated to this blocker fix.
-- Frontend lint remains failing from pre-existing broad lint debt.
-- Frontend has no unit/integration test script.
-- Some Da Nang UI defaults and business scoring assumptions remain by design for the single approved `da-nang` City_ID.
-- `ES-system` route density now loads canonical POIs, but canonical `Address_Current` is empty for all rows, so road-name density is zero and proximity density remains the usable signal.
+- `npm audit --omit=dev` still fails in this environment; use the documented
+  official Bulk Advisory POST diagnostic as the current production-only
+  classification until npm CLI/registry decompression behavior is fixed.
+- Production-only advisory classification: 9 advisory records, 1 low, 4
+  moderate, 4 high; 2 direct and 7 transitive; 0 affect the new `pg` path.
+- The disposable write importer was verified, but production migration/import has not been approved or run.
+- The optional Postgres repository adapter is still not enabled by default.
+- Address/admin-boundary spatial joins remain pending because no boundary dataset has been approved.
+- Dependency install reported `12 vulnerabilities`; no `npm audit fix` was run because that would be a broader dependency change.
+- Phase 1 is not complete; this is only the first foundation batch.
 
 ## Next Step
 
-Stop here and wait for user review. Do not start Phase 1 until the user explicitly approves it.
+Review Batch 2 results, then decide whether Batch 3 should add endpoint-level
+repository-switch tests, rollback packaging, or a local-only migration runbook.
+Do not cut over runtime to PostgreSQL without a separate explicit approval.

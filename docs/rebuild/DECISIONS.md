@@ -27,9 +27,53 @@ Updated: 2026-07-26 01:49:31 +07:00.
 - Run frontend production build to `C:\tmp\urbanagent-fe-build-phase0-fix` to avoid modifying repo `dist`.
 - Leave broad frontend lint debt unresolved and reported, per user instruction.
 
+## Phase 1 Decisions
+
+- Start Phase 1 only after explicit user approval on 2026-07-26.
+- Use a modular monolith data foundation instead of introducing microservices.
+- Keep CSV as the default runtime repository until a Postgres migration/import is
+  explicitly run and verified.
+- Add PostgreSQL/PostGIS migration SQL, but do not run migrations in this batch.
+- Add `pg` as the backend Postgres driver dependency.
+- Preserve legacy API-compatible POI shape through a `PostgresPoiRepository`
+  mapper so old endpoints can switch repositories later without response-field
+  churn.
+- Treat the Phase 0 canonical CSV as a legacy-canonical import source that
+  produces Bronze source records, Gold POI entities, external IDs, aliases,
+  image records, and review summaries.
+- Keep missing freshness, address, rating, review, and admin-boundary values as
+  null/unknown in the import plan.
+- Do not auto-merge duplicate candidates in this batch.
+- Use Docker Compose with `postgis/postgis:16-3.5-alpine` and port `55432` for
+  disposable Postgres/PostGIS verification only.
+- Require `URBANAGENT_ALLOW_PHASE1_DB_WRITE=true` for migration, rollback, and
+  importer write mode.
+- Restrict guarded Phase 1 DB writes to disposable localhost `55432` database
+  names containing `phase1`, `test`, or `disposable`.
+- Keep importer dry-run as the default; real write mode requires `--write`.
+- Do not drop PostGIS or pgcrypto in rollback because extensions may be shared
+  in non-disposable databases.
+- Use `(poi_id, provider, external_id)` as the external ID primary key so
+  identical ID values in different namespaces and duplicate row prevention are
+  explicit without implying RestaurantID is a Google Place ID.
+- Add unique image association indexes to keep second imports idempotent.
+- Treat repeated import runs as new `ingestion_runs`; core entity/source/image/
+  alias/review counts must remain unchanged.
+- Close the Phase 1 Batch 2 security gate by documenting npm CLI audit failure
+  and classifying production advisories through the official npm Bulk Advisory
+  POST endpoint with gzip fallback decoding.
+- Do not change dependencies during audit closure; direct `pg@8.22.0` remains
+  accepted for Phase 1 because no production advisory affects the `pg` path.
+
 ## Still Open
 
 - Decide whether restored root CSV Git LFS pointer files should remain tracked for legacy compatibility in the eventual Phase 0 commit.
 - Decide whether `.gitignore` changes from the earlier Phase 0 patch should be kept.
 - Decide when to add a real frontend test runner.
 - Decide whether Phase 1 should restore road-name density through verified address/admin data or leave route density proximity-only until PostGIS.
+- Decide whether the next Phase 1 batch should run a local Postgres/PostGIS
+  verification environment, add rollback SQL first, or add endpoint-level tests
+  for repository switching first.
+- Track npm CLI audit decompression/registry behavior as environment debt; the
+  current production advisory classification was obtained without modifying
+  dependencies.

@@ -73,3 +73,364 @@ Results:
 - `npm.cmd test`: FAIL because no frontend `test` script exists.
 
 Frontend lint failure remains intentionally unresolved because this task explicitly said not to fix all existing frontend lint errors.
+
+## Phase 1 Batch 1
+
+Updated: 2026-07-26 10:08:23 +07:00.
+
+Commands run:
+
+```text
+npm.cmd install
+npm.cmd test
+node --check src\infrastructure\db\postgresClient.js
+node --check src\modules\cities\cityConfig.js
+node --check src\modules\pois\canonicalPoiImportPlan.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1DataPlatform.test.js
+node --check src\services\poiRepository.js
+node --check src\server.js
+node --check server.js
+npm.cmd run phase1:import:canonical
+cd D:\POI-urban-danang-FE
+npm.cmd run build
+```
+
+Results:
+
+- `npm.cmd install`: PASS; added `pg` dependency. NPM audit summary reported `12 vulnerabilities (1 low, 8 moderate, 3 high)`. No audit fix was run.
+- `npm.cmd test`: PASS.
+- Node test runner summary: 15 tests, 15 pass, 0 fail.
+- Syntax checks: PASS.
+- Import dry-run: PASS.
+- Frontend production build: PASS.
+- Vite warning remains: one JS chunk is `1,368.16 kB`.
+
+Phase 1 test coverage added:
+
+- migration defines PostGIS/pgcrypto and required foundation tables.
+- migration does not contain `DROP TABLE` or `TRUNCATE`.
+- Da Nang City Pack config is explicit and converts to a PostGIS bbox polygon.
+- canonical import plan preserves approved dataset hash and plans 4,166 POIs.
+- import plan produces source records, external IDs, aliases, images, and review summaries.
+- POI entity records preserve null semantics and field provenance.
+- Postgres repository mapper preserves the legacy API-compatible POI shape and does not expose `placeId`.
+
+Import dry-run output:
+
+```text
+mode: dry-run
+cityId: da-nang
+source provider: legacy_canonical_csv
+source policyClass: legacy-canonical
+source path: data/canonical/urbanagent_poi_master_v1.csv
+source sha256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+source rows: 4166
+applicationPois: 4166
+invalidRows: 0
+headerMatchesExpected: true
+sourceRecords: 4166
+externalIds: 8337
+aliases: 985
+images: 16246
+reviewSummaries: 4166
+```
+
+Not run:
+
+- No database migration was run.
+- No write import was run.
+- No production Firebase operation was run.
+
+## Phase 1 Batch 2
+
+Updated: 2026-07-26 12:20:17 +07:00.
+
+Disposable database:
+
+```text
+Docker Compose file: docker-compose.phase1.yml
+Image: postgis/postgis:16-3.5-alpine
+Host port: 55432
+Database: disposable local Phase 1 test database
+```
+
+Commands run:
+
+```text
+docker compose -f docker-compose.phase1.yml up -d
+npm.cmd run phase1:db:migrate
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd run phase1:db:rollback
+node -e <list Phase 1 tables after rollback>
+npm.cmd run phase1:db:migrate
+npm.cmd run phase1:import:canonical -- --write
+npm.cmd run phase1:db:diagnostics
+npm.cmd test
+npm.cmd run phase1:import:canonical -- --dry-run
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <CSV default runtime check>
+node --check <Phase 1 scripts, services, and tests>
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd audit --omit=dev --registry=http://registry.npmjs.org
+npm.cmd ls pg --omit=dev
+npm.cmd ls --omit=dev --depth=0
+docker compose -f docker-compose.phase1.yml down -v
+```
+
+Results:
+
+- Migration apply: PASS.
+- First real write import: PASS.
+- First import counts:
+  - POI entities: `4166`
+  - source records: `4166`
+  - external IDs: `8337`
+  - aliases: `985`
+  - images: `16246`
+  - review summaries: `4166`
+- Second real write import: PASS.
+- Second import core counts: unchanged.
+- Idempotency: PASS for core tables; `ingestion_runs` increments by design.
+- Rollback: PASS; Phase 1 tables removed.
+- Reapply migration and final import: PASS.
+- Final diagnostics: PASS.
+- PostgresPoiRepository integration: PASS.
+- CSV/Postgres selected parity: PASS.
+- CSV default runtime: PASS, `CanonicalCsvPoiRepository`, count `4166`.
+- Canonical SHA-256: `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Container/volume cleanup: PASS.
+
+Final database diagnostics:
+
+```text
+cities: 1
+poi_entities: 4166
+source_records: 4166
+external_ids: 8337
+aliases: 985
+images: 16246
+review_summaries: 4166
+duplicate source records: 0
+duplicate external IDs: 0
+duplicate aliases: 0
+duplicate image associations: 0
+orphan source records/external IDs/aliases/images/reviews: 0
+invalid longitude: 0
+invalid latitude: 0
+null geometry: 0
+wrong SRID: 0
+coordinate mismatch: 0
+outside Da Nang envelope: 0
+merged provenance rows: 5
+invalid rating ranges: 0
+image ordering anomalies: 0
+GiST index: poi_entities_location_gix
+EXPLAIN observed the GiST index in the representative bbox query.
+```
+
+Tests:
+
+```text
+Unit/default suite without DB integration:
+tests 16
+pass 15
+fail 0
+skipped 1
+
+Full suite with URBANAGENT_PHASE1_INTEGRATION=true:
+tests 16
+pass 16
+fail 0
+skipped 0
+```
+
+`npm audit --omit=dev`:
+
+- Result: FAIL due npm audit endpoint response parsing failure.
+- Error observed: invalid JSON response body from
+  `https://registry.npmjs.org/-/npm/v1/security/advisories/bulk`; response
+  began with gzip/binary bytes and npm could not parse it as JSON.
+- HTTP fallback returned `426 Upgrade Required`.
+- No `npm audit fix` or `npm audit fix --force` was run.
+- `npm install` previously reported `12 vulnerabilities (1 low, 8 moderate, 3 high)`.
+- Direct production dependencies are `cors`, `csv-parser`, `express`,
+  `firebase-admin`, `multer`, and `pg`.
+- New `pg` direct dependency is installed as `pg@8.22.0`.
+- Official npm Bulk Advisory POST with gzip fallback decoding returned a usable
+  production-only classification.
+
+## Phase 1 Batch 2 Security Audit Closure
+
+Updated: 2026-07-26 12:31:18 +07:00.
+
+Commands run:
+
+```text
+node --version
+npm.cmd --version
+npm.cmd config get registry
+npm.cmd config get userconfig
+npm.cmd config get globalconfig
+npm.cmd config get proxy
+npm.cmd config get https-proxy
+npm.cmd ping --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/ --userconfig=<empty temp npmrc>
+npm.cmd audit --omit=dev --json --registry=https://registry.npmjs.org/ --cache=<temp cache> --prefer-online
+wsl.exe sh -lc "npm audit --omit=dev --json --registry=https://registry.npmjs.org/"
+npm.cmd config ls -l | rg -n "audit|compress|gzip|encoding|fetch|registry|proxy"
+node <temp official npm bulk advisory classifier>
+Remove-Item <temp audit artifacts>
+```
+
+Environment:
+
+```text
+Node: v24.11.1
+npm: 11.6.2
+registry: https://registry.npmjs.org/
+proxy: null
+https-proxy: null
+npm ping: PASS
+```
+
+NPM CLI audit behavior:
+
+```text
+npm audit --omit=dev: FAIL
+npm audit --omit=dev --json: FAIL
+empty userconfig audit: FAIL
+isolated cache audit: FAIL
+WSL npm audit: FAIL
+HTTP registry fallback: FAIL, 426 Upgrade Required
+```
+
+Observed failure:
+
+```text
+invalid json response body at https://registry.npmjs.org/-/npm/v1/security/advisories/bulk
+Unexpected token '\u001f', gzip/binary response was parsed as JSON
+```
+
+Production advisory classification source:
+
+```text
+Official npm Bulk Advisory POST endpoint
+Accept-Encoding: identity
+Response was still gzip; decoded locally before JSON parsing
+Production dependency tree source: npm ls --omit=dev --all --json
+Package/version source: package-lock.json production packages only
+```
+
+Production-only summary:
+
+```text
+production packages checked: 252
+advisory records affecting installed production versions: 9
+severity: 1 low, 4 moderate, 4 high
+direct advisories: 2
+transitive advisories: 7
+advisories affecting new pg path: 0
+pg version: 8.22.0
+```
+
+Production advisories:
+
+```text
+body-parser@2.2.2
+- severity: low
+- range: >=2.0.0 <2.3.0
+- path: express@5.2.1 > body-parser@2.2.2
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: likely transitive Express/body-parser update when available
+- affects pg path: no
+
+brace-expansion@2.1.1
+- severity: high
+- range: >=2.0.0 <2.1.2
+- path: firebase-admin > @google-cloud/firestore > google-gax > rimraf > glob > minimatch > brace-expansion
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Firebase/Google dependency update or override only with approval
+- affects pg path: no
+
+brace-expansion@2.1.1
+- severity: high
+- range: <=5.0.7
+- path: same Firebase/Google transitive path
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Firebase/Google dependency update or override only with approval
+- affects pg path: no
+
+form-data@2.5.5
+- severity: high
+- range: <2.5.6
+- path: firebase-admin > @google-cloud/storage > retry-request > @types/request > form-data
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Firebase/Google dependency update or override only with approval
+- affects pg path: no
+
+multer@2.1.1
+- severity: high
+- range: >=1.0.0 <2.2.0
+- path: multer@2.1.1
+- direct: yes
+- fix availability from bulk payload: none listed
+- remediation character: direct minor/patch update likely needed, but not changed in this task
+- affects pg path: no
+
+multer@2.1.1
+- severity: moderate
+- range: >=2.0.0-alpha.1 <2.2.0
+- path: multer@2.1.1
+- direct: yes
+- fix availability from bulk payload: none listed
+- remediation character: direct minor/patch update likely needed, but not changed in this task
+- affects pg path: no
+
+protobufjs@7.6.3
+- severity: moderate
+- range: >=7.5.0 <=7.6.4
+- paths: Firebase/Google Firestore/gax/protobufjs transitive paths
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Firebase/Google dependency update or override only with approval
+- affects pg path: no
+
+qs@6.15.1
+- severity: moderate
+- range: >=6.11.1 <=6.15.1
+- paths: express@5.2.1 > qs and express > body-parser > qs
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Express/qs update or override only with approval
+- affects pg path: no
+
+uuid@9.0.1
+- severity: moderate
+- range: <11.1.1
+- paths: firebase-admin > @google-cloud/storage > gaxios/teeny-request > uuid
+- direct: no
+- fix availability from bulk payload: none listed
+- remediation character: transitive Firebase/Google dependency update or override only with approval
+- affects pg path: no
+```
+
+Conclusion:
+
+- The new Phase 1 `pg@8.22.0` dependency and its dependency path have no
+  production advisories in this classification.
+- Existing production advisories are in Express/Multer/Firebase transitive
+  surfaces and remain unresolved because this task prohibited dependency changes.
+- No package file, lockfile, application code, migration SQL, tests, frontend
+  file, production database, or Firebase data was modified during audit closure.
