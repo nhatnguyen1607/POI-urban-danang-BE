@@ -1,6 +1,6 @@
 # Decisions
 
-Updated: 2026-07-26 01:49:31 +07:00.
+Updated: 2026-07-26 16:35:00 +07:00.
 
 ## Accepted
 
@@ -15,7 +15,10 @@ Updated: 2026-07-26 01:49:31 +07:00.
 - Urban-void rows are excluded from traveler POIs, recommendations, itineraries, maps, and POI counts.
 - Missing coordinates, address, admin-boundary, rating, review count, and freshness values must stay unknown/null unless verified.
 - Phase 0 may add tests and safety foundation only.
-- Phase 1 remains blocked until explicit approval.
+- Phase 1 was explicitly approved, implemented through Batch 3, merged to
+  `main`, and tagged `phase-1-batch-3`.
+- Phase 2 was explicitly approved on 2026-07-26 for traveler API v2 planning
+  and specification.
 
 ## New Decisions In This Fix Batch
 
@@ -95,14 +98,159 @@ Updated: 2026-07-26 01:49:31 +07:00.
   `/api/eda`, `/api/pois/data-quality`, `/api/agent/recommend-poi`, and
   `/api/agent/create-itinerary`.
 
+## Phase 2 Planning Decisions
+
+- Limit this batch to planning/specification documentation only.
+- Phase 2 scope is backend Traveler API v2.
+- Do not modify application code, tests, migrations, package files, canonical
+  CSV, manifest, context files, AGENTS files, or frontend source in this
+  planning batch.
+- Treat all new `/api/v2` endpoint definitions as `PROPOSED FOR PHASE 2` until
+  a later implementation batch adds and tests them.
+- Preserve all legacy endpoints until equivalent v2 endpoints pass tests.
+- Keep CSV as default runtime and PostgreSQL as explicit opt-in during Phase 2.
+- Do not perform production database migration/import in Phase 2 planning.
+- Keep partner/seller/admin product behavior outside Traveler API v2 scope.
+- Defer frontend traveler rebuild to Phase 3.
+- Defer City Pack automation/second city to Phase 4+.
+- Defer monetization and partner product work to later approved phases.
+- Use the new Phase 2 planning artifacts as the review basis:
+  - `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+  - `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+  - `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+- API base path is `/api/v2`.
+- Trip resource name is `/trips`.
+- Standalone `POST /api/v2/recommendations` endpoint is accepted.
+- Guest preview is stateless and non-persistent by default.
+- Raw internal scoring signals are not public API contract.
+- Public recommendations expose `score`, `reason`, `reasonCodes`,
+  `warnings`, and POI provenance.
+- `cityId` is required for city-scoped endpoints.
+- Only `GET /api/v2/cities` is not city-scoped.
+- Da Nang is the only supported Phase 2 city.
+- Explicit unknown city returns `CITY_NOT_SUPPORTED`; no silent Da Nang
+  fallback is allowed for invalid `cityId`.
+- Public v2 metadata must not expose local dataset paths, database table names,
+  SQL details, `DATABASE_URL`, repository class names, or storage-mode
+  dependencies.
+- Public contract metadata uses `contractVersion`, not a fake hash. The Phase
+  2 draft contract version is `phase2-traveler-api-v2-draft-1`.
+- OpenAPI 3.1 is `APPROVED AND REQUIRED` in Phase 2 Batch 1.
+- Batch 1 must create a draft OpenAPI artifact covering only approved Batch 1
+  endpoints and common schemas.
+- `openApiSha256` may be recorded only after the OpenAPI artifact exists and
+  the SHA-256 is calculated from that artifact.
+- Common v2 response metadata is minimal: every response requires `apiVersion`
+  and `requestId`; city-scoped responses also require `cityId`.
+- `datasetVersion` appears only where lineage context is relevant.
+- `applicationPoiCount`, `qualitySummary`, and `capabilityStatus` primarily
+  belong in `GET /api/v2/cities/:cityId/status`.
+- Unknown values are represented by `null` and/or explicit status fields, not
+  empty strings or zero.
+- Route summaries must mark partial/unknown routes with known/unknown leg
+  counts and must not imply zero distance/time.
+- Rating contract separates normalized scale-5 rating, Google scale-5 source
+  rating/count, Foody scale-10 source rating, nullable review count, and sample
+  review data.
+- Source identifiers are typed objects with namespace/value/source;
+  `RestaurantID` is not a Google Place ID.
+- Capabilities use states such as `unavailable`, `planned`, `experimental`, or
+  `available`; no capability is public `true` before implementation and
+  validation.
+- Phase 2 core approved scope is limited to cities, city status, POI
+  search/detail, recommendations, and stateless trip preview.
+- Trip persistence/edit/replan/stop edit/feedback persistence routes are
+  `CONDITIONAL - NOT APPROVED FOR IMPLEMENTATION`.
+- Request IDs are generated server-side when absent; optional `X-Request-Id`
+  requires validation and must be returned in responses/logs without logging
+  tokens or sensitive payloads.
+- Accepted `X-Request-Id` length is 1 to 128 characters and may contain ASCII
+  letters, digits, dot, underscore, colon, and hyphen.
+- Missing or invalid `X-Request-Id` generates a new server requestId, does not
+  echo the invalid value, continues the request, and must not reject an
+  otherwise valid API request.
+- Conditional authenticated routes use Firebase Bearer tokens; local dev
+  fallback must never work in production and tests must not contact Firebase
+  production.
+- Batch 1 owns all POI search pagination behavior: limit validation, default
+  limit 20, maximum limit 100, opaque cursor, cursor validation, deterministic
+  search/list sorting, canonical `Global_ID` final tie-break, `total`,
+  `nextCursor`, CSV-default endpoint behavior, and OpenAPI contract.
+- Batch 2 owns recommendation v2, recommendation deterministic ranking,
+  reasonCodes, recommendation fixture foundation, and quality evaluation
+  preparation.
+- Legacy versus v2 is used for behavioral parity evaluation, not as separate
+  ranking algorithms.
+- Recommendation-quality evaluation compares B0 current `recommendPOIs`
+  against B1 category-only, B2 rating/popularity, and approved ablations.
+- Capability transition rule: planning examples may show `planned`; after an
+  endpoint is implemented and validated it may become `experimental` for
+  local/test status, and becomes `available` only when approved environment
+  criteria pass.
+
+## Phase 2 Batch 1 Implementation Decisions
+
+- Implement only the approved read-only Traveler API v2 foundation endpoints in
+  this batch:
+  - `GET /api/v2/cities`
+  - `GET /api/v2/cities/:cityId/status`
+  - `GET /api/v2/pois/search`
+  - `GET /api/v2/pois/:poiId`
+- Mount the v2 router only in the primary backend runtime `src/server.js`.
+- Keep legacy routes unchanged and keep CSV as the default POI runtime.
+- Keep PostgreSQL explicit opt-in; do not switch default runtime behavior.
+- Use shared Traveler API v2 helpers for response envelopes, request ID
+  resolution, pagination, POI search, and POI serialization.
+- Accept valid `X-Request-Id` values with ASCII letters, digits, dot,
+  underscore, colon, and hyphen, length 1 to 128 characters.
+- Replace missing or invalid request IDs with generated server request IDs;
+  never echo invalid caller values and do not reject otherwise valid requests
+  for tracing-header issues.
+- Use `CITY_NOT_SUPPORTED` for unsupported explicit `cityId`; do not silently
+  fallback to Da Nang.
+- Require `cityId` for all city-scoped v2 endpoints except `GET /api/v2/cities`.
+- Implement POI search pagination with default limit `20`, maximum limit `100`,
+  opaque base64url cursors, cursor validation, deterministic sorting, and
+  canonical `Global_ID` tie-break behavior.
+- Expose POI provenance through typed `sourceIdentifiers` and do not expose
+  ambiguous legacy `placeId` or raw `sourceIds` in Traveler API v2 POI
+  responses.
+- Mark implemented Batch 1 capabilities as `experimental`, planned future
+  Traveler API v2 capabilities as `planned`, and unavailable external/live or
+  persistence capabilities as `unavailable`.
+- Create the OpenAPI 3.1 draft artifact at
+  `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json`.
+- Record the real OpenAPI SHA-256 only after generating the artifact:
+  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
+- Do not implement recommendation v2, itinerary preview v2, persistence,
+  edit/replan, feedback persistence, frontend changes, production DB work, or
+  Phase 2 Batch 2 in this batch.
+
+## Phase 2 Proposals Pending User Acceptance
+
+- Add versioned backend traveler endpoints under `/api/v2` in separately
+  approved implementation batches.
+- Add core city/status, POI search/detail, recommendation, and stateless
+  itinerary preview endpoints first.
+- Keep trip persistence/edit/replan/stop edit/feedback persistence as
+  conditional contract drafts only until persistence approval.
+- Use a stable v2 response envelope with `ok`, `data` or `error`, and `meta`.
+- Return `CITY_NOT_SUPPORTED` for unknown city IDs instead of silently falling
+  back to Da Nang.
+- Add machine-readable reason/warning codes while preserving display reasons.
+- Implement Phase 2 in small batches with legacy compatibility tests after each
+  batch.
+- Create the required OpenAPI 3.1 specification in Batch 1.
+
 ## Still Open
 
 - Decide whether restored root CSV Git LFS pointer files should remain tracked for legacy compatibility in the eventual Phase 0 commit.
 - Decide whether `.gitignore` changes from the earlier Phase 0 patch should be kept.
 - Decide when to add a real frontend test runner.
 - Decide whether Phase 1 should restore road-name density through verified address/admin data or leave route density proximity-only until PostGIS.
-- Decide whether the next Phase 1 batch should run a local Postgres/PostGIS
-  verification environment, add rollback SQL first, or add endpoint-level tests
-  for repository switching first.
-- Decide when to mark Draft PR #2 ready for review; do not merge or begin
-  Phase 2 without explicit approval.
+- Decide whether conditional trip persistence belongs in Phase 2.
+- If persistence is approved, decide whether Firestore remains the persistence
+  mechanism.
+- Decide whether a Firebase emulator is required for conditional persistence
+  tests.
+- Decide what process and reviewers will create the curated query fixture.

@@ -67,6 +67,7 @@ const {
 } = require('./services/firestorePersistenceService');
 const { getFirebaseAdminDiagnostics, getFirestoreDb, isFirebaseAdminReady } = require('./config/firebaseAdmin');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
+const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
@@ -88,6 +89,8 @@ function errorStatus(error) {
 app.use(express.json({
   skip: (req) => req.is('multipart/form-data')
 }));
+
+app.use('/api/v2', travelerApiV2Router);
 
 const upload = multer({ dest: UPLOAD_DIR });
 const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';

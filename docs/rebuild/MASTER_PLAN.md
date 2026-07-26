@@ -1,8 +1,20 @@
 # UrbanAgent Rebuild Master Plan
 
-Updated: 2026-07-26 01:49:31 +07:00.
+Updated: 2026-07-26 15:35:00 +07:00.
 
-This plan is synchronized with the approved Phase 0 canonical dataset. Phase 1 work such as PostgreSQL/PostGIS remains future work and has not started.
+This plan is synchronized with the approved Phase 0 canonical dataset and the
+completed Phase 1 data-platform foundation. Phase 1 is merged into `main` and
+tagged `phase-1-batch-3`. Phase 2 is now in planning/specification only after
+explicit user approval.
+
+Phase 2 planning artifacts:
+
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+
+All Phase 2 API v2 architecture in this master plan remains `PROPOSED FOR
+PHASE 2` until implemented and tested in a later approved batch.
 
 ## 1. Current Architecture
 
@@ -184,11 +196,14 @@ No second City Pack was implemented.
 
 ## 13. PostgreSQL/PostGIS And Migration
 
-PostgreSQL/PostGIS remains Phase 1+ only. No migration was added or run in Phase 0.
+Phase 1 added and validated the PostgreSQL/PostGIS data-platform foundation
+against disposable local infrastructure only. CSV remains the default runtime;
+PostgreSQL remains explicit opt-in and no production migration/import has been
+approved or run.
 
 ## 14. Proposed API V2
 
-Still future:
+Status: `PROPOSED FOR PHASE 2`.
 
 - `GET /api/v2/cities`
 - `GET /api/v2/pois`
@@ -253,4 +268,6 @@ Phase 0 blocker criteria now verified:
 - legacy root expert-system CSV dependency removed.
 - backend tests pass from `tests/phase0/`.
 
-Phase 1 remains blocked until explicit approval.
+Phase 1 is complete through Batch 3. Phase 2 is approved for planning and
+specification only; implementation remains pending user review of the Phase 2
+scope/contract/evaluation artifacts.

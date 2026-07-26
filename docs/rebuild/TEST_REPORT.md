@@ -825,3 +825,93 @@ Safety confirmations:
 - No Firebase production data was touched.
 - The canonical CSV bytes were not modified.
 - Phase 2 was not started.
+
+## Phase 2 Batch 1 Traveler API v2 Foundation
+
+Updated: 2026-07-26 22:04:35 +07:00.
+
+Scope validated:
+
+- Traveler API v2 router mounted at `/api/v2`.
+- City metadata/status endpoints.
+- POI search/detail endpoints.
+- Common success/error envelope.
+- Request ID handling.
+- POI search pagination and deterministic ordering.
+- OpenAPI 3.1 Batch 1 artifact.
+- CSV default runtime behavior.
+
+Commands run:
+
+```text
+node --check src\modules\travelerApiV2\constants.js
+node --check src\modules\travelerApiV2\requestContext.js
+node --check src\modules\travelerApiV2\pagination.js
+node --check src\modules\travelerApiV2\serializers.js
+node --check src\modules\travelerApiV2\poiSearch.js
+node --check src\modules\travelerApiV2\router.js
+node --check tests\phase2\phase2TravelerApiV2Batch1.test.js
+node -e <OpenAPI JSON parse>
+node -e <OpenAPI SHA-256>
+npm.cmd test
+```
+
+Results:
+
+- Syntax checks: PASS.
+- OpenAPI JSON parse: PASS.
+- OpenAPI SHA-256:
+  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
+- `npm.cmd test`: PASS.
+- Test totals: 22 tests, 21 passed, 0 failed, 1 skipped.
+- Skipped test: existing Phase 1 disposable PostGIS integration test because
+  `URBANAGENT_PHASE1_INTEGRATION=true` was not set.
+
+Endpoint smoke results from `tests/phase2/phase2TravelerApiV2Batch1.test.js`:
+
+```text
+GET /api/v2/cities
+  PASS, one supported city: da-nang
+  valid X-Request-Id echoed
+  invalid X-Request-Id replaced by generated requestId
+
+GET /api/v2/cities/da-nang/status
+  PASS, applicationPoiCount 4166
+  contractVersion phase2-traveler-api-v2-draft-1
+
+GET /api/v2/cities/hue/status
+  PASS, HTTP 422 CITY_NOT_SUPPORTED
+
+GET /api/v2/pois/search?source=all without cityId
+  PASS, HTTP 400 VALIDATION_ERROR
+
+GET /api/v2/pois/search?cityId=da-nang&limit=101
+  PASS, HTTP 400 VALIDATION_ERROR
+
+GET /api/v2/pois/search?cityId=da-nang&source=google_maps&limit=1
+  PASS, page.total 3946
+
+GET /api/v2/pois/search?cityId=da-nang&source=foody&limit=1
+  PASS, page.total 225
+
+GET /api/v2/pois/search?cityId=da-nang&source=all&limit=1
+  PASS, page.total 4166
+
+GET /api/v2/pois/:poiId?cityId=da-nang
+  PASS, traveler-safe POI detail shape
+
+GET /api/v2/pois/not-a-real-poi?cityId=da-nang
+  PASS, HTTP 404 NOT_FOUND
+```
+
+Safety confirmations:
+
+- CSV remains the default runtime.
+- PostgreSQL remains explicit opt-in.
+- No recommendation v2 endpoint was implemented.
+- No itinerary preview v2 endpoint was implemented.
+- No trip persistence/edit/replan/feedback endpoint was implemented.
+- No frontend source was changed.
+- No production database or Firebase production data was touched.
+- Canonical CSV bytes were not modified.
+- Phase 2 Batch 2 was not started.

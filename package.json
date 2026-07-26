@@ -20,7 +20,7 @@
     "phase1:db:migrate": "node scripts/phase1_db_migrate.js",
     "phase1:db:rollback": "node scripts/phase1_db_rollback.js",
     "phase1:import:canonical": "node scripts/phase1_import_canonical_pois.js",
-    "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js"
+    "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js"
   },
   "keywords": [],
   "author": "",

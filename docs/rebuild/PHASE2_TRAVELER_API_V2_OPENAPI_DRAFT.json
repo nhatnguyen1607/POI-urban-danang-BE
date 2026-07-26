@@ -1,0 +1,1092 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "UrbanAgent Traveler API v2",
+    "version": "phase2-traveler-api-v2-draft-1",
+    "summary": "Batch 1 traveler API v2 contract for city metadata, city status, POI search, and POI detail.",
+    "description": "This draft covers only approved Phase 2 Batch 1 endpoints. Recommendation, itinerary preview, persistence, edit, replan, feedback, booking, live opening hours, and production database rollout endpoints are intentionally excluded."
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Traveler API v2"
+    }
+  ],
+  "paths": {
+    "/api/v2/cities": {
+      "get": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "List supported traveler cities.",
+        "operationId": "listTravelerCitiesV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supported city list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "cities"
+                          ],
+                          "properties": {
+                            "cities": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/City"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/cities/{cityId}/status": {
+      "get": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "Read dataset, quality, and capability status for one city.",
+        "operationId": "getTravelerCityStatusV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CityIdPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "City status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CityStatus"
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/CityMeta"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/CityNotSupported"
+          }
+        }
+      }
+    },
+    "/api/v2/pois/search": {
+      "get": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "Search traveler POIs with deterministic pagination.",
+        "operationId": "searchTravelerPoisV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/CityIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/SourceQuery"
+          },
+          {
+            "$ref": "#/components/parameters/QueryText"
+          },
+          {
+            "$ref": "#/components/parameters/CategoryQuery"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQuery"
+          },
+          {
+            "$ref": "#/components/parameters/CursorQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "pois",
+                            "page"
+                          ],
+                          "properties": {
+                            "pois": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/TravelerPoi"
+                              }
+                            },
+                            "page": {
+                              "$ref": "#/components/schemas/Pagination"
+                            }
+                          }
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/CityMeta"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "422": {
+            "$ref": "#/components/responses/CityNotSupported"
+          }
+        }
+      }
+    },
+    "/api/v2/pois/{poiId}": {
+      "get": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "Read one traveler POI by canonical ID.",
+        "operationId": "getTravelerPoiV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/PoiIdPath"
+          },
+          {
+            "$ref": "#/components/parameters/CityIdQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "POI detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "poi"
+                          ],
+                          "properties": {
+                            "poi": {
+                              "$ref": "#/components/schemas/TravelerPoi"
+                            }
+                          }
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/CityMeta"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/CityNotSupported"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "RequestIdHeader": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        },
+        "description": "Optional caller request ID. Invalid values are replaced by a generated server request ID."
+      },
+      "CityIdPath": {
+        "name": "cityId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "da-nang"
+          ]
+        }
+      },
+      "CityIdQuery": {
+        "name": "cityId",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "da-nang"
+          ]
+        }
+      },
+      "PoiIdPath": {
+        "name": "poiId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": "Canonical Global_ID exposed as the public POI ID."
+      },
+      "SourceQuery": {
+        "name": "source",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "ggmap",
+            "google",
+            "google_maps",
+            "foody",
+            "all",
+            "canonical"
+          ],
+          "default": "google_maps"
+        },
+        "description": "Source compatibility filter. Unknown values use the Google-compatible default."
+      },
+      "QueryText": {
+        "name": "q",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CategoryQuery": {
+        "name": "category",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "LimitQuery": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        }
+      },
+      "CursorQuery": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Opaque pagination cursor returned by the previous page."
+      }
+    },
+    "responses": {
+      "ValidationError": {
+        "description": "Validation error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "CityNotSupported": {
+        "description": "The requested city is not supported.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Requested resource was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "SuccessEnvelope": {
+        "type": "object",
+        "required": [
+          "ok",
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "data": {
+            "type": "object"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "required": [
+          "ok",
+          "error",
+          "meta"
+        ],
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ResponseMeta": {
+        "type": "object",
+        "required": [
+          "apiVersion",
+          "requestId"
+        ],
+        "properties": {
+          "apiVersion": {
+            "const": "v2"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "CityMeta": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          {
+            "type": "object",
+            "required": [
+              "cityId"
+            ],
+            "properties": {
+              "cityId": {
+                "const": "da-nang"
+              }
+            }
+          }
+        ]
+      },
+      "ApiError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "details"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "VALIDATION_ERROR",
+              "CITY_NOT_SUPPORTED",
+              "NOT_FOUND",
+              "INTERNAL_ERROR"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "CapabilityState": {
+        "type": "string",
+        "enum": [
+          "unavailable",
+          "planned",
+          "experimental",
+          "available"
+        ]
+      },
+      "CapabilityStatus": {
+        "type": "object",
+        "required": [
+          "cities",
+          "cityStatus",
+          "poiSearch",
+          "poiDetail",
+          "recommendations",
+          "tripPreview",
+          "tripSave",
+          "tripEdit",
+          "tripReplan",
+          "feedbackPersistence",
+          "liveOpeningHours",
+          "liveBooking",
+          "roadNetworkRouting"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cities": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "cityStatus": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "poiSearch": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "poiDetail": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "recommendations": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "tripPreview": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "tripSave": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "tripEdit": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "tripReplan": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "feedbackPersistence": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "liveOpeningHours": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "liveBooking": {
+            "$ref": "#/components/schemas/CapabilityState"
+          },
+          "roadNetworkRouting": {
+            "$ref": "#/components/schemas/CapabilityState"
+          }
+        }
+      },
+      "City": {
+        "type": "object",
+        "required": [
+          "cityId",
+          "displayName",
+          "countryCode",
+          "timezone",
+          "currency",
+          "status",
+          "capabilityStatus"
+        ],
+        "properties": {
+          "cityId": {
+            "const": "da-nang"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "countryCode": {
+            "const": "VN"
+          },
+          "timezone": {
+            "const": "Asia/Ho_Chi_Minh"
+          },
+          "currency": {
+            "const": "VND"
+          },
+          "status": {
+            "const": "EXPERIMENTAL"
+          },
+          "capabilityStatus": {
+            "$ref": "#/components/schemas/CapabilityStatus"
+          }
+        }
+      },
+      "CityStatus": {
+        "type": "object",
+        "required": [
+          "city",
+          "dataset",
+          "qualitySummary",
+          "capabilityStatus"
+        ],
+        "properties": {
+          "city": {
+            "$ref": "#/components/schemas/City"
+          },
+          "dataset": {
+            "type": "object",
+            "required": [
+              "datasetVersion",
+              "contractVersion",
+              "applicationPoiCount"
+            ],
+            "properties": {
+              "datasetVersion": {
+                "const": "urbanagent-poi-master-v1"
+              },
+              "contractVersion": {
+                "const": "phase2-traveler-api-v2-draft-1"
+              },
+              "applicationPoiCount": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            }
+          },
+          "qualitySummary": {
+            "$ref": "#/components/schemas/QualitySummary"
+          },
+          "capabilityStatus": {
+            "$ref": "#/components/schemas/CapabilityStatus"
+          }
+        }
+      },
+      "QualitySummary": {
+        "type": "object",
+        "required": [
+          "status",
+          "missingAddress",
+          "missingRating",
+          "missingReviewCount",
+          "openingHours",
+          "freshness",
+          "adminBoundary"
+        ],
+        "properties": {
+          "status": {
+            "const": "known_gaps"
+          },
+          "missingAddress": {
+            "$ref": "#/components/schemas/QualityCount"
+          },
+          "missingRating": {
+            "$ref": "#/components/schemas/QualityCount"
+          },
+          "missingReviewCount": {
+            "$ref": "#/components/schemas/QualityCount"
+          },
+          "openingHours": {
+            "$ref": "#/components/schemas/StatusOnly"
+          },
+          "freshness": {
+            "$ref": "#/components/schemas/StatusOnly"
+          },
+          "adminBoundary": {
+            "$ref": "#/components/schemas/StatusOnly"
+          }
+        }
+      },
+      "QualityCount": {
+        "type": "object",
+        "required": [
+          "count",
+          "status"
+        ],
+        "properties": {
+          "count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "known",
+              "known_gap",
+              "unknown"
+            ]
+          }
+        }
+      },
+      "StatusOnly": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "required": [
+          "total",
+          "limit",
+          "nextCursor"
+        ],
+        "properties": {
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TravelerPoi": {
+        "type": "object",
+        "required": [
+          "id",
+          "globalId",
+          "cityId",
+          "name",
+          "category",
+          "categoryNormalized",
+          "location",
+          "address",
+          "rating",
+          "images",
+          "provenance",
+          "freshness",
+          "warnings"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "globalId": {
+            "type": "string"
+          },
+          "cityId": {
+            "const": "da-nang"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categoryNormalized": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "location": {
+            "$ref": "#/components/schemas/PoiLocation"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PoiAddress"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingSummary"
+          },
+          "images": {
+            "$ref": "#/components/schemas/PoiImages"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/PoiProvenance"
+          },
+          "freshness": {
+            "$ref": "#/components/schemas/PoiFreshness"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PoiLocation": {
+        "type": "object",
+        "required": [
+          "lat",
+          "lon",
+          "hasCoordinates",
+          "coordinateStatus"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "hasCoordinates": {
+            "type": "boolean"
+          },
+          "coordinateStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "PoiAddress": {
+        "type": "object",
+        "required": [
+          "current",
+          "raw",
+          "district",
+          "adminNormalizationStatus"
+        ],
+        "properties": {
+          "current": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "raw": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "district": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adminNormalizationStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "RatingSummary": {
+        "type": "object",
+        "required": [
+          "normalized",
+          "google",
+          "foody",
+          "reviewCount"
+        ],
+        "properties": {
+          "normalized": {
+            "$ref": "#/components/schemas/RatingValue"
+          },
+          "google": {
+            "$ref": "#/components/schemas/GoogleRatingValue"
+          },
+          "foody": {
+            "$ref": "#/components/schemas/FoodyRatingValue"
+          },
+          "reviewCount": {
+            "$ref": "#/components/schemas/CountValue"
+          }
+        }
+      },
+      "RatingValue": {
+        "type": "object",
+        "required": [
+          "value",
+          "scale",
+          "status"
+        ],
+        "properties": {
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "scale": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "GoogleRatingValue": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RatingValue"
+          },
+          {
+            "type": "object",
+            "required": [
+              "ratingCount",
+              "ratingCountStatus"
+            ],
+            "properties": {
+              "ratingCount": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "ratingCountStatus": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "FoodyRatingValue": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RatingValue"
+          },
+          {
+            "type": "object",
+            "required": [
+              "sampleReviewCount",
+              "sampleReviewCountStatus"
+            ],
+            "properties": {
+              "sampleReviewCount": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "sampleReviewCountStatus": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CountValue": {
+        "type": "object",
+        "required": [
+          "value",
+          "status"
+        ],
+        "properties": {
+          "value": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "PoiImages": {
+        "type": "object",
+        "required": [
+          "imageUrls",
+          "imageUrl"
+        ],
+        "properties": {
+          "imageUrls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "imageUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          }
+        }
+      },
+      "PoiProvenance": {
+        "type": "object",
+        "required": [
+          "source",
+          "sourceIdentifiers",
+          "aliasGlobalIds",
+          "mergeStatus",
+          "dataQualityFlags"
+        ],
+        "properties": {
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceIdentifiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceIdentifier"
+            }
+          },
+          "aliasGlobalIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mergeStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dataQualityFlags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SourceIdentifier": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "value",
+          "source"
+        ],
+        "properties": {
+          "namespace": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "PoiFreshness": {
+        "type": "object",
+        "required": [
+          "observedAt",
+          "lastVerifiedAt",
+          "status"
+        ],
+        "properties": {
+          "observedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastVerifiedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "const": "unknown"
+          }
+        }
+      }
+    }
+  }
+}
