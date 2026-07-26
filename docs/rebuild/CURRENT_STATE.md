@@ -1,209 +1,230 @@
 # Current State
 
-Updated: 2026-07-26 14:26:14 +07:00.
+Updated: 2026-07-26 22:04:35 +07:00.
 
 ## Phase
 
-`PHASE_1_BATCH_3_ENDPOINT_RUNTIME_SWITCH_PASSED`
+`PHASE_2_BATCH_1_IMPLEMENTED_PENDING_REVIEW`
 
-Phase 1 Batch 2 validated the PostgreSQL/PostGIS schema and importer against a
-disposable Docker Compose PostGIS database. Migration, rollback, reapply, real
-write import, idempotency, diagnostics, Postgres repository integration, and
-CSV/Postgres parity passed. No production database or Firebase data was touched.
+Phase 2 Batch 1 has been explicitly approved and implemented. This batch is
+limited to Traveler API v2 safety foundation endpoints, common envelope/error
+metadata, request ID handling, city metadata/status, POI search/detail,
+pagination, OpenAPI 3.1 draft artifact, and focused backend tests.
 
-The Batch 2 security remediation gate is now closed. Targeted production
-dependency remediation was applied without `npm audit fix`, broad dependency
-updates, application behavior changes, production database access, Firebase
-access, or Phase 1 Batch 3 work.
+No recommendation v2 endpoint, itinerary preview v2 endpoint, trip persistence,
+trip edit/replan, feedback persistence, PostgreSQL default-runtime switch,
+frontend source change, production database access, Firebase production access,
+or Phase 2 Batch 2 work has been started.
 
-Phase 1 Batch 3 has now added endpoint-level runtime-switch smoke coverage for
-the existing backend API while keeping CSV as the default runtime and requiring
-explicit PostgreSQL opt-in.
+## Repository State
 
-Security remediation result:
+Backend repository:
 
-- `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
-- `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
-- `pg@8.22.0`: retained; no production advisory found.
-- Direct dependency updates:
-  - `firebase-admin`: `^14.0.0` -> `^14.2.0`.
-  - `multer`: `^2.1.1` -> `^2.2.0`.
-- Production overrides:
-  - `body-parser@2.3.0`
-  - `brace-expansion@5.0.8`
-  - `call-bind-apply-helpers@1.0.2`
-  - `form-data@2.5.6`
-  - `get-intrinsic@1.3.0`
-  - `hasown@2.0.4`
-  - `protobufjs@7.6.5`
-  - `qs@6.15.3`
-  - `uuid@11.1.1`
-- Dependency integrity: `npm.cmd ci --ignore-scripts` PASS.
-- Clean-clone `npm.cmd ci` without flags: PASS.
-- `npm.cmd ls --omit=dev --all`: PASS, no `ELSPROBLEMS`.
-- Firebase Admin and Multer compatibility smoke: PASS without connecting to
-  production Firebase.
-- Final disposable PostGIS integration rerun: PASS, 16 tests passed, 0 failed,
-  0 skipped.
-- Disposable container and volume cleanup after final gate: PASS.
+- Path: `D:\POI-urban-danang-BE`
+- Branch: `main`
+- Local `main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
+- `origin/main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
+- Phase 1 Batch 3 commit
+  `2c34471747f6fd33d73130db2ab47df054d4f35c` is in `origin/main`.
+- Annotated tag `phase-1-batch-3` is present on current `main`.
+- Working tree contained Phase 2 planning documentation changes before Batch 1
+  implementation began.
+- Phase 2 Batch 1 implementation changes are currently uncommitted and pending
+  user review.
 
-## Repository Visibility
+Frontend repository:
 
-- Backend repo visible: `D:\POI-urban-danang-BE`
-- Frontend repo visible: `D:\POI-urban-danang-FE`
-
-## Branches And Working Tree
-
-Backend branch: `phase1/data-platform-foundation`.
-
-Backend status before Batch 3 commit:
-
-- modified: `docs/rebuild/CURRENT_STATE.md`
-- modified: `docs/rebuild/DECISIONS.md`
-- modified: `docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md`
-- modified: `docs/rebuild/TEST_REPORT.md`
-- modified: `docs/rebuild/WORKLOG.md`
-- modified: `tests/phase1/phase1PostgresIntegration.test.js`
-
-Frontend branch: `main`.
-
-Frontend status:
-
-- clean: `## main...origin/main`
-- No frontend application source file was changed.
+- Path: `D:\POI-urban-danang-FE`
+- Read for context only.
+- No frontend files were changed in this Phase 2 planning batch.
 
 ## Canonical Dataset Status
 
 - Path: `data/canonical/urbanagent_poi_master_v1.csv`
 - Rows: `4166`
 - Unique `Global_ID`: `4166`
-- SHA-256: `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`
-- Runtime repository load count: `4166`
-- Header contract: pass
-- City filter `da-nang`: `4166`
+- SHA-256:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`
+- Runtime semantics from Phase 0 remain binding:
+  - no coordinate fallback to Da Nang center
+  - nullable rating/review/address/freshness values
+  - `RestaurantID` remains source identifier
+  - `Global_ID` remains canonical key
+  - `google_maps+foody` provenance preserved
+  - urban-void rows excluded from traveler runtime counts
 
-## Phase 1 Data Platform Status
+## Phase 1 Status
 
-- Migration file exists: `migrations/phase1/001_core_postgis_schema.sql`.
-- Rollback file exists: `migrations/phase1/001_core_postgis_schema.down.sql`.
-- Disposable Compose file exists: `docker-compose.phase1.yml`.
-- Migration declares PostGIS and pgcrypto extensions.
-- Core tables defined: `cities`, `ingestion_runs`, `poi_entities`,
-  `poi_source_records`, `poi_external_ids`, `poi_aliases`, `poi_images`,
-  `poi_reviews_summary`, `poi_merge_candidates`, `data_quality_issues`.
-- Da Nang City Pack config exists in `src/modules/cities/cityConfig.js`.
-- Canonical import dry-run produces:
-  - application POIs: `4166`
-  - source records: `4166`
-  - external IDs: `8337`
-  - aliases: `985`
-  - images: `16246`
-  - review summaries: `4166`
-- Existing runtime still defaults to CSV through the repository adapter.
-- Postgres runtime can be selected later with `URBANAGENT_POI_REPOSITORY=postgres`
-  after migration/import setup.
-- Disposable database method used: Docker Compose with
-  `postgis/postgis:16-3.5-alpine`, host port `55432`.
-- Migration apply: PASS.
-- First real write import: PASS.
-- Second real write import: PASS; core counts unchanged.
-- Rollback: PASS; Phase 1 tables removed.
-- Reapply and final import: PASS.
-- Final diagnostics:
-  - cities: `1`
+Phase 1 data-platform foundation is complete through Batch 3 and merged to
+`main`.
+
+Validated Phase 1 records show:
+
+- Default backend tests: 15 passed, 0 failed, 1 disposable-DB integration test
+  skipped when DB is absent.
+- Full disposable PostGIS integration: 16 passed, 0 failed, 0 skipped.
+- Migration apply, rollback, reapply, canonical import, second import,
+  idempotency, geometry, constraints, Postgres repository integration, and
+  CSV/Postgres parity passed.
+- Canonical counts:
   - POI entities: `4166`
   - source records: `4166`
   - external IDs: `8337`
   - aliases: `985`
   - images: `16246`
   - review summaries: `4166`
-  - duplicate checks: `0`
-  - orphan checks: `0`
-  - invalid longitude/latitude: `0`
-  - null geometry: `0`
-  - wrong SRID: `0`
-  - coordinate mismatch: `0`
-  - outside Da Nang envelope: `0`
-  - merged provenance rows: `5`
-  - GiST index: `poi_entities_location_gix`
-- Disposable container and volume cleanup: PASS; no Phase 1 container or volume remains.
-- Batch 3 endpoint runtime switch smoke: PASS inside the disposable PostGIS
-  integration suite.
-  - Explicit runtime env: `URBANAGENT_POI_REPOSITORY=postgres`.
-  - `GET /api/eda?source=google_maps`: PASS, `3946` POIs.
-  - `GET /api/eda?source=foody`: PASS, `225` POIs.
-  - `GET /api/pois/data-quality`: PASS, `4166` application POIs and expected headers.
-  - `POST /api/agent/recommend-poi`: PASS, nonempty `da-nang` results.
-  - `POST /api/agent/create-itinerary`: PASS, nonempty `da-nang` itinerary and
-    missing-origin first leg remains unknown.
-- Local disposable PostGIS runbook exists:
-  `docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md`.
+- `npm audit --omit=dev`: 0 production vulnerabilities after targeted
+  remediation.
+- CSV remains the default runtime.
+- PostgreSQL remains explicit opt-in through
+  `URBANAGENT_POI_REPOSITORY=postgres`.
+- No production database or Firebase production data was touched.
+
+## Current API Implementation
+
+`CURRENT IMPLEMENTATION`:
+
+- Primary Express server: `src/server.js`.
+- Legacy compatibility server: `server.js`.
+- Current traveler routes:
+  - `POST /api/agent/recommend-poi`
+  - `POST /api/agent/create-itinerary`
+  - `POST /api/agent/guest-itinerary-preview`
+  - `POST /api/agent/update-itinerary`
+  - `GET /api/agent/itineraries`
+  - `POST /api/agent/itineraries`
+  - `POST /api/agent/feedback`
+- Current data/status routes:
+  - `GET /api/eda`
+  - `GET /api/pois/data-quality`
+  - `GET /api/weather/forecast`
+  - `POST /api/route/matrix`
+- Partner/seller/admin routes exist but are outside Phase 2 Traveler API v2
+  scope.
+
+New Phase 2 Batch 1 Traveler API v2 routes are mounted under `src/server.js` at
+`/api/v2`:
+
+- `GET /api/v2/cities`
+- `GET /api/v2/cities/:cityId/status`
+- `GET /api/v2/pois/search`
+- `GET /api/v2/pois/:poiId`
+
+Batch 1 routes expose a common v2 envelope with `ok`, `data` or `error`, and
+`meta`. Every v2 response includes `apiVersion` and `requestId`; city-scoped
+responses also include `cityId`.
+
+Implemented Batch 1 behavior:
+
+- missing or invalid `X-Request-Id` generates a new server request ID and does
+  not reject an otherwise valid request.
+- unknown `cityId` returns `CITY_NOT_SUPPORTED`.
+- missing required `cityId` returns `VALIDATION_ERROR`.
+- POI search pagination uses default limit `20`, maximum limit `100`, opaque
+  cursors, cursor validation, deterministic sorting, and canonical `Global_ID`
+  tie-breaks.
+- POI search keeps legacy EDA source compatibility counts:
+  - Google-compatible: `3946`
+  - Foody-compatible: `225`
+  - All/canonical: `4166`
+- POI responses expose traveler-safe provenance through typed source
+  identifiers and do not expose ambiguous legacy `placeId` or raw `sourceIds`.
+
+## New Phase 2 Planning Artifacts
+
+Current Phase 2 planning artifacts revised in this batch:
+
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json`
+
+Revision corrections applied:
+
+- public API examples no longer expose dataset filesystem paths, database
+  internals, repository class names, SQL details, or storage-mode dependencies.
+- public metadata uses `contractVersion` instead of a false contract hash.
+- common response metadata is minimal: every v2 response requires `apiVersion`
+  and `requestId`; city-scoped responses also require `cityId`.
+- `datasetVersion`, `applicationPoiCount`, `qualitySummary`, and
+  `capabilityStatus` are used only where relevant, primarily city status.
+- OpenAPI 3.1 is approved and required in Batch 1; `openApiSha256` may be
+  recorded only after an artifact exists and is hashed.
+- unknown values are modeled as `null` and/or explicit status fields, not empty
+  strings or zero.
+- route summaries distinguish partial and unknown legs with known/unknown leg
+  counts and `distanceFullyKnown` / `travelTimeFullyKnown`.
+- normalized ratings and source ratings are separated.
+- source identifiers are namespaced objects; `RestaurantID` is not a Google
+  Place ID.
+- capability states use `unavailable`, `planned`, `experimental`, or
+  `available`; no capability is true before implementation and validation.
+- Phase 2 endpoints are split into core approved scope and conditional
+  persistence scope.
+- raw internal recommendation scoring signals are not public API.
+- request ID behavior is final: invalid/missing `X-Request-Id` generates a new
+  server requestId and does not reject otherwise valid requests.
+- authentication contracts are documented.
+- Batch 1 owns POI search pagination, cursor validation, deterministic
+  search/list sorting, and OpenAPI; Batch 2 owns recommendation ranking and
+  evaluation fixture foundation.
+- recommendation evaluation treats legacy/v2 as behavioral parity and compares
+  current `recommendPOIs` against category-only/rating-popularity baselines and
+  ablations.
+- scientific evaluation plan now includes research questions, hypotheses,
+  baselines, fixture requirements, metrics, ablations, repeatability,
+  statistical reporting, failure taxonomy, and validity threats.
+- OpenAPI draft artifact SHA-256:
+  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`
+
+Updated in this batch:
+
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md` appended only
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
 
 ## Build/Test Status
 
-Backend:
+Phase 2 Batch 1 validation:
 
-- `npm.cmd test`: PASS, 16 tests total, 15 passed, 0 failed, 1 skipped
-  when the disposable Postgres database is absent.
-- `node --check` for Phase 1 files and server entrypoints: PASS.
-- `npm.cmd run phase1:import:canonical`: PASS in dry-run mode.
-- `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true`: PASS, 16 tests passed, 0 failed, 0 skipped.
-- `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true` after Batch 3
-  endpoint smoke: PASS, 16 tests passed, 0 failed, 0 skipped.
-- `npm.cmd run phase1:db:diagnostics`: PASS.
-- `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
-- `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
-- Security remediation: PASS; previous 9 production advisory records are no
-  longer present in npm audit output.
-- `npm.cmd ci --ignore-scripts`: PASS; lockfile is reproducible from a clean
-  install.
-- Clean clone at `C:\tmp\urbanagent-phase1-readiness-clone`:
-  - `git lfs pull`: PASS.
-  - `npm.cmd ci` without `--ignore-scripts`, `--force`, or
-    `--legacy-peer-deps`: PASS.
-  - `git status --short --branch`: clean before and after checks.
-  - `npm.cmd ls --omit=dev --all`: PASS.
-  - `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
-  - `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
-  - `npm.cmd test`: PASS, 16 tests total, 15 passed, 0 failed, 1 skipped
-    because the disposable DB is absent.
-- `npm.cmd ls --omit=dev --all`: PASS; no `ELSPROBLEMS`.
-- Firebase Admin and Multer smoke: PASS; package entrypoints used by
-  UrbanAgent load without initializing production Firebase.
-- Full disposable PostGIS integration: PASS, 16 passed, 0 failed, 0 skipped.
-- Full integration diagnostics: PASS, POI entities `4166`, source records
-  `4166`, external IDs `8337`, aliases `985`, images `16246`, review summaries
-  `4166`, duplicate checks `0`, orphan checks `0`, geometry checks `0`, GiST
-  index `poi_entities_location_gix`.
-- Canonical SHA-256 recheck: PASS,
-  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
-- CSV default runtime recheck: PASS, `4166` POIs with no
-  `URBANAGENT_POI_REPOSITORY` override.
-- Disposable cleanup: PASS; no `urbanagent-phase1-postgis` container or
-  `urbanagent_phase1_postgis_data` volume remains.
-- Branch synchronization: PASS, local `HEAD` equals
-  `origin/phase1/data-platform-foundation`.
-- PR unmerged by Git state: PASS, `HEAD` is not an ancestor of `origin/main`.
+- Syntax checks for all new Traveler API v2 modules and the new Phase 2 test:
+  PASS.
+- OpenAPI JSON parse: PASS.
+- OpenAPI SHA-256:
+  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
+- `npm.cmd test`: PASS, 22 tests total, 21 passed, 0 failed, 1 skipped.
+- The skipped test is the existing guarded Phase 1 disposable PostGIS
+  integration test when DB integration env vars are absent.
+- Phase 2 Batch 1 endpoint smoke: PASS.
+- Runtime source counts observed through v2 search:
+  - Google-compatible: `3946`
+  - Foody-compatible: `225`
+  - All/canonical: `4166`
+- CSV remains default runtime.
+- PostgreSQL remains explicit opt-in.
 
-Frontend:
+## Risks
 
-- `npm.cmd run build`: PASS.
-- Vite warning remains: one JS chunk is `1,368.16 kB`, above the 500 kB warning threshold.
-- Frontend lint and missing frontend test script remain accepted pre-existing debt from Phase 0.
-
-## Remaining Risks
-
-- The disposable write importer was verified, but production migration/import has not been approved or run.
-- The optional Postgres repository adapter is still not enabled by default.
-- Batch 3 endpoint smoke covers selected existing API paths only; broader
-  authenticated traveler/partner v2 behavior remains future work.
-- Address/admin-boundary spatial joins remain pending because no boundary dataset has been approved.
-- No `npm audit fix`, `npm update`, `npm upgrade`, or `npm dedupe` was run.
-- Phase 1 is not complete; this gate closes Batch 1-2 dependency integrity and
-  draft PR readiness validation only.
+- Batch 1 intentionally implements only city/status and POI read/search v2
+  endpoints. Recommendation v2 and itinerary preview v2 remain unimplemented
+  until later approved batches.
+- Existing traveler responses include some mojibake display strings; Phase 2
+  contract should test structure and semantics first, then handle copy/encoding
+  deliberately.
+- Current route estimates are local haversine approximations, not road-network
+  routing.
+- Canonical dataset lacks verified opening hours, address, admin boundary,
+  phone, website, and freshness data; v2 must surface uncertainty.
+- Current server entrypoint listens immediately, so Phase 2 Batch 1 endpoint
+  tests use child-process smoke tests.
+- Firestore persistence couples traveler, seller, admin, and POI persistence;
+  Phase 2 should not deepen partner/traveler coupling.
 
 ## Next Step
 
-Review the Phase 1 pull request with Batch 3 endpoint runtime-switch coverage.
-Do not cut over runtime to PostgreSQL and do not start Phase 2 without separate
-explicit approval.
+User review of Phase 2 Batch 1 implementation and validation.
+
+Do not start Phase 2 Batch 2 until the user explicitly approves it.

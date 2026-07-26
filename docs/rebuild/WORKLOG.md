@@ -948,3 +948,426 @@ Key conclusions:
 - CSV remains the default runtime when `URBANAGENT_POI_REPOSITORY` is absent.
 - No production database, shared database, Firebase production data, frontend
   code, or canonical CSV bytes were touched.
+
+## 2026-07-26 15:35:00 +07:00 - Phase 2 Traveler API v2 planning and specification
+
+Scope:
+
+```text
+Planning/specification only after APPROVED PHASE 2.
+No application source changes.
+No test changes.
+No migration changes.
+No package/dependency changes.
+No canonical CSV, manifest, context, AGENTS, or frontend changes.
+No Docker/PostGIS workflow.
+No production database or Firebase access.
+No commit or push.
+```
+
+Files read:
+
+```text
+AGENTS.md
+URBANAGENT_CODEX_CONTEXT.md
+PLANNING.md
+README.md
+package.json
+docs/rebuild/MASTER_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/DATA_AUDIT.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+docs/rebuild/URBANAGENT_DATASET_DECISION.md
+docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md
+..\POI-urban-danang-FE\AGENTS.md
+..\POI-urban-danang-FE\PLANNING.md
+..\POI-urban-danang-FE\package.json
+server.js
+src/server.js
+src/services/poiRepository.js
+src/services/poiDataService.js
+src/services/canonicalCsvPoiRepository.js
+src/services/poiRetrievalService.js
+src/services/itineraryPlannerService.js
+src/services/routeMatrixService.js
+src/services/weatherService.js
+src/services/firestorePersistenceService.js
+src/middleware/firebaseAuth.js
+src/modules/cities/cityConfig.js
+src/modules/pois/postgresPoiRepository.js
+tests/phase0/phase0CanonicalData.test.js
+tests/phase1/phase1DataPlatform.test.js
+tests/phase1/phase1PostgresIntegration.test.js
+```
+
+Commands run:
+
+```text
+git fetch origin --tags --prune
+git status --short --branch
+git branch --show-current
+git rev-parse HEAD
+git rev-parse origin/main
+git merge-base --is-ancestor 2c34471 origin/main
+git --no-pager log --oneline --decorate -10
+rg -n "app\.(get|post|put|patch|delete)\(" server.js src\server.js
+rg -n "Traveler API v2|API v2|Phase 2|Phase 3|Phase 4|Phase 5|Phase 6|Every recommendation|Source_IDs|City_ID|RestaurantID|Alias_Global_IDs|urban-void|missing|null|guest|PostgreSQL|CSV remains|default runtime" URBANAGENT_CODEX_CONTEXT.md PLANNING.md docs\rebuild\MASTER_PLAN.md docs\rebuild\CURRENT_STATE.md docs\rebuild\DECISIONS.md docs\rebuild\TEST_REPORT.md docs\rebuild\DATA_AUDIT.md
+rg -n "function |const .* =|module\.exports|exports\." src\services src\middleware src\config tests
+rg --files | rg "cityConfig|cities|phase1|postgres|import"
+Get-Content -LiteralPath <required docs and source files>
+Get-Date -Format "yyyy-MM-dd HH:mm:ss zzz"
+```
+
+Files created:
+
+```text
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+```
+
+Files updated:
+
+```text
+docs/rebuild/MASTER_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/WORKLOG.md
+```
+
+Key conclusions:
+
+- Phase 1 Batch 3 is merged into `main` and tagged `phase-1-batch-3`.
+- Current API v2 traveler endpoints do not exist yet.
+- Current traveler functionality is available through legacy `/api/agent/*`
+  endpoints and repository-backed POI/data-quality routes.
+- Primary server has 40 Express endpoint registrations; legacy root server has
+  5 compatibility registrations.
+- Phase 2 should add backend Traveler API v2 only and keep all legacy endpoints.
+- CSV remains default runtime; PostgreSQL remains explicit opt-in.
+- The only approved city in Phase 2 is `da-nang`.
+- Unknown city behavior must be explicit in v2 and must not silently return Da
+  Nang data.
+- Partner/seller/admin product behavior is out of Phase 2 traveler scope.
+- No build/test was run because this was documentation-only planning and no
+  application/test code changed.
+
+## 2026-07-26 16:17:26 +07:00 - Phase 2 Traveler API v2 specification revision
+
+Scope:
+
+```text
+Documentation revision only.
+No Phase 2 implementation.
+No application source changes.
+No test changes.
+No migration changes.
+No package/dependency changes.
+No canonical data changes.
+No manifest/context/AGENTS changes.
+No frontend changes.
+No runtime configuration changes.
+No commit or push.
+```
+
+Files read:
+
+```text
+C:\Users\ADMIN\.codex\attachments\c9b876cc-899b-4479-ad66-d22e998c8893\pasted-text.txt
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+```
+
+Commands run:
+
+```text
+Get-Content -LiteralPath <attached request>
+rg -n <Phase 2 public metadata/null/capability/signal checks>
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_SCOPE.md
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+Get-Content -LiteralPath docs\rebuild\CURRENT_STATE.md
+Get-Content -LiteralPath docs\rebuild\DECISIONS.md
+Get-Date -Format "yyyy-MM-dd HH:mm:ss zzz"
+```
+
+Files revised:
+
+```text
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/WORKLOG.md
+```
+
+Key conclusions:
+
+- Public API examples were revised to avoid local dataset paths, SQL/table
+  details, repository class names, `DATABASE_URL`, and storage-mode
+  dependencies.
+- Public metadata now uses `datasetVersion`, `contractHash`,
+  `applicationPoiCount`, `qualitySummary`, and `capabilityStatus`.
+- Unknown values are specified as `null` and/or explicit status fields, not
+  empty strings or zero.
+- Route summaries now model partial/unknown routes with known/unknown leg
+  counts and full-known flags.
+- Rating contract now separates normalized scale-5 rating, Google source
+  rating/count, Foody scale-10 source rating, review count, and sample review
+  data.
+- Source identifiers are typed objects; `RestaurantID` is explicitly not a
+  Google Place ID.
+- Capabilities now use state strings and are not public `true` before
+  implementation and validation.
+- Phase 2 is split into core approved endpoints and conditional persistence
+  endpoints that are not approved for implementation.
+- Scientific evaluation plan now includes RQs, hypotheses, baselines, fixture
+  requirements, metrics, ablations, repeatability, statistical reporting,
+  failure taxonomy, qualitative analysis, and validity threats.
+- Phase 2 implementation remains not started.
+
+## 2026-07-26 21:50:51 +07:00 - Phase 2 final specification correction before Batch 1
+
+Scope:
+
+```text
+Final documentation-only correction.
+No Phase 2 code implementation.
+No application source changes.
+No test changes.
+No migration changes.
+No package/dependency changes.
+No canonical data changes.
+No runtime configuration changes.
+No frontend changes.
+No git add, commit, or push.
+```
+
+Files read:
+
+```text
+C:\Users\ADMIN\.codex\attachments\2fbeb369-e5e7-42c1-a2e9-aef2f5237396\pasted-text.txt
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+```
+
+Commands run:
+
+```text
+Get-Content -LiteralPath <attached request>
+rg -n <Phase 2 contractVersion/OpenAPI/requestId/pagination/baseline checks>
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_SCOPE.md
+Get-Content -LiteralPath docs\rebuild\PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+Get-Content -LiteralPath docs\rebuild\DECISIONS.md
+Get-Date -Format "yyyy-MM-dd HH:mm:ss zzz"
+```
+
+Files revised:
+
+```text
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/WORKLOG.md
+```
+
+Key conclusions:
+
+- Replaced false `contractHash` semantics with `contractVersion`.
+- Phase 2 draft contract version is
+  `phase2-traveler-api-v2-draft-1`.
+- OpenAPI 3.1 is approved and required in Batch 1.
+- `openApiSha256` may be recorded only after generating and hashing the
+  OpenAPI artifact.
+- Batch 1 owns POI search pagination, cursor validation, deterministic
+  search/list sorting, CSV-default endpoint behavior, and OpenAPI contract.
+- Batch 2 owns recommendation v2 ranking, reasonCodes, fixture foundation, and
+  quality evaluation preparation.
+- Request ID behavior is final: invalid/missing `X-Request-Id` generates a new
+  server requestId, does not echo invalid values, and does not reject otherwise
+  valid requests.
+- Common metadata is minimal: `apiVersion` and `requestId`, plus `cityId` for
+  city-scoped responses.
+- Legacy/v2 comparison is behavioral parity, not a quality algorithm
+  comparison.
+- Remaining open questions are limited to conditional persistence, Firestore,
+  Firebase emulator for conditional persistence tests, and curated query
+  fixture process/reviewers.
+- Phase 2 implementation remains not started.
+
+## 2026-07-26 22:04:35 +07:00 - Phase 2 Batch 1 Traveler API v2 Foundation
+
+User authorization:
+
+```text
+APPROVED PHASE 2 BATCH 1
+```
+
+Files read/inspected:
+
+```text
+git status --short --branch
+git --no-pager diff --name-status
+src/server.js
+package.json
+src/modules/travelerApiV2/constants.js
+src/modules/travelerApiV2/requestContext.js
+src/modules/travelerApiV2/pagination.js
+src/modules/travelerApiV2/serializers.js
+src/modules/travelerApiV2/poiSearch.js
+src/modules/travelerApiV2/router.js
+tests/phase0/phase0CanonicalData.test.js
+tests/phase1/phase1DataPlatform.test.js
+tests/phase1/phase1PostgresIntegration.test.js
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+```
+
+Changed/added files:
+
+```text
+src/server.js
+src/modules/travelerApiV2/constants.js
+src/modules/travelerApiV2/requestContext.js
+src/modules/travelerApiV2/pagination.js
+src/modules/travelerApiV2/serializers.js
+src/modules/travelerApiV2/poiSearch.js
+src/modules/travelerApiV2/router.js
+tests/phase2/phase2TravelerApiV2Batch1.test.js
+package.json
+docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/WORKLOG.md
+```
+
+Implementation summary:
+
+- Mounted a new read-only Traveler API v2 router at `/api/v2` in the primary
+  backend runtime.
+- Added common v2 response envelope and error envelope helpers.
+- Added request ID validation with server-generated replacement for missing or
+  invalid `X-Request-Id`.
+- Added city metadata/status endpoints for the single approved Phase 2 city.
+- Added POI search/detail endpoints backed by the existing repository flow.
+- Added POI search pagination with default limit `20`, maximum `100`, opaque
+  cursor validation, deterministic sort, and canonical `Global_ID` tie-breaks.
+- Added traveler-safe POI serialization that preserves null/unknown semantics
+  and exposes typed source identifiers instead of ambiguous legacy fields.
+- Added OpenAPI 3.1 Batch 1 artifact covering only the approved Batch 1
+  endpoints and common schemas.
+- Added focused Phase 2 Batch 1 tests.
+- Updated the backend test script to include `tests/phase2/*.test.js`.
+
+Commands run:
+
+```text
+node --check src\modules\travelerApiV2\constants.js
+node --check src\modules\travelerApiV2\requestContext.js
+node --check src\modules\travelerApiV2\pagination.js
+node --check src\modules\travelerApiV2\serializers.js
+node --check src\modules\travelerApiV2\poiSearch.js
+node --check src\modules\travelerApiV2\router.js
+node --check tests\phase2\phase2TravelerApiV2Batch1.test.js
+node -e <OpenAPI JSON parse>
+node -e <OpenAPI SHA-256>
+npm test
+npm.cmd test
+```
+
+Command results:
+
+- `npm test`: failed before running tests because PowerShell blocked
+  `D:\Apps\npm.ps1` under the local execution policy.
+- `npm.cmd test`: PASS.
+- Test totals: 21 tests, 20 passed, 0 failed, 1 skipped.
+- Skipped test: existing guarded Phase 1 disposable PostGIS integration test
+  when DB integration env vars are absent.
+- OpenAPI SHA-256:
+  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
+
+Endpoint smoke conclusions:
+
+- `GET /api/v2/cities`: PASS.
+- `GET /api/v2/cities/:cityId/status`: PASS, application POIs `4166`.
+- Unknown city: PASS, `CITY_NOT_SUPPORTED`.
+- Missing `cityId`: PASS, `VALIDATION_ERROR`.
+- Invalid pagination limit: PASS, `VALIDATION_ERROR`.
+- Google-compatible POI search count: `3946`.
+- Foody-compatible POI search count: `225`.
+- All/canonical POI search count: `4166`.
+- POI detail: PASS.
+- Unknown POI detail: PASS, `NOT_FOUND`.
+
+Safety conclusions:
+
+- CSV remains the default runtime.
+- PostgreSQL remains explicit opt-in.
+- No production/shared database was used.
+- No Firebase production data was touched.
+- Canonical CSV bytes were not modified.
+- No frontend files were changed.
+- Recommendation v2, itinerary preview v2, persistence, edit/replan, feedback
+  persistence, and Phase 2 Batch 2 were not started.
+
+## 2026-07-26 22:04:35 +07:00 - Phase 2 Batch 1 Final Review Test Tightening
+
+Scope:
+
+- Focused review before commit and Draft PR.
+- Added narrow Batch 1 tests only.
+- No Phase 2 Batch 2 implementation.
+- No recommendation v2, itinerary preview v2, persistence/edit/replan,
+  feedback persistence, frontend, canonical CSV, production database, or
+  Firebase production changes.
+
+Additional test coverage added:
+
+- Missing request ID generates a server request ID.
+- Error responses include `meta.apiVersion` and `meta.requestId`.
+- Non-integer limit is rejected.
+- Malformed cursor is rejected with structured `VALIDATION_ERROR`.
+- `source=canonical` returns all `4166` POIs.
+- Repeated identical paginated requests return identical order/cursor behavior.
+- Consecutive cursor pages have no duplicate `Global_ID` and match the
+  equivalent wider first page.
+- Public endpoint response bodies do not expose local paths, storage internals,
+  SQL details, repository class names, stack traces, bearer strings, or token
+  text.
+- Serializer semantics preserve canonical public IDs, `google_maps+foody`
+  provenance, typed source identifiers, alias IDs, nullable rating/review
+  values, scale-5 normalized/Google ratings, scale-10 Foody ratings,
+  sample-review semantics, image URL array compatibility, and null district
+  behavior.
+
+Commands run:
+
+```text
+node -e <canonical fixture availability diagnostic>
+npm.cmd test
+```
+
+Results:
+
+- `npm.cmd test`: PASS.
+- Test totals: 22 tests, 21 passed, 0 failed, 1 skipped.
+- Skipped test remains the existing guarded Phase 1 disposable PostGIS
+  integration test when DB integration env vars are absent.
