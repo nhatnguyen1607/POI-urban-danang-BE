@@ -82,6 +82,18 @@ Updated: 2026-07-26 01:49:31 +07:00.
   `npm.cmd ci --ignore-scripts`, `npm.cmd ls --omit=dev --all`,
   `npm.cmd audit --omit=dev`, backend tests, syntax checks, and Firebase
   Admin/Multer smoke all pass.
+- Start Phase 1 Batch 3 only after explicit user approval on 2026-07-26.
+- Limit Batch 3 to endpoint-level PostgreSQL runtime-switch smoke coverage and
+  a local disposable PostGIS runbook.
+- Keep `src/server.js` runtime behavior intact for Batch 3; use a child-process
+  smoke test instead of refactoring the server export shape.
+- Run Batch 3 endpoint smoke only inside the guarded disposable DB integration
+  path with `URBANAGENT_PHASE1_INTEGRATION=true`.
+- Continue to require `URBANAGENT_POI_REPOSITORY=postgres` for PostgreSQL API
+  runtime tests; CSV remains default when the env var is absent.
+- Cover existing endpoint compatibility before adding API v2 behavior:
+  `/api/eda`, `/api/pois/data-quality`, `/api/agent/recommend-poi`, and
+  `/api/agent/create-itinerary`.
 
 ## Still Open
 
@@ -93,4 +105,4 @@ Updated: 2026-07-26 01:49:31 +07:00.
   verification environment, add rollback SQL first, or add endpoint-level tests
   for repository switching first.
 - Decide when to mark Draft PR #2 ready for review; do not merge or begin
-  Batch 3 without explicit approval.
+  Phase 2 without explicit approval.

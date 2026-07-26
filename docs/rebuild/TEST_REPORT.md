@@ -740,3 +740,88 @@ Safety confirmations:
 Final readiness verdict:
 
 `READY FOR REVIEW`
+
+## Phase 1 Batch 3 Endpoint Runtime Switch
+
+Updated: 2026-07-26 14:26:14 +07:00.
+
+Commands run:
+
+```text
+node --check tests\phase1\phase1PostgresIntegration.test.js
+npm.cmd test
+wsl.exe docker compose -f docker-compose.phase1.yml up -d
+docker healthcheck wait for urbanagent-phase1-postgis
+URBANAGENT_PHASE1_INTEGRATION=true npm.cmd test
+npm.cmd run phase1:db:diagnostics
+wsl.exe docker compose -f docker-compose.phase1.yml down -v
+wsl.exe docker ps -a --filter name=urbanagent-phase1-postgis
+wsl.exe docker volume ls --filter name=urbanagent_phase1_postgis_data
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <canonical repository count>
+node -e <CSV default runtime check>
+```
+
+Results:
+
+- Phase 1 integration test syntax: PASS.
+- Default `npm.cmd test`: PASS, 16 tests total, 15 passed, 0 failed, 1 skipped.
+- Disposable PostGIS healthcheck: PASS, `healthy`.
+- Full disposable DB `npm.cmd test`: PASS, 16 tests total, 16 passed, 0 failed, 0 skipped.
+- Batch 3 endpoint smoke under `URBANAGENT_POI_REPOSITORY=postgres`: PASS.
+- `npm.cmd run phase1:db:diagnostics`: PASS.
+- Canonical SHA-256: PASS,
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- CSV default runtime: PASS, repository `csv-default`, count `4166`.
+- Disposable container and volume cleanup: PASS.
+
+Endpoint smoke coverage:
+
+```text
+GET /api/eda?source=google_maps
+  PASS, metrics.totalPOIs 3946, quality applicationPois 4166
+
+GET /api/eda?source=foody
+  PASS, metrics.totalPOIs 225
+
+GET /api/pois/data-quality
+  PASS, applicationPois 4166, headerMatchesExpected true
+
+POST /api/agent/recommend-poi
+  PASS, nonempty results, cityId da-nang
+
+POST /api/agent/create-itinerary
+  PASS, nonempty itinerary, cityId da-nang
+  missing-origin first leg: distanceKm null, distanceKnown false
+```
+
+Final diagnostics:
+
+```text
+cities: 1
+poi_entities: 4166
+source_records: 4166
+external_ids: 8337
+aliases: 985
+images: 16246
+review_summaries: 4166
+duplicate checks: 0
+orphan checks: 0
+invalid longitude: 0
+invalid latitude: 0
+null geometry: 0
+wrong SRID: 0
+coordinate mismatch: 0
+outside Da Nang envelope: 0
+merged provenance rows: 5
+GiST index: poi_entities_location_gix
+```
+
+Safety confirmations:
+
+- CSV remains the default runtime unless `URBANAGENT_POI_REPOSITORY=postgres`
+  is set explicitly.
+- No production or shared PostgreSQL database was used.
+- No Firebase production data was touched.
+- The canonical CSV bytes were not modified.
+- Phase 2 was not started.
