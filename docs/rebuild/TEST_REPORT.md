@@ -1,6 +1,6 @@
 # Test Report
 
-Updated: 2026-07-26 13:08:43 +07:00.
+Updated: 2026-07-26 13:28:46 +07:00.
 
 ## Backend
 
@@ -601,3 +601,142 @@ Safety confirmations:
   frontend file, production database, or Firebase data was modified.
 - PostgreSQL remains opt-in and CSV remains the default runtime.
 - Draft PR #2 remains unmerged and Batch 3 was not started.
+
+## Phase 1 Draft PR Final Readiness Gate
+
+Updated: 2026-07-26 13:28:46 +07:00.
+
+Package placement:
+
+- `call-bind-apply-helpers@1.0.2`, `get-intrinsic@1.3.0`, and
+  `hasown@2.0.4` are under `overrides`.
+- They are not top-level production dependencies.
+- Top-level production dependencies remain `cors`, `csv-parser`, `express`,
+  `firebase-admin`, `multer`, and `pg`.
+- `devDependencies` is empty.
+- Package-lock paths resolve the three integrity overrides under
+  `node_modules/call-bind-apply-helpers`, `node_modules/get-intrinsic`, and
+  `node_modules/hasown`.
+
+Clean clone:
+
+```text
+path: C:\tmp\urbanagent-phase1-readiness-clone
+branch: phase1/data-platform-foundation
+HEAD: c160f61edc45cbde5da772f1c9f564336b4de41c
+git lfs pull: PASS
+npm.cmd ci: PASS
+git status after npm ci and checks: clean
+package.json/package-lock diff after npm ci: none
+```
+
+Clean-clone commands and results:
+
+```text
+npm.cmd ci
+  PASS, added 298 packages and audited 299 packages.
+  No lifecycle script failed.
+  No credentials were required.
+
+npm.cmd ls --omit=dev --all
+  PASS, exit code 0, no ELSPROBLEMS.
+
+npm.cmd audit --omit=dev
+  PASS, found 0 vulnerabilities.
+
+npm.cmd audit --omit=dev --json
+  PASS, total vulnerabilities 0.
+
+npm.cmd test
+  PASS, tests 16, pass 15, fail 0, skipped 1.
+  The single skipped test is the disposable Postgres integration test because
+  the clean clone did not enable the DB integration environment.
+```
+
+Full disposable PostGIS integration:
+
+```text
+image: postgis/postgis:16-3.5-alpine
+compose file: docker-compose.phase1.yml
+host port: 55432
+database: urbanagent_phase1_test
+container: urbanagent-phase1-postgis
+
+wsl.exe docker compose -f docker-compose.phase1.yml up -d
+  PASS
+
+healthcheck
+  PASS, healthy
+
+URBANAGENT_PHASE1_INTEGRATION=true npm.cmd test
+  PASS, tests 16, pass 16, fail 0, skipped 0.
+
+npm.cmd run phase1:db:diagnostics
+  PASS
+
+wsl.exe docker compose -f docker-compose.phase1.yml down -v
+  PASS
+
+container cleanup check
+  PASS, no urbanagent-phase1-postgis container remains.
+
+volume cleanup check
+  PASS, no urbanagent_phase1_postgis_data volume remains.
+```
+
+Final DB diagnostics:
+
+```text
+poi_entities: 4166
+source_records: 4166
+external_ids: 8337
+aliases: 985
+images: 16246
+review_summaries: 4166
+duplicate checks: 0
+orphan checks: 0
+invalid longitude: 0
+invalid latitude: 0
+null geometry: 0
+wrong SRID: 0
+coordinate mismatch: 0
+outside Da Nang envelope: 0
+GiST index: poi_entities_location_gix
+```
+
+Canonical data:
+
+```text
+SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+runtime count: 4166
+CSV default runtime count without URBANAGENT_POI_REPOSITORY: 4166
+```
+
+PR file hygiene:
+
+- `git --no-pager diff --name-status main...HEAD`: reviewed.
+- `git --no-pager diff --stat main...HEAD`: reviewed.
+- `git --no-pager log --oneline --decorate main..HEAD`: reviewed.
+- No `.env`, Firebase credential JSON, database dump, diagnostic bundle, raw
+  audit output, `node_modules`, `dist`, temporary workspace file, accidental
+  `status` file, or full patch artifact was found in the PR diff.
+- `package.json` and `package-lock.json` changes are limited to approved
+  Phase 1 `pg` dependency, approved security remediation, and final dependency
+  integrity overrides.
+
+Safety confirmations:
+
+- No application source, migration SQL, tests, canonical CSV, manifest,
+  frontend code, production/shared database, or Firebase production data was
+  modified during this final gate.
+- No `npm audit fix`, `npm audit fix --force`, `npm update`, `npm upgrade`, or
+  `npm dedupe` was run.
+- PostgreSQL remains explicit opt-in and CSV remains the default runtime.
+- Branch is synchronized with `origin/phase1/data-platform-foundation`.
+- Git state confirms Phase 1 `HEAD` is not in `origin/main`; PR #2 was not
+  merged in this gate.
+- Batch 3 was not started.
+
+Final readiness verdict:
+
+`READY FOR REVIEW`

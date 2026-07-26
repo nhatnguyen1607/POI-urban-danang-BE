@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-07-26 13:08:43 +07:00.
+Updated: 2026-07-26 13:28:46 +07:00.
 
 ## Phase
 
@@ -35,9 +35,13 @@ Security remediation result:
   - `qs@6.15.3`
   - `uuid@11.1.1`
 - Dependency integrity: `npm.cmd ci --ignore-scripts` PASS.
+- Clean-clone `npm.cmd ci` without flags: PASS.
 - `npm.cmd ls --omit=dev --all`: PASS, no `ELSPROBLEMS`.
 - Firebase Admin and Multer compatibility smoke: PASS without connecting to
   production Firebase.
+- Final disposable PostGIS integration rerun: PASS, 16 tests passed, 0 failed,
+  0 skipped.
+- Disposable container and volume cleanup after final gate: PASS.
 
 ## Repository Visibility
 
@@ -135,9 +139,33 @@ Backend:
   longer present in npm audit output.
 - `npm.cmd ci --ignore-scripts`: PASS; lockfile is reproducible from a clean
   install.
+- Clean clone at `C:\tmp\urbanagent-phase1-readiness-clone`:
+  - `git lfs pull`: PASS.
+  - `npm.cmd ci` without `--ignore-scripts`, `--force`, or
+    `--legacy-peer-deps`: PASS.
+  - `git status --short --branch`: clean before and after checks.
+  - `npm.cmd ls --omit=dev --all`: PASS.
+  - `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
+  - `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
+  - `npm.cmd test`: PASS, 16 tests total, 15 passed, 0 failed, 1 skipped
+    because the disposable DB is absent.
 - `npm.cmd ls --omit=dev --all`: PASS; no `ELSPROBLEMS`.
 - Firebase Admin and Multer smoke: PASS; package entrypoints used by
   UrbanAgent load without initializing production Firebase.
+- Full disposable PostGIS integration: PASS, 16 passed, 0 failed, 0 skipped.
+- Full integration diagnostics: PASS, POI entities `4166`, source records
+  `4166`, external IDs `8337`, aliases `985`, images `16246`, review summaries
+  `4166`, duplicate checks `0`, orphan checks `0`, geometry checks `0`, GiST
+  index `poi_entities_location_gix`.
+- Canonical SHA-256 recheck: PASS,
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- CSV default runtime recheck: PASS, `4166` POIs with no
+  `URBANAGENT_POI_REPOSITORY` override.
+- Disposable cleanup: PASS; no `urbanagent-phase1-postgis` container or
+  `urbanagent_phase1_postgis_data` volume remains.
+- Branch synchronization: PASS, local `HEAD` equals
+  `origin/phase1/data-platform-foundation`.
+- PR unmerged by Git state: PASS, `HEAD` is not an ancestor of `origin/main`.
 
 Frontend:
 

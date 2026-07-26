@@ -770,3 +770,94 @@ Key conclusions:
 - No app source, migration SQL, tests, canonical CSV, manifest, frontend,
   production database, Firebase data, `npm audit fix`, broad update, dedupe,
   merge, or Batch 3 work occurred in this gate.
+
+## 2026-07-26 Phase 1 Draft PR Final Readiness Gate
+
+Time: 2026-07-26 13:28:46 +07:00.
+
+Mode: final readiness checks for Draft PR #2. No application source, migration
+SQL, tests, canonical CSV, manifest, frontend code, production database, or
+Firebase production data was modified.
+
+Changed files:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Commands run:
+
+```text
+node -e <package dependencies/devDependencies/overrides inspection>
+rg -n <package override and lockfile path inspection>
+git --no-pager diff --name-status main...HEAD
+git --no-pager diff --stat main...HEAD
+git --no-pager log --oneline --decorate main..HEAD
+git remote get-url origin
+git lfs version
+git clone --branch phase1/data-platform-foundation <origin> C:\tmp\urbanagent-phase1-readiness-clone
+git lfs pull
+git lfs status
+npm.cmd ci
+git status --short --branch
+git diff -- package.json package-lock.json
+npm.cmd ls --omit=dev --all
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd test
+wsl.exe docker --version
+wsl.exe docker compose -f docker-compose.phase1.yml version
+wsl.exe docker ps -a --filter name=urbanagent-phase1-postgis
+wsl.exe docker volume ls --filter name=urbanagent_phase1_postgis_data
+wsl.exe docker compose -f docker-compose.phase1.yml up -d
+docker healthcheck wait for urbanagent-phase1-postgis
+URBANAGENT_PHASE1_INTEGRATION=true npm.cmd test
+npm.cmd run phase1:db:diagnostics
+wsl.exe docker compose -f docker-compose.phase1.yml down -v
+wsl.exe docker ps -a --filter name=urbanagent-phase1-postgis
+wsl.exe docker volume ls --filter name=urbanagent_phase1_postgis_data
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <canonical repository count>
+node -e <CSV default runtime count>
+git fetch origin
+git merge-base --is-ancestor HEAD origin/main
+git --no-pager diff --name-only main...HEAD | rg -n <forbidden file pattern>
+```
+
+Key conclusions:
+
+- `call-bind-apply-helpers@1.0.2`, `get-intrinsic@1.3.0`, and
+  `hasown@2.0.4` are under `overrides`, not top-level production
+  dependencies.
+- Clean clone at `C:\tmp\urbanagent-phase1-readiness-clone` checked out
+  `c160f61edc45cbde5da772f1c9f564336b4de41c`.
+- `git lfs pull` in the clean clone passed.
+- Clean-clone `npm.cmd ci` passed without `--ignore-scripts`, `--force`, or
+  `--legacy-peer-deps`; package files remained unchanged and Git status stayed
+  clean.
+- Clean-clone `npm.cmd ls --omit=dev --all` passed with no `ELSPROBLEMS`.
+- Clean-clone `npm.cmd audit --omit=dev` and `npm.cmd audit --omit=dev --json`
+  passed with total vulnerabilities `0`.
+- Clean-clone default `npm.cmd test` passed with `15` passed, `0` failed, `1`
+  skipped because disposable DB integration was off.
+- Full disposable PostGIS integration with
+  `postgis/postgis:16-3.5-alpine` passed: `16` passed, `0` failed, `0`
+  skipped.
+- Full integration diagnostics passed with POI entities `4166`, source records
+  `4166`, external IDs `8337`, aliases `985`, images `16246`, review summaries
+  `4166`, duplicate/orphan/geometry checks `0`, and GiST index
+  `poi_entities_location_gix`.
+- Disposable PostGIS container and volume were removed after validation.
+- Canonical SHA-256 matched
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Canonical runtime and CSV default runtime both returned `4166` POIs.
+- PR diff hygiene check found no `.env`, Firebase credential JSON, database
+  dump, diagnostic bundle, raw audit output, `node_modules`, `dist`, temporary
+  workspace file, accidental `status` file, or full patch artifact.
+- Local `HEAD` equals `origin/phase1/data-platform-foundation`; Git state
+  confirms Phase 1 `HEAD` is not in `origin/main`, so PR #2 was not merged in
+  this gate.
+- No production/shared database or Firebase production system was touched.
+- Batch 3 was not started.
