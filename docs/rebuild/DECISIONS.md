@@ -72,11 +72,16 @@ Updated: 2026-07-26 01:49:31 +07:00.
 - Use explicit npm `overrides` for production transitive advisories:
   `body-parser@2.3.0`, `brace-expansion@5.0.8`, `form-data@2.5.6`,
   `protobufjs@7.6.5`, `qs@6.15.3`, and `uuid@11.1.1`.
+- Add three narrow integrity overrides, `call-bind-apply-helpers@1.0.2`,
+  `get-intrinsic@1.3.0`, and `hasown@2.0.4`, only to make npm's full
+  production dependency tree validation reproducible and free of
+  `ELSPROBLEMS`.
 - Keep `pg@8.22.0` unchanged because no production advisory affects the new
   PostgreSQL path.
-- Accept `npm.cmd ls --omit=dev --all` `ELSPROBLEMS` override-tree warnings as
-  a remaining review item because `npm audit --omit=dev`, direct dependency
-  listing, syntax checks, and tests pass.
+- Treat the dependency integrity gate as passed only after
+  `npm.cmd ci --ignore-scripts`, `npm.cmd ls --omit=dev --all`,
+  `npm.cmd audit --omit=dev`, backend tests, syntax checks, and Firebase
+  Admin/Multer smoke all pass.
 
 ## Still Open
 
@@ -87,6 +92,5 @@ Updated: 2026-07-26 01:49:31 +07:00.
 - Decide whether the next Phase 1 batch should run a local Postgres/PostGIS
   verification environment, add rollback SQL first, or add endpoint-level tests
   for repository switching first.
-- Track npm override-tree validation warnings under `get-intrinsic` /
-  `call-bind-apply-helpers` as a residual package-manager review item before
-  production release.
+- Decide when to mark Draft PR #2 ready for review; do not merge or begin
+  Batch 3 without explicit approval.

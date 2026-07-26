@@ -703,3 +703,70 @@ Key conclusions:
 - No `npm audit fix`, broad update, dependency dedupe, application code change,
   canonical CSV change, production database access, Firebase access, commit,
   push, or Phase 1 Batch 3 work occurred during this remediation step.
+
+## 2026-07-26 Phase 1 Final Dependency Integrity Gate
+
+Time: 2026-07-26 13:08:43 +07:00.
+
+Changed files:
+
+```text
+package.json
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Commands run:
+
+```text
+npm.cmd ls --omit=dev --all
+npm.cmd explain get-intrinsic
+npm.cmd explain call-bind-apply-helpers
+npm.cmd explain body-parser
+npm.cmd explain qs
+npm.cmd explain firebase-admin
+npm.cmd explain multer
+npm.cmd explain hasown
+npm.cmd install --ignore-scripts
+npm.cmd ci --ignore-scripts
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd test
+node --check src\server.js
+node --check server.js
+node --check src\config\firebaseAdmin.js
+node --check src\infrastructure\db\phase1MigrationRunner.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1PostgresIntegration.test.js
+node -e <firebase-admin and multer compatibility smoke>
+git status --short --branch
+git --no-pager diff --stat
+```
+
+Key conclusions:
+
+- The initial full production dependency tree check failed with
+  `ELSPROBLEMS`.
+- `get-intrinsic@1.3.0` and `call-bind-apply-helpers@1.0.2` were first
+  reported invalid even though installed versions satisfied their dependency
+  ranges; adding narrow overrides moved npm to the remaining invalid package.
+- `hasown@2.0.4` was then reported invalid under the `form-data@2.5.6` /
+  `es-set-tostringtag@2.1.0` path; adding a narrow override resolved the final
+  tree validation error.
+- Final `npm.cmd ls --omit=dev --all` passes with exit code `0`.
+- `npm.cmd ci --ignore-scripts` passes, proving the lockfile is reproducible
+  from a clean install.
+- `npm.cmd audit --omit=dev` and `npm.cmd audit --omit=dev --json` both pass
+  with total vulnerabilities `0`.
+- Backend default tests pass: `16` tests total, `15` passed, `0` failed, `1`
+  skipped because the disposable Postgres database is absent.
+- Syntax checks pass for server entrypoints, Firebase Admin config, Phase 1
+  migration runner, Postgres repository, importer, and integration test.
+- Firebase Admin and Multer compatibility smoke passes without initializing
+  Firebase or connecting to production.
+- No app source, migration SQL, tests, canonical CSV, manifest, frontend,
+  production database, Firebase data, `npm audit fix`, broad update, dedupe,
+  merge, or Batch 3 work occurred in this gate.

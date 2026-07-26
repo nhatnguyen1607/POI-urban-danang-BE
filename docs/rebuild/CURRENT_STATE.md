@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-07-26 12:52:16 +07:00.
+Updated: 2026-07-26 13:08:43 +07:00.
 
 ## Phase
 
@@ -27,13 +27,17 @@ Security remediation result:
 - Production overrides:
   - `body-parser@2.3.0`
   - `brace-expansion@5.0.8`
+  - `call-bind-apply-helpers@1.0.2`
   - `form-data@2.5.6`
+  - `get-intrinsic@1.3.0`
+  - `hasown@2.0.4`
   - `protobufjs@7.6.5`
   - `qs@6.15.3`
   - `uuid@11.1.1`
-- Residual warning: `npm.cmd ls --omit=dev --all` reports `ELSPROBLEMS`
-  for npm's override tree under `get-intrinsic` /
-  `call-bind-apply-helpers`; `npm audit`, syntax checks, and tests pass.
+- Dependency integrity: `npm.cmd ci --ignore-scripts` PASS.
+- `npm.cmd ls --omit=dev --all`: PASS, no `ELSPROBLEMS`.
+- Firebase Admin and Multer compatibility smoke: PASS without connecting to
+  production Firebase.
 
 ## Repository Visibility
 
@@ -46,7 +50,6 @@ Backend branch: `phase1/data-platform-foundation`.
 
 Backend status after security remediation:
 
-- modified: `package-lock.json`
 - modified: `package.json`
 - modified: `docs/rebuild/CURRENT_STATE.md`
 - modified: `docs/rebuild/DECISIONS.md`
@@ -130,6 +133,11 @@ Backend:
 - `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
 - Security remediation: PASS; previous 9 production advisory records are no
   longer present in npm audit output.
+- `npm.cmd ci --ignore-scripts`: PASS; lockfile is reproducible from a clean
+  install.
+- `npm.cmd ls --omit=dev --all`: PASS; no `ELSPROBLEMS`.
+- Firebase Admin and Multer smoke: PASS; package entrypoints used by
+  UrbanAgent load without initializing production Firebase.
 
 Frontend:
 
@@ -139,15 +147,12 @@ Frontend:
 
 ## Remaining Risks
 
-- `npm.cmd ls --omit=dev --all` reports `ELSPROBLEMS` for npm override-tree
-  validation under `get-intrinsic` / `call-bind-apply-helpers`; `npm audit`,
-  direct dependency listing, syntax checks, and tests pass.
 - The disposable write importer was verified, but production migration/import has not been approved or run.
 - The optional Postgres repository adapter is still not enabled by default.
 - Address/admin-boundary spatial joins remain pending because no boundary dataset has been approved.
 - No `npm audit fix`, `npm update`, `npm upgrade`, or `npm dedupe` was run.
-- Phase 1 is not complete; this remediation closes the Batch 1-2 security
-  gate only.
+- Phase 1 is not complete; this gate closes Batch 1-2 dependency integrity and
+  draft PR readiness validation only.
 
 ## Next Step
 

@@ -1,6 +1,6 @@
 # Test Report
 
-Updated: 2026-07-26 12:52:16 +07:00.
+Updated: 2026-07-26 13:08:43 +07:00.
 
 ## Backend
 
@@ -517,3 +517,87 @@ Safety confirmations:
   frontend file, production database, or Firebase data was modified.
 - PostgreSQL remains opt-in and CSV remains the default runtime.
 - Phase 1 Batch 3 was not started.
+
+## Phase 1 Final Dependency Integrity Gate
+
+Updated: 2026-07-26 13:08:43 +07:00.
+
+Commands run:
+
+```text
+npm.cmd ls --omit=dev --all
+npm.cmd explain get-intrinsic
+npm.cmd explain call-bind-apply-helpers
+npm.cmd explain body-parser
+npm.cmd explain qs
+npm.cmd explain firebase-admin
+npm.cmd explain multer
+npm.cmd explain hasown
+npm.cmd install --ignore-scripts
+npm.cmd ci --ignore-scripts
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd test
+node --check src\server.js
+node --check server.js
+node --check src\config\firebaseAdmin.js
+node --check src\infrastructure\db\phase1MigrationRunner.js
+node --check src\modules\pois\postgresPoiRepository.js
+node --check scripts\phase1_import_canonical_pois.js
+node --check tests\phase1\phase1PostgresIntegration.test.js
+node -e <firebase-admin and multer compatibility smoke>
+```
+
+Integrity correction:
+
+```text
+override call-bind-apply-helpers -> 1.0.2
+override get-intrinsic -> 1.3.0
+override hasown -> 2.0.4
+```
+
+Results:
+
+- Initial `npm.cmd ls --omit=dev --all`: FAIL, exit code `1`.
+  - First invalid paths: `get-intrinsic@1.3.0` and
+    `call-bind-apply-helpers@1.0.2` under the `qs` / `side-channel` tree.
+  - After adding those two overrides, the remaining invalid path was
+    `hasown@2.0.4` under `form-data@2.5.6` / `es-set-tostringtag@2.1.0`.
+- Final `npm.cmd ls --omit=dev --all`: PASS, exit code `0`; no
+  `ELSPROBLEMS`.
+- `npm.cmd ci --ignore-scripts`: PASS; clean install from `package-lock.json`
+  is reproducible.
+- `npm.cmd audit --omit=dev`: PASS, `found 0 vulnerabilities`.
+- `npm.cmd audit --omit=dev --json`: PASS.
+  - info: `0`
+  - low: `0`
+  - moderate: `0`
+  - high: `0`
+  - critical: `0`
+  - total: `0`
+  - production dependencies counted by audit metadata: `156`
+  - total dependencies counted by audit metadata: `298`
+- `npm.cmd test`: PASS.
+  - tests: `16`
+  - pass: `15`
+  - fail: `0`
+  - skipped: `1` because the disposable Postgres integration test skips when
+    database environment variables are absent.
+- Syntax checks: PASS for server entrypoints, Firebase Admin config, Phase 1
+  migration runner, Postgres repository, importer, and Phase 1 integration
+  test.
+- Firebase Admin compatibility smoke: PASS for `require('firebase-admin')`,
+  `require('firebase-admin/auth')`, and `require('firebase-admin/firestore')`
+  entrypoints used by UrbanAgent. The smoke did not initialize Firebase and did
+  not connect to production.
+- Multer compatibility smoke: PASS for `multer(...).single('image')`, matching
+  UrbanAgent upload middleware usage.
+
+Safety confirmations:
+
+- No `npm audit fix`, `npm audit fix --force`, `npm update`, `npm upgrade`, or
+  `npm dedupe` was run.
+- No application source code, migration SQL, tests, canonical CSV, manifest,
+  frontend file, production database, or Firebase data was modified.
+- PostgreSQL remains opt-in and CSV remains the default runtime.
+- Draft PR #2 remains unmerged and Batch 3 was not started.
