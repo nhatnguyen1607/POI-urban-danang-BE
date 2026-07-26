@@ -861,3 +861,90 @@ Key conclusions:
   this gate.
 - No production/shared database or Firebase production system was touched.
 - Batch 3 was not started.
+
+## 2026-07-26 14:26:14 +07:00 - Phase 1 Batch 3 endpoint runtime-switch coverage
+
+Scope:
+
+```text
+Approved Phase 1 Batch 3 only.
+No Phase 2 work.
+No production/shared database.
+No Firebase production access.
+No canonical CSV byte changes.
+CSV remains default runtime.
+PostgreSQL remains explicit opt-in.
+```
+
+Changed files:
+
+```text
+tests/phase1/phase1PostgresIntegration.test.js
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Commands run:
+
+```text
+git status --short --branch
+Get-Content -LiteralPath docs\rebuild\CURRENT_STATE.md
+Get-Content -LiteralPath docs\rebuild\TEST_REPORT.md
+Get-Content -LiteralPath docs\rebuild\DECISIONS.md
+Get-Content -LiteralPath docs\rebuild\WORKLOG.md -Tail 80
+git --no-pager diff -- tests/phase1/phase1PostgresIntegration.test.js
+git --no-pager diff --stat
+node --check tests\phase1\phase1PostgresIntegration.test.js
+npm.cmd test
+wsl.exe docker compose -f docker-compose.phase1.yml up -d
+docker healthcheck wait for urbanagent-phase1-postgis
+URBANAGENT_PHASE1_INTEGRATION=true npm.cmd test
+npm.cmd run phase1:db:diagnostics
+wsl.exe docker compose -f docker-compose.phase1.yml down -v
+wsl.exe docker ps -a --filter name=urbanagent-phase1-postgis
+wsl.exe docker volume ls --filter name=urbanagent_phase1_postgis_data
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <canonical repository count>
+node -e <CSV default runtime check>
+```
+
+Results:
+
+```text
+Phase 1 integration test syntax: PASS.
+Default npm.cmd test: PASS, 16 total, 15 passed, 0 failed, 1 skipped.
+Disposable PostGIS healthcheck: PASS.
+Full disposable DB npm.cmd test: PASS, 16 total, 16 passed, 0 failed, 0 skipped.
+Endpoint runtime-switch smoke: PASS under URBANAGENT_POI_REPOSITORY=postgres.
+Diagnostics: PASS.
+Canonical SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae.
+CSV default runtime: PASS, csv-default, 4166 POIs.
+Disposable container and volume cleanup: PASS.
+```
+
+Endpoint smoke evidence:
+
+```text
+GET /api/eda?source=google_maps: 3946 POIs.
+GET /api/eda?source=foody: 225 POIs.
+GET /api/pois/data-quality: 4166 application POIs, expected headers.
+POST /api/agent/recommend-poi: nonempty da-nang results.
+POST /api/agent/create-itinerary: nonempty da-nang itinerary.
+Missing-origin first leg: distanceKm null, distanceKnown false.
+```
+
+Key conclusions:
+
+- Existing endpoint compatibility now has explicit PostgreSQL runtime-switch
+  smoke coverage for EDA, data quality, recommendation, and itinerary paths.
+- The endpoint smoke test starts a local child process and does not require a
+  server export refactor.
+- The test path is guarded by the disposable DB integration flag and does not
+  run against production/shared databases.
+- Local runbook documents the exact disposable PostGIS workflow and cleanup.
+- CSV remains the default runtime when `URBANAGENT_POI_REPOSITORY` is absent.
+- No production database, shared database, Firebase production data, frontend
+  code, or canonical CSV bytes were touched.

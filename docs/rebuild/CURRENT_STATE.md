@@ -1,10 +1,10 @@
 # Current State
 
-Updated: 2026-07-26 13:28:46 +07:00.
+Updated: 2026-07-26 14:26:14 +07:00.
 
 ## Phase
 
-`PHASE_1_SECURITY_REMEDIATION_PASSED`
+`PHASE_1_BATCH_3_ENDPOINT_RUNTIME_SWITCH_PASSED`
 
 Phase 1 Batch 2 validated the PostgreSQL/PostGIS schema and importer against a
 disposable Docker Compose PostGIS database. Migration, rollback, reapply, real
@@ -15,6 +15,10 @@ The Batch 2 security remediation gate is now closed. Targeted production
 dependency remediation was applied without `npm audit fix`, broad dependency
 updates, application behavior changes, production database access, Firebase
 access, or Phase 1 Batch 3 work.
+
+Phase 1 Batch 3 has now added endpoint-level runtime-switch smoke coverage for
+the existing backend API while keeping CSV as the default runtime and requiring
+explicit PostgreSQL opt-in.
 
 Security remediation result:
 
@@ -52,13 +56,14 @@ Security remediation result:
 
 Backend branch: `phase1/data-platform-foundation`.
 
-Backend status after security remediation:
+Backend status before Batch 3 commit:
 
-- modified: `package.json`
 - modified: `docs/rebuild/CURRENT_STATE.md`
 - modified: `docs/rebuild/DECISIONS.md`
+- modified: `docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md`
 - modified: `docs/rebuild/TEST_REPORT.md`
 - modified: `docs/rebuild/WORKLOG.md`
+- modified: `tests/phase1/phase1PostgresIntegration.test.js`
 
 Frontend branch: `main`.
 
@@ -122,6 +127,17 @@ Frontend status:
   - merged provenance rows: `5`
   - GiST index: `poi_entities_location_gix`
 - Disposable container and volume cleanup: PASS; no Phase 1 container or volume remains.
+- Batch 3 endpoint runtime switch smoke: PASS inside the disposable PostGIS
+  integration suite.
+  - Explicit runtime env: `URBANAGENT_POI_REPOSITORY=postgres`.
+  - `GET /api/eda?source=google_maps`: PASS, `3946` POIs.
+  - `GET /api/eda?source=foody`: PASS, `225` POIs.
+  - `GET /api/pois/data-quality`: PASS, `4166` application POIs and expected headers.
+  - `POST /api/agent/recommend-poi`: PASS, nonempty `da-nang` results.
+  - `POST /api/agent/create-itinerary`: PASS, nonempty `da-nang` itinerary and
+    missing-origin first leg remains unknown.
+- Local disposable PostGIS runbook exists:
+  `docs/rebuild/PHASE1_LOCAL_POSTGIS_RUNBOOK.md`.
 
 ## Build/Test Status
 
@@ -132,6 +148,8 @@ Backend:
 - `node --check` for Phase 1 files and server entrypoints: PASS.
 - `npm.cmd run phase1:import:canonical`: PASS in dry-run mode.
 - `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true`: PASS, 16 tests passed, 0 failed, 0 skipped.
+- `npm.cmd test` with `URBANAGENT_PHASE1_INTEGRATION=true` after Batch 3
+  endpoint smoke: PASS, 16 tests passed, 0 failed, 0 skipped.
 - `npm.cmd run phase1:db:diagnostics`: PASS.
 - `npm.cmd audit --omit=dev`: PASS, `0 vulnerabilities`.
 - `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
@@ -177,6 +195,8 @@ Frontend:
 
 - The disposable write importer was verified, but production migration/import has not been approved or run.
 - The optional Postgres repository adapter is still not enabled by default.
+- Batch 3 endpoint smoke covers selected existing API paths only; broader
+  authenticated traveler/partner v2 behavior remains future work.
 - Address/admin-boundary spatial joins remain pending because no boundary dataset has been approved.
 - No `npm audit fix`, `npm update`, `npm upgrade`, or `npm dedupe` was run.
 - Phase 1 is not complete; this gate closes Batch 1-2 dependency integrity and
@@ -184,6 +204,6 @@ Frontend:
 
 ## Next Step
 
-Review the Phase 1 Batch 1-2 pull request with the security remediation
-included. Do not cut over runtime to PostgreSQL and do not start Batch 3
-without separate explicit approval.
+Review the Phase 1 pull request with Batch 3 endpoint runtime-switch coverage.
+Do not cut over runtime to PostgreSQL and do not start Phase 2 without separate
+explicit approval.

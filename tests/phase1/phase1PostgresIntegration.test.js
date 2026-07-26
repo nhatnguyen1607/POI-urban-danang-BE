@@ -1,4 +1,6 @@
 const assert = require('node:assert/strict');
+const { spawn } = require('node:child_process');
+const http = require('node:http');
 const test = require('node:test');
 
 const { createPostgresPool, withTransaction } = require('../../src/infrastructure/db/postgresClient');
@@ -32,6 +34,140 @@ const EXPECTED_COUNTS = {
   images: 16246,
   review_summaries: 4166,
 };
+
+function requestJson({ port, method = 'GET', path, body, token }) {
+  return new Promise((resolve, reject) => {
+    const payload = body ? JSON.stringify(body) : null;
+    const req = http.request({
+      hostname: '127.0.0.1',
+      port,
+      method,
+      path,
+      headers: {
+        ...(payload ? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) } : {}),
+        ...(token ? { authorization: `Bearer ${token}` } : {}),
+      },
+    }, (res) => {
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => {
+        const text = Buffer.concat(chunks).toString('utf8');
+        try {
+          resolve({
+            statusCode: res.statusCode,
+            body: text ? JSON.parse(text) : null,
+          });
+        } catch (error) {
+          reject(new Error(`Failed to parse JSON from ${path}: ${error.message}. Body: ${text.slice(0, 300)}`));
+        }
+      });
+    });
+    req.on('error', reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
+
+async function waitForServer(port, child) {
+  const startedAt = Date.now();
+  let lastError = null;
+  while (Date.now() - startedAt < 45000) {
+    if (child.exitCode !== null) {
+      throw new Error(`Server exited before readiness check completed with code ${child.exitCode}`);
+    }
+    try {
+      const response = await requestJson({ port, path: '/api/eda?source=all' });
+      if (response.statusCode === 200) return;
+      lastError = new Error(`Readiness returned HTTP ${response.statusCode}`);
+    } catch (error) {
+      lastError = error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 750));
+  }
+  throw lastError || new Error('Timed out waiting for server readiness');
+}
+
+async function stopServer(child) {
+  if (!child || child.exitCode !== null) return;
+  child.kill();
+  const exited = await new Promise((resolve) => {
+    const timeout = setTimeout(resolve, 5000);
+    child.once('exit', () => {
+      clearTimeout(timeout);
+      resolve(true);
+    });
+  });
+  if (exited) return;
+  child.kill('SIGKILL');
+  await new Promise((resolve) => child.once('exit', resolve));
+}
+
+async function runPostgresEndpointSmoke({ databaseUrl }) {
+  assert.ok(databaseUrl, 'Endpoint smoke requires DATABASE_URL or POSTGRES_URL');
+  const port = 19000 + Math.floor(Math.random() * 1000);
+  const child = spawn(process.execPath, ['src/server.js'], {
+    cwd: process.cwd(),
+    env: {
+      ...process.env,
+      DATABASE_URL: databaseUrl,
+      PORT: String(port),
+      URBANAGENT_POI_REPOSITORY: 'postgres',
+      DISABLE_DEV_AUTH_FALLBACK: 'false',
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const logs = [];
+  child.stdout.on('data', (chunk) => logs.push(chunk.toString('utf8')));
+  child.stderr.on('data', (chunk) => logs.push(chunk.toString('utf8')));
+
+  try {
+    await waitForServer(port, child);
+
+    const google = await requestJson({ port, path: '/api/eda?source=google_maps' });
+    assert.equal(google.statusCode, 200, logs.join('').slice(-1000));
+    assert.equal(google.body.metrics.totalPOIs, 3946);
+    assert.equal(google.body.quality.totals.applicationPois, EXPECTED_COUNTS.poi_entities);
+
+    const foody = await requestJson({ port, path: '/api/eda?source=foody' });
+    assert.equal(foody.statusCode, 200);
+    assert.equal(foody.body.metrics.totalPOIs, 225);
+
+    const quality = await requestJson({ port, path: '/api/pois/data-quality' });
+    assert.equal(quality.statusCode, 200);
+    assert.equal(quality.body.totals.applicationPois, EXPECTED_COUNTS.poi_entities);
+    assert.equal(quality.body.headerMatchesExpected, true);
+
+    const recommendation = await requestJson({
+      port,
+      method: 'POST',
+      path: '/api/agent/recommend-poi',
+      body: { query: 'quan cafe yen tinh', context: { cityId: DEFAULT_CITY_ID }, limit: 3 },
+    });
+    assert.equal(recommendation.statusCode, 200);
+    assert.ok(recommendation.body.results.length > 0);
+    assert.equal(recommendation.body.results[0].cityId, DEFAULT_CITY_ID);
+
+    const itinerary = await requestJson({
+      port,
+      method: 'POST',
+      path: '/api/agent/create-itinerary',
+      token: 'local-admin-dev-token',
+      body: {
+        query: 'quan cafe yen tinh',
+        context: { cityId: DEFAULT_CITY_ID },
+        limit: 3,
+        durationMinutes: 180,
+      },
+    });
+    assert.equal(itinerary.statusCode, 200, JSON.stringify(itinerary.body));
+    assert.equal(itinerary.body.cityId, DEFAULT_CITY_ID);
+    assert.ok(itinerary.body.itinerary.length > 0);
+    assert.equal(itinerary.body.itinerary[0].travelFromPrevious.distanceKm, null);
+    assert.equal(itinerary.body.itinerary[0].travelFromPrevious.distanceKnown, false);
+  } finally {
+    await stopServer(child);
+  }
+}
 
 function coreCounts(diagnostics) {
   return Object.fromEntries(Object.keys(EXPECTED_COUNTS).map((key) => [key, diagnostics.counts[key]]));
@@ -144,6 +280,8 @@ test('Phase 1 disposable Postgres migration/import/rollback/repository integrati
     const finalDiagnostics = await getPhase1DbDiagnostics(pool);
     assertExpectedPhase1Diagnostics(finalDiagnostics);
     assert.deepEqual(coreCounts(finalDiagnostics), EXPECTED_COUNTS);
+
+    await runPostgresEndpointSmoke({ databaseUrl: process.env.DATABASE_URL || process.env.POSTGRES_URL });
   } finally {
     delete process.env.URBANAGENT_POI_REPOSITORY;
     setPoiRepositoryForTests(null);
