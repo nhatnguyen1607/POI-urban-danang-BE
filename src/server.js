@@ -41,7 +41,7 @@ const { recommendContextualPOIs } = require('./services/contextualPoiRecommender
 const { rebuildUserPreferences } = require('./services/userPreferenceService');
 const { generateBusinessInsights } = require('./services/businessInsightGenerator');
 const { getAgentTrainingStatus } = require('./services/trainingStatusService');
-const { loadPOIs } = require('./services/poiDataService');
+const { DEFAULT_CITY_ID, getPoiDataQualityReport, loadPOIs, loadPOIsForEdaSource } = require('./services/poiDataService');
 const {
   ensureUserDocument,
   getCustomerProfile,
@@ -90,6 +90,7 @@ app.use(express.json({
 }));
 
 const upload = multer({ dest: UPLOAD_DIR });
+const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';
 
 app.get('/api/health/firebase', (req, res) => {
   const db = getFirestoreDb();
@@ -132,49 +133,35 @@ const readCSV = (filePath) => {
 
 app.get('/api/eda', async (req, res) => {
   try {
-    const source = req.query.source || 'ggmap';
-    const fileName = source === 'foody' ? 'poi_data_foody.csv' : 'poi_data_ggmap.csv';
-    const filePath = path.join(DATA_DIR, fileName);
+    const cityId = req.query.cityId || DEFAULT_CITY_ID;
+    const [{ pois: data, normalizedSource }, quality] = await Promise.all([
+      loadPOIsForEdaSource({ cityId, source: req.query.source }),
+      getPoiDataQualityReport(),
+    ]);
     
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'Data file not found' });
-    }
-
-    const data = await readCSV(filePath);
-    
-    // Calculate EDA Metrics
     const totalPOIs = data.length;
-    
-    const categories = new Set();
-    let totalRating = 0;
-    let ratingCount = 0;
-
-    data.forEach(row => {
-      const category = row.category || row.Category;
-      const rating = row.rating || row['Overall Rating'];
-      
-      if (category) categories.add(category);
-      if (rating && !isNaN(parseFloat(rating))) {
-        totalRating += parseFloat(rating);
-        ratingCount++;
-      }
-    });
-
+    const categories = new Set(data.map((poi) => poi.category).filter(Boolean));
+    const districts = new Set(data.map((poi) => poi.district).filter(Boolean));
+    const rated = data.filter((poi) => typeof poi.rating === 'number');
     const numCategories = categories.size;
-    const avgRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : 0;
-    // We mock districts if it's not in the CSV directly (from address)
-    const numDistricts = 7; 
+    const avgRating = rated.length
+      ? (rated.reduce((sum, poi) => sum + poi.rating, 0) / rated.length).toFixed(1)
+      : null;
+    const numDistricts = districts.size;
 
     // Return first 50 items for table to avoid huge payload
     const sampleData = data.slice(0, 50).map(row => ({
-      id: row.place_id || row.RestaurantID || Math.random().toString(36).substring(7),
-      name: row.name || row['Restaurant Name'],
-      address: row.address || row.Address,
-      category: row.category || row.Category,
-      rating: row.rating || row['Overall Rating'],
-      price: row.price_range || row.Price || 'Chưa cập nhật',
-      lat: row.lat || row.Lat,
-      lng: row.lng || row.Lon
+      id: row.id,
+      globalId: row.globalId,
+      sourceId: row.sourceId,
+      name: row.name,
+      address: row.address || null,
+      category: row.category,
+      rating: row.rating,
+      price: row.price || 'Chua cap nhat',
+      lat: row.lat,
+      lng: row.lon,
+      cityId: row.cityId
     }));
 
     res.json({
@@ -182,13 +169,26 @@ app.get('/api/eda', async (req, res) => {
         totalPOIs,
         numDistricts,
         numCategories,
-        avgRating
+        avgRating,
+        source: normalizedSource
+      },
+      quality: {
+        dataset: quality.dataset,
+        totals: quality.totals,
       },
       sampleData
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to process EDA' });
+  }
+});
+
+app.get('/api/pois/data-quality', async (req, res) => {
+  try {
+    res.json(await getPoiDataQualityReport());
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to read POI data quality report', details: error.message });
   }
 });
 
@@ -320,7 +320,7 @@ app.post('/api/pois/sync-local', requireFirebaseAuth, async (req, res) => {
         ...poi,
         poiId: poi.id,
         semanticText: poi.text || poi.normalized,
-        location: { lat: poi.lat, lng: poi.lon, district: poi.district, address: poi.district },
+        location: { lat: poi.lat, lng: poi.lon, district: poi.district, address: poi.address || '' },
         status: 'active',
         verified: true,
       }));
@@ -401,6 +401,30 @@ app.post('/api/agent/create-itinerary', requireFirebaseAuth, async (req, res) =>
   } catch (error) {
     console.error('[Agent Itinerary Error]', error);
     res.status(500).json({ error: 'Failed to create itinerary', details: error.message });
+  }
+});
+
+app.post('/api/agent/guest-itinerary-preview', optionalFirebaseAuth, async (req, res) => {
+  if (!GUEST_ITINERARY_PREVIEW_ENABLED) {
+    return res.status(404).json({ error: 'Guest itinerary preview is disabled' });
+  }
+  try {
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const { query, context, transport, limit, durationMinutes } = body;
+    if (!query || !String(query).trim()) {
+      return res.status(400).json({ error: 'Missing query' });
+    }
+    const result = await createItinerary({
+      query,
+      context: { ...(context || {}), userId: req.user?.uid || null },
+      transport,
+      limit,
+      durationMinutes,
+    });
+    res.json({ ...result, preview: true, authenticated: Boolean(req.user?.uid) });
+  } catch (error) {
+    console.error('[Guest Itinerary Preview Error]', error);
+    res.status(500).json({ error: 'Failed to create guest itinerary preview', details: error.message });
   }
 });
 

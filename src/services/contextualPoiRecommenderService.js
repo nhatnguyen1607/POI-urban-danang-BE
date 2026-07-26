@@ -2,8 +2,6 @@ const { requireFirestoreDb } = require('../config/firebaseAdmin');
 const { clamp01, distanceScore, haversineKm, ratingScore, reviewSignal } = require('./scoringUtils');
 const { getUserPreferences } = require('./userPreferenceService');
 
-const DEFAULT_LOCATION = { lat: 16.0544, lon: 108.2022 };
-
 function cleanKey(value, fallback = 'unknown') {
   return String(value || fallback)
     .normalize('NFD')
@@ -11,6 +9,20 @@ function cleanKey(value, fallback = 'unknown') {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_+|_+$/g, '') || fallback;
+}
+
+function validLocation(location) {
+  if (!location) return null;
+  const lat = Number(location.lat);
+  const lon = Number(location.lon ?? location.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  return { lat, lon };
+}
+
+function numberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
 }
 
 function contextFromInput(input = {}) {
@@ -39,9 +51,9 @@ function normalizePoi(doc) {
     district: data.location?.district || data.district || '',
     lat: Number(data.location?.lat ?? data.lat),
     lon: Number(data.location?.lng ?? data.location?.lon ?? data.lon ?? data.lng),
-    rating: Number(data.rating || 0),
-    reviewCount: Number(data.reviewCount || 0),
-    ratingSum: Number(data.ratingSum || 0),
+    rating: numberOrNull(data.rating),
+    reviewCount: numberOrNull(data.reviewCount),
+    ratingSum: numberOrNull(data.ratingSum),
     timesVisited: Number(data.timesVisited || 0),
     timesAddedToItinerary: Number(data.timesAddedToItinerary || 0),
     timesRouted: Number(data.timesRouted || 0),
@@ -161,10 +173,7 @@ async function loadActivePois(limit = 400) {
 }
 
 async function recommendContextualPOIs({ userId, currentLocation, currentContext = {}, limit = 8 }) {
-  const location = {
-    lat: Number(currentLocation?.lat) || DEFAULT_LOCATION.lat,
-    lon: Number(currentLocation?.lon ?? currentLocation?.lng) || DEFAULT_LOCATION.lon,
-  };
+  const location = validLocation(currentLocation);
   const context = contextFromInput(currentContext);
   const [profile, pois] = await Promise.all([
     getUserPreferences(userId, { rebuildIfStale: true }).catch(() => null),
@@ -174,10 +183,10 @@ async function recommendContextualPOIs({ userId, currentLocation, currentContext
   const scored = pois
     .filter((poi) => isOpenForContext(poi, context))
     .map((poi) => {
-      const distanceKm = haversineKm(location, { lat: poi.lat, lon: poi.lon });
+      const distanceKm = location ? haversineKm(location, { lat: poi.lat, lon: poi.lon }) : null;
       const popularity = popularityScore(poi);
       const personalization = personalizationScore(poi, profile, context);
-      const distance = distanceScore(distanceKm, currentContext.maxDistanceKm || 12);
+      const distance = distanceKm === null ? 0.5 : distanceScore(distanceKm, currentContext.maxDistanceKm || 12);
       const finalScore = clamp01(popularity * 0.30 + personalization * 0.42 + distance * 0.28);
       return {
         poi,
@@ -223,4 +232,5 @@ module.exports = {
   contextFromInput,
   popularityScore,
   personalizationScore,
+  validLocation,
 };

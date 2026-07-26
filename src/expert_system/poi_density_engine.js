@@ -1,6 +1,7 @@
 const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
+const { loadPOIs } = require('../services/poiDataService');
 
 // ============================================================================
 //  POI DENSITY ENGINE - Suy luận mật độ giao thông từ dữ liệu POI
@@ -15,38 +16,20 @@ class POIDensityEngine {
   }
 
   async load() {
-    const dataDir = path.join(__dirname, '..', '..', 'data');
+    const pois = await loadPOIs();
 
-    const [foodyPois, ggmapPois] = await Promise.all([
-      this._readCSV(path.join(dataDir, 'poi_data_foody.csv')),
-      this._readCSV(path.join(dataDir, 'poi_data_ggmap.csv')),
-    ]);
-
-    // Foody: có trường Address → trích xuất tên đường
-    for (const poi of foodyPois) {
-      const roadName = this._extractRoadName(poi['Address']);
+    // Canonical POIs keep current/raw address separately; never infer address from district.
+    for (const poi of pois) {
+      const roadName = this._extractRoadName(poi.addressCurrent || poi.addressRaw || poi.address);
       if (roadName) {
         const key = this._normalize(roadName);
         this.roadPoiCount.set(key, (this.roadPoiCount.get(key) || 0) + 1);
       }
-      const lat = parseFloat(poi['Lat']);
-      const lng = parseFloat(poi['Lon']);
-      if (!isNaN(lat) && !isNaN(lng)) {
-        this.allPois.push({ lat, lng });
-      }
-    }
-
-    // GGMap: chỉ có tọa độ → dùng proximity search
-    for (const poi of ggmapPois) {
-      const lat = parseFloat(poi['Lat']);
-      const lng = parseFloat(poi['Lon']);
-      if (!isNaN(lat) && !isNaN(lng)) {
-        this.allPois.push({ lat, lng });
-      }
+      this.allPois.push({ lat: poi.lat, lng: poi.lon });
     }
 
     this.loaded = true;
-    console.log(`[POI Engine] ${this.roadPoiCount.size} đường từ Foody | ${this.allPois.length} tổng POI`);
+    console.log(`[POI Engine] ${this.roadPoiCount.size} roads from canonical address data | ${this.allPois.length} POIs`);
 
     // Log top 10 đường đông nhất
     const sorted = [...this.roadPoiCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -63,7 +46,7 @@ class POIDensityEngine {
     return Math.max(nameCount, nearbyCount);
   }
 
-  /** Đếm POI theo tên đường (từ Foody) */
+  /** Count POIs by road name when canonical address data is available. */
   _getCountByName(roadName) {
     if (!roadName) return 0;
     const target = this._normalize(roadName);

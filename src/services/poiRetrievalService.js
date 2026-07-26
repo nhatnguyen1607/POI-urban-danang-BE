@@ -1,4 +1,4 @@
-const { loadPOIs, normalizeText } = require('./poiDataService');
+const { DEFAULT_CITY_ID, loadPOIs, normalizeText } = require('./poiDataService');
 const { detectIntent, categoryMatchScore } = require('./intentService');
 const {
   clamp01,
@@ -10,8 +10,6 @@ const {
 } = require('./scoringUtils');
 const { applyReranker } = require('./rerankerService');
 const { runSemanticRetrieval } = require('./semanticModelService');
-
-const DANANG_CENTER = { lat: 16.0544, lon: 108.2022 };
 
 function buildActions(poi) {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${poi.lat},${poi.lon}`;
@@ -30,6 +28,14 @@ function memoryFromContext(context = {}) {
     categoryPenalty: memory.categoryPenalty || {},
     explicitSignals: memory.explicitSignals || {},
   };
+}
+
+function validLocation(location) {
+  if (!location) return null;
+  const lat = Number(location.lat);
+  const lon = Number(location.lon ?? location.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  return { lat, lon };
 }
 
 function isPoiDisliked(poi, context = {}) {
@@ -105,15 +111,14 @@ function explicitNegativePenalty(poi, context = {}) {
 function scorePOI(poi, query, context = {}, semanticScore = null) {
   const normalizedQuery = normalizeText(query);
   const intent = detectIntent(query);
-  const userLocation = context.location || DANANG_CENTER;
-  const distanceKm = haversineKm(
-    { lat: userLocation.lat, lon: userLocation.lon || userLocation.lng },
-    { lat: poi.lat, lon: poi.lon },
-  );
+  const userLocation = validLocation(context.location);
+  const distanceKm = userLocation
+    ? haversineKm(userLocation, { lat: poi.lat, lon: poi.lon })
+    : null;
   const semantic = keywordScore(normalizedQuery, poi.normalized);
   const category = categoryMatchScore(poi, intent);
   const rating = ratingScore(poi.rating);
-  const distance = distanceScore(distanceKm, context.maxDistanceKm || 14);
+  const distance = distanceKm === null ? 0.5 : distanceScore(distanceKm, context.maxDistanceKm || 14);
   const review = reviewSignal(poi.reviewCount);
   const preference = explicitPreferenceScore(poi, context);
   const memoryCategoryPenalty = categoryPenaltyScore(poi, context);
@@ -138,7 +143,7 @@ function scorePOI(poi, query, context = {}, semanticScore = null) {
   );
 
   const warnings = [];
-  if (distanceKm > 10) warnings.push('Địa điểm hơi xa so với tâm/vị trí hiện tại.');
+  if (distanceKm !== null && distanceKm > 10) warnings.push('Địa điểm hơi xa so với tâm/vị trí hiện tại.');
   if (category < 0.3 && intent) warnings.push('Danh mục không trùng khớp mạnh với intent, cần kiểm tra lại.');
   if (!poi.rating) warnings.push('Thiếu rating rõ ràng.');
 
@@ -172,14 +177,23 @@ function toRecommendation(scored) {
 
   return {
     id: poi.id,
+    globalId: poi.globalId || poi.id,
+    sourceId: poi.sourceId || undefined,
+    sourceIds: poi.sourceIds || undefined,
+    aliasGlobalIds: poi.aliasGlobalIds || undefined,
     type: 'poi',
     title: poi.name,
     name: poi.name,
     category: poi.category,
     district: poi.district,
+    address: poi.address || undefined,
+    cityId: poi.cityId,
     lat: poi.lat,
     lon: poi.lon,
+    hasCoordinates: poi.hasCoordinates,
+    coordinateStatus: poi.coordinateStatus,
     rating: poi.rating,
+    reviewCount: poi.reviewCount,
     price: poi.price,
     source: poi.source,
     score: Math.round(score * 100),
@@ -197,7 +211,8 @@ function toRecommendation(scored) {
 async function recommendPOIs({ query, context = {}, limit = 8 }) {
   const semanticConfig = context.semanticModel || {};
   const semanticEnabled = semanticConfig.enabled === true;
-  const pois = await loadPOIs();
+  const cityId = context.cityId || DEFAULT_CITY_ID;
+  const pois = await loadPOIs({ cityId });
   const candidateLimit = semanticConfig.candidateLimit || 200;
   const semanticCandidates = semanticEnabled
     ? pois
@@ -208,12 +223,14 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
         .slice(0, candidateLimit)
         .map(({ poi }) => ({
           _agent_id: String(poi.id),
-          RestaurantID: String(poi.id),
+          Global_ID: poi.globalId || poi.id,
+          RestaurantID: poi.sourceId || '',
           'Restaurant Name': poi.name,
           Category: poi.category,
           District: poi.district,
           Lat: poi.lat,
           Lon: poi.lon,
+          cityId: poi.cityId,
           LLM_Input_Text: poi.text || `${poi.name}. ${poi.category}. ${poi.district}.`,
         }))
     : [];
@@ -252,6 +269,7 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
   return {
     role: 'traveler',
     query,
+    cityId,
     results: scored,
     semanticTool: {
       enabled: semanticTool.enabled,
@@ -268,5 +286,5 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
 module.exports = {
   recommendPOIs,
   scorePOI,
-  DANANG_CENTER,
+  validLocation,
 };

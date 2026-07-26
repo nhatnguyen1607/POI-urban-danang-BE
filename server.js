@@ -6,6 +6,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
 const { initExpertSystem, findOptimalRoute } = require('./ES-system/expert_system');
+const { DEFAULT_CITY_ID, getPoiDataQualityReport, loadPOIsForEdaSource } = require('./src/services/poiDataService');
 
 const app = express();
 app.use(cors());
@@ -45,49 +46,35 @@ const readCSV = (filePath) => {
 
 app.get('/api/eda', async (req, res) => {
   try {
-    const source = req.query.source || 'ggmap';
-    const fileName = source === 'foody' ? 'poi_data_foody.csv' : 'poi_data_ggmap.csv';
-    const filePath = path.join(__dirname, 'data', fileName);
+    const cityId = req.query.cityId || DEFAULT_CITY_ID;
+    const [{ pois: data, normalizedSource }, quality] = await Promise.all([
+      loadPOIsForEdaSource({ cityId, source: req.query.source }),
+      getPoiDataQualityReport(),
+    ]);
     
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'Data file not found' });
-    }
-
-    const data = await readCSV(filePath);
-    
-    // Calculate EDA Metrics
     const totalPOIs = data.length;
-    
-    const categories = new Set();
-    let totalRating = 0;
-    let ratingCount = 0;
-
-    data.forEach(row => {
-      const category = row.category || row.Category;
-      const rating = row.rating || row['Overall Rating'];
-      
-      if (category) categories.add(category);
-      if (rating && !isNaN(parseFloat(rating))) {
-        totalRating += parseFloat(rating);
-        ratingCount++;
-      }
-    });
-
+    const categories = new Set(data.map((poi) => poi.category).filter(Boolean));
+    const districts = new Set(data.map((poi) => poi.district).filter(Boolean));
+    const rated = data.filter((poi) => typeof poi.rating === 'number');
     const numCategories = categories.size;
-    const avgRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : 0;
-    // We mock districts if it's not in the CSV directly (from address)
-    const numDistricts = 7; 
+    const avgRating = rated.length
+      ? (rated.reduce((sum, poi) => sum + poi.rating, 0) / rated.length).toFixed(1)
+      : null;
+    const numDistricts = districts.size;
 
     // Return first 50 items for table to avoid huge payload
     const sampleData = data.slice(0, 50).map(row => ({
-      id: row.place_id || row.RestaurantID || Math.random().toString(36).substring(7),
-      name: row.name || row['Restaurant Name'],
-      address: row.address || row.Address,
-      category: row.category || row.Category,
-      rating: row.rating || row['Overall Rating'],
-      price: row.price_range || row.Price || 'Chưa cập nhật',
-      lat: row.lat || row.Lat,
-      lng: row.lng || row.Lon
+      id: row.id,
+      globalId: row.globalId,
+      sourceId: row.sourceId,
+      name: row.name,
+      address: row.address || null,
+      category: row.category,
+      rating: row.rating,
+      price: row.price || 'Chua cap nhat',
+      lat: row.lat,
+      lng: row.lon,
+      cityId: row.cityId
     }));
 
     res.json({
@@ -95,7 +82,12 @@ app.get('/api/eda', async (req, res) => {
         totalPOIs,
         numDistricts,
         numCategories,
-        avgRating
+        avgRating,
+        source: normalizedSource
+      },
+      quality: {
+        dataset: quality.dataset,
+        totals: quality.totals,
       },
       sampleData
     });
