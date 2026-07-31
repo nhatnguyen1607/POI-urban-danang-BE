@@ -1646,3 +1646,95 @@ Use this prompt after adding this file to the repositories:
 # 19. Fourth Codex execution prompt — traveler experience
 
 > Implement the traveler-focused API v2 and UI rebuild. Use a split itinerary/map layout inspired by mature trip planners, but apply the UrbanAgent coastal tourism design system. Add guest preview, editable timeline, route stats, warnings, alternatives, share/save, and mobile map/itinerary switching. Remove generic AI gradients and dashboard styling from traveler pages. Add the lightweight Da Nang 3D-like hero media component with video/poster/reduced-motion fallbacks. Keep `/partners` separate and do not surface seller tools in traveler navigation.
+
+---
+
+# 20. Multi-source POI governance
+
+Status: future strategy only. Implementation is not started.
+
+The approved Phase 2 runtime and evaluation baseline remains the Da Nang
+canonical dataset:
+
+- `data/canonical/urbanagent_poi_master_v1.csv`
+- application POIs: `4166`
+- unique `Global_ID`: `4166`
+- SHA-256:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`
+- CSV repository remains the default runtime.
+- PostgreSQL/PostGIS remains explicit opt-in.
+- No second City Pack is approved in Phase 2.
+
+Future multi-source POI expansion is governed by:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+- `docs/rebuild/DECISIONS.md`
+
+No external POI source may be added, ingested, scraped, persisted, cached,
+exposed, trained on, redistributed, or used to change the canonical runtime
+without an explicit approved source onboarding decision.
+
+Required approval phrase before any source spike:
+
+`APPROVED MULTI-SOURCE POI SPIKE`
+
+Every source onboarding proposal must define:
+
+- source owner and documentation,
+- active license or contract version,
+- allowed storage, caching, display, API redistribution, export, commercial
+  use, machine-learning use, and derived-use rules,
+- attribution requirements,
+- refresh, deletion, termination, and stale-record rules,
+- cost and rate limits,
+- data-quality sample,
+- security and privacy classification,
+- isolated dry-run plan,
+- rollback plan.
+
+Competitor products such as Wanderlog, Mindtrip, Layla, Tripadvisor pages, Yelp
+pages, Google Maps pages, or similar commercial products must not be scraped or
+copied as substitute POI sources. They may be used only for product-pattern
+benchmarking unless a separate licensed data agreement explicitly permits a
+specific data use.
+
+Future POI expansion should use layered source classes:
+
+1. persistent open sources with compatible licenses,
+2. licensed or request-time restricted commercial enrichment,
+3. UrbanAgent-owned or directly licensed local enrichment,
+4. evidence-backed derived intelligence with retained provenance.
+
+External identifiers must remain namespaced source identifiers. They do not
+replace `Global_ID` and do not create independent traveler POIs unless entity
+resolution concludes that they are separate physical or logical places.
+
+Every imported, enriched, or derived field should retain source, observed
+value, timestamps, license or contract class, attribution requirements,
+persistence class, expiration or refresh policy, transformation history,
+confidence, and status.
+
+Entity resolution must use multiple signals such as distance, normalized name,
+aliases, address, phone, website, category compatibility, existing identifiers,
+and verification evidence. Name match alone is insufficient. Ambiguous POIs
+must not be automatically merged.
+
+Every multi-source spike must produce reports for exact matches, fuzzy matches,
+ambiguity, probable new entities, duplicates, source conflicts, licenses,
+attribution, field completeness, stale or removed records, and cost.
+
+Restricted provider payloads must not be committed to Git, included in Git
+bundles, placed in public fixtures, exposed through public APIs, or shown to
+clients unless the source policy explicitly permits that use.
+
+Frontend and future mobile clients must consume UrbanAgent backend API
+contracts rather than call external POI providers directly. Clients must keep
+unknown data visibly unknown and must not convert null rating, review count,
+district, route distance, opening hours, freshness, or verification status into
+fabricated display claims.
+
+This governance does not approve external ingestion, production source sync,
+canonical CSV replacement, global coverage, a second city, mobile
+implementation, booking integration, partner monetization, or production
+PostgreSQL cutover.

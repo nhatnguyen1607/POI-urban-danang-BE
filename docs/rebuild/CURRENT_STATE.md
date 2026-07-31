@@ -228,3 +228,35 @@ Phase 2 Batch 1 validation:
 User review of Phase 2 Batch 1 implementation and validation.
 
 Do not start Phase 2 Batch 2 until the user explicitly approves it.
+
+## Future Multi-Source POI Direction
+
+A future multi-source POI and City Pack strategy has been documented.
+
+No multi-source implementation has started.
+
+Current runtime remains:
+
+- Da Nang only,
+- 4166 canonical application POIs,
+- canonical CSV unchanged,
+- CSV default,
+- PostgreSQL opt-in.
+
+Phase 2 continues on the fixed canonical baseline.
+
+No Overture, OpenStreetMap, Wikidata, Google Places, Foursquare, Tripadvisor,
+booking-provider, or competitor data has been added to runtime.
+
+New planning documents:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+The backend and frontend `URBANAGENT_CODEX_CONTEXT.md` files now contain the
+same shared multi-source governance section.
+
+The next source-expansion action requires explicit approval after Phase 2 work
+is safely paused or completed.
+
+Mobile product work has not started.

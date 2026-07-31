@@ -109,3 +109,76 @@ Do not state that a phase is complete unless:
 - documentation is updated,
 - existing compatibility is checked,
 - remaining failures are reported honestly.
+
+## External POI Source Guardrails
+
+No agent may add, ingest, scrape, persist, cache, expose, train on, or
+redistribute a new external POI source without an explicit approved source
+onboarding decision.
+
+Before changing code for a new source, the agent must read:
+
+- `URBANAGENT_CODEX_CONTEXT.md`
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/CURRENT_STATE.md`
+
+A source onboarding proposal must include:
+
+- source owner,
+- source documentation,
+- license or contract version,
+- allowed storage,
+- allowed caching,
+- allowed display,
+- allowed API redistribution,
+- attribution requirements,
+- ML and derived-use rules,
+- refresh and deletion rules,
+- estimated cost,
+- rate limits,
+- data-quality sample,
+- security classification,
+- dry-run plan,
+- rollback plan.
+
+Never scrape Wanderlog, Google Maps, Tripadvisor, Yelp, Mindtrip, Layla, or
+another commercial or competitor product as a substitute for an approved API,
+open dataset, direct agreement, or licensed source.
+
+No source-expansion work may change:
+
+- the canonical CSV,
+- the canonical SHA-256,
+- the approved application POI count,
+- the default runtime repository,
+
+during an active Phase 2 batch.
+
+Every multi-source spike must be isolated and reversible.
+
+Every spike must produce:
+
+- exact-match report,
+- fuzzy-match report,
+- ambiguity report,
+- probable-new-entity report,
+- duplicate report,
+- source-conflict report,
+- license report,
+- attribution report,
+- field-completeness report,
+- cost report.
+
+Do not automatically merge ambiguous POIs.
+
+Do not invent missing ratings, reviews, opening hours, addresses, freshness,
+coordinates, or provider identifiers.
+
+Restricted provider payloads must not be committed to Git, included in Git
+bundles, placed in public fixtures, or exposed through public APIs.
+
+Required approval phrase before any source spike:
+
+`APPROVED MULTI-SOURCE POI SPIKE`

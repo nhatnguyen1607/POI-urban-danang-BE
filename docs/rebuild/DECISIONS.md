@@ -254,3 +254,50 @@ Updated: 2026-07-26 16:35:00 +07:00.
 - Decide whether a Firebase emulator is required for conditional persistence
   tests.
 - Decide what process and reviewers will create the curated query fixture.
+
+## Decision - Future Multi-Source POI Architecture
+
+Date: 2026-07-31.
+
+Status: `APPROVED AS DOCUMENTED FUTURE DIRECTION`.
+
+UrbanAgent will retain the current 4166-POI Da Nang canonical dataset as the
+fixed Phase 2 runtime and evaluation baseline.
+
+Future data expansion will use a layered architecture:
+
+1. approved persistent open sources,
+2. licensed or request-time commercial enrichment,
+3. UrbanAgent-owned local enrichment,
+4. evidence-backed derived intelligence.
+
+The existing application `Global_ID` remains the legacy canonical POI key.
+
+External identifiers remain namespaced source identifiers and do not create
+independent product POIs without entity resolution.
+
+No external source may be ingested without license, storage, display,
+redistribution, attribution, deletion, refresh, cost, security, and quality
+review.
+
+Competitor products, including Wanderlog, Mindtrip, and Layla, are approved
+for benchmarking only and are prohibited as scraped POI sources.
+
+Phase 2 must not:
+
+- change the canonical dataset,
+- change the 4166 application POI baseline,
+- add a second city,
+- introduce a source ingestion pipeline,
+- claim global coverage.
+
+Detailed governance:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+Implementation requires a separate approval:
+
+`APPROVED MULTI-SOURCE POI SPIKE`
+
+Mobile product design remains deferred and is not part of this decision.

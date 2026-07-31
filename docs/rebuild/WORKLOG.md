@@ -1371,3 +1371,57 @@ Results:
 - Test totals: 22 tests, 21 passed, 0 failed, 1 skipped.
 - Skipped test remains the existing guarded Phase 1 disposable PostGIS
   integration test when DB integration env vars are absent.
+
+## 2026-07-31 - Multi-Source POI Strategy Documentation Completion
+
+Type: documentation-only planning repair in clean clones.
+
+Context:
+
+- Phase 2 continues to use the approved 4166-POI Da Nang canonical baseline.
+- No source expansion was added to an active implementation batch.
+- Mobile product design remains deferred.
+- The original backend and frontend working copies were read only.
+- Corrected documentation work was performed in clean clones under `C:\tmp`.
+
+Created in the backend documentation clone:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+Updated in the backend documentation clone:
+
+- `AGENTS.md`
+- `URBANAGENT_CODEX_CONTEXT.md`
+- `docs/rebuild/MASTER_PLAN.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/WORKLOG.md`
+
+Updated in the frontend documentation clone:
+
+- `AGENTS.md`
+- `URBANAGENT_CODEX_CONTEXT.md`
+
+Corrections:
+
+- Completed `DATA_SOURCE_LICENSE_POLICY.md`; the registry code fence is closed
+  and the policy now includes approval status, provider guardrails,
+  attribution, storage/cache/deletion, ML/derived-use, security/privacy,
+  dry-run, Phase 2 freeze, and approval-gate sections.
+- Added the same shared multi-source governance section to both backend and
+  frontend `URBANAGENT_CODEX_CONTEXT.md`.
+- Backend and frontend context files now remain equivalent after the shared
+  governance addition.
+- Recorded that future source expansion requires:
+  `APPROVED MULTI-SOURCE POI SPIKE`.
+
+No application source, tests, migrations, package files, OpenAPI runtime
+artifacts, canonical data, runtime configuration, frontend implementation code,
+or mobile code was changed.
+
+No external POI source was downloaded, queried, sampled, scraped, or ingested.
+
+No production database or Firebase production resource was accessed.
+
+No multi-source implementation, Phase 2 Batch 3, commit, or push occurred.
