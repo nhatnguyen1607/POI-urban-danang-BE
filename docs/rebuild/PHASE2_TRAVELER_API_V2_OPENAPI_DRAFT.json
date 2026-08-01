@@ -1589,7 +1589,9 @@
           "feasibilityStatus",
           "stops",
           "warnings",
-          "provenance"
+          "provenance",
+          "explanation",
+          "dataFreshness"
         ],
         "properties": {
           "tripId": {
@@ -1713,6 +1715,63 @@
           },
           "contract": {
             "$ref": "#/components/schemas/TripPreviewContractVersions"
+          },
+          "explanation": {
+            "type": "object",
+            "required": [
+              "summary",
+              "reasonCodes"
+            ],
+            "properties": {
+              "summary": {
+                "type": "string",
+                "description": "Public-safe deterministic explanation for the preview outcome."
+              },
+              "reasonCodes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Machine-readable public-safe reason codes for the preview summary."
+              }
+            }
+          },
+          "dataFreshness": {
+            "type": "object",
+            "required": [
+              "source",
+              "observedAt",
+              "lastVerifiedAt",
+              "status"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "canonical_dataset"
+                ]
+              },
+              "observedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Null in Batch 3 when source freshness is unknown in the approved runtime data."
+              },
+              "lastVerifiedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Null in Batch 3 when source verification time is unknown in the approved runtime data."
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "unknown"
+                ]
+              }
+            }
           }
         }
       },
@@ -1773,7 +1832,6 @@
             "type": "string",
             "enum": [
               "requested",
-              "poi_specific",
               "category_default",
               "fallback"
             ]
@@ -1811,7 +1869,8 @@
           "estimationMethod",
           "estimationPolicyVersion",
           "distanceKnown",
-          "travelTimeKnown"
+          "travelTimeKnown",
+          "warnings"
         ],
         "properties": {
           "distanceMeters": {
@@ -1883,6 +1942,13 @@
           },
           "travelTimeKnown": {
             "type": "boolean"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewWarning"
+            },
+            "description": "Public-safe leg-level warnings such as missing origin, missing coordinates, or estimated travel time."
           }
         }
       },

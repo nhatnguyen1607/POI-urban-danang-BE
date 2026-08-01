@@ -225,6 +225,11 @@ function addUnscheduled(unscheduled, item) {
   });
 }
 
+function publicTravelLeg(leg) {
+  const { legOrder, ...publicLeg } = leg;
+  return publicLeg;
+}
+
 function routeSummaryFromLegs(stops) {
   const legs = stops.map((stop) => stop.travelFromPrevious);
   const knownLegs = legs.filter((leg) => leg.distanceKnown && leg.travelTimeKnown);
@@ -416,15 +421,10 @@ function scheduleCandidates({ candidates, request, mustIncludeIds }) {
       durationMinutes: duration.durationMinutes,
       durationSource: duration.durationSource,
       durationPolicyVersion: DURATION_POLICY_VERSION,
-      durationPolicyCategory: duration.policyCategory,
-      travelFromPrevious: leg,
+      travelFromPrevious: publicTravelLeg(leg),
       reason: candidate.reason,
       reasonCodes: [...new Set([...candidate.reasonCodes, 'route_preview'])],
       warnings: warningCodes(stopWarningObjects),
-      recommendation: {
-        score: candidate.score,
-        source: candidate.selectionSource,
-      },
     };
     targetDay.stops.push(stop);
     targetDay.warnings.push(...stopWarningObjects);
@@ -674,11 +674,6 @@ async function buildTripPreview(request) {
         durationPolicyVersion: DURATION_POLICY_VERSION,
         travelPolicyVersion: TRAVEL_POLICY_VERSION,
       },
-      recommendationSummary: {
-        candidateLimit: request.recommendationOptions.limit,
-        candidateCount: recommendations.recommendations.length,
-        query: recommendations.query,
-      },
     },
   };
 }
@@ -692,4 +687,5 @@ module.exports = {
   normalizeOpeningHours,
   parseTimeToMinutes,
   policyCategoryForPoi,
+  scheduleCandidates,
 };
