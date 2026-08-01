@@ -331,3 +331,102 @@ Implementation requires a separate approval:
 `APPROVED MULTI-SOURCE POI SPIKE`
 
 Mobile product design remains deferred and is not part of this decision.
+
+## Proposed Decision - Phase 2 Batch 3 Trip Preview Design
+
+Date: 2026-08-01.
+
+Status: `PROPOSED - PENDING USER APPROVAL`.
+
+UrbanAgent proposes Phase 2 Batch 3 as a backend-only, stateless Traveler API
+v2 trip preview endpoint:
+
+`POST /api/v2/trips/preview`
+
+Proposed decisions:
+
+- Trip preview is non-persistent.
+- Trip preview reuses Phase 2 Batch 2 recommendation scoring as its candidate
+  generator.
+- Itinerary construction is deterministic.
+- Stop durations use the versioned Batch 3 duration policy:
+  requested duration, approved POI-specific duration, category default, then
+  global fallback.
+- Requested `durationMinutes` range is 15 to 480 minutes.
+- `maxStopsPerDay` is 1 to 6, with defaults by pace:
+  `relaxed=3`, `balanced=4`, `packed=6`.
+- `dayCount` is 1 to 7 to keep MVP preview bounded and testable.
+- Known travel legs use local haversine estimation only.
+- Missing-origin first leg remains unknown:
+  `distanceMeters: null`, `travelDurationMinutes: null`,
+  `estimationMethod: null`; `calculationSource: "missing-origin"` is allowed
+  only as an explanatory field.
+- Travel from an unknown origin to the first stop is not included in schedule
+  feasibility.
+- Opening-hours behavior is conservative: use only approved runtime data,
+  otherwise emit deterministic warnings and do not fabricate hours.
+- Warnings are machine-readable, deterministic, and traveler-safe.
+- `NO_FEASIBLE_ITINERARY` is limited to structurally valid requests with
+  impossible hard constraints.
+- No persistence, saved trips, itinerary mutation, feedback persistence,
+  external routing provider, frontend implementation, mobile implementation,
+  second city, or external POI integration is included.
+
+Required implementation approval phrase:
+
+`APPROVED PHASE 2 BATCH 3`
+
+The phrase appearing inside this documentation does not itself grant approval.
+
+Implementation has not started and user approval has not been granted.
+
+## Approval Event - Phase 2 Batch 3 Trip Preview Design
+
+Date: 2026-08-01.
+
+Status: `APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+
+User approval phrase:
+
+`APPROVED PHASE 2 BATCH 3`
+
+This approval officializes the documented Phase 2 Batch 3 Trip Preview design
+for implementation planning after the documentation is committed, reviewed,
+merged, and post-merge validated.
+
+Approved design boundaries:
+
+- backend Traveler API v2 design for `POST /api/v2/trips/preview`,
+- non-persistent trip preview,
+- Da Nang-only canonical 4166-POI baseline,
+- reuse of Batch 2 deterministic recommendations,
+- deterministic day allocation and stop ordering,
+- versioned duration policy,
+- local haversine travel-time estimates,
+- conservative opening-hours handling,
+- normalized warning severity enum: `info`, `warning`, `error`,
+- explicit `FEASIBLE`, `FEASIBLE_WITH_WARNINGS`, `PARTIAL`, and
+  `INFEASIBLE` status semantics,
+- narrow HTTP 422 `NO_FEASIBLE_ITINERARY` semantics,
+- deterministic evaluation gates.
+
+Implementation still has not started.
+
+This approval does not authorize:
+
+- external POI ingestion,
+- multi-source implementation,
+- frontend or mobile implementation,
+- production database cutover,
+- Firebase production access,
+- additional cities,
+- trip persistence,
+- saved trips,
+- trip mutation,
+- booking,
+- payments.
+
+The following approvals remain not granted:
+
+- `APPROVED MULTI-SOURCE POI SPIKE`
+- `APPROVED DATA SOURCE LICENSE POLICY`

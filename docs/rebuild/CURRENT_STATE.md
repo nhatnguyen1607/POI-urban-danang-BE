@@ -1,25 +1,26 @@
 # Current State
 
-Updated: 2026-08-01 13:17:32 +07:00.
+Updated: 2026-08-01 15:48:48 +07:00.
 
 ## Phase
 
-`PHASE_2_BATCH_2_MERGED_MULTI_SOURCE_DOCS_SYNC_PENDING_REVIEW`
+`PHASE_2_BATCH_3_DESIGN_APPROVED_DOCUMENTATION_PENDING_MERGE`
 
-Phase 2 Batch 2 has been merged into `main` and tagged
-`phase-2-batch-2`. The current documentation branch
-`docs/multi-source-poi-governance` is being synchronized onto the merged Batch
-2 baseline for Draft PR #5 review only.
+Phase 2 Batch 1 and Batch 2 are completed, merged, validated, and tagged.
+Phase 2 Batch 3 Trip Preview design is approved through
+`APPROVED PHASE 2 BATCH 3`. Documentation is not yet merged at the start of
+this officialization task.
 
 Completed Batch 2 scope is limited to Traveler API v2 recommendation endpoint
 coverage, public recommendation serialization, `reasonCodes`, deterministic
 recommendation ordering, a recommendation smoke/evaluation fixture foundation,
 OpenAPI update, and focused backend tests.
 
-No itinerary preview v2 endpoint, trip persistence, trip edit/replan, feedback
-persistence, PostgreSQL default-runtime switch, frontend source change,
-production database access, Firebase production access, Phase 2 Batch 3 work,
-or later-phase work has been started.
+`POST /api/v2/trips/preview` is not implemented. Runtime remains Batch 2.
+No trip persistence, trip edit/replan, feedback persistence, PostgreSQL
+default-runtime switch, frontend source change, mobile work, production
+database access, Firebase production access, external POI integration, or
+later-phase work has been started.
 
 ## Repository State
 
@@ -61,6 +62,11 @@ Frontend repository:
   - `Global_ID` remains canonical key
   - `google_maps+foody` provenance preserved
   - urban-void rows excluded from traveler runtime counts
+
+Backend runtime remains Da Nang only. The approved application POI count
+remains `4166`, and the canonical SHA-256 remains
+`5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+CSV remains the default runtime. PostgreSQL/PostGIS remains explicit opt-in.
 
 ## Phase 1 Status
 
@@ -145,6 +151,7 @@ Implemented Batch 1 behavior:
   `reasonCodes`, `warnings`, and POI provenance, and omits raw scoring signals.
 - Recommendation v2 uses deterministic tie-breaking by score descending,
   normalized name ascending, and canonical `Global_ID` ascending.
+- `POST /api/v2/trips/preview`: not implemented.
 
 ## New Phase 2 Planning Artifacts
 
@@ -201,6 +208,36 @@ Updated in this batch:
 - `docs/rebuild/WORKLOG.md` appended only
 - `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
 - `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+
+## Phase 2 Batch 3 Design Package
+
+Status:
+
+`APPROVED - DOCUMENTATION PENDING MERGE`
+
+Authoritative documents:
+
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+
+Integrated canonical documents:
+
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+- `docs/rebuild/MASTER_PLAN.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/WORKLOG.md`
+
+Design approval has been granted through `APPROVED PHASE 2 BATCH 3`.
+Documentation must be merged and post-merge validated before runtime
+implementation begins. Runtime implementation has not started.
+
+No frontend or mobile Batch 3 work has started.
 
 ## Build/Test Status
 

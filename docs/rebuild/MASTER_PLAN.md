@@ -13,8 +13,26 @@ Phase 2 planning artifacts:
 - `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
 - `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
 
+Phase 2 Batch 3 Trip Preview design package:
+
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+
 All Phase 2 API v2 architecture in this master plan remains `PROPOSED FOR
 PHASE 2` until implemented and tested in a later approved batch.
+
+Phase 2 Batch 3 status:
+
+`APPROVED - DOCUMENTATION PENDING MERGE`
+
+Phase 2 Batch 1 is completed. Phase 2 Batch 2 is completed. Phase 2 Batch 3
+design has been approved through `APPROVED PHASE 2 BATCH 3`, but documentation
+is pending merge and post-merge validation. Runtime implementation has not
+started. Multi-source implementation has not started. Frontend and mobile
+Batch 3 work have not started.
 
 ## 1. Current Architecture
 
@@ -268,9 +286,10 @@ Phase 0 blocker criteria now verified:
 - legacy root expert-system CSV dependency removed.
 - backend tests pass from `tests/phase0/`.
 
-Phase 1 is complete through Batch 3. Phase 2 is approved for planning and
-specification only; implementation remains pending user review of the Phase 2
-scope/contract/evaluation artifacts.
+Phase 1 is complete through Batch 3. Phase 2 Batch 1 and Batch 2 are complete.
+Phase 2 Batch 3 trip-preview design is approved for implementation planning
+through `APPROVED PHASE 2 BATCH 3`, but documentation is pending merge and
+post-merge validation. Batch 3 runtime implementation has not started.
 
 ## Future Data Platform Expansion - Multi-Source City Packs
 
