@@ -1,0 +1,478 @@
+{
+  "fixtureVersion": "phase2-trip-preview-smoke-v1",
+  "datasetSha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+  "contractVersion": "phase2-batch3-trip-preview-v1",
+  "cityId": "da-nang",
+  "notes": [
+    "These fixtures validate deterministic software behavior only.",
+    "They are not a travel-quality benchmark and must not be used for scientific superiority claims.",
+    "Fixtures use canonical Global_ID values only and do not include restricted provider payloads."
+  ],
+  "cases": [
+    {
+      "id": "one-day-balanced-trip",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "date": "2026-08-15",
+          "startTime": "14:00",
+          "durationMinutes": 300,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "startLocation": {
+          "lat": 16.0678,
+          "lon": 108.2208,
+          "label": "hotel"
+        },
+        "constraints": {
+          "maxStopsPerDay": 3
+        },
+        "recommendationOptions": {
+          "limit": 8
+        }
+      },
+      "expectedInvariants": [
+        "ok",
+        "nonempty_stops",
+        "known_first_leg",
+        "no_persistent_trip_id"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED",
+        "TRAVEL_TIME_ESTIMATED"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "multi-day-balanced-trip",
+      "input": {
+        "cityId": "da-nang",
+        "query": "cafe restaurant shopping",
+        "trip": {
+          "date": "2026-08-15",
+          "startTime": "09:00",
+          "dayCount": 2,
+          "transport": "motorbike",
+          "pace": "balanced",
+          "dailyWindow": {
+            "start": "09:00",
+            "end": "14:00"
+          }
+        },
+        "constraints": {
+          "maxStopsPerDay": 2
+        },
+        "recommendationOptions": {
+          "limit": 8
+        }
+      },
+      "expectedInvariants": [
+        "two_days",
+        "no_duplicate_stops"
+      ],
+      "expectedWarnings": [
+        "ORIGIN_NOT_PROVIDED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "food-focused-trip",
+      "input": {
+        "cityId": "da-nang",
+        "query": "nha hang hai san dia phuong",
+        "trip": {
+          "startTime": "11:00",
+          "durationMinutes": 240,
+          "transport": "taxi",
+          "pace": "relaxed"
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "nonempty_stops"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "culture-landmark-focused-trip",
+      "input": {
+        "cityId": "da-nang",
+        "query": "dia diem check in van hoa landmark",
+        "trip": {
+          "startTime": "08:30",
+          "durationMinutes": 240,
+          "transport": "car",
+          "pace": "balanced"
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "nonempty_stops"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "family-friendly-trip",
+      "input": {
+        "cityId": "da-nang",
+        "query": "gia dinh tre em an uong nhe nha",
+        "trip": {
+          "startTime": "10:00",
+          "durationMinutes": 240,
+          "transport": "car",
+          "pace": "relaxed",
+          "party": {
+            "adults": 2,
+            "children": 1
+          }
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "nonempty_stops"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "tight-daily-window",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "date": "2026-08-15",
+          "transport": "motorbike",
+          "pace": "packed",
+          "dailyWindow": {
+            "start": "14:00",
+            "end": "15:00"
+          }
+        },
+        "constraints": {
+          "maxStopsPerDay": 4
+        },
+        "recommendationOptions": {
+          "limit": 10
+        }
+      },
+      "expectedInvariants": [
+        "schedule_no_overflow"
+      ],
+      "expectedWarnings": [
+        "DAILY_WINDOW_TIGHT"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "must-include-known-poi",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 240,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "constraints": {
+          "mustIncludePoiIds": [
+            "google_maps_34"
+          ],
+          "maxStopsPerDay": 3
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "must_include_scheduled"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "excluded-pois",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 240,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "constraints": {
+          "excludePoiIds": [
+            "google_maps_34",
+            "google_maps_34"
+          ],
+          "maxStopsPerDay": 3
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "excluded_absent",
+        "duplicate_ids_normalized"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "missing-opening-hours",
+      "input": {
+        "cityId": "da-nang",
+        "query": "cafe nho",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 120,
+          "transport": "walk",
+          "pace": "relaxed"
+        },
+        "constraints": {
+          "mustIncludePoiIds": [
+            "google_maps_34"
+          ],
+          "maxStopsPerDay": 1
+        },
+        "recommendationOptions": {
+          "limit": 3
+        }
+      },
+      "expectedInvariants": [
+        "opening_hours_unknown"
+      ],
+      "expectedWarnings": [
+        "OPENING_HOURS_UNKNOWN"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "missing-coordinates-degraded-geography",
+      "input": {
+        "syntheticOnly": true
+      },
+      "expectedInvariants": [
+        "missing_coordinates_warning"
+      ],
+      "expectedWarnings": [
+        "COORDINATES_MISSING"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "insufficient-candidates",
+      "input": {
+        "cityId": "da-nang",
+        "query": "zzzzzzzz non matching deterministic query",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 120,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "recommendationOptions": {
+          "limit": 3
+        }
+      },
+      "expectedInvariants": [
+        "infeasible_allowed"
+      ],
+      "expectedWarnings": [
+        "INSUFFICIENT_CANDIDATES"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "impossible-hard-constraints",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 120,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "constraints": {
+          "mustIncludePoiIds": [
+            "google_maps_34"
+          ],
+          "excludePoiIds": [
+            "google_maps_34"
+          ],
+          "maxStopsPerDay": 1
+        },
+        "recommendationOptions": {
+          "limit": 3
+        }
+      },
+      "expectedError": "NO_FEASIBLE_ITINERARY"
+    },
+    {
+      "id": "deterministic-tie-case",
+      "input": {
+        "syntheticOnly": true
+      },
+      "expectedInvariants": [
+        "global_id_tie_break"
+      ],
+      "expectedFeasibility": "FEASIBLE"
+    },
+    {
+      "id": "duplicate-alias-risk",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 240,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "constraints": {
+          "mustIncludePoiIds": [
+            "google_maps_34",
+            "google_maps_34"
+          ],
+          "maxStopsPerDay": 3
+        },
+        "recommendationOptions": {
+          "limit": 6
+        }
+      },
+      "expectedInvariants": [
+        "no_duplicate_stops"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "partial-preview",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "09:00",
+          "durationMinutes": 90,
+          "transport": "motorbike",
+          "pace": "packed"
+        },
+        "constraints": {
+          "maxStopsPerDay": 4
+        },
+        "recommendationOptions": {
+          "limit": 8
+        }
+      },
+      "expectedInvariants": [
+        "partial_has_unscheduled_explanations"
+      ],
+      "expectedWarnings": [
+        "PARTIAL_PREVIEW"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "missing-origin",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "14:00",
+          "durationMinutes": 240,
+          "transport": "motorbike",
+          "pace": "relaxed"
+        },
+        "constraints": {
+          "maxStopsPerDay": 2
+        },
+        "recommendationOptions": {
+          "limit": 5
+        }
+      },
+      "expectedInvariants": [
+        "missing_origin_first_leg_null"
+      ],
+      "expectedWarnings": [
+        "ORIGIN_NOT_PROVIDED"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    },
+    {
+      "id": "duration-override",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "14:00",
+          "durationMinutes": 180,
+          "transport": "motorbike",
+          "pace": "balanced"
+        },
+        "constraints": {
+          "maxStopsPerDay": 3
+        },
+        "recommendationOptions": {
+          "limit": 8
+        }
+      },
+      "expectedInvariants": [
+        "duration_budget_applied"
+      ],
+      "expectedWarnings": [
+        "DURATION_ESTIMATED"
+      ],
+      "expectedFeasibility": "PARTIAL"
+    },
+    {
+      "id": "max-stops-application",
+      "input": {
+        "cityId": "da-nang",
+        "query": "quan cafe yen tinh",
+        "trip": {
+          "startTime": "14:00",
+          "durationMinutes": 300,
+          "transport": "motorbike",
+          "pace": "packed"
+        },
+        "constraints": {
+          "maxStopsPerDay": 1
+        },
+        "recommendationOptions": {
+          "limit": 8
+        }
+      },
+      "expectedInvariants": [
+        "max_stops_respected"
+      ],
+      "expectedWarnings": [
+        "MAX_STOPS_APPLIED"
+      ],
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS"
+    }
+  ]
+}
