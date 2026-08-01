@@ -204,6 +204,7 @@ test('Phase 2 OpenAPI draft is limited to approved implemented core endpoints', 
     '/api/v2/pois/search',
     '/api/v2/pois/{poiId}',
     '/api/v2/recommendations',
+    '/api/v2/trips/preview',
   ]);
 
   for (const forbidden of [
@@ -215,7 +216,10 @@ test('Phase 2 OpenAPI draft is limited to approved implemented core endpoints', 
     'PostgresPoiRepository',
     'poi_entities',
     'RestaurantID',
-    '/api/v2/trips',
+    '/api/v2/trips/{tripId}',
+    '/api/v2/trips/{tripId}/replan',
+    '/api/v2/trips/{tripId}/stops',
+    '/api/v2/feedback',
   ]) {
     assert.equal(artifactText.includes(forbidden), false, `${forbidden} must not appear in the public artifact`);
   }

@@ -3,8 +3,8 @@
   "info": {
     "title": "UrbanAgent Traveler API v2",
     "version": "phase2-traveler-api-v2-draft-1",
-    "summary": "Batch 2 traveler API v2 contract for city metadata, POI search, POI detail, and recommendations.",
-    "description": "This draft covers approved Phase 2 Batch 1 and Batch 2 core endpoints. Itinerary preview, persistence, edit, replan, feedback, booking, live opening hours, and production database rollout endpoints are intentionally excluded."
+    "summary": "Traveler API v2 contract for city metadata, POI search, POI detail, recommendations, and stateless trip preview.",
+    "description": "This draft covers approved Phase 2 Batch 1, Batch 2, and Batch 3 core endpoints. Trip persistence, saved trips, edit, replan, feedback persistence, booking, live opening hours, external routing, external POI ingestion, and production database rollout endpoints are intentionally excluded."
   },
   "servers": [
     {
@@ -310,6 +310,106 @@
           },
           "422": {
             "$ref": "#/components/responses/CityNotSupported"
+          }
+        }
+      }
+    },
+    "/api/v2/trips/preview": {
+      "post": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "Create a deterministic non-persistent trip preview.",
+        "operationId": "createTravelerTripPreviewV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripPreviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trip preview response. May be feasible, feasible with warnings, partial, or infeasible.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/TripPreviewResponse"
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/CityMeta"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "422": {
+            "description": "Unsupported city or impossible hard trip constraints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "cityNotSupported": {
+                    "value": {
+                      "ok": false,
+                      "error": {
+                        "code": "CITY_NOT_SUPPORTED",
+                        "message": "Only da-nang is supported in this release.",
+                        "details": {
+                          "cityId": "hue"
+                        }
+                      },
+                      "meta": {
+                        "apiVersion": "v2",
+                        "requestId": "req_example"
+                      }
+                    }
+                  },
+                  "noFeasibleItinerary": {
+                    "value": {
+                      "ok": false,
+                      "error": {
+                        "code": "NO_FEASIBLE_ITINERARY",
+                        "message": "The requested hard trip constraints cannot produce a feasible itinerary.",
+                        "details": {
+                          "cityId": "da-nang",
+                          "hardConstraintsSatisfied": false
+                        }
+                      },
+                      "meta": {
+                        "apiVersion": "v2",
+                        "requestId": "req_example",
+                        "cityId": "da-nang"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1288,6 +1388,735 @@
           },
           "status": {
             "const": "unknown"
+          }
+        }
+      },
+      "TripPreviewRequest": {
+        "type": "object",
+        "required": [
+          "cityId",
+          "query"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cityId": {
+            "type": "string",
+            "const": "da-nang"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "trip": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "date": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "startTime": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              },
+              "durationMinutes": {
+                "type": "integer",
+                "minimum": 15,
+                "maximum": 480
+              },
+              "transport": {
+                "type": "string",
+                "enum": [
+                  "walk",
+                  "motorbike",
+                  "car",
+                  "taxi"
+                ],
+                "default": "motorbike"
+              },
+              "pace": {
+                "type": "string",
+                "enum": [
+                  "relaxed",
+                  "balanced",
+                  "packed"
+                ],
+                "default": "balanced"
+              },
+              "dayCount": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 7,
+                "default": 1
+              },
+              "dailyWindow": {
+                "$ref": "#/components/schemas/DailyWindow"
+              },
+              "party": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "budget": {
+                "type": "string",
+                "enum": [
+                  "budget",
+                  "moderate",
+                  "premium",
+                  "unknown"
+                ],
+                "default": "unknown"
+              }
+            }
+          },
+          "startLocation": {
+            "$ref": "#/components/schemas/TripPreviewStartLocation"
+          },
+          "preferences": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/TripPreviewConstraints"
+          },
+          "recommendationOptions": {
+            "$ref": "#/components/schemas/TripPreviewRecommendationOptions"
+          }
+        }
+      },
+      "DailyWindow": {
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "properties": {
+          "start": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "end": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          }
+        },
+        "description": "Same-day local HH:mm window; span must be 15 to 480 minutes."
+      },
+      "TripPreviewStartLocation": {
+        "type": "object",
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TripPreviewConstraints": {
+        "type": "object",
+        "properties": {
+          "mustIncludePoiIds": {
+            "type": "array",
+            "maxItems": 20,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "excludePoiIds": {
+            "type": "array",
+            "maxItems": 100,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxStopsPerDay": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "maxDistanceKm": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      },
+      "TripPreviewRecommendationOptions": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30,
+            "default": 12
+          }
+        }
+      },
+      "TripPreviewResponse": {
+        "type": "object",
+        "required": [
+          "trip"
+        ],
+        "properties": {
+          "trip": {
+            "$ref": "#/components/schemas/TripPreviewTrip"
+          }
+        }
+      },
+      "TripPreviewTrip": {
+        "type": "object",
+        "required": [
+          "tripId",
+          "preview",
+          "persisted",
+          "cityId",
+          "feasibilityStatus",
+          "stops",
+          "warnings",
+          "provenance"
+        ],
+        "properties": {
+          "tripId": {
+            "type": "null",
+            "description": "No persistent trip ID is returned in Batch 3."
+          },
+          "preview": {
+            "type": "boolean",
+            "const": true
+          },
+          "persisted": {
+            "type": "boolean",
+            "const": false
+          },
+          "authenticated": {
+            "type": "boolean",
+            "const": false
+          },
+          "saveEligible": {
+            "type": "boolean",
+            "const": false
+          },
+          "cityId": {
+            "type": "string",
+            "const": "da-nang"
+          },
+          "query": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 15,
+            "maximum": 480
+          },
+          "transport": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "motorbike",
+              "car",
+              "taxi"
+            ]
+          },
+          "pace": {
+            "type": "string",
+            "enum": [
+              "relaxed",
+              "balanced",
+              "packed"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "startTime": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dayCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7
+          },
+          "dailyWindow": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DailyWindow"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timeKnown": {
+            "type": "boolean"
+          },
+          "feasibilityStatus": {
+            "$ref": "#/components/schemas/TripPreviewFeasibilityStatus"
+          },
+          "stops": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewStop"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewDay"
+            }
+          },
+          "routeSummary": {
+            "$ref": "#/components/schemas/TripPreviewRouteSummary"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {}
+          },
+          "unscheduled": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewUnscheduledItem"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewWarning"
+            }
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/TripPreviewProvenance"
+          },
+          "contract": {
+            "$ref": "#/components/schemas/TripPreviewContractVersions"
+          }
+        }
+      },
+      "TripPreviewFeasibilityStatus": {
+        "type": "string",
+        "enum": [
+          "FEASIBLE",
+          "FEASIBLE_WITH_WARNINGS",
+          "PARTIAL",
+          "INFEASIBLE"
+        ]
+      },
+      "TripPreviewStop": {
+        "type": "object",
+        "required": [
+          "stopId",
+          "order",
+          "poi",
+          "durationMinutes",
+          "durationSource",
+          "durationPolicyVersion",
+          "travelFromPrevious",
+          "warnings"
+        ],
+        "properties": {
+          "stopId": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "dayNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7
+          },
+          "poi": {
+            "$ref": "#/components/schemas/TravelerPoi"
+          },
+          "arrivalTime": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "departureTime": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "durationMinutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "durationSource": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "poi_specific",
+              "category_default",
+              "fallback"
+            ]
+          },
+          "durationPolicyVersion": {
+            "type": "string",
+            "const": "phase2-batch3-duration-v1"
+          },
+          "travelFromPrevious": {
+            "$ref": "#/components/schemas/TripPreviewTravelLeg"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "reasonCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewWarningCode"
+            }
+          }
+        }
+      },
+      "TripPreviewTravelLeg": {
+        "type": "object",
+        "required": [
+          "distanceMeters",
+          "travelDurationMinutes",
+          "travelMode",
+          "estimationMethod",
+          "estimationPolicyVersion",
+          "distanceKnown",
+          "travelTimeKnown"
+        ],
+        "properties": {
+          "distanceMeters": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Null when origin or coordinates are unknown."
+          },
+          "travelDurationMinutes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Null when origin or coordinates are unknown."
+          },
+          "transport": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "motorbike",
+              "car",
+              "taxi"
+            ]
+          },
+          "travelMode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "motorbike",
+              "car",
+              "taxi"
+            ]
+          },
+          "estimationMethod": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "local-haversine-estimate",
+              null
+            ]
+          },
+          "estimationPolicyVersion": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "phase2-batch3-travel-time-v1",
+              null
+            ]
+          },
+          "calculationSource": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "local-haversine-estimate",
+              "missing-origin",
+              "missing-coordinates",
+              null
+            ]
+          },
+          "distanceKnown": {
+            "type": "boolean"
+          },
+          "travelTimeKnown": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TripPreviewDay": {
+        "type": "object",
+        "properties": {
+          "dayNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7
+          },
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dailyWindow": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DailyWindow"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "feasibilityStatus": {
+            "$ref": "#/components/schemas/TripPreviewFeasibilityStatus"
+          },
+          "stops": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stopCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unscheduled": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewUnscheduledItem"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewWarning"
+            }
+          }
+        }
+      },
+      "TripPreviewRouteSummary": {
+        "type": "object",
+        "properties": {
+          "totalDistanceKm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "totalTravelMinutes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalStayMinutes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalPlanMinutes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "distanceFullyKnown": {
+            "type": "boolean"
+          },
+          "travelTimeFullyKnown": {
+            "type": "boolean"
+          },
+          "knownLegCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unknownLegCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "calculationSource": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "known",
+              "partial"
+            ]
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripPreviewWarningCode"
+            }
+          }
+        }
+      },
+      "TripPreviewWarningCode": {
+        "type": "string",
+        "enum": [
+          "OPENING_HOURS_CONFLICT",
+          "UNSCHEDULED_MUST_INCLUDE",
+          "COORDINATES_MISSING",
+          "OPENING_HOURS_UNPARSEABLE",
+          "DAILY_WINDOW_TIGHT",
+          "INSUFFICIENT_CANDIDATES",
+          "PARTIAL_PREVIEW",
+          "OPENING_HOURS_UNKNOWN",
+          "DURATION_ESTIMATED",
+          "TRAVEL_TIME_ESTIMATED",
+          "ORIGIN_NOT_PROVIDED",
+          "MAX_STOPS_APPLIED",
+          "BUDGET_DATA_UNKNOWN"
+        ]
+      },
+      "TripPreviewWarning": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message",
+          "scope"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/TripPreviewWarningCode"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "preview",
+              "day",
+              "stop",
+              "leg"
+            ]
+          },
+          "dayNumber": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "stopOrder": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "legOrder": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "poiId": {
+            "type": "string"
+          }
+        }
+      },
+      "TripPreviewUnscheduledItem": {
+        "type": "object",
+        "required": [
+          "reasonCode",
+          "message",
+          "requested"
+        ],
+        "properties": {
+          "poiId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requested": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TripPreviewProvenance": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "canonical"
+          },
+          "datasetVersion": {
+            "type": "string",
+            "const": "urbanagent-poi-master-v1"
+          },
+          "externalLiveDataUsed": {
+            "type": "boolean",
+            "const": false
+          }
+        }
+      },
+      "TripPreviewContractVersions": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "phase2-batch3-trip-preview-v1"
+          },
+          "durationPolicyVersion": {
+            "type": "string",
+            "const": "phase2-batch3-duration-v1"
+          },
+          "travelPolicyVersion": {
+            "type": "string",
+            "const": "phase2-batch3-travel-time-v1"
           }
         }
       }
