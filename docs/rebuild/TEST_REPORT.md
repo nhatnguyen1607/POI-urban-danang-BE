@@ -1001,7 +1001,7 @@ Safety confirmations:
 - No itinerary preview v2, trip persistence/edit/replan, feedback persistence,
   Phase 2 Batch 3, or later-phase work was started.
 
-## Phase 2 Batch 3 - Trip Preview Implementation Validation
+## Phase 2 Batch 3 - Targeted Fix Validation for PR #9
 
 Date: 2026-08-01.
 
@@ -1013,6 +1013,10 @@ Implementation clone:
 
 `C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730`
 
+Status:
+
+`IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`
+
 Scope validated:
 
 - `POST /api/v2/trips/preview`.
@@ -1021,100 +1025,127 @@ Scope validated:
 - Deterministic validation, stop selection, day assignment, geographic
   ordering, duration policy, local Haversine travel estimates, warnings,
   unscheduled explanations, and feasibility statuses.
-- Missing-origin first leg remains `null`/unknown.
+- Missing-origin first leg remains unknown/null and does not fabricate
+  distance, travel time, or coordinates.
 - OpenAPI 3.1 artifact updated for the Batch 3 preview endpoint.
+- Public runtime fields and OpenAPI schema now match exactly for trip, stop,
+  and travel-leg objects.
 - No persistence, replan, mutation, feedback, frontend, mobile, second-city,
   external routing, or external-source route.
 
-Commands run so far:
+Commands run:
 
 ```text
 npm.cmd ci
-node --check src\modules\travelerApiV2\tripPreview.js
-node --check src\modules\travelerApiV2\tripPreviewValidation.js
-node --check src\modules\travelerApiV2\router.js
-node --test tests\phase2\phase2TravelerApiV2Batch3.test.js
-node -e <OpenAPI JSON parse and path list>
-npm.cmd test
 npm.cmd ls --omit=dev --all
 npm.cmd audit --omit=dev
 npm.cmd audit --omit=dev --json
-node -e <18-scenario endpoint smoke script>
+node --check src/server.js and all Traveler API v2 / Phase 2 test JavaScript files
+node --test tests/phase2/phase2TravelerApiV2Batch3.test.js
+npm.cmd test
+node -e <CSV-default endpoint and engine-unit smoke script>
 ```
 
-Results so far:
+Results:
 
-- `npm.cmd ci`: PASS, 298 packages installed from lockfile, 0 vulnerabilities
-  reported by install summary.
+- `npm.cmd ci`: PASS, package files unchanged, 0 vulnerabilities reported by
+  install summary.
 - `npm.cmd ls --omit=dev --all`: PASS, no ELSPROBLEMS.
 - `npm.cmd audit --omit=dev`: PASS, found 0 vulnerabilities.
 - `npm.cmd audit --omit=dev --json`: PASS, total production
   vulnerabilities `0`.
-- Batch 3 focused tests: PASS, 8 tests, 8 passed, 0 failed, 0 skipped.
-- Full default test suite: PASS, 36 tests total, 35 passed, 0 failed,
-  1 skipped.
+- JavaScript syntax checks: PASS, `16` files checked.
+- Batch 3 focused tests: PASS, `10` tests, `10` passed, `0` failed,
+  `0` skipped.
+- Full default test suite: PASS, `38` tests total, `37` passed, `0` failed,
+  `1` skipped.
 - Allowed skip: existing guarded Phase 1 disposable PostGIS integration test
-  when `URBANAGENT_PHASE1_INTEGRATION=true` and disposable DB variables are
-  absent.
-- OpenAPI JSON parse: PASS.
+  when disposable DB variables are absent.
+- OpenAPI JSON parse: PASS, OpenAPI version `3.1.0`.
 - OpenAPI SHA-256:
-  `a6add259e5da16beaba5fc5be4d3e34a542a6077e4bf4a4b9f2d6b8c78788d31`.
+  `0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034`.
 - Canonical CSV SHA-256:
   `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
 - Canonical application POI count: `4166`.
 - CSV default runtime repository: `CanonicalCsvPoiRepository`.
+- PostgreSQL/PostGIS remains explicit opt-in.
 
-Endpoint smoke coverage inside tests:
-
-```text
-POST /api/v2/trips/preview valid one-day preview: PASS
-POST /api/v2/trips/preview repeated deterministic preview: PASS
-missing origin first-leg null behavior: PASS
-known origin first-leg numeric behavior: PASS
-explicit duration budget trimming: PASS
-category-default duration policy: PASS
-excluded POI absent: PASS
-must-include POI handling: PASS
-partial preview with unscheduled explanations: PASS
-NO_FEASIBLE_ITINERARY for impossible hard constraints: PASS
-unsupported city: PASS
-invalid daily window: PASS
-invalid X-Request-Id generates safe request ID: PASS
-valid X-Request-Id echo: PASS
-persistence/replan/stop mutation/feedback routes absent: PASS
-```
-
-Standalone endpoint smoke script:
+Public field reconciliation:
 
 ```text
-valid one-day preview: PASS, 3 stops
-valid multi-day preview: PASS, 2 days
-repeated identical preview: PASS
-missing origin: PASS, distanceMeters null, travelDurationMinutes null,
-  distanceKnown false
-explicit origin: PASS, numeric first-leg distance/time
-explicit duration: PASS
-category-default duration: PASS
-excluded POI: PASS
-must-include POI: PASS
-partial preview: PASS
-infeasible preview: PASS as deterministic PARTIAL with explanations
-impossible hard constraints: PASS, NO_FEASIBLE_ITINERARY
-invalid city: PASS, CITY_NOT_SUPPORTED
-invalid time window: PASS, VALIDATION_ERROR
-invalid X-Request-Id: PASS, generated safe request ID
-valid X-Request-Id: PASS, echoed
-no persistent trip route: PASS, 404
-no replan route: PASS, 404
+trip.explanation: retained and documented in OpenAPI.
+trip.dataFreshness: retained and documented in OpenAPI.
+trip.recommendationSummary: removed from public runtime and OpenAPI.
+stop.durationPolicyCategory: removed from public runtime and OpenAPI.
+stop.recommendation: removed from public runtime and OpenAPI.
+travelFromPrevious.legOrder: removed from public runtime and OpenAPI.
+travelFromPrevious.warnings: retained and documented in OpenAPI.
 ```
 
-Fixture:
+Duration source contract:
+
+```text
+durationSource enum: requested, category_default, fallback
+durationPolicyVersion: phase2-batch3-duration-v1
+poi_specific: removed from active Batch 3 v1 contract; reserved for a future
+contract version only after an approved canonical duration field exists.
+```
+
+Fixture coverage:
 
 - Path: `tests/fixtures/phase2/tripPreviewQueries.json`.
 - Fixture version: `phase2-trip-preview-smoke-v1`.
-- Case count: `18`.
+- Total cases: `18`.
+- Endpoint cases: `16`.
+- Engine-unit synthetic cases: `2`.
+- Execution coverage: `18/18` cases executed with meaningful assertions.
+- Endpoint smoke: PASS, `16/16`.
+- Engine-unit synthetic execution: PASS, `2/2`.
 - Fixture purpose: deterministic software behavior validation, not travel
   quality or scientific superiority proof.
+
+Evaluation metrics:
+
+```text
+deterministic replay rate: 15/15
+exclusion violation rate: 0/1 violations
+duplicate-stop rate: 0/15 duplicates
+hard-constraint satisfaction rate on satisfiable cases: 15/15
+must-include scheduling rate on satisfiable cases: 4/4
+daily-window overflow rate: 0/4 overflows
+known opening-hours conflict rate: 3/3 detected
+unscheduled explanation coverage: 14/14
+warning-code correctness: 16/16
+geographic compactness proxy: 15/15 within <= 80 km or unknown route
+```
+
+Standalone smoke details:
+
+```text
+missing origin: PASS, distanceMeters null, travelDurationMinutes null,
+  distanceKnown false, calculationSource missing-origin
+explicit origin: PASS, first leg distance/time known
+partial preview: PASS
+impossible hard constraints: PASS, NO_FEASIBLE_ITINERARY
+excluded POI: PASS
+must-include POI: PASS
+repeated deterministic request: PASS
+valid X-Request-Id echo: PASS
+invalid X-Request-Id safe regeneration: PASS
+forbidden persistence route: PASS
+forbidden replan route: PASS
+```
+
+Limitations:
+
+- These tests are deterministic software and contract smokes.
+- They are not a scientific travel-quality benchmark.
+- Local travel estimates use Haversine approximation, not road-network routing
+  or live traffic.
+- Opening-hours handling remains conservative and uses only approved canonical
+  data when present.
+- PR #9 remains unmerged; production/main remains at the merged Phase 2
+  Batch 2 runtime until PR #9 is reviewed, merged, and post-merge validated.
 
 Safety confirmations:
 

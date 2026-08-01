@@ -378,13 +378,13 @@ Required implementation approval phrase:
 
 The phrase appearing inside this documentation does not itself grant approval.
 
-Implementation has not started and user approval has not been granted.
+At the time of the design approval record, implementation had not started. User approval was later granted and implementation now exists on PR #9 review branch, not merged.
 
 ## Approval Event - Phase 2 Batch 3 Trip Preview Design
 
 Date: 2026-08-01.
 
-Status: `APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
 
 User approval phrase:
 
@@ -410,7 +410,7 @@ Approved design boundaries:
 - narrow HTTP 422 `NO_FEASIBLE_ITINERARY` semantics,
 - deterministic evaluation gates.
 
-Implementation still has not started.
+Implementation exists on PR #9 review branch and has not merged. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 This approval does not authorize:
 
@@ -425,6 +425,49 @@ This approval does not authorize:
 - trip mutation,
 - booking,
 - payments.
+
+The following approvals remain not granted:
+
+- `APPROVED MULTI-SOURCE POI SPIKE`
+- `APPROVED DATA SOURCE LICENSE POLICY`
+
+## Decision - Phase 2 Batch 3 Targeted Review Corrections
+
+Date: 2026-08-01.
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Decision:
+
+Apply only the targeted corrections required by strict review of PR #9.
+
+Accepted corrections:
+
+- Keep traveler-safe public fields `trip.explanation`, `trip.dataFreshness`,
+  and `travelFromPrevious.warnings`, and document them in OpenAPI.
+- Remove internal or redundant public fields `trip.recommendationSummary`,
+  `stop.durationPolicyCategory`, `stop.recommendation`, and direct
+  `travelFromPrevious.legOrder`.
+- Keep active Batch 3 v1 `durationSource` values limited to `requested`,
+  `category_default`, and `fallback`.
+- Reserve `poi_specific` for a future contract version only after an approved
+  canonical duration field exists; do not fabricate one.
+- Make each trip-preview fixture execution mode explicit as `endpoint` or
+  `engine_unit`.
+- Execute all 18 fixture cases meaningfully: 16 through the public endpoint
+  and 2 through production scheduling modules with controlled in-memory
+  candidates.
+- Report endpoint and engine-unit denominators separately.
+
+Explicit non-decisions:
+
+- No persistence, saved-trip, edit, replan, stop mutation, or feedback route.
+- No frontend or mobile implementation.
+- No second city.
+- No PostgreSQL default-runtime switch.
+- No external POI source, routing provider, live opening-hours provider, or
+  multi-source implementation.
+- No Batch 4 work.
 
 The following approvals remain not granted:
 

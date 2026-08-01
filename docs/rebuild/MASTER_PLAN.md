@@ -4,8 +4,9 @@ Updated: 2026-07-26 15:35:00 +07:00.
 
 This plan is synchronized with the approved Phase 0 canonical dataset and the
 completed Phase 1 data-platform foundation. Phase 1 is merged into `main` and
-tagged `phase-1-batch-3`. Phase 2 is now in planning/specification only after
-explicit user approval.
+tagged `phase-1-batch-3`. Phase 2 Batch 1 and Batch 2 are merged and
+validated; Phase 2 Batch 3 Trip Preview runtime exists on PR #9 review branch
+and is not merged.
 
 Phase 2 planning artifacts:
 
@@ -21,18 +22,19 @@ Phase 2 Batch 3 Trip Preview design package:
 - `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
 - `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
 
-All Phase 2 API v2 architecture in this master plan remains `PROPOSED FOR
+Future Phase 2 API v2 architecture in this master plan remains `PROPOSED FOR
 PHASE 2` until implemented and tested in a later approved batch.
 
 Phase 2 Batch 3 status:
 
-`APPROVED - DOCUMENTATION PENDING MERGE`
+`IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`
 
 Phase 2 Batch 1 is completed. Phase 2 Batch 2 is completed. Phase 2 Batch 3
-design has been approved through `APPROVED PHASE 2 BATCH 3`, but documentation
-is pending merge and post-merge validation. Runtime implementation has not
-started. Multi-source implementation has not started. Frontend and mobile
-Batch 3 work have not started.
+design has been approved through `APPROVED PHASE 2 BATCH 3`, and runtime
+implementation exists on PR #9 review branch but has not merged. Production
+main remains at the merged Phase 2 Batch 2 runtime until PR #9 is merged and
+post-merge validation passes. Multi-source implementation has not started.
+Frontend and mobile Batch 3 work have not started.
 
 ## 1. Current Architecture
 
@@ -287,9 +289,8 @@ Phase 0 blocker criteria now verified:
 - backend tests pass from `tests/phase0/`.
 
 Phase 1 is complete through Batch 3. Phase 2 Batch 1 and Batch 2 are complete.
-Phase 2 Batch 3 trip-preview design is approved for implementation planning
-through `APPROVED PHASE 2 BATCH 3`, but documentation is pending merge and
-post-merge validation. Batch 3 runtime implementation has not started.
+Phase 2 Batch 3 trip-preview implementation exists on PR #9 review branch and
+remains unmerged pending strict re-audit and post-merge validation.
 
 ## Future Data Platform Expansion - Multi-Source City Packs
 

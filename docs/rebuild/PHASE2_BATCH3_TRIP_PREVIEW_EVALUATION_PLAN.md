@@ -1,6 +1,6 @@
 # UrbanAgent Phase 2 Batch 3 - Trip Preview Evaluation Plan
 
-Status: APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED
+Status: IMPLEMENTED ON REVIEW BRANCH - NOT MERGED
 
 Updated: 2026-08-01
 
@@ -237,7 +237,7 @@ Warnings must be emitted in the stable taxonomy order defined in `docs/rebuild/P
 
 ## 16. Approval State
 
-Implementation has not started.
+Implementation exists on PR #9 review branch and has not merged. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 Design approval has been granted through:
 

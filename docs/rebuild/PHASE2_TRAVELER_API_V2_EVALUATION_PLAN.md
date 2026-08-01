@@ -2,7 +2,7 @@
 
 Updated: 2026-07-26 16:35:00 +07:00.
 
-Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+Status: `IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`.
 
 This plan defines evaluation requirements for Traveler API v2. It does not
 invent or claim evaluation results.

@@ -161,7 +161,9 @@ Implemented Batch 1 behavior:
   `reasonCodes`, `warnings`, and POI provenance, and omits raw scoring signals.
 - Recommendation v2 uses deterministic tie-breaking by score descending,
   normalized name ascending, and canonical `Global_ID` ascending.
-- `POST /api/v2/trips/preview`: not implemented.
+- `POST /api/v2/trips/preview`: implemented on
+  `phase2/batch3-traveler-api-v2-trip-preview` review branch; not merged to
+  production/main until PR #9 is approved, merged, and post-merge validated.
 
 ## New Phase 2 Planning Artifacts
 
@@ -223,7 +225,7 @@ Updated in this batch:
 
 Status:
 
-`APPROVED - DOCUMENTATION PENDING MERGE`
+`IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`
 
 Authoritative documents:
 
@@ -244,8 +246,9 @@ Integrated canonical documents:
 - `docs/rebuild/WORKLOG.md`
 
 Design approval has been granted through `APPROVED PHASE 2 BATCH 3`.
-Documentation must be merged and post-merge validated before runtime
-implementation begins. Runtime implementation has not started.
+Runtime implementation exists on PR #9 review branch and has not merged.
+Production/main runtime remains at the merged Phase 2 Batch 2 baseline until
+PR #9 is merged and post-merge validation passes.
 
 No frontend or mobile Batch 3 work has started.
 
@@ -263,13 +266,13 @@ implementation task:
 - Batch 3 focused test file:
   `tests/phase2/phase2TravelerApiV2Batch3.test.js`.
 - `node --test tests/phase2/phase2TravelerApiV2Batch3.test.js`: PASS,
-  8 tests, 8 passed, 0 failed.
-- `npm.cmd test`: PASS, 36 tests total, 35 passed, 0 failed, 1 skipped.
+  10 tests, 10 passed, 0 failed.
+- `npm.cmd test`: PASS, 38 tests total, 37 passed, 0 failed, 1 skipped.
 - The skipped test remains the existing guarded Phase 1 disposable PostGIS
   integration test when DB integration env vars are absent.
 - OpenAPI JSON parse after Batch 3 update: PASS.
 - OpenAPI SHA-256:
-  `a6add259e5da16beaba5fc5be4d3e34a542a6077e4bf4a4b9f2d6b8c78788d31`.
+  `0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034`.
 - Canonical CSV SHA-256 remains
   `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
 - Canonical application POIs remain `4166`.
@@ -303,8 +306,9 @@ Phase 2 Batch 2 validation:
 
 ## Risks
 
-- Batch 2 intentionally implements only standalone recommendation v2.
-  Itinerary preview v2 remains unimplemented until Phase 2 Batch 3 approval.
+- Batch 3 trip preview exists only on PR #9 review branch at the time of this
+  record; production/main remains at the merged Batch 2 runtime until review,
+  merge, and post-merge validation complete.
 - Existing traveler responses include some mojibake display strings; Phase 2
   contract should test structure and semantics first, then handle copy/encoding
   deliberately.
@@ -319,9 +323,9 @@ Phase 2 Batch 2 validation:
 
 ## Next Step
 
-User review of the synchronized backend multi-source documentation Draft PR #5.
+Strict re-audit of PR #9 after targeted Batch 3 corrections.
 
-Do not start Phase 2 Batch 3 until the user explicitly approves it.
+Do not merge PR #9 until strict re-audit passes and the user approves merge.
 
 ## Future Multi-Source POI Direction
 

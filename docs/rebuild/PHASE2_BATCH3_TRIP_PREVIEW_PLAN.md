@@ -1,6 +1,6 @@
 # UrbanAgent Phase 2 Batch 3 - Trip Preview Plan
 
-Status: APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED
+Status: IMPLEMENTED ON REVIEW BRANCH - NOT MERGED
 
 Updated: 2026-08-01
 
@@ -10,7 +10,7 @@ Backend baseline: `35e867a3dd8f4e9dbe27705fa9a02c7f66ea901f`
 
 This is the authoritative entry point and document map for the Phase 2 Batch 3 Trip Preview design package.
 
-It records the accepted design decisions for documentation review only. It does not approve implementation and does not change runtime behavior.
+It records the accepted design decisions and the current review-branch implementation state. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 ## 2. Canonical References
 
@@ -47,7 +47,7 @@ Governance documents that remain binding:
 - CSV remains the default runtime.
 - PostgreSQL/PostGIS remains explicit opt-in.
 - No external POI source has been integrated.
-- Phase 2 Batch 3 implementation has not started.
+- Phase 2 Batch 3 implementation exists on PR #9 review branch and has not merged.
 
 ## 4. Approved Design Decisions For The Batch 3 Spec
 
@@ -98,7 +98,7 @@ If a caller provides `durationMinutes`, it is treated as a requested hard schedu
 
 If a stop visit duration is not explicitly requested, the preview resolves stop duration in this order:
 
-1. approved POI-specific duration,
+1. requested duration when explicitly supplied for the preview,
 2. versioned category default,
 3. versioned global fallback.
 
@@ -111,11 +111,12 @@ Every stop must expose:
 Allowed `durationSource` values:
 
 - `requested`
-- `poi_specific`
 - `category_default`
 - `fallback`
 
 When `durationSource` is `category_default` or `fallback`, the stop must include warning code `DURATION_ESTIMATED`.
+
+POI-specific durations are reserved for a future contract version only after an approved canonical duration field exists. Phase 2 Batch 3 v1 must not fabricate a POI-specific duration value.
 
 Category-duration table:
 
@@ -352,7 +353,7 @@ The following approval phrases are present only as future gates and have not bee
 
 ## 8. Approval State
 
-Implementation has not started.
+Implementation exists on PR #9 review branch and has not merged. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 Design approval has been granted through:
 

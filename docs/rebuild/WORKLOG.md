@@ -1903,3 +1903,126 @@ Safety:
   source, external routing provider, live opening-hours provider, frontend,
   mobile, second-city, persistence, saved-trip, replan, mutation, feedback,
   Batch 4, Phase 3, tag, or main push was used.
+
+## 2026-08-01 22:23:15 +07:00 - Phase 2 Batch 3 PR #9 Targeted Fixes
+
+Type: targeted correction and validation in implementation clone.
+
+Implementation clone:
+
+```text
+C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730
+```
+
+Branch:
+
+```text
+phase2/batch3-traveler-api-v2-trip-preview
+```
+
+Previous branch HEAD:
+
+```text
+f0d02306512e87e28ed05f6c4c7c95d3844a5efa
+```
+
+Files changed:
+
+- `src/modules/travelerApiV2/tripPreview.js`
+- `tests/fixtures/phase2/tripPreviewQueries.json`
+- `tests/phase2/phase2TravelerApiV2Batch3.test.js`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/MASTER_PLAN.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md`
+
+Commands run:
+
+```text
+Get-Content <strict audit report>
+git status --short --branch
+git branch --show-current
+git rev-parse HEAD
+git fetch origin --tags --prune
+git rev-parse origin/main
+git rev-parse origin/phase2/batch3-traveler-api-v2-trip-preview
+GitHub API PR #9 metadata check
+rg <stale status and contract terms>
+npm.cmd ci
+npm.cmd ls --omit=dev --all
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+node --check src/server.js and all Traveler API v2 / Phase 2 test JavaScript files
+node --test tests/phase2/phase2TravelerApiV2Batch3.test.js
+npm.cmd test
+node -e <CSV-default endpoint and engine-unit smoke script>
+```
+
+Results:
+
+```text
+npm.cmd ci: PASS
+npm.cmd ls --omit=dev --all: PASS, no ELSPROBLEMS
+npm.cmd audit --omit=dev: PASS, 0 vulnerabilities
+npm.cmd audit --omit=dev --json: PASS, total vulnerabilities 0
+syntax checks: PASS, 16 files
+Batch 3 focused tests: PASS, 10 total, 10 passed, 0 failed, 0 skipped
+npm.cmd test: PASS, 38 total, 37 passed, 0 failed, 1 skipped
+endpoint smoke: PASS, 16/16 endpoint fixture cases
+engine-unit smoke: PASS, 2/2 synthetic fixture cases
+fixture execution: PASS, 18/18 meaningful assertions
+OpenAPI SHA-256: 0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034
+canonical CSV SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+application POIs: 4166
+CSV-default repository: CanonicalCsvPoiRepository
+```
+
+Evaluation metrics:
+
+```text
+deterministic replay rate: 15/15
+exclusion violation rate: 0/1 violations
+duplicate-stop rate: 0/15 duplicates
+hard-constraint satisfaction rate on satisfiable cases: 15/15
+must-include scheduling rate on satisfiable cases: 4/4
+daily-window overflow rate: 0/4 overflows
+known opening-hours conflict rate: 3/3 detected
+unscheduled explanation coverage: 14/14
+warning-code correctness: 16/16
+geographic compactness proxy: 15/15 within <= 80 km or unknown route
+```
+
+Targeted corrections:
+
+- Reconciled public runtime and OpenAPI fields.
+- Removed public internal fields:
+  `trip.recommendationSummary`, `stop.durationPolicyCategory`,
+  `stop.recommendation`, and `travelFromPrevious.legOrder`.
+- Retained and documented traveler-safe fields:
+  `trip.explanation`, `trip.dataFreshness`, and
+  `travelFromPrevious.warnings`.
+- Active `durationSource` enum is exactly `requested`,
+  `category_default`, and `fallback`.
+- Marked all 18 fixture cases with explicit execution mode.
+- Executed the two synthetic cases through production scheduling modules.
+- Corrected Batch 3 status wording to `IMPLEMENTED ON REVIEW BRANCH - NOT
+  MERGED`.
+
+Safety:
+
+- Original repository `D:\POI-urban-danang-BE` remained untouched.
+- Canonical CSV, package files, migrations, environment files, frontend,
+  mobile, database schemas, and credentials were not modified.
+- No production/shared database or Firebase production was touched.
+- No external POI source, routing provider, persistence, saved-trip, replan,
+  mutation, feedback, second-city, Batch 4, or later-phase work occurred.
