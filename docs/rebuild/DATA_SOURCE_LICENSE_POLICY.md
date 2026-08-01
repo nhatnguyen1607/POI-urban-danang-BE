@@ -263,12 +263,29 @@ is safely paused or completed.
 
 ## 12. Approval Gate
 
-Implementation may begin only after explicit approval of source scope, source
-list, license review, storage policy, test environment, entity-resolution
-thresholds, reporting format, and no-production-write guardrail.
+Source implementation may begin only after explicit approval of source scope,
+source list, license review, storage policy, test environment,
+entity-resolution thresholds, reporting format, and no-production-write
+guardrail.
 
-Required approval phrase:
+Required source-spike approval phrase:
 
 `APPROVED MULTI-SOURCE POI SPIKE`
 
-Until that approval exists, this document remains policy planning only.
+Until that approval exists, no external data-source implementation may begin.
+
+## 13. Policy Approval
+
+This policy becomes enforceable for implementation only after explicit user
+approval.
+
+Required approval phrase:
+
+`APPROVED DATA SOURCE LICENSE POLICY`
+
+The presence of this phrase in this policy document does not itself grant
+approval.
+
+Until the user explicitly issues that approval in the project workflow, this
+document remains a proposed governance policy and no external data-source
+implementation may begin.
