@@ -1699,3 +1699,207 @@ Safety:
 - No external POI source was queried, downloaded, sampled, scraped, ingested,
   cached, persisted, or merged.
 - Multi-source approvals remain not granted.
+
+## 2026-08-01 17:11:45 +07:00 - Phase 2 Batch 3 Trip Preview Runtime Implementation
+
+Type: approved backend runtime implementation in fresh clean clone.
+
+Implementation clone:
+
+```text
+C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730
+```
+
+Branch:
+
+```text
+phase2/batch3-traveler-api-v2-trip-preview
+```
+
+User approval:
+
+```text
+APPROVED PHASE 2 BATCH 3
+```
+
+Baseline verification:
+
+- `origin/main`: `03bcc2ba90be7aa2618b5381f763ac1933469deb`.
+- Approved Batch 3 design commit
+  `b6fc14f02d84ca17d1a1eb1dc5bad17ab0971632` is an ancestor of
+  `origin/main`.
+- Batch 2 implementation commit
+  `7718cd5c9e4d4d07a083f1d10aa9ad539035e14b` is an ancestor of
+  `origin/main`.
+- Tag `phase-2-batch-2` resolves to
+  `707cce556cf37986d9bd78fdf25902d76850242c`.
+- Canonical CSV SHA-256 verified:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Canonical row count verified: `4166`.
+- Five authoritative Batch 3 design-document Git blob hashes matched the
+  approved expected values.
+
+Files changed or added:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+src/modules/travelerApiV2/constants.js
+src/modules/travelerApiV2/recommendations.js
+src/modules/travelerApiV2/router.js
+src/modules/travelerApiV2/serializers.js
+src/modules/travelerApiV2/tripPreview.js
+src/modules/travelerApiV2/tripPreviewDurationPolicy.js
+src/modules/travelerApiV2/tripPreviewTravelPolicy.js
+src/modules/travelerApiV2/tripPreviewValidation.js
+src/modules/travelerApiV2/tripPreviewWarnings.js
+tests/fixtures/phase2/tripPreviewQueries.json
+tests/phase2/phase2TravelerApiV2Batch1.test.js
+tests/phase2/phase2TravelerApiV2Batch3.test.js
+```
+
+Commands run:
+
+```text
+git clone --branch main --single-branch <backend-origin-url> <implementation-clone>
+git -C <implementation-clone> fetch origin --tags --prune
+git -C <implementation-clone> lfs pull
+git -C <implementation-clone> merge-base --is-ancestor b6fc14f02d84ca17d1a1eb1dc5bad17ab0971632 origin/main
+git -C <implementation-clone> merge-base --is-ancestor 7718cd5c9e4d4d07a083f1d10aa9ad539035e14b origin/main
+git -C <implementation-clone> rev-parse "phase-2-batch-2^{}"
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <five Batch 3 design Git-blob SHA-256 calculation>
+git -C <implementation-clone> branch --list phase2/batch3-traveler-api-v2-trip-preview
+git -C <implementation-clone> ls-remote --heads origin phase2/batch3-traveler-api-v2-trip-preview
+git -C <implementation-clone> switch -c phase2/batch3-traveler-api-v2-trip-preview
+Import-Csv data\canonical\urbanagent_poi_master_v1.csv <opening-hours/category inspection>
+npm.cmd ci
+node --check src\modules\travelerApiV2\tripPreview.js
+node --check src\modules\travelerApiV2\tripPreviewValidation.js
+node --check src\modules\travelerApiV2\router.js
+node --test tests\phase2\phase2TravelerApiV2Batch3.test.js
+node -e <OpenAPI JSON parse and path list>
+npm.cmd test
+git -C <implementation-clone> status --short --branch
+git -C <implementation-clone> diff --name-status
+```
+
+Validation output recorded:
+
+```text
+node --test tests/phase2/phase2TravelerApiV2Batch3.test.js
+tests 8
+pass 8
+fail 0
+skipped 0
+
+npm.cmd test
+tests 36
+pass 35
+fail 0
+skipped 1
+```
+
+Implementation notes:
+
+- Added deterministic validation, duration policy, travel policy, warning
+  taxonomy, and trip-preview orchestration modules.
+- Mounted only `POST /api/v2/trips/preview`.
+- Reused Batch 2 recommendation semantics through a shared candidate helper.
+- Updated OpenAPI 3.1 draft to include the Batch 3 preview route and no
+  persistence routes.
+- Updated the existing OpenAPI regression test to allow only the new preview
+  route and continue forbidding persistence/replan/feedback routes.
+- Added 18-case fixture `phase2-trip-preview-smoke-v1`.
+- Added focused Batch 3 tests covering request contract, determinism,
+  constraints, duration, travel, missing-origin, warning taxonomy, feasibility,
+  `NO_FEASIBLE_ITINERARY`, endpoint smokes, and no persistence routes.
+
+Safety:
+
+- Original repository `D:\POI-urban-danang-BE` was not modified.
+- Canonical CSV bytes were not modified.
+- No package dependency was added.
+- No migration, schema, production database, shared database, Firebase
+  production, external POI source, external routing provider, live
+  opening-hours provider, frontend, mobile, second-city, persistence, saved
+  trip, replan, stop mutation, feedback persistence, Batch 4, Phase 3, or
+  later-phase work was started.
+- Multi-source approvals remain not granted.
+
+## 2026-08-01 17:24:00 +07:00 - Phase 2 Batch 3 Validation Continuation
+
+Type: non-destructive validation in implementation clone.
+
+Implementation clone:
+
+```text
+C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730
+```
+
+Commands run:
+
+```text
+npm.cmd ls --omit=dev --all
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+node --check src/server.js and all JavaScript files under src/modules/travelerApiV2 plus tests/phase2
+npm.cmd test
+node -e <18-scenario endpoint smoke script>
+Get-FileHash -Algorithm SHA256 docs\rebuild\PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <CSV-default runtime repository and application POI count diagnostic>
+git -C <implementation-clone> diff --name-status
+git -C <implementation-clone> diff --stat
+```
+
+Results:
+
+```text
+npm.cmd ls --omit=dev --all: PASS, no ELSPROBLEMS
+npm.cmd audit --omit=dev: PASS, found 0 vulnerabilities
+npm.cmd audit --omit=dev --json: PASS, total vulnerabilities 0
+syntax checks: PASS, 16 files
+npm.cmd test: PASS, 36 total, 35 passed, 0 failed, 1 skipped
+endpoint smoke script: PASS, 18/18 scenarios
+OpenAPI SHA-256: a6add259e5da16beaba5fc5be4d3e34a542a6077e4bf4a4b9f2d6b8c78788d31
+canonical CSV SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+application POIs: 4166
+CSV-default repository: CanonicalCsvPoiRepository
+```
+
+Endpoint smoke scenarios:
+
+```text
+valid one-day preview: PASS
+valid multi-day preview: PASS
+repeated identical preview: PASS
+missing origin: PASS
+explicit origin: PASS
+explicit duration: PASS
+category-default duration: PASS
+excluded POI: PASS
+must-include POI: PASS
+partial preview: PASS
+infeasible preview: PASS as deterministic PARTIAL with explanations
+impossible hard constraints: PASS
+invalid city: PASS
+invalid time window: PASS
+invalid X-Request-Id: PASS
+valid X-Request-Id: PASS
+no persistent trip route: PASS
+no replan route: PASS
+```
+
+Safety:
+
+- Original repository `D:\POI-urban-danang-BE` remained untouched.
+- No production database, shared database, Firebase production, external POI
+  source, external routing provider, live opening-hours provider, frontend,
+  mobile, second-city, persistence, saved-trip, replan, mutation, feedback,
+  Batch 4, Phase 3, tag, or main push was used.

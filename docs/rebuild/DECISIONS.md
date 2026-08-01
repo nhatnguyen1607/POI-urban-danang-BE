@@ -430,3 +430,55 @@ The following approvals remain not granted:
 
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
+
+## Decision - Phase 2 Batch 3 Runtime Implementation Boundary
+
+Date: 2026-08-01.
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Decision:
+
+Implement only the approved stateless Traveler API v2 trip-preview endpoint:
+
+- `POST /api/v2/trips/preview`
+
+Implementation branch:
+
+- `phase2/batch3-traveler-api-v2-trip-preview`
+
+Accepted implementation choices:
+
+- Reuse the Batch 2 recommendation path through a shared candidate helper
+  instead of adding a second recommendation scorer.
+- Keep the existing v2 `ok/data/meta` envelope and request-ID behavior.
+- Keep CSV as the default POI runtime and PostgreSQL/PostGIS explicit opt-in.
+- Use deterministic pure modules for validation, duration policy, local
+  Haversine travel policy, warning taxonomy, and trip-preview construction.
+- Treat the canonical `Opening_Hours_Raw` field conservatively:
+  simple same-day `HH:mm - HH:mm` ranges may be parsed; missing hours remain
+  unknown; unparseable values do not become verified-open claims.
+- Return `NO_FEASIBLE_ITINERARY` only for structurally valid requests with
+  impossible hard constraints such as include/exclude overlap.
+- Update OpenAPI 3.1 to document the new preview endpoint while continuing to
+  exclude persistence, saved-trip, replan, mutation, feedback, frontend,
+  mobile, external routing, and external-source routes.
+
+Explicit non-decisions:
+
+- No trip persistence.
+- No saved trips.
+- No trip edit, replan, or stop mutation.
+- No feedback persistence.
+- No frontend or mobile implementation.
+- No second City Pack.
+- No new dependency.
+- No production/shared database or Firebase production access.
+- No external POI source, external routing provider, live opening-hours
+  provider, or traffic provider.
+- No multi-source implementation.
+
+The following approvals remain not granted:
+
+- `APPROVED MULTI-SOURCE POI SPIKE`
+- `APPROVED DATA SOURCE LICENSE POLICY`

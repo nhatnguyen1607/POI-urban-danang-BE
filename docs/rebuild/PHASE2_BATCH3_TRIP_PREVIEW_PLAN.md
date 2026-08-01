@@ -373,3 +373,39 @@ Before Batch 3 implementation begins, the user must explicitly approve implement
 - the implementation boundaries.
 
 The implementation approval must not be inferred from this document.
+
+## 10. Implementation Review State
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Date: 2026-08-01.
+
+Runtime implementation has begun only after explicit user approval:
+
+`APPROVED PHASE 2 BATCH 3`
+
+Implementation branch:
+
+`phase2/batch3-traveler-api-v2-trip-preview`
+
+Implemented runtime surface:
+
+- `POST /api/v2/trips/preview`
+
+The implementation remains a review-branch change and is not merged into
+`main` at the time of this record.
+
+Preserved boundaries:
+
+- no persistence,
+- no saved-trip route,
+- no replan or stop mutation route,
+- no feedback persistence route,
+- no frontend or mobile work,
+- no second city,
+- no external routing provider,
+- no external POI source,
+- no production database or Firebase production access,
+- canonical CSV unchanged,
+- CSV default runtime preserved,
+- PostgreSQL/PostGIS explicit opt-in preserved.
