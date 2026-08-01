@@ -2,14 +2,15 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 2 IMPLEMENTED FOR APPROVED RECOMMENDATION FOUNDATION`.
+Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
 
 This document separates accepted decisions, current implementation, proposed
 Phase 2 core scope, conditional scope, and open questions. Phase 2 Batch 1
 implemented the approved city/status and POI read/search foundation. Phase 2
 Batch 2 implements the approved standalone recommendation v2 foundation.
-Itinerary preview v2, persistence/edit/replan/feedback, and later batches have
-not started.
+Batch 3 trip preview now has an approved documentation-only design package.
+Runtime implementation, tests, OpenAPI JSON changes,
+persistence/edit/replan/feedback, and later batches have not started.
 
 ## 1. Baseline Verification
 
@@ -373,6 +374,20 @@ Batch 3:
 - stateless itinerary preview v2
 - unknown-route semantics
 - explanation/provenance
+
+Batch 3 design package:
+
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+
+Batch 3 design is approved through `APPROVED PHASE 2 BATCH 3`, but runtime is
+not implemented. The design resolves the preview contract around
+the existing v2 envelope, `data.trip.stops`, nullable missing-origin route
+semantics, local haversine-only known-leg estimates, and opening-hours
+unknown behavior.
 
 Conditional Batch 4:
 

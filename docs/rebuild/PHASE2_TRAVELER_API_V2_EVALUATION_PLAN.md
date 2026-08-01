@@ -2,10 +2,20 @@
 
 Updated: 2026-07-26 16:35:00 +07:00.
 
-Status: `PROPOSED FOR PHASE 2`.
+Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
 
 This plan defines evaluation requirements for Traveler API v2. It does not
 invent or claim evaluation results.
+
+Phase 2 Batch 3 trip preview has an approved documentation-only design package:
+
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+
+The Batch 3 endpoint is not implemented in this planning state.
 
 ## 1. Research Questions
 
@@ -392,7 +402,7 @@ User-quality limitation:
 For each v2 route:
 
 - HTTP status code
-- success/error envelope
+- v2 `ok/data/meta` success envelope and `ok/error/meta` error envelope
 - requestId propagation
 - invalid `X-Request-Id` replacement without rejecting otherwise valid requests
 - cityId requirement
@@ -460,8 +470,9 @@ Functional smoke:
 - `durationMinutes`: 180.
 - Expected: nonempty stops.
 - Expected missing-origin first leg:
-  - `distanceKm`: null
-  - `estimatedMinutes`: null
+  - `distanceMeters`: null
+  - `travelDurationMinutes`: null
+  - `estimationMethod`: null
   - `distanceKnown`: false
   - `travelTimeKnown`: false
   - `calculationSource`: `missing-origin`
@@ -470,6 +481,9 @@ Functional smoke:
   - `travelTimeFullyKnown`: false when any required leg is unknown
   - `unknownLegCount` greater than zero when origin is missing
   - total distance/time null or explicitly partial
+
+Additional Batch 3 gates are defined in
+`docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`.
 
 ## 16. Legacy Compatibility Evaluation
 

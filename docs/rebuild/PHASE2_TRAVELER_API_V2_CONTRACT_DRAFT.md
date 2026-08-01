@@ -2,14 +2,15 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 2 IMPLEMENTED FOR APPROVED RECOMMENDATION FOUNDATION`.
+Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
 
 This contract draft now has a Phase 2 Batch 1 implementation for city metadata,
 city status, POI search, POI detail, common envelopes, request IDs, pagination,
 and the OpenAPI artifact. Phase 2 Batch 2 implements standalone recommendation
-v2. Itinerary preview v2 and conditional persistence routes are not
-implemented. Conditional persistence routes are retained for design continuity
-but are marked `CONDITIONAL - NOT APPROVED FOR IMPLEMENTATION`.
+v2. Itinerary preview v2 now has an approved documentation-only Batch 3 design
+package but is not implemented. Conditional persistence routes are retained
+for design continuity but are marked `CONDITIONAL - NOT APPROVED FOR
+IMPLEMENTATION`.
 
 ## 1. Approved Contract Decisions
 
@@ -191,6 +192,7 @@ Recommended error codes:
 | 404 | `NOT_FOUND` | Resource not found. |
 | 409 | `STATE_CONFLICT` | Edit/replan conflicts with trip state. |
 | 422 | `CITY_NOT_SUPPORTED` | City is not available in Phase 2. |
+| 422 | `NO_FEASIBLE_ITINERARY` | A valid trip-preview request cannot produce a feasible preview. |
 | 500 | `INTERNAL_ERROR` | Unexpected backend failure. |
 | 502 | `UPSTREAM_UNAVAILABLE` | Optional upstream helper failed. |
 
@@ -357,7 +359,7 @@ Rules:
     "status": "unknown"
   },
   "warnings": [
-    "opening_hours_unknown",
+    "OPENING_HOURS_UNKNOWN",
     "address_unknown"
   ]
 }
@@ -398,14 +400,19 @@ Rules:
   "order": 1,
   "poi": {},
   "travelFromPrevious": {
-    "distanceKm": null,
-    "estimatedMinutes": null,
+    "distanceMeters": null,
+    "travelDurationMinutes": null,
     "transport": "motorbike",
+    "travelMode": "motorbike",
+    "estimationMethod": null,
+    "estimationPolicyVersion": null,
     "calculationSource": "missing-origin",
     "distanceKnown": false,
     "travelTimeKnown": false
   },
-  "suggestedStayMinutes": 55,
+  "durationMinutes": 60,
+  "durationSource": "category_default",
+  "durationPolicyVersion": "phase2-batch3-duration-v1",
   "reason": "Structured stop reason.",
   "reasonCodes": [
     "intent_match"
@@ -429,7 +436,7 @@ Rules:
   "calculationSource": "partial-local-haversine-estimate",
   "status": "partial",
   "warnings": [
-    "missing_origin"
+    "ORIGIN_NOT_PROVIDED"
   ]
 }
 ```
@@ -706,6 +713,28 @@ Purpose: stateless, guest-safe itinerary preview.
 
 Auth: optional.
 
+Status: `APPROVED DESIGN FOR PHASE 2 BATCH 3 - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+
+Authoritative Batch 3 design package:
+
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md`
+
+Draft request decisions:
+
+- `cityId` is required and only `da-nang` is supported in Batch 3.
+- `query` is required and must be nonempty.
+- `trip.durationMinutes` is optional; when supplied it must be an integer from
+  15 to 480.
+- `startLocation` is optional.
+- If `startLocation` is present, latitude and longitude are both required and
+  must be valid numeric coordinates.
+- `constraints.maxStopsPerDay` is optional, minimum 1 and maximum 6.
+- `recommendationOptions.limit` is optional, minimum 1 and maximum 30.
+
 Acceptance:
 
 - Does not require login.
@@ -713,6 +742,13 @@ Acceptance:
 - Missing origin remains unknown/null.
 - Unknown route totals are null or partial, never zero.
 - No Da Nang center coordinate fallback.
+- Response uses the existing v2 `ok/data/meta` envelope.
+- Trip stops appear under `data.trip.stops`.
+- Missing-origin first leg uses `calculationSource: "missing-origin"`.
+- Known later legs may use `calculationSource: "local-haversine-estimate"`.
+- Road-network routing is not part of Batch 3.
+- Opening hours are used only if approved runtime data exists; otherwise the
+  response emits `OPENING_HOURS_UNKNOWN`.
 
 ## 13. Conditional Scope - Not Approved For Implementation
 

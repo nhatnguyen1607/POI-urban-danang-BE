@@ -1611,3 +1611,91 @@ Safety:
   external POI source was modified.
 - PR #5 remains Draft and unmerged.
 - Phase 2 Batch 3 was not started.
+
+## 2026-08-01 15:48:48 +07:00 - Phase 2 Batch 3 Trip Preview Design Acceptance Package
+
+Type: documentation-only design acceptance completion in clean planning clone.
+
+Planning clone:
+
+```text
+C:\tmp\urbanagent-phase2-batch3-planning-20260801-142927
+```
+
+Files finalized:
+
+```text
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_SCOPE.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_EVALUATION_PLAN.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_IMPLEMENTATION_BOUNDARIES.md
+```
+
+Canonical documents integrated:
+
+```text
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/MASTER_PLAN.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/WORKLOG.md
+```
+
+Work completed:
+
+- Renamed the prior authoritative entry-point draft to
+  `PHASE2_BATCH3_TRIP_PREVIEW_PLAN.md`.
+- Finalized the documentation-only Batch 3 design package.
+- Integrated the design package into seven canonical documentation records.
+- Documented final request limits, duration policy, trip/day limits,
+  travel-time policy, missing-origin semantics, opening-hours behavior,
+  warning taxonomy, feasibility statuses, `NO_FEASIBLE_ITINERARY` semantics,
+  and evaluation metrics/thresholds.
+
+Safety:
+
+- No source, test, package, OpenAPI JSON, canonical CSV, migration, database
+  configuration, runtime configuration, environment, credential, frontend, or
+  mobile file was modified.
+- No external POI source was queried, downloaded, sampled, scraped, ingested,
+  cached, persisted, or merged.
+- No production database or Firebase production resource was accessed.
+- No implementation work was started.
+- No commit, push, or Pull Request was created.
+- User approval has not been granted.
+
+## 2026-08-01 16:05:12 +07:00 - Phase 2 Batch 3 Design Approval Officialization
+
+Type: documentation-only approval officialization in clean planning clone.
+
+User approval:
+
+```text
+APPROVED PHASE 2 BATCH 3
+```
+
+Work completed:
+
+- Applied final public warning-severity normalization.
+- Limited public warning severity values to `info`, `warning`, and `error`.
+- Recorded that Phase 2 Batch 3 design approval has been granted.
+- Recorded that documentation must be committed, reviewed, merged, and
+  post-merge validated before runtime implementation begins.
+- Preserved the approved request limits, duration policy, travel-time policy,
+  missing-origin semantics, opening-hours semantics, feasibility statuses, and
+  evaluation gates.
+
+Safety:
+
+- Documentation officialization started.
+- Runtime implementation did not start.
+- No source, test, package, OpenAPI JSON, canonical CSV, migration, database
+  configuration, runtime configuration, environment, credential, frontend, or
+  mobile file was modified.
+- No production database or Firebase production resource was accessed.
+- No external POI source was queried, downloaded, sampled, scraped, ingested,
+  cached, persisted, or merged.
+- Multi-source approvals remain not granted.
