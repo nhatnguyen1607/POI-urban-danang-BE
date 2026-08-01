@@ -1488,3 +1488,126 @@ Safety:
 - No frontend source was changed.
 - No commit or push occurred.
 - Phase 2 Batch 3 was not started.
+
+## 2026-07-31 - Multi-Source POI Strategy Documentation Completion
+
+Type: documentation-only planning repair in clean clones.
+
+Context:
+
+- Phase 2 continues to use the approved 4166-POI Da Nang canonical baseline.
+- No source expansion was added to an active implementation batch.
+- Mobile product design remains deferred.
+- The original backend and frontend working copies were read only.
+- Corrected documentation work was performed in clean clones under `C:\tmp`.
+
+Created in the backend documentation clone:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+Updated in the backend documentation clone:
+
+- `AGENTS.md`
+- `URBANAGENT_CODEX_CONTEXT.md`
+- `docs/rebuild/MASTER_PLAN.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/WORKLOG.md`
+
+Updated in the frontend documentation clone:
+
+- `AGENTS.md`
+- `URBANAGENT_CODEX_CONTEXT.md`
+
+Corrections:
+
+- Completed `DATA_SOURCE_LICENSE_POLICY.md`; the registry code fence is closed
+  and the policy now includes approval status, provider guardrails,
+  attribution, storage/cache/deletion, ML/derived-use, security/privacy,
+  dry-run, Phase 2 freeze, and approval-gate sections.
+- Added the same shared multi-source governance section to both backend and
+  frontend `URBANAGENT_CODEX_CONTEXT.md`.
+- Backend and frontend context files now remain equivalent after the shared
+  governance addition.
+- Recorded that future source expansion requires:
+  `APPROVED MULTI-SOURCE POI SPIKE`.
+
+No application source, tests, migrations, package files, OpenAPI runtime
+artifacts, canonical data, runtime configuration, frontend implementation code,
+or mobile code was changed.
+
+No external POI source was downloaded, queried, sampled, scraped, or ingested.
+
+No production database or Firebase production resource was accessed.
+
+No multi-source implementation, Phase 2 Batch 3, commit, or push occurred.
+
+## 2026-08-01 13:17:32 +07:00 - Synchronize Backend Multi-Source Docs After Phase 2 Batch 2 Merge
+
+Type: documentation-only Draft PR synchronization in clean backend clone.
+
+Context:
+
+- Existing Draft PR #5 remains the backend multi-source governance
+  documentation PR.
+- Phase 2 Batch 2 has been merged into `origin/main` at
+  `707cce556cf37986d9bd78fdf25902d76850242c`.
+- Phase 2 Batch 2 implementation commit
+  `7718cd5c9e4d4d07a083f1d10aa9ad539035e14b` is an ancestor of `origin/main`.
+- Documentation branch before synchronization:
+  `a9bf00d2de0a35a3b5dacdf570b0e1e8d14d71cd`.
+- The original backend working copy at `D:\POI-urban-danang-BE` was not
+  modified.
+
+Files changed in the documentation branch diff versus `origin/main`:
+
+```text
+AGENTS.md
+URBANAGENT_CODEX_CONTEXT.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/MASTER_PLAN.md
+docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/WORKLOG.md
+```
+
+Commands run:
+
+```text
+git status --short --branch
+git branch --show-current
+git rev-parse HEAD
+git remote -v
+git fetch origin --tags --prune
+Invoke-RestMethod https://api.github.com/repos/nhatnguyen1607/POI-urban-danang-BE/pulls/5
+git rev-parse origin/main
+git merge-base --is-ancestor 7718cd5c9e4d4d07a083f1d10aa9ad539035e14b origin/main
+git diff --name-status origin/main...HEAD
+git merge --no-ff origin/main
+rg -n "<<<<<<<|=======|>>>>>>>" docs/rebuild
+git diff --name-status origin/main
+git diff --stat origin/main
+```
+
+Conflict resolution:
+
+- `docs/rebuild/DECISIONS.md`: preserved both the completed Phase 2 Batch 2
+  implementation decisions and the future multi-source governance decision.
+- `docs/rebuild/WORKLOG.md`: preserved both the Phase 2 Batch 2 implementation
+  entry and the multi-source documentation completion entry.
+- `docs/rebuild/CURRENT_STATE.md`: updated stale Batch 1/Batch 2 next-step
+  language so the document reflects the merged Batch 2 baseline and waits for
+  Draft PR #5 review.
+
+Safety:
+
+- No application source, tests, package files, migration SQL, OpenAPI JSON,
+  runtime configuration, canonical data, environment files, production
+  database, Firebase production resource, frontend code, mobile code, or
+  external POI source was modified.
+- PR #5 remains Draft and unmerged.
+- Phase 2 Batch 3 was not started.

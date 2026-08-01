@@ -520,7 +520,36 @@ Checks:
 - No secrets, tokens, filesystem paths, SQL details, internal repository class
   names, or `DATABASE_URL` in public responses/logs.
 
-## 20. Batch Exit Gate
+## 20. Multi-Source POI Evaluation Boundary
+
+Phase 2 evaluation uses only the approved Da Nang canonical runtime dataset:
+
+- `data/canonical/urbanagent_poi_master_v1.csv`
+- 4166 application POIs
+- CSV default runtime
+- PostgreSQL opt-in only
+
+Multi-source POI evaluation is not part of Phase 2 unless a later task is
+explicitly approved with:
+
+`APPROVED MULTI-SOURCE POI SPIKE`
+
+Do not count external-source discovery, provider benchmarking, license review,
+entity-resolution experiments, cross-provider duplicate matching, or second-city
+coverage as Phase 2 Traveler API v2 validation.
+
+Any future source spike evaluation must separately record:
+
+- source license class and allowed uses,
+- attribution obligations,
+- cache/storage/deletion limits,
+- field-level provenance,
+- entity-resolution false merge and false split samples,
+- freshness and removal behavior,
+- whether restricted payloads are excluded from Git, bundles, public APIs, and
+  logs.
+
+## 21. Batch Exit Gate
 
 Each implementation batch may close only when:
 
@@ -536,7 +565,7 @@ Each implementation batch may close only when:
 - No production DB or Firebase production data was touched.
 - Documentation and worklog are updated.
 
-## 21. Final Phase 2 Exit Gate
+## 22. Final Phase 2 Exit Gate
 
 Phase 2 can be declared complete only when:
 
@@ -548,7 +577,7 @@ Phase 2 can be declared complete only when:
 - No Phase 3 frontend rebuild, Phase 4 City Pack automation, partner product,
   monetization, or second city work has started.
 
-## 22. Report Template
+## 23. Report Template
 
 ```text
 Verdict:

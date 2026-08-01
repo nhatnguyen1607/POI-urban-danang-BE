@@ -1,16 +1,20 @@
 # Current State
 
-Updated: 2026-07-31 19:55:42 +07:00.
+Updated: 2026-08-01 13:17:32 +07:00.
 
 ## Phase
 
-`PHASE_2_BATCH_2_IMPLEMENTED_PENDING_REVIEW`
+`PHASE_2_BATCH_2_MERGED_MULTI_SOURCE_DOCS_SYNC_PENDING_REVIEW`
 
-Phase 2 Batch 2 has been explicitly approved and implemented after the merged
-Batch 1 baseline. This batch is limited to Traveler API v2 recommendation
-endpoint coverage, public recommendation serialization, `reasonCodes`,
-deterministic recommendation ordering, a recommendation smoke/evaluation
-fixture foundation, OpenAPI update, and focused backend tests.
+Phase 2 Batch 2 has been merged into `main` and tagged
+`phase-2-batch-2`. The current documentation branch
+`docs/multi-source-poi-governance` is being synchronized onto the merged Batch
+2 baseline for Draft PR #5 review only.
+
+Completed Batch 2 scope is limited to Traveler API v2 recommendation endpoint
+coverage, public recommendation serialization, `reasonCodes`, deterministic
+recommendation ordering, a recommendation smoke/evaluation fixture foundation,
+OpenAPI update, and focused backend tests.
 
 No itinerary preview v2 endpoint, trip persistence, trip edit/replan, feedback
 persistence, PostgreSQL default-runtime switch, frontend source change,
@@ -19,19 +23,23 @@ or later-phase work has been started.
 
 ## Repository State
 
-Backend repository:
+Backend repository state:
 
 - Path: `D:\POI-urban-danang-BE`
-- Branch: `main`
-- Local `main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
-- `origin/main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
+- Original working copy remains untouched during documentation
+  synchronization.
+- Documentation clean clone:
+  `C:\tmp\urbanagent-docs-be-20260731-clean`
+- Documentation branch: `docs/multi-source-poi-governance`
+- Previous documentation branch commit:
+  `a9bf00d2de0a35a3b5dacdf570b0e1e8d14d71cd`
+- `origin/main`: `707cce556cf37986d9bd78fdf25902d76850242c`
+- Phase 2 Batch 2 implementation commit
+  `7718cd5c9e4d4d07a083f1d10aa9ad539035e14b` is in `origin/main`.
+- Annotated tag `phase-2-batch-2` is present.
 - Phase 1 Batch 3 commit
   `2c34471747f6fd33d73130db2ab47df054d4f35c` is in `origin/main`.
-- Annotated tag `phase-1-batch-3` is present on current `main`.
-- Working tree contained Phase 2 planning documentation changes before Batch 1
-  implementation began.
-- Phase 2 Batch 1 implementation changes are currently uncommitted and pending
-  user review.
+- Annotated tag `phase-1-batch-3` is present.
 
 Frontend repository:
 
@@ -237,6 +245,38 @@ Phase 2 Batch 2 validation:
 
 ## Next Step
 
-User review of Phase 2 Batch 1 implementation and validation.
+User review of the synchronized backend multi-source documentation Draft PR #5.
 
-Do not start Phase 2 Batch 2 until the user explicitly approves it.
+Do not start Phase 2 Batch 3 until the user explicitly approves it.
+
+## Future Multi-Source POI Direction
+
+A future multi-source POI and City Pack strategy has been documented.
+
+No multi-source implementation has started.
+
+Current runtime remains:
+
+- Da Nang only,
+- 4166 canonical application POIs,
+- canonical CSV unchanged,
+- CSV default,
+- PostgreSQL opt-in.
+
+Phase 2 continues on the fixed canonical baseline.
+
+No Overture, OpenStreetMap, Wikidata, Google Places, Foursquare, Tripadvisor,
+booking-provider, or competitor data has been added to runtime.
+
+New planning documents:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+The backend and frontend `URBANAGENT_CODEX_CONTEXT.md` files now contain the
+same shared multi-source governance section.
+
+The next source-expansion action requires explicit approval after Phase 2 work
+is safely paused or completed.
+
+Mobile product work has not started.

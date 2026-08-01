@@ -422,7 +422,32 @@ Phase 2 tests should cover:
 - Is a Firebase emulator required for conditional persistence tests?
 - What process and reviewers will create the curated query fixture?
 
-## 22. Definition Of Done
+## 22. Multi-Source POI Boundary
+
+Phase 2 Traveler API v2 remains scoped to the approved Da Nang canonical
+baseline. Multi-source POI strategy, license policy, and source governance are
+documented for future planning only.
+
+Phase 2 must not:
+
+- ingest, scrape, sample, download, persist, cache, or merge an external POI
+  source;
+- replace or regenerate `data/canonical/urbanagent_poi_master_v1.csv`;
+- change the approved 4166 application-POI runtime baseline;
+- add a second city or global source pipeline;
+- expose provider-restricted fields through public traveler contracts.
+
+Future source work requires a separate source onboarding decision and the exact
+approval phrase:
+
+`APPROVED MULTI-SOURCE POI SPIKE`
+
+The governing references are:
+
+- `docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md`
+- `docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md`
+
+## 23. Definition Of Done
 
 Phase 2 can be closed only when:
 

@@ -271,3 +271,59 @@ Phase 0 blocker criteria now verified:
 Phase 1 is complete through Batch 3. Phase 2 is approved for planning and
 specification only; implementation remains pending user review of the Phase 2
 scope/contract/evaluation artifacts.
+
+## Future Data Platform Expansion - Multi-Source City Packs
+
+Status: `PLANNED, NOT STARTED`.
+
+This roadmap item does not alter Phase 2.
+
+Phase 2 continues to use the approved 4166-POI Da Nang canonical baseline.
+
+Future City Pack and POI expansion should proceed through:
+
+### Stage 4A - Source Discovery Spike
+
+- Evaluate approved open-source candidates.
+- Use a bounded Da Nang development sample.
+- Produce coverage, quality, license, and cost reports.
+- Do not modify canonical runtime data.
+
+### Stage 4B - License Registry And Source Governance
+
+- Create a machine-readable source registry.
+- Record storage, caching, display, API, attribution, ML, and deletion rights.
+- Reject sources with unclear or incompatible rights.
+
+### Stage 4C - Entity Resolution Prototype
+
+- Compare new candidates against the current canonical entities.
+- Produce exact, fuzzy, ambiguous, and probable-new-entity reports.
+- Keep all merges reversible.
+- Do not auto-merge ambiguous records.
+
+### Stage 4D - Local Verification Workflow
+
+- Support verified business profiles.
+- Support local operator review.
+- Record evidence, timestamps, and freshness.
+- Keep submitted and verified values distinct.
+
+### Stage 4E - City Pack Automation
+
+- Convert approved source records and local enrichment into a reproducible
+  City Pack.
+- Preserve field-level provenance and license records.
+- Keep provider-specific restrictions enforceable.
+
+### Stage 4F - Second-City Readiness
+
+- Select the second city through a separate product and data decision.
+- Do not assume Da Nang matching rules or categories generalize automatically.
+
+Required gate before Stage 4A:
+
+`APPROVED MULTI-SOURCE POI SPIKE`
+
+Mobile execution-companion design remains a later product track and is not
+part of this data-platform roadmap update.
