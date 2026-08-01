@@ -3,6 +3,8 @@ const CONTRACT_VERSION = 'phase2-traveler-api-v2-draft-1';
 const DATASET_VERSION = 'urbanagent-poi-master-v1';
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
+const DEFAULT_RECOMMENDATION_LIMIT = 5;
+const MAX_RECOMMENDATION_LIMIT = 20;
 
 const CAPABILITY_STATES = Object.freeze({
   UNAVAILABLE: 'unavailable',
@@ -19,6 +21,8 @@ module.exports = {
   CONTRACT_VERSION,
   DATASET_VERSION,
   DEFAULT_LIMIT,
+  DEFAULT_RECOMMENDATION_LIMIT,
   MAX_LIMIT,
+  MAX_RECOMMENDATION_LIMIT,
   PHASE2_CITY_STATUS,
 };

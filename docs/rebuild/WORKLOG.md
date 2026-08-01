@@ -1371,3 +1371,120 @@ Results:
 - Test totals: 22 tests, 21 passed, 0 failed, 1 skipped.
 - Skipped test remains the existing guarded Phase 1 disposable PostGIS
   integration test when DB integration env vars are absent.
+
+## 2026-07-31 19:55:42 +07:00 - Phase 2 Batch 2 Traveler API v2 Recommendations
+
+Scope:
+
+- User approved Phase 2 Batch 2.
+- Implemented only standalone Traveler API v2 recommendations.
+- Did not implement itinerary preview v2, trip persistence/edit/replan,
+  feedback persistence, frontend changes, PostgreSQL default runtime, production
+  database work, Firebase production access, Batch 3, or later-phase work.
+- Used the clean validation clone:
+  `C:\tmp\urbanagent-phase2-batch1-validation-clone-20260726-225244`.
+- Did not modify the locked original working copy at
+  `D:\POI-urban-danang-BE`.
+
+Files changed:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+src/modules/travelerApiV2/constants.js
+src/modules/travelerApiV2/recommendations.js
+src/modules/travelerApiV2/router.js
+src/modules/travelerApiV2/serializers.js
+tests/fixtures/phase2/recommendationQueries.json
+tests/phase2/phase2TravelerApiV2Batch1.test.js
+tests/phase2/phase2TravelerApiV2Batch2.test.js
+```
+
+Commands run:
+
+```text
+git status --short --branch
+git branch --show-current
+git rev-parse HEAD
+Get-Content AGENTS.md
+Get-Content URBANAGENT_CODEX_CONTEXT.md
+Get-Content PLANNING.md
+Get-Content README.md
+Get-Content package.json
+Get-Content D:\POI-urban-danang-FE\AGENTS.md
+Get-Content D:\POI-urban-danang-FE\URBANAGENT_CODEX_CONTEXT.md
+Get-Content docs\rebuild\PHASE2_TRAVELER_API_V2_SCOPE.md
+Get-Content docs\rebuild\PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md
+Get-Content docs\rebuild\PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md
+Get-Content docs\rebuild\CURRENT_STATE.md
+Get-Content docs\rebuild\DECISIONS.md
+Get-Content docs\rebuild\TEST_REPORT.md
+Get-Content docs\rebuild\WORKLOG.md
+rg --files src\modules\travelerApiV2 src\services tests\phase2 docs\rebuild
+rg -n <traveler API v2 and recommendation references>
+node --check src\modules\travelerApiV2\constants.js
+node --check src\modules\travelerApiV2\recommendations.js
+node --check src\modules\travelerApiV2\router.js
+node --check tests\phase2\phase2TravelerApiV2Batch1.test.js
+node --check tests\phase2\phase2TravelerApiV2Batch2.test.js
+node -e <OpenAPI JSON parse and path list>
+npm.cmd test
+Get-FileHash -Algorithm SHA256 docs\rebuild\PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <CSV default runtime and count diagnostic>
+git status --short
+git diff --name-status
+```
+
+Results:
+
+- Syntax checks: PASS.
+- OpenAPI JSON parse: PASS.
+- OpenAPI implemented core paths:
+  - `/api/v2/cities`
+  - `/api/v2/cities/{cityId}/status`
+  - `/api/v2/pois/search`
+  - `/api/v2/pois/{poiId}`
+  - `/api/v2/recommendations`
+- OpenAPI SHA-256:
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`.
+- Canonical CSV SHA-256:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- CSV default runtime: `csv-default`, count `4166`.
+- `npm.cmd test`: PASS, 28 tests total, 27 passed, 0 failed, 1 skipped.
+- Skipped test remains the existing guarded Phase 1 disposable PostGIS
+  integration test when DB integration env vars are absent.
+
+Endpoint and semantic conclusions:
+
+- `POST /api/v2/recommendations`: PASS.
+- Query `quan cafe yen tinh`: nonempty canonical Da Nang recommendations.
+- Missing `cityId`: `400 VALIDATION_ERROR`.
+- Unsupported `cityId=hue`: `422 CITY_NOT_SUPPORTED`.
+- Missing/blank `query`: `400 VALIDATION_ERROR`.
+- Invalid recommendation `limit`: `400 VALIDATION_ERROR`.
+- Public recommendations expose `poi`, `score`, `reason`, `reasonCodes`,
+  `warnings`, and `provenance`.
+- Raw fields are absent from v2 recommendation responses: `signals`,
+  `scoreRaw`, `sourceIds`, and `placeId`.
+- Repeated v2 recommendation requests return deterministic POI IDs.
+- `recommendations` capability is now `experimental`; `tripPreview` remains
+  `planned`.
+- The recommendation fixture is a smoke/evaluation foundation only and does not
+  support quality superiority claims.
+
+Safety:
+
+- CSV remains the default runtime.
+- PostgreSQL remains explicit opt-in.
+- No production or shared database was used.
+- No Firebase production data was touched.
+- Canonical CSV bytes were not modified.
+- No frontend source was changed.
+- No commit or push occurred.
+- Phase 2 Batch 3 was not started.

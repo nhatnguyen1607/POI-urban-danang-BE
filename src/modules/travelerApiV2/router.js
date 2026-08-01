@@ -3,12 +3,13 @@ const { getPoiDataQualityReport, loadPOIsForEdaSource } = require('../../service
 const { getCityConfig, listCityConfigs } = require('../cities/cityConfig');
 const { sendError, sendSuccess, travelerApiV2Context } = require('./requestContext');
 const { searchTravelerPois } = require('./poiSearch');
+const { getTravelerRecommendations, validateRecommendationRequest } = require('./recommendations');
 const { serializeCity, serializeCityStatus, serializePoi } = require('./serializers');
 
 const router = express.Router();
 
 function requireSupportedCity(req, res) {
-  const cityId = req.params.cityId || req.query.cityId;
+  const cityId = req.params.cityId || req.query.cityId || req.body?.cityId;
   if (!cityId) {
     sendError(req, res, 400, 'VALIDATION_ERROR', 'cityId is required', {
       details: [{ field: 'cityId', rule: 'required' }],
@@ -82,6 +83,31 @@ router.get('/pois/:poiId', async (req, res) => {
     sendSuccess(req, res, { poi: serializePoi(poi) }, { cityId: city.cityId });
   } catch (error) {
     sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to read POI detail');
+  }
+});
+
+router.post('/recommendations', async (req, res) => {
+  try {
+    const validation = validateRecommendationRequest(req.body);
+    if (validation.error) {
+      sendError(req, res, 400, 'VALIDATION_ERROR', 'Invalid recommendation request', {
+        details: [validation.error],
+      });
+      return;
+    }
+
+    const city = requireSupportedCity(req, res);
+    if (!city) return;
+
+    const result = await getTravelerRecommendations({
+      query: validation.query,
+      context: validation.context,
+      limit: validation.limit,
+      cityId: city.cityId,
+    });
+    sendSuccess(req, res, result, { cityId: city.cityId });
+  } catch (error) {
+    sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to recommend POIs');
   }
 });
 

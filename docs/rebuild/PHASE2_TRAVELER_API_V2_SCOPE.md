@@ -2,13 +2,14 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 1 IMPLEMENTED FOR APPROVED CORE FOUNDATION`.
+Status: `PHASE 2 BATCH 2 IMPLEMENTED FOR APPROVED RECOMMENDATION FOUNDATION`.
 
 This document separates accepted decisions, current implementation, proposed
-Phase 2 core scope, conditional scope, and open questions. Phase 2 Batch 1 has
-implemented only the approved city/status and POI read/search foundation.
-Recommendation v2, itinerary preview v2, persistence/edit/replan/feedback, and
-later batches have not started.
+Phase 2 core scope, conditional scope, and open questions. Phase 2 Batch 1
+implemented the approved city/status and POI read/search foundation. Phase 2
+Batch 2 implements the approved standalone recommendation v2 foundation.
+Itinerary preview v2, persistence/edit/replan/feedback, and later batches have
+not started.
 
 ## 1. Baseline Verification
 
@@ -34,6 +35,8 @@ later batches have not started.
   - `GET /api/v2/cities/:cityId/status`
   - `GET /api/v2/pois/search`
   - `GET /api/v2/pois/:poiId`
+- Implemented Batch 2 endpoints:
+  - `POST /api/v2/recommendations`
 - No production database or Firebase production access is part of this planning
   or implementation batch.
 
@@ -350,6 +353,20 @@ Batch 2:
 - recommendation deterministic ranking
 - curated evaluation fixture foundation
 - quality evaluation preparation
+
+Batch 2 implemented:
+
+- `POST /api/v2/recommendations`
+- request validation for body `cityId`, nonempty `query`, valid
+  `context.location`, and bounded `limit`
+- default recommendation limit `5`, maximum `20`
+- public response fields `poi`, `score`, `reason`, `reasonCodes`, `warnings`,
+  and `provenance`
+- deterministic public tie-breaking: score descending, normalized name
+  ascending, canonical `Global_ID` ascending
+- no public raw scoring signals, `scoreRaw`, ambiguous `sourceIds`, or
+  `placeId`
+- smoke/evaluation fixture foundation without quality superiority claims
 
 Batch 3:
 

@@ -3,8 +3,8 @@
   "info": {
     "title": "UrbanAgent Traveler API v2",
     "version": "phase2-traveler-api-v2-draft-1",
-    "summary": "Batch 1 traveler API v2 contract for city metadata, city status, POI search, and POI detail.",
-    "description": "This draft covers only approved Phase 2 Batch 1 endpoints. Recommendation, itinerary preview, persistence, edit, replan, feedback, booking, live opening hours, and production database rollout endpoints are intentionally excluded."
+    "summary": "Batch 2 traveler API v2 contract for city metadata, POI search, POI detail, and recommendations.",
+    "description": "This draft covers approved Phase 2 Batch 1 and Batch 2 core endpoints. Itinerary preview, persistence, edit, replan, feedback, booking, live opening hours, and production database rollout endpoints are intentionally excluded."
   },
   "servers": [
     {
@@ -250,6 +250,63 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/CityNotSupported"
+          }
+        }
+      }
+    },
+    "/api/v2/recommendations": {
+      "post": {
+        "tags": [
+          "Traveler API v2"
+        ],
+        "summary": "Recommend traveler POIs for one city-scoped query.",
+        "operationId": "recommendTravelerPoisV2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecommendationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recommendation results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/RecommendationResponse"
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/CityMeta"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "422": {
             "$ref": "#/components/responses/CityNotSupported"
@@ -1059,6 +1116,153 @@
             ]
           }
         }
+      },
+      "RecommendationRequest": {
+        "type": "object",
+        "required": [
+          "cityId",
+          "query"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cityId": {
+            "const": "da-nang"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "location": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "lon": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "lng": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  }
+                }
+              },
+              "durationMinutes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "maxDistanceKm": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 5
+          }
+        }
+      },
+      "RecommendationResponse": {
+        "type": "object",
+        "required": [
+          "recommendations",
+          "query",
+          "cityId",
+          "limit",
+          "warnings"
+        ],
+        "properties": {
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecommendationItem"
+            }
+          },
+          "query": {
+            "type": "string"
+          },
+          "cityId": {
+            "const": "da-nang"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RecommendationItem": {
+        "type": "object",
+        "required": [
+          "poi",
+          "score",
+          "reason",
+          "reasonCodes",
+          "warnings",
+          "provenance"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "poi": {
+            "$ref": "#/components/schemas/TravelerPoi"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "reason": {
+            "type": "string"
+          },
+          "reasonCodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecommendationReasonCode"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/PoiProvenance"
+          }
+        }
+      },
+      "RecommendationReasonCode": {
+        "type": "string",
+        "enum": [
+          "intent_match",
+          "category_match",
+          "query_text_match",
+          "preference_match",
+          "rating_signal",
+          "review_signal",
+          "distance_fit",
+          "distance_unknown",
+          "canonical_dataset_match"
+        ]
       },
       "PoiFreshness": {
         "type": "object",

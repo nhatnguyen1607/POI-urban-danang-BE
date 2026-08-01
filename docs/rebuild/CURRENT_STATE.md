@@ -1,20 +1,21 @@
 # Current State
 
-Updated: 2026-07-26 22:04:35 +07:00.
+Updated: 2026-07-31 19:55:42 +07:00.
 
 ## Phase
 
-`PHASE_2_BATCH_1_IMPLEMENTED_PENDING_REVIEW`
+`PHASE_2_BATCH_2_IMPLEMENTED_PENDING_REVIEW`
 
-Phase 2 Batch 1 has been explicitly approved and implemented. This batch is
-limited to Traveler API v2 safety foundation endpoints, common envelope/error
-metadata, request ID handling, city metadata/status, POI search/detail,
-pagination, OpenAPI 3.1 draft artifact, and focused backend tests.
+Phase 2 Batch 2 has been explicitly approved and implemented after the merged
+Batch 1 baseline. This batch is limited to Traveler API v2 recommendation
+endpoint coverage, public recommendation serialization, `reasonCodes`,
+deterministic recommendation ordering, a recommendation smoke/evaluation
+fixture foundation, OpenAPI update, and focused backend tests.
 
-No recommendation v2 endpoint, itinerary preview v2 endpoint, trip persistence,
-trip edit/replan, feedback persistence, PostgreSQL default-runtime switch,
-frontend source change, production database access, Firebase production access,
-or Phase 2 Batch 2 work has been started.
+No itinerary preview v2 endpoint, trip persistence, trip edit/replan, feedback
+persistence, PostgreSQL default-runtime switch, frontend source change,
+production database access, Firebase production access, Phase 2 Batch 3 work,
+or later-phase work has been started.
 
 ## Repository State
 
@@ -109,6 +110,7 @@ New Phase 2 Batch 1 Traveler API v2 routes are mounted under `src/server.js` at
 - `GET /api/v2/cities/:cityId/status`
 - `GET /api/v2/pois/search`
 - `GET /api/v2/pois/:poiId`
+- `POST /api/v2/recommendations`
 
 Batch 1 routes expose a common v2 envelope with `ok`, `data` or `error`, and
 `meta`. Every v2 response includes `apiVersion` and `requestId`; city-scoped
@@ -129,6 +131,12 @@ Implemented Batch 1 behavior:
   - All/canonical: `4166`
 - POI responses expose traveler-safe provenance through typed source
   identifiers and do not expose ambiguous legacy `placeId` or raw `sourceIds`.
+- Recommendation v2 validates body-scoped `cityId`, rejects unsupported cities
+  with `CITY_NOT_SUPPORTED`, returns nonempty canonical Da Nang results for the
+  smoke query `quan cafe yen tinh`, exposes public `score`, `reason`,
+  `reasonCodes`, `warnings`, and POI provenance, and omits raw scoring signals.
+- Recommendation v2 uses deterministic tie-breaking by score descending,
+  normalized name ascending, and canonical `Global_ID` ascending.
 
 ## New Phase 2 Planning Artifacts
 
@@ -175,7 +183,7 @@ Revision corrections applied:
   baselines, fixture requirements, metrics, ablations, repeatability,
   statistical reporting, failure taxonomy, and validity threats.
 - OpenAPI draft artifact SHA-256:
-  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`
 
 Updated in this batch:
 
@@ -188,29 +196,33 @@ Updated in this batch:
 
 ## Build/Test Status
 
-Phase 2 Batch 1 validation:
+Phase 2 Batch 2 validation:
 
-- Syntax checks for all new Traveler API v2 modules and the new Phase 2 test:
+- Syntax checks for changed/new Traveler API v2 modules and Phase 2 tests:
   PASS.
 - OpenAPI JSON parse: PASS.
 - OpenAPI SHA-256:
-  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
-- `npm.cmd test`: PASS, 22 tests total, 21 passed, 0 failed, 1 skipped.
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`.
+- `npm.cmd test`: PASS, 28 tests total, 27 passed, 0 failed, 1 skipped.
 - The skipped test is the existing guarded Phase 1 disposable PostGIS
   integration test when DB integration env vars are absent.
 - Phase 2 Batch 1 endpoint smoke: PASS.
+- Phase 2 Batch 2 recommendation endpoint smoke: PASS.
 - Runtime source counts observed through v2 search:
   - Google-compatible: `3946`
   - Foody-compatible: `225`
   - All/canonical: `4166`
+- Runtime recommendation smoke:
+  - `POST /api/v2/recommendations`: PASS, nonempty canonical Da Nang results.
+  - deterministic repeated response IDs: PASS.
+  - public raw scoring fields absent: PASS.
 - CSV remains default runtime.
 - PostgreSQL remains explicit opt-in.
 
 ## Risks
 
-- Batch 1 intentionally implements only city/status and POI read/search v2
-  endpoints. Recommendation v2 and itinerary preview v2 remain unimplemented
-  until later approved batches.
+- Batch 2 intentionally implements only standalone recommendation v2.
+  Itinerary preview v2 remains unimplemented until Phase 2 Batch 3 approval.
 - Existing traveler responses include some mojibake display strings; Phase 2
   contract should test structure and semantics first, then handle copy/encoding
   deliberately.

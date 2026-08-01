@@ -1,0 +1,31 @@
+{
+  "fixtureVersion": "phase2-recommendation-smoke-v1",
+  "datasetSha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+  "notes": [
+    "This fixture is a smoke and evaluation-foundation fixture only.",
+    "It is not a scored relevance benchmark and must not be used for quality superiority claims."
+  ],
+  "queries": [
+    {
+      "id": "quiet-cafe-da-nang",
+      "cityId": "da-nang",
+      "query": "quan cafe yen tinh",
+      "limit": 5,
+      "expectedRelevantCategories": [
+        "cafe"
+      ],
+      "mustNotExposeFields": [
+        "signals",
+        "scoreRaw",
+        "sourceIds",
+        "placeId"
+      ],
+      "expectedWarningConditions": [
+        "freshness_unknown",
+        "opening_hours_unknown"
+      ],
+      "annotationSource": "contract-smoke",
+      "reviewerNotes": "Foundation fixture for deterministic endpoint and public field semantics only."
+    }
+  ]
+}
