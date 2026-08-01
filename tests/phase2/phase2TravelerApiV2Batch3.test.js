@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const { spawn } = require('node:child_process');
 const http = require('node:http');
 const path = require('node:path');
@@ -8,6 +9,7 @@ const fixture = require('../fixtures/phase2/tripPreviewQueries.json');
 const {
   buildTripPreview,
   normalizeOpeningHours,
+  scheduleCandidates,
 } = require('../../src/modules/travelerApiV2/tripPreview');
 const {
   CATEGORY_DEFAULTS,
@@ -104,6 +106,10 @@ function warningCodeList(trip) {
   return (trip.warnings || []).map((warning) => warning.code);
 }
 
+function warningCodeListFromScheduled(scheduled) {
+  return (scheduled.warnings || []).map((warning) => warning.code);
+}
+
 function stripVariableMeta(response) {
   return {
     ...response.body,
@@ -135,6 +141,10 @@ function assertNoPublicLeak(value) {
   }
 }
 
+function fixtureCasesByMode(mode) {
+  return fixture.cases.filter((item) => item.executionMode === mode);
+}
+
 test('Phase 2 Batch 3 fixture records the approved deterministic coverage set', () => {
   assert.equal(fixture.fixtureVersion, 'phase2-trip-preview-smoke-v1');
   assert.equal(fixture.contractVersion, 'phase2-batch3-trip-preview-v1');
@@ -144,7 +154,12 @@ test('Phase 2 Batch 3 fixture records the approved deterministic coverage set', 
     '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae',
   );
   assert.equal(fixture.cases.length, 18);
+  assert.equal(fixtureCasesByMode('endpoint').length, 16);
+  assert.equal(fixtureCasesByMode('engine_unit').length, 2);
+  assert.equal(new Set(fixture.cases.map((item) => item.id)).size, fixture.cases.length);
+  assert.ok(fixture.cases.every((item) => ['endpoint', 'engine_unit'].includes(item.executionMode)));
   assert.ok(fixture.notes.some((note) => note.includes('not a travel-quality benchmark')));
+  assert.ok(fixture.notes.some((note) => note.includes('executionMode')));
 });
 
 test('Phase 2 Batch 3 request validation is deterministic and bounded', () => {
@@ -291,17 +306,25 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
     deterministicReplayPass: 0,
     deterministicReplayTotal: 0,
     exclusionViolations: 0,
+    exclusionChecks: 0,
     duplicateStops: 0,
+    duplicateChecks: 0,
     scheduledStops: 0,
     satisfiableMustIncludeTotal: 0,
     satisfiableMustIncludeScheduled: 0,
+    dailyWindowOverflow: 0,
+    dailyWindowChecks: 0,
+    knownOpeningHoursConflicts: 0,
+    knownOpeningHoursConflictChecks: 0,
     unscheduledItems: 0,
     unscheduledItemsExplained: 0,
     warningAssertions: 0,
     warningAssertionsPassed: 0,
+    geographicCompactnessPass: 0,
+    geographicCompactnessTotal: 0,
   };
 
-  for (const testCase of fixture.cases.filter((item) => !item.input.syntheticOnly)) {
+  for (const testCase of fixtureCasesByMode('endpoint')) {
     const validation = validateTripPreviewRequest(testCase.input);
     assert.equal(validation.errors, undefined, `${testCase.id} should be structurally valid`);
     const first = await buildTripPreview(validation.value);
@@ -325,8 +348,10 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
 
     const ids = first.trip.stops.map((stop) => stop.poi.globalId);
     metrics.scheduledStops += ids.length;
+    metrics.duplicateChecks += 1;
     metrics.duplicateStops += ids.length - new Set(ids).size;
-    for (const excluded of validation.value.constraints.excludePoiIds) {
+    for (const excluded of new Set(validation.value.constraints.excludePoiIds)) {
+      metrics.exclusionChecks += 1;
       if (ids.includes(excluded)) metrics.exclusionViolations += 1;
     }
     for (const required of validation.value.constraints.mustIncludePoiIds) {
@@ -336,17 +361,36 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
     }
     metrics.unscheduledItems += first.trip.unscheduled.length;
     metrics.unscheduledItemsExplained += first.trip.unscheduled.filter((item) => item.reasonCode && item.message).length;
+    metrics.geographicCompactnessTotal += 1;
+    if (
+      first.trip.routeSummary.totalDistanceKm === null ||
+      (first.trip.routeSummary.totalDistanceKm >= 0 && first.trip.routeSummary.totalDistanceKm <= 80)
+    ) {
+      metrics.geographicCompactnessPass += 1;
+    }
 
     for (const warningCode of testCase.expectedWarnings || []) {
       metrics.warningAssertions += 1;
       if (warningCodeList(first.trip).includes(warningCode)) metrics.warningAssertionsPassed += 1;
     }
+    if (warningCodeList(first.trip).includes('OPENING_HOURS_CONFLICT')) {
+      metrics.knownOpeningHoursConflictChecks += 1;
+      metrics.knownOpeningHoursConflicts += 1;
+    }
 
     for (const stop of first.trip.stops) {
       assert.equal(stop.durationPolicyVersion, DURATION_POLICY_VERSION);
+      assert.equal(['requested', 'category_default', 'fallback'].includes(stop.durationSource), true);
+      assert.equal(Object.prototype.hasOwnProperty.call(stop, 'durationPolicyCategory'), false);
+      assert.equal(Object.prototype.hasOwnProperty.call(stop, 'recommendation'), false);
+      assert.equal(Object.prototype.hasOwnProperty.call(stop.travelFromPrevious, 'legOrder'), false);
       assert.equal(Object.prototype.hasOwnProperty.call(stop.poi, 'placeId'), false);
       assert.equal(Object.prototype.hasOwnProperty.call(stop.poi, 'sourceIds'), false);
       if (stop.arrivalTime && stop.departureTime && first.trip.dailyWindow) {
+        metrics.dailyWindowChecks += 1;
+        if (stop.arrivalTime < first.trip.dailyWindow.start || stop.departureTime > first.trip.dailyWindow.end) {
+          metrics.dailyWindowOverflow += 1;
+        }
         assert.ok(stop.arrivalTime >= first.trip.dailyWindow.start, `${testCase.id} arrival overflow`);
         assert.ok(stop.departureTime <= first.trip.dailyWindow.end, `${testCase.id} departure overflow`);
       }
@@ -356,10 +400,106 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
 
   assert.equal(metrics.deterministicReplayPass, metrics.deterministicReplayTotal);
   assert.equal(metrics.exclusionViolations, 0);
+  assert.ok(metrics.exclusionChecks > 0);
   assert.equal(metrics.duplicateStops, 0);
+  assert.ok(metrics.duplicateChecks > 0);
   assert.equal(metrics.satisfiableMustIncludeScheduled, metrics.satisfiableMustIncludeTotal);
+  assert.ok(metrics.satisfiableMustIncludeTotal > 0);
+  assert.equal(metrics.dailyWindowOverflow, 0);
+  assert.ok(metrics.dailyWindowChecks > 0);
+  assert.equal(metrics.knownOpeningHoursConflicts, metrics.knownOpeningHoursConflictChecks);
+  assert.ok(metrics.knownOpeningHoursConflictChecks > 0);
   assert.equal(metrics.unscheduledItemsExplained, metrics.unscheduledItems);
   assert.equal(metrics.warningAssertionsPassed, metrics.warningAssertions);
+  assert.equal(metrics.geographicCompactnessPass, metrics.geographicCompactnessTotal);
+  assert.ok(metrics.geographicCompactnessTotal > 0);
+});
+
+test('Phase 2 Batch 3 engine-unit fixtures execute production scheduling policies', () => {
+  const engineCases = fixtureCasesByMode('engine_unit');
+  assert.equal(engineCases.length, 2);
+
+  for (const testCase of engineCases) {
+    const validation = validateTripPreviewRequest(testCase.input);
+    assert.equal(validation.errors, undefined, `${testCase.id} should be structurally valid`);
+
+    const first = scheduleCandidates({
+      candidates: testCase.engineUnit.candidates,
+      request: validation.value,
+      mustIncludeIds: testCase.engineUnit.mustIncludeIds || [],
+    });
+    const second = scheduleCandidates({
+      candidates: [...testCase.engineUnit.candidates].reverse(),
+      request: validation.value,
+      mustIncludeIds: testCase.engineUnit.mustIncludeIds || [],
+    });
+
+    assert.equal(first.feasibilityStatus, testCase.expectedFeasibility, testCase.id);
+    assert.deepEqual(
+      first.stops.map((stop) => stop.poi.globalId),
+      second.stops.map((stop) => stop.poi.globalId),
+      `${testCase.id} must be independent of input object iteration order`,
+    );
+    assert.deepEqual(warningCodeListFromScheduled(first), warningCodeListFromScheduled(second), `${testCase.id} warnings must be deterministic`);
+
+    for (const warningCode of testCase.expectedWarnings || []) {
+      assert.ok(warningCodeListFromScheduled(first).includes(warningCode), `${testCase.id} should emit ${warningCode}`);
+    }
+
+    const ids = first.stops.map((stop) => stop.poi.globalId);
+    assert.equal(new Set(ids).size, ids.length, `${testCase.id} should not duplicate stops`);
+
+    if (testCase.id === 'missing-coordinates-degraded-geography') {
+      assert.equal(first.stops.length, 1);
+      const stop = first.stops[0];
+      assert.equal(stop.poi.location.lat, null);
+      assert.equal(stop.poi.location.lon, null);
+      assert.equal(stop.poi.location.hasCoordinates, false);
+      assert.equal(stop.travelFromPrevious.distanceMeters, null);
+      assert.equal(stop.travelFromPrevious.travelDurationMinutes, null);
+      assert.equal(stop.travelFromPrevious.calculationSource, 'missing-coordinates');
+      assert.equal(stop.travelFromPrevious.distanceKnown, false);
+      assert.ok(stop.warnings.includes('COORDINATES_MISSING'));
+    }
+
+    if (testCase.id === 'deterministic-tie-case') {
+      assert.deepEqual(ids, testCase.engineUnit.expectedStopOrder);
+      assert.ok(first.stops.every((stop) => stop.travelFromPrevious.estimationMethod === TRAVEL_ESTIMATION_METHOD));
+      assert.equal(JSON.stringify(first), JSON.stringify(second));
+    }
+  }
+});
+
+test('Phase 2 Batch 3 OpenAPI schema matches public runtime trip preview fields', async () => {
+  const openApiPath = path.join(__dirname, '..', '..', 'docs', 'rebuild', 'PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json');
+  const openApi = JSON.parse(fs.readFileSync(openApiPath, 'utf8'));
+  const previewCase = fixture.cases.find((item) => item.id === 'one-day-balanced-trip');
+  const validation = validateTripPreviewRequest(previewCase.input);
+  const result = await buildTripPreview(validation.value);
+  const trip = result.trip;
+  const stop = trip.stops[0];
+  const leg = stop.travelFromPrevious;
+
+  assert.equal(openApi.openapi, '3.1.0');
+  assert.ok(openApi.paths['/api/v2/trips/preview']?.post);
+
+  const tripSchemaFields = Object.keys(openApi.components.schemas.TripPreviewTrip.properties).sort();
+  assert.deepEqual(Object.keys(trip).sort(), tripSchemaFields);
+
+  const stopSchemaFields = Object.keys(openApi.components.schemas.TripPreviewStop.properties).sort();
+  assert.deepEqual(Object.keys(stop).sort(), stopSchemaFields);
+
+  const legSchemaFields = Object.keys(openApi.components.schemas.TripPreviewTravelLeg.properties).sort();
+  assert.deepEqual(Object.keys(leg).sort(), legSchemaFields);
+
+  assert.deepEqual(
+    openApi.components.schemas.TripPreviewStop.properties.durationSource.enum,
+    ['requested', 'category_default', 'fallback'],
+  );
+  assert.equal(Object.prototype.hasOwnProperty.call(trip, 'recommendationSummary'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(stop, 'durationPolicyCategory'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(stop, 'recommendation'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(leg, 'legOrder'), false);
 });
 
 test('Phase 2 Batch 3 engine preserves missing-origin null semantics and budget warnings', {
