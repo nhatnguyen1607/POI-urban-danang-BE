@@ -254,3 +254,33 @@ Updated: 2026-07-26 16:35:00 +07:00.
 - Decide whether a Firebase emulator is required for conditional persistence
   tests.
 - Decide what process and reviewers will create the curated query fixture.
+
+## Phase 2 Batch 2 Implementation Decisions
+
+- Implement only the approved standalone Traveler API v2 recommendation
+  endpoint:
+  - `POST /api/v2/recommendations`
+- Keep the existing `recommendPOIs` algorithm as B0/current behavior. Batch 2
+  wraps it in a public v2 contract and does not claim recommendation-quality
+  superiority.
+- Require `cityId` in the recommendation request body. Missing `cityId`
+  returns `VALIDATION_ERROR`; unsupported explicit `cityId` returns
+  `CITY_NOT_SUPPORTED`.
+- Keep Da Nang as the only supported Phase 2 city and keep CSV as the default
+  runtime.
+- Use recommendation limit default `5` and maximum `20` for the v2 endpoint.
+- Public recommendation items expose only `poi`, `score`, `reason`,
+  `reasonCodes`, `warnings`, and `provenance`.
+- Do not expose raw internal scoring signals, `scoreRaw`, ambiguous
+  `sourceIds`, or `placeId` in Traveler API v2 recommendation responses.
+- Apply deterministic public ordering by score descending, normalized name
+  ascending, and canonical `Global_ID` ascending.
+- Add a curated smoke/evaluation fixture foundation for `quan cafe yen tinh`.
+  The fixture is not a scored relevance benchmark and must not be used for
+  quality superiority claims.
+- Mark `recommendations` capability as `experimental` after implementation and
+  validation. Keep `tripPreview` as `planned`; persistence/edit/replan/feedback
+  remain `unavailable`.
+- Do not implement itinerary preview v2, trip persistence, frontend changes,
+  PostgreSQL default runtime, production database work, Firebase production
+  access, Phase 2 Batch 3, or later-phase work in Batch 2.

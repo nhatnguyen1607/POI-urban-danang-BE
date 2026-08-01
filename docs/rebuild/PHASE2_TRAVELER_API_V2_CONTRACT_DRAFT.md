@@ -2,14 +2,14 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 1 IMPLEMENTED FOR APPROVED CORE FOUNDATION`.
+Status: `PHASE 2 BATCH 2 IMPLEMENTED FOR APPROVED RECOMMENDATION FOUNDATION`.
 
 This contract draft now has a Phase 2 Batch 1 implementation for city metadata,
 city status, POI search, POI detail, common envelopes, request IDs, pagination,
-and the OpenAPI artifact. Recommendation v2, itinerary preview v2, and
-conditional persistence routes are not implemented. Conditional persistence
-routes are retained for design continuity but are marked
-`CONDITIONAL - NOT APPROVED FOR IMPLEMENTATION`.
+and the OpenAPI artifact. Phase 2 Batch 2 implements standalone recommendation
+v2. Itinerary preview v2 and conditional persistence routes are not
+implemented. Conditional persistence routes are retained for design continuity
+but are marked `CONDITIONAL - NOT APPROVED FOR IMPLEMENTATION`.
 
 ## 1. Approved Contract Decisions
 
@@ -33,8 +33,8 @@ routes are retained for design continuity but are marked
   `openApiSha256`, calculated from the generated artifact.
 - Batch 1 OpenAPI artifact:
   `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json`.
-- Batch 1 OpenAPI SHA-256:
-  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
+- Batch 2 OpenAPI SHA-256:
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`.
 
 ## 2. Public Metadata Boundary
 
@@ -225,7 +225,7 @@ Example:
   "status": "PHASE2_DRAFT",
   "capabilityStatus": {
     "poiSearch": "planned",
-    "recommendations": "planned",
+    "recommendations": "experimental",
     "tripPreview": "planned",
     "tripSave": "unavailable",
     "tripEdit": "unavailable",
@@ -537,7 +537,7 @@ Success:
         "status": "PHASE2_DRAFT",
         "capabilityStatus": {
           "poiSearch": "planned",
-          "recommendations": "planned",
+          "recommendations": "experimental",
           "tripPreview": "planned",
           "tripSave": "unavailable",
           "tripEdit": "unavailable",
@@ -586,7 +586,7 @@ Success:
     },
     "capabilityStatus": {
       "poiSearch": "planned",
-      "recommendations": "planned",
+      "recommendations": "experimental",
       "tripPreview": "planned",
       "tripSave": "unavailable",
       "tripEdit": "unavailable",
@@ -694,6 +694,11 @@ Acceptance:
 - Raw scoring signals are not public contract.
 - Deterministic tie-breaking: score descending, normalized name ascending,
   canonical `Global_ID` ascending.
+- Missing `cityId` returns `VALIDATION_ERROR`.
+- Unsupported explicit `cityId` returns `CITY_NOT_SUPPORTED`.
+- Default limit is `5`; maximum limit is `20`.
+- The smoke/evaluation fixture foundation is not a scored relevance benchmark
+  and must not be used for recommendation-quality superiority claims.
 
 ### POST `/api/v2/trips/preview`
 
