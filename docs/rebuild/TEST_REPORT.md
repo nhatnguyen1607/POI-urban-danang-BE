@@ -915,3 +915,88 @@ Safety confirmations:
 - No production database or Firebase production data was touched.
 - Canonical CSV bytes were not modified.
 - Phase 2 Batch 2 was not started.
+
+## Phase 2 Batch 2 Traveler API v2 Recommendations
+
+Updated: 2026-07-31 19:55:42 +07:00.
+
+Scope validated:
+
+- Standalone `POST /api/v2/recommendations`.
+- Request body validation for `cityId`, `query`, `context.location`, and
+  recommendation `limit`.
+- Public recommendation response fields: `poi`, `score`, `reason`,
+  `reasonCodes`, `warnings`, and `provenance`.
+- Deterministic recommendation ordering by score, normalized name, and
+  canonical `Global_ID`.
+- Recommendation smoke/evaluation fixture foundation.
+- OpenAPI 3.1 artifact updated for Batch 1 + Batch 2 implemented core
+  endpoints only.
+
+Commands run:
+
+```text
+node --check src\modules\travelerApiV2\constants.js
+node --check src\modules\travelerApiV2\recommendations.js
+node --check src\modules\travelerApiV2\router.js
+node --check tests\phase2\phase2TravelerApiV2Batch1.test.js
+node --check tests\phase2\phase2TravelerApiV2Batch2.test.js
+node -e <OpenAPI JSON parse and path list>
+npm.cmd test
+Get-FileHash -Algorithm SHA256 docs\rebuild\PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+node -e <CSV default runtime and count diagnostic>
+```
+
+Results:
+
+- Syntax checks: PASS.
+- OpenAPI JSON parse: PASS.
+- OpenAPI implemented core paths:
+  - `/api/v2/cities`
+  - `/api/v2/cities/{cityId}/status`
+  - `/api/v2/pois/search`
+  - `/api/v2/pois/{poiId}`
+  - `/api/v2/recommendations`
+- OpenAPI SHA-256:
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`.
+- Canonical CSV SHA-256: PASS,
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- CSV default runtime: PASS, repository `csv-default`, count `4166`.
+- `npm.cmd test`: PASS.
+- Test totals: 28 tests, 27 passed, 0 failed, 1 skipped.
+- Skipped test remains the existing guarded Phase 1 disposable PostGIS
+  integration test when DB integration env vars are absent.
+
+Recommendation v2 smoke results:
+
+```text
+POST /api/v2/recommendations
+  PASS, nonempty results for query "quan cafe yen tinh"
+  cityId da-nang
+  limit 5
+  deterministic repeated response IDs PASS
+  public fields include score, reason, reasonCodes, warnings, provenance
+  raw fields absent: signals, scoreRaw, sourceIds, placeId
+```
+
+Validation/error results:
+
+```text
+missing cityId -> 400 VALIDATION_ERROR
+unsupported cityId hue -> 422 CITY_NOT_SUPPORTED
+missing/blank query -> 400 VALIDATION_ERROR
+invalid recommendation limit -> 400 VALIDATION_ERROR
+invalid context.location latitude/longitude rejected by unit validation
+```
+
+Safety confirmations:
+
+- CSV remains the default runtime.
+- PostgreSQL remains explicit opt-in.
+- No production/shared database was used.
+- No Firebase production data was touched.
+- Canonical CSV bytes were not modified.
+- No frontend files were changed.
+- No itinerary preview v2, trip persistence/edit/replan, feedback persistence,
+  Phase 2 Batch 3, or later-phase work was started.

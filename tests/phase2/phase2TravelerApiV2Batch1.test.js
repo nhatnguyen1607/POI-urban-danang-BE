@@ -190,7 +190,7 @@ test('Phase 2 POI serializer preserves canonical public semantics', async () => 
   assert.ok(serializedAlias.provenance.aliasGlobalIds.every((alias) => alias !== serializedAlias.globalId));
 });
 
-test('Phase 2 OpenAPI draft is limited to approved Batch 1 endpoints', () => {
+test('Phase 2 OpenAPI draft is limited to approved implemented core endpoints', () => {
   const openApiPath = path.join(__dirname, '..', '..', 'docs', 'rebuild', 'PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json');
   const artifactText = fs.readFileSync(openApiPath, 'utf8');
   const artifact = JSON.parse(artifactText);
@@ -203,6 +203,7 @@ test('Phase 2 OpenAPI draft is limited to approved Batch 1 endpoints', () => {
     '/api/v2/cities/{cityId}/status',
     '/api/v2/pois/search',
     '/api/v2/pois/{poiId}',
+    '/api/v2/recommendations',
   ]);
 
   for (const forbidden of [
@@ -214,7 +215,6 @@ test('Phase 2 OpenAPI draft is limited to approved Batch 1 endpoints', () => {
     'PostgresPoiRepository',
     'poi_entities',
     'RestaurantID',
-    '/api/v2/recommendations',
     '/api/v2/trips',
   ]) {
     assert.equal(artifactText.includes(forbidden), false, `${forbidden} must not appear in the public artifact`);
@@ -255,7 +255,7 @@ test('Phase 2 Batch 1 traveler API endpoints expose CSV-backed city and POI cont
     assert.equal(cities.body.data.cities.length, 1);
     assert.equal(cities.body.data.cities[0].cityId, DEFAULT_CITY_ID);
     assert.equal(cities.body.data.cities[0].capabilityStatus.poiSearch, 'experimental');
-    assert.equal(cities.body.data.cities[0].capabilityStatus.recommendations, 'planned');
+    assert.equal(cities.body.data.cities[0].capabilityStatus.recommendations, 'experimental');
     assert.equal(cities.body.data.cities[0].capabilityStatus.liveBooking, 'unavailable');
 
     const generatedRequestId = await requestJson({ port, path: '/api/v2/cities' });

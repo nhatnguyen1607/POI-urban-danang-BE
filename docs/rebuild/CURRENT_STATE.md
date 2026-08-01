@@ -1,36 +1,45 @@
 # Current State
 
-Updated: 2026-07-26 22:04:35 +07:00.
+Updated: 2026-08-01 13:17:32 +07:00.
 
 ## Phase
 
-`PHASE_2_BATCH_1_IMPLEMENTED_PENDING_REVIEW`
+`PHASE_2_BATCH_2_MERGED_MULTI_SOURCE_DOCS_SYNC_PENDING_REVIEW`
 
-Phase 2 Batch 1 has been explicitly approved and implemented. This batch is
-limited to Traveler API v2 safety foundation endpoints, common envelope/error
-metadata, request ID handling, city metadata/status, POI search/detail,
-pagination, OpenAPI 3.1 draft artifact, and focused backend tests.
+Phase 2 Batch 2 has been merged into `main` and tagged
+`phase-2-batch-2`. The current documentation branch
+`docs/multi-source-poi-governance` is being synchronized onto the merged Batch
+2 baseline for Draft PR #5 review only.
 
-No recommendation v2 endpoint, itinerary preview v2 endpoint, trip persistence,
-trip edit/replan, feedback persistence, PostgreSQL default-runtime switch,
-frontend source change, production database access, Firebase production access,
-or Phase 2 Batch 2 work has been started.
+Completed Batch 2 scope is limited to Traveler API v2 recommendation endpoint
+coverage, public recommendation serialization, `reasonCodes`, deterministic
+recommendation ordering, a recommendation smoke/evaluation fixture foundation,
+OpenAPI update, and focused backend tests.
+
+No itinerary preview v2 endpoint, trip persistence, trip edit/replan, feedback
+persistence, PostgreSQL default-runtime switch, frontend source change,
+production database access, Firebase production access, Phase 2 Batch 3 work,
+or later-phase work has been started.
 
 ## Repository State
 
-Backend repository:
+Backend repository state:
 
 - Path: `D:\POI-urban-danang-BE`
-- Branch: `main`
-- Local `main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
-- `origin/main`: `ec06a905e2f61f9f4c90dc7857bf31cf2bb78fb6`
+- Original working copy remains untouched during documentation
+  synchronization.
+- Documentation clean clone:
+  `C:\tmp\urbanagent-docs-be-20260731-clean`
+- Documentation branch: `docs/multi-source-poi-governance`
+- Previous documentation branch commit:
+  `a9bf00d2de0a35a3b5dacdf570b0e1e8d14d71cd`
+- `origin/main`: `707cce556cf37986d9bd78fdf25902d76850242c`
+- Phase 2 Batch 2 implementation commit
+  `7718cd5c9e4d4d07a083f1d10aa9ad539035e14b` is in `origin/main`.
+- Annotated tag `phase-2-batch-2` is present.
 - Phase 1 Batch 3 commit
   `2c34471747f6fd33d73130db2ab47df054d4f35c` is in `origin/main`.
-- Annotated tag `phase-1-batch-3` is present on current `main`.
-- Working tree contained Phase 2 planning documentation changes before Batch 1
-  implementation began.
-- Phase 2 Batch 1 implementation changes are currently uncommitted and pending
-  user review.
+- Annotated tag `phase-1-batch-3` is present.
 
 Frontend repository:
 
@@ -109,6 +118,7 @@ New Phase 2 Batch 1 Traveler API v2 routes are mounted under `src/server.js` at
 - `GET /api/v2/cities/:cityId/status`
 - `GET /api/v2/pois/search`
 - `GET /api/v2/pois/:poiId`
+- `POST /api/v2/recommendations`
 
 Batch 1 routes expose a common v2 envelope with `ok`, `data` or `error`, and
 `meta`. Every v2 response includes `apiVersion` and `requestId`; city-scoped
@@ -129,6 +139,12 @@ Implemented Batch 1 behavior:
   - All/canonical: `4166`
 - POI responses expose traveler-safe provenance through typed source
   identifiers and do not expose ambiguous legacy `placeId` or raw `sourceIds`.
+- Recommendation v2 validates body-scoped `cityId`, rejects unsupported cities
+  with `CITY_NOT_SUPPORTED`, returns nonempty canonical Da Nang results for the
+  smoke query `quan cafe yen tinh`, exposes public `score`, `reason`,
+  `reasonCodes`, `warnings`, and POI provenance, and omits raw scoring signals.
+- Recommendation v2 uses deterministic tie-breaking by score descending,
+  normalized name ascending, and canonical `Global_ID` ascending.
 
 ## New Phase 2 Planning Artifacts
 
@@ -175,7 +191,7 @@ Revision corrections applied:
   baselines, fixture requirements, metrics, ablations, repeatability,
   statistical reporting, failure taxonomy, and validity threats.
 - OpenAPI draft artifact SHA-256:
-  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`
 
 Updated in this batch:
 
@@ -188,29 +204,33 @@ Updated in this batch:
 
 ## Build/Test Status
 
-Phase 2 Batch 1 validation:
+Phase 2 Batch 2 validation:
 
-- Syntax checks for all new Traveler API v2 modules and the new Phase 2 test:
+- Syntax checks for changed/new Traveler API v2 modules and Phase 2 tests:
   PASS.
 - OpenAPI JSON parse: PASS.
 - OpenAPI SHA-256:
-  `58599da0dd29023c5d25eee1fc74da7f52339d3e131d6d5542344974b6577a9b`.
-- `npm.cmd test`: PASS, 22 tests total, 21 passed, 0 failed, 1 skipped.
+  `371e5de7db74b3fdeaf52999e2f417db0078309edb9ff5fe399dfec210c60da9`.
+- `npm.cmd test`: PASS, 28 tests total, 27 passed, 0 failed, 1 skipped.
 - The skipped test is the existing guarded Phase 1 disposable PostGIS
   integration test when DB integration env vars are absent.
 - Phase 2 Batch 1 endpoint smoke: PASS.
+- Phase 2 Batch 2 recommendation endpoint smoke: PASS.
 - Runtime source counts observed through v2 search:
   - Google-compatible: `3946`
   - Foody-compatible: `225`
   - All/canonical: `4166`
+- Runtime recommendation smoke:
+  - `POST /api/v2/recommendations`: PASS, nonempty canonical Da Nang results.
+  - deterministic repeated response IDs: PASS.
+  - public raw scoring fields absent: PASS.
 - CSV remains default runtime.
 - PostgreSQL remains explicit opt-in.
 
 ## Risks
 
-- Batch 1 intentionally implements only city/status and POI read/search v2
-  endpoints. Recommendation v2 and itinerary preview v2 remain unimplemented
-  until later approved batches.
+- Batch 2 intentionally implements only standalone recommendation v2.
+  Itinerary preview v2 remains unimplemented until Phase 2 Batch 3 approval.
 - Existing traveler responses include some mojibake display strings; Phase 2
   contract should test structure and semantics first, then handle copy/encoding
   deliberately.
@@ -225,9 +245,9 @@ Phase 2 Batch 1 validation:
 
 ## Next Step
 
-User review of Phase 2 Batch 1 implementation and validation.
+User review of the synchronized backend multi-source documentation Draft PR #5.
 
-Do not start Phase 2 Batch 2 until the user explicitly approves it.
+Do not start Phase 2 Batch 3 until the user explicitly approves it.
 
 ## Future Multi-Source POI Direction
 
