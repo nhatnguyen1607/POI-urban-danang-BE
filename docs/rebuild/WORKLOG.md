@@ -2026,3 +2026,42 @@ Safety:
 - No production/shared database or Firebase production was touched.
 - No external POI source, routing provider, persistence, saved-trip, replan,
   mutation, feedback, second-city, Batch 4, or later-phase work occurred.
+
+## 2026-08-02 08:42:21 +07:00 - Phase 2 Batch 3 OpenAPI LF Reproducibility Fix
+
+Type: repository-normalization correction for PR #9.
+
+Implementation clone:
+
+```text
+C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730
+```
+
+Previous branch HEAD:
+
+```text
+a670f9e4287b2e5309abc73d79d139bedad3c67d
+```
+
+Correction:
+
+- Added a narrowly scoped `.gitattributes` rule for the OpenAPI artifact:
+  `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json text eol=lf`.
+- Preserved OpenAPI semantic JSON content.
+- Clarified in `TEST_REPORT.md` that the expected OpenAPI SHA-256 is the
+  repository-controlled LF checkout byte hash.
+
+Pre-commit validation plan:
+
+- Verify raw OpenAPI bytes hash to
+  `0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034`.
+- Verify fresh clones with `core.autocrlf=true` and `core.autocrlf=false`
+  both check out the OpenAPI artifact with the same LF byte hash.
+- Run dependency, audit, test, OpenAPI parse, canonical hash, and POI count
+  checks before push.
+
+Safety:
+
+- No runtime JavaScript, tests, fixtures, package files, canonical CSV,
+  migrations, environment files, frontend, mobile, database, Firebase,
+  external-source, second-city, Batch 4, main push, tag, or PR merge occurred.

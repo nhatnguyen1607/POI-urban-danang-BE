@@ -1064,6 +1064,8 @@ Results:
 - OpenAPI JSON parse: PASS, OpenAPI version `3.1.0`.
 - OpenAPI SHA-256:
   `0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034`.
+  This is the SHA-256 of the repository-controlled LF checkout bytes for
+  `docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json`.
 - Canonical CSV SHA-256:
   `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
 - Canonical application POI count: `4166`.
