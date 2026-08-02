@@ -431,6 +431,50 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Demo Sprint Backend Per-Day Time Windows
+
+Date: 2026-08-02.
+
+Status: `IMPLEMENTED_ON_DEMO_BRANCH`.
+
+Branch:
+
+- `demo/2026-08-07-per-day-windows`
+
+Decision:
+
+Support per-day local time-window overrides in the stateless Traveler API v2
+trip preview endpoint as a narrow backward-compatible demo extension.
+
+Accepted request semantics:
+
+- preserve existing `trip.dailyWindow.start` / `end`,
+- also accept `trip.dailyWindow.startTime` / `endTime`,
+- add optional `trip.dayWindows[]` with unique `dayNumber` values from 1 to 7,
+- each per-day item may use `start` / `end` or `startTime` / `endTime`,
+- each per-day item overrides the default `trip.dailyWindow` for that day,
+- `dayNumber` must be within `trip.dayCount`,
+- response `trip.days[].dailyWindow` exposes the resolved window for each day.
+
+Rationale:
+
+The 2026-08-07 local video demo needs a clear traveler flow where a user
+selects a default daily window and optionally customizes individual days. This
+extension keeps the preview stateless and avoids production scope expansion.
+
+Explicit non-decisions:
+
+- No saved trips.
+- No trip ownership or history.
+- No replan or stop mutation route.
+- No feedback persistence.
+- No Firebase production use.
+- No production PostgreSQL cutover.
+- No external POI ingestion or routing provider.
+- No second city.
+- No mobile implementation.
+- No Batch 4 work.
+
 ## Decision - Phase 2 Batch 3 Targeted Review Corrections
 
 Date: 2026-08-01.

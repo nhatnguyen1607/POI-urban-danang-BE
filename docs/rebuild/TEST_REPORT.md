@@ -1160,3 +1160,76 @@ Safety confirmations:
 - No frontend or mobile files were changed.
 - No persistence, saved-trip, replan, mutation, feedback, second-city,
   multi-source, Batch 4, Phase 3, or later-phase work was started.
+
+## Demo Sprint - Backend Per-Day Time Window Validation
+
+Date: 2026-08-02.
+
+Branch:
+
+`demo/2026-08-07-per-day-windows`
+
+Scope:
+
+- Backward-compatible request parsing for `trip.dailyWindow.startTime` /
+  `endTime` aliases.
+- Optional `trip.dayWindows[]` per-day local time-window overrides.
+- Scheduler uses a per-day override before falling back to `trip.dailyWindow`
+  and then `trip.startTime`.
+- Response remains stateless and grouped by day through `trip.days[]`.
+
+Commands:
+
+```text
+node --check src/modules/travelerApiV2/tripPreviewValidation.js
+node --check src/modules/travelerApiV2/tripPreview.js
+node --check tests/phase2/phase2TravelerApiV2Batch3.test.js
+node -e <OpenAPI JSON parse>
+node --test tests/phase2/phase2TravelerApiV2Batch3.test.js
+npm.cmd test
+npm.cmd audit --omit=dev
+npm.cmd ls --omit=dev --all
+node -e <per-day-window HTTP smoke>
+```
+
+Results:
+
+- JavaScript syntax checks: PASS.
+- OpenAPI JSON parse: PASS.
+- Batch 3 focused tests: PASS, `12` total, `12` passed, `0` failed.
+- Full default test suite: PASS, `40` total, `39` passed, `0` failed,
+  `1` guarded optional PostGIS skip.
+- `npm.cmd audit --omit=dev`: PASS, `0` vulnerabilities.
+- `npm.cmd ls --omit=dev --all`: PASS, no ELSPROBLEMS.
+- OpenAPI SHA-256:
+  `5dc88bb27797626e4564c6b324e19ed286ae1239bd03eda8d9c736a3aa892988`.
+- Canonical CSV SHA-256:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Canonical application POI count remains `4166`.
+
+Per-day-window HTTP smoke:
+
+```text
+POST /api/v2/trips/preview: 200
+stopCount: 5
+requestId: demo_sprint:per-day-windows
+day 1 dailyWindow: 09:00-17:00
+day 2 dailyWindow: 11:00-14:00
+day 3 dailyWindow: 08:30-12:30
+persisted: false
+tripId: null
+```
+
+Safety confirmations:
+
+- Canonical CSV bytes were not modified.
+- CSV remains the default runtime.
+- PostgreSQL/PostGIS remains explicit opt-in.
+- No dependency was added or upgraded.
+- No production/shared database was used.
+- No Firebase production data was touched.
+- No external POI source, routing provider, traffic provider, or live
+  opening-hours provider was queried.
+- No persistence, authentication, trip ownership/history, replan, stop
+  mutation, feedback persistence, second-city, mobile, multi-source, Batch 4,
+  or frontend implementation was started in this backend Part B patch.

@@ -1,8 +1,46 @@
 # Current State
 
-Updated: 2026-08-01 17:11:45 +07:00.
+Updated: 2026-08-02 10:28:39 +07:00.
 
 ## Phase
+
+`DEMO_SPRINT_BACKEND_PER_DAY_WINDOWS_BRANCH`
+
+Phase 2 Batch 3 is merged, validated, tagged, and backed up. The demo sprint
+backend branch is:
+
+`demo/2026-08-07-per-day-windows`
+
+Branch base:
+
+`e5f2f975b009d561dfef037932068836bde24918`
+
+This branch adds only a backward-compatible demo extension to
+`POST /api/v2/trips/preview`:
+
+- preserve existing `trip.dailyWindow` behavior,
+- accept `trip.dailyWindow.startTime` / `endTime` aliases in addition to
+  `start` / `end`,
+- accept optional `trip.dayWindows[]` per-day overrides for day counts 1-7,
+- keep the response grouped by day with each day exposing its resolved
+  `dailyWindow`.
+
+Validation on this branch:
+
+- `npm.cmd test`: PASS, `40` total, `39` passed, `0` failed, `1` guarded
+  optional PostGIS skip.
+- `npm.cmd audit --omit=dev`: PASS, `0` vulnerabilities.
+- Per-day-window HTTP smoke: PASS, `200`, `5` stops, day windows resolved as
+  `09:00-17:00`, `11:00-14:00`, and `08:30-12:30`.
+- OpenAPI SHA-256:
+  `5dc88bb27797626e4564c6b324e19ed286ae1239bd03eda8d9c736a3aa892988`.
+
+No persistence, authentication, trip ownership/history, replan mutation, stop
+mutation, feedback persistence, external routing, external POI ingestion,
+second city, mobile work, production database access, Firebase production
+access, multi-source implementation, or Batch 4 work was started.
+
+## Previous Phase 2 Batch 3 State
 
 `PHASE_2_BATCH_3_IMPLEMENTED_REVIEW_BRANCH_NOT_MERGED`
 

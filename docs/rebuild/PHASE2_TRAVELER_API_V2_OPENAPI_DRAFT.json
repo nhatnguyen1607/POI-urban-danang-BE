@@ -1453,6 +1453,14 @@
               "dailyWindow": {
                 "$ref": "#/components/schemas/DailyWindow"
               },
+              "dayWindows": {
+                "type": "array",
+                "maxItems": 7,
+                "items": {
+                  "$ref": "#/components/schemas/TripDayWindowOverride"
+                },
+                "description": "Optional per-day local time-window overrides for demo trip previews. Each item overrides dailyWindow for one dayNumber."
+              },
               "party": {
                 "type": "object",
                 "additionalProperties": true
@@ -1486,10 +1494,7 @@
       },
       "DailyWindow": {
         "type": "object",
-        "required": [
-          "start",
-          "end"
-        ],
+        "minProperties": 2,
         "properties": {
           "start": {
             "type": "string",
@@ -1498,9 +1503,47 @@
           "end": {
             "type": "string",
             "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "startTime": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "endTime": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
           }
         },
-        "description": "Same-day local HH:mm window; span must be 15 to 480 minutes."
+        "description": "Same-day local HH:mm window; accepts start/end or backward-compatible demo aliases startTime/endTime. Span must be 15 to 960 minutes."
+      },
+      "TripDayWindowOverride": {
+        "type": "object",
+        "required": [
+          "dayNumber"
+        ],
+        "properties": {
+          "dayNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7
+          },
+          "start": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "end": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "startTime": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "endTime": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          }
+        },
+        "description": "Per-day override for TripPreviewRequest.trip.dayWindows; dayNumber must be unique and within dayCount. Accepts start/end or startTime/endTime. Span must be 15 to 960 minutes."
       },
       "TripPreviewStartLocation": {
         "type": "object",
