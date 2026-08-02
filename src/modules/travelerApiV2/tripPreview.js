@@ -184,7 +184,8 @@ function orderCandidatesGeographically(candidates, startLocation) {
 }
 
 function resolveDayWindow(request, dayNumber) {
-  const configured = request.trip.dailyWindow;
+  const configured = (request.trip.dayWindows || []).find((window) => window.dayNumber === dayNumber) ||
+    request.trip.dailyWindow;
   if (configured) {
     const spanMinutes = request.trip.durationMinutes
       ? Math.min(configured.spanMinutes, request.trip.durationMinutes)

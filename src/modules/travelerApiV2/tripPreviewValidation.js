@@ -10,6 +10,8 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const TRANSPORT_MODES = new Set(['walk', 'motorbike', 'car', 'taxi']);
 const PACES = new Set(['relaxed', 'balanced', 'packed']);
 const BUDGETS = new Set(['budget', 'moderate', 'premium', 'unknown']);
+const MAX_DAY_WINDOWS = 7;
+const MAX_TIME_WINDOW_SPAN_MINUTES = 960;
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -49,6 +51,44 @@ function parseTime(value, field) {
   return {
     value: text,
     minutes: Number(hours) * 60 + Number(minutes),
+  };
+}
+
+function parseTimeWindow(value, field) {
+  if (!isPlainObject(value)) {
+    return { error: fieldError(field, 'object_with_start_end') };
+  }
+
+  const rawStart = value.start !== undefined ? value.start : value.startTime;
+  const rawEnd = value.end !== undefined ? value.end : value.endTime;
+  const startField = value.start !== undefined ? `${field}.start` : `${field}.startTime`;
+  const endField = value.end !== undefined ? `${field}.end` : `${field}.endTime`;
+  const start = parseTime(rawStart, startField);
+  const end = parseTime(rawEnd, endField);
+  const errors = [];
+  if (start.error) errors.push(start.error);
+  if (end.error) errors.push(end.error);
+  if (errors.length) return { errors };
+  if (start.value === null || end.value === null) {
+    return { error: fieldError(field, 'start_end_required') };
+  }
+
+  const span = end.minutes - start.minutes;
+  if (span <= 0) {
+    return { error: fieldError(field, 'same_day_end_after_start') };
+  }
+  if (span < 15 || span > MAX_TIME_WINDOW_SPAN_MINUTES) {
+    return { error: fieldError(field, `span_minutes_between_15_and_${MAX_TIME_WINDOW_SPAN_MINUTES}`) };
+  }
+
+  return {
+    value: {
+      start: start.value,
+      end: end.value,
+      startMinutes: start.minutes,
+      endMinutes: end.minutes,
+      spanMinutes: span,
+    },
   };
 }
 
@@ -149,34 +189,57 @@ function validateTripPreviewRequest(body = {}) {
 
   let dailyWindow = null;
   if (safeTrip.dailyWindow !== undefined && safeTrip.dailyWindow !== null) {
-    if (!isPlainObject(safeTrip.dailyWindow)) {
-      errors.push(fieldError('trip.dailyWindow', 'object_with_start_end'));
+    const parsedWindow = parseTimeWindow(safeTrip.dailyWindow, 'trip.dailyWindow');
+    if (parsedWindow.errors) errors.push(...parsedWindow.errors);
+    if (parsedWindow.error) errors.push(parsedWindow.error);
+    if (parsedWindow.value) dailyWindow = parsedWindow.value;
+  }
+
+  const dayWindows = [];
+  if (safeTrip.dayWindows !== undefined && safeTrip.dayWindows !== null) {
+    if (!Array.isArray(safeTrip.dayWindows)) {
+      errors.push(fieldError('trip.dayWindows', 'array'));
+    } else if (safeTrip.dayWindows.length > MAX_DAY_WINDOWS) {
+      errors.push(fieldError('trip.dayWindows', `maximum_${MAX_DAY_WINDOWS}`));
     } else {
-      const start = parseTime(safeTrip.dailyWindow.start, 'trip.dailyWindow.start');
-      const end = parseTime(safeTrip.dailyWindow.end, 'trip.dailyWindow.end');
-      if (start.error) errors.push(start.error);
-      if (end.error) errors.push(end.error);
-      if (!start.error && !end.error) {
-        if (start.value === null || end.value === null) {
-          errors.push(fieldError('trip.dailyWindow', 'start_end_required'));
-        } else {
-          const span = end.minutes - start.minutes;
-          if (span <= 0) {
-            errors.push(fieldError('trip.dailyWindow', 'same_day_end_after_start'));
-          } else if (span < 15 || span > 480) {
-            errors.push(fieldError('trip.dailyWindow', 'span_minutes_between_15_and_480'));
-          } else {
-            dailyWindow = {
-              start: start.value,
-              end: end.value,
-              startMinutes: start.minutes,
-              endMinutes: end.minutes,
-              spanMinutes: span,
-            };
-          }
+      const seenDayNumbers = new Set();
+      for (const [index, item] of safeTrip.dayWindows.entries()) {
+        const field = `trip.dayWindows[${index}]`;
+        if (!isPlainObject(item)) {
+          errors.push(fieldError(field, 'object'));
+          continue;
+        }
+        const parsedDayNumber = parseInteger(item.dayNumber, {
+          field: `${field}.dayNumber`,
+          min: 1,
+          max: MAX_DAY_WINDOWS,
+          required: true,
+        });
+        if (parsedDayNumber.error) {
+          errors.push(parsedDayNumber.error);
+          continue;
+        }
+        if (seenDayNumbers.has(parsedDayNumber.value)) {
+          errors.push(fieldError('trip.dayWindows', 'unique_dayNumber'));
+          continue;
+        }
+        seenDayNumbers.add(parsedDayNumber.value);
+
+        const parsedWindow = parseTimeWindow(item, field);
+        if (parsedWindow.errors) errors.push(...parsedWindow.errors);
+        if (parsedWindow.error) errors.push(parsedWindow.error);
+        if (parsedWindow.value) {
+          dayWindows.push({
+            dayNumber: parsedDayNumber.value,
+            ...parsedWindow.value,
+          });
         }
       }
     }
+  }
+
+  if (!dayCount.error && dayCount.value && dayWindows.some((window) => window.dayNumber > dayCount.value)) {
+    errors.push(fieldError('trip.dayWindows', 'dayNumber_within_dayCount'));
   }
 
   const startLocation = parseCoordinates(body.startLocation);
@@ -238,6 +301,7 @@ function validateTripPreviewRequest(body = {}) {
         pace: normalizedPace,
         dayCount: dayCount.value || 1,
         dailyWindow,
+        dayWindows: dayWindows.sort((a, b) => a.dayNumber - b.dayNumber),
         party: isPlainObject(safeTrip.party) ? safeTrip.party : {},
         budget: BUDGETS.has(budget) ? budget : 'unknown',
       },
@@ -257,6 +321,8 @@ function validateTripPreviewRequest(body = {}) {
 }
 
 module.exports = {
+  MAX_DAY_WINDOWS,
+  MAX_TIME_WINDOW_SPAN_MINUTES,
   TIME_PATTERN,
   validateTripPreviewRequest,
 };
