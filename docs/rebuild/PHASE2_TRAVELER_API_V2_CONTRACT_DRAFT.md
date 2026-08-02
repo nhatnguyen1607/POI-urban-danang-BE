@@ -2,7 +2,7 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+Status: `IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`.
 
 This contract draft now has a Phase 2 Batch 1 implementation for city metadata,
 city status, POI search, POI detail, common envelopes, request IDs, pagination,

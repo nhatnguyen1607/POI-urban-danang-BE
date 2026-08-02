@@ -1,6 +1,6 @@
 # UrbanAgent Phase 2 Batch 3 - Trip Preview API Contract
 
-Status: APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED
+Status: IMPLEMENTED ON REVIEW BRANCH - NOT MERGED
 
 Updated: 2026-08-01
 
@@ -317,7 +317,15 @@ Proposed success envelope using the existing Traveler API v2 `ok/data/meta` cont
             "estimationPolicyVersion": null,
             "calculationSource": "missing-origin",
             "distanceKnown": false,
-            "travelTimeKnown": false
+            "travelTimeKnown": false,
+            "warnings": [
+              {
+                "code": "ORIGIN_NOT_PROVIDED",
+                "severity": "info",
+                "message": "Start location was not provided; first-leg distance and travel time are unknown.",
+                "scope": "leg"
+              }
+            ]
           },
           "reason": "Matches the requested cafe intent and traveler context.",
           "reasonCodes": ["intent_match", "category_match", "ranked_candidate"],
@@ -381,7 +389,7 @@ Each itinerary stop must include:
 - `arrivalTime`: local `HH:mm` when time is known, otherwise `null`.
 - `departureTime`: local `HH:mm` when time is known, otherwise `null`.
 - `durationMinutes`: deterministic positive integer.
-- `durationSource`: `requested`, `poi_specific`, `category_default`, or `fallback`.
+- `durationSource`: `requested`, `category_default`, or `fallback`.
 - `durationPolicyVersion`: versioned duration policy identifier.
 - `travelFromPrevious`: leg summary from the previous known point.
 - `reasonCodes`: deterministic machine-readable reasons.
@@ -406,6 +414,7 @@ When the origin for a leg is unknown:
 - `estimationPolicyVersion`: `null`
 - `distanceKnown`: `false`
 - `calculationSource`: `missing-origin` may be included as an explanatory field.
+- `warnings`: public-safe leg-level warning objects.
 
 `calculationSource` must not replace `estimationMethod`.
 
@@ -455,7 +464,7 @@ The implementation should use this deterministic sequence:
 5. Remove excluded IDs.
 6. Validate must-include IDs against the same city and traveler-eligible POI set.
 7. Choose target stop count from `maxStopsPerDay`, pace, duration budget, and daily window.
-8. Resolve stop duration by requested, POI-specific, category default, or fallback policy.
+8. Resolve stop duration by requested, category default, or fallback policy.
 9. Build the ordered route:
    - with a known start location, prefer nearest feasible candidate after recommendation score,
    - without a start location, keep the first stop recommendation-led and mark first leg unknown,
@@ -686,7 +695,7 @@ The endpoint may expose:
 
 ## 19. Approval State
 
-Implementation has not started.
+Implementation exists on PR #9 review branch and has not merged. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 Design approval has been granted through:
 

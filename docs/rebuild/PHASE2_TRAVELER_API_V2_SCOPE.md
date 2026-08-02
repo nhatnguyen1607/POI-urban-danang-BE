@@ -2,7 +2,7 @@
 
 Updated: 2026-07-26 22:04:35 +07:00.
 
-Status: `PHASE 2 BATCH 3 TRIP PREVIEW DESIGN APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED`.
+Status: `IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`.
 
 This document separates accepted decisions, current implementation, proposed
 Phase 2 core scope, conditional scope, and open questions. Phase 2 Batch 1

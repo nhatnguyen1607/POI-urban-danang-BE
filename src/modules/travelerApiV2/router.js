@@ -5,6 +5,8 @@ const { sendError, sendSuccess, travelerApiV2Context } = require('./requestConte
 const { searchTravelerPois } = require('./poiSearch');
 const { getTravelerRecommendations, validateRecommendationRequest } = require('./recommendations');
 const { serializeCity, serializeCityStatus, serializePoi } = require('./serializers');
+const { buildTripPreview } = require('./tripPreview');
+const { validateTripPreviewRequest } = require('./tripPreviewValidation');
 
 const router = express.Router();
 
@@ -108,6 +110,39 @@ router.post('/recommendations', async (req, res) => {
     sendSuccess(req, res, result, { cityId: city.cityId });
   } catch (error) {
     sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to recommend POIs');
+  }
+});
+
+router.post('/trips/preview', async (req, res) => {
+  try {
+    const validation = validateTripPreviewRequest(req.body);
+    if (validation.errors) {
+      sendError(req, res, 400, 'VALIDATION_ERROR', 'Invalid trip preview request', {
+        details: validation.errors,
+      });
+      return;
+    }
+
+    const city = getCityConfig(validation.value.cityId);
+    if (!city) {
+      sendError(req, res, 422, 'CITY_NOT_SUPPORTED', 'Only da-nang is supported in this release.', {
+        details: { cityId: validation.value.cityId },
+      });
+      return;
+    }
+
+    const result = await buildTripPreview(validation.value);
+    if (result.error) {
+      sendError(req, res, result.error.status, result.error.code, result.error.message, {
+        cityId: validation.value.cityId,
+        details: result.error.details,
+      });
+      return;
+    }
+
+    sendSuccess(req, res, { trip: result.trip }, { cityId: city.cityId });
+  } catch (error) {
+    sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to create trip preview');
   }
 });
 

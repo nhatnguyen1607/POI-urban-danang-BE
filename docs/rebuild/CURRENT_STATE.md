@@ -1,26 +1,36 @@
 # Current State
 
-Updated: 2026-08-01 15:48:48 +07:00.
+Updated: 2026-08-01 17:11:45 +07:00.
 
 ## Phase
 
-`PHASE_2_BATCH_3_DESIGN_APPROVED_DOCUMENTATION_PENDING_MERGE`
+`PHASE_2_BATCH_3_IMPLEMENTED_REVIEW_BRANCH_NOT_MERGED`
 
 Phase 2 Batch 1 and Batch 2 are completed, merged, validated, and tagged.
 Phase 2 Batch 3 Trip Preview design is approved through
-`APPROVED PHASE 2 BATCH 3`. Documentation is not yet merged at the start of
-this officialization task.
+`APPROVED PHASE 2 BATCH 3`. The approved design documentation was merged and
+post-merge validated before runtime implementation began.
+
+Phase 2 Batch 3 runtime implementation now exists on review branch
+`phase2/batch3-traveler-api-v2-trip-preview` in clean implementation clone
+`C:\tmp\urbanagent-phase2-batch3-implementation-20260801-164730`.
+
+The implementation adds exactly one new Traveler API v2 runtime endpoint:
+
+- `POST /api/v2/trips/preview`
+
+Batch 3 remains unmerged at the time of this record. Production runtime is
+unchanged until the review branch is approved and merged.
 
 Completed Batch 2 scope is limited to Traveler API v2 recommendation endpoint
 coverage, public recommendation serialization, `reasonCodes`, deterministic
 recommendation ordering, a recommendation smoke/evaluation fixture foundation,
 OpenAPI update, and focused backend tests.
 
-`POST /api/v2/trips/preview` is not implemented. Runtime remains Batch 2.
 No trip persistence, trip edit/replan, feedback persistence, PostgreSQL
 default-runtime switch, frontend source change, mobile work, production
-database access, Firebase production access, external POI integration, or
-later-phase work has been started.
+database access, Firebase production access, external POI integration,
+second-city work, Batch 4, Phase 3, or later-phase work has been started.
 
 ## Repository State
 
@@ -151,7 +161,9 @@ Implemented Batch 1 behavior:
   `reasonCodes`, `warnings`, and POI provenance, and omits raw scoring signals.
 - Recommendation v2 uses deterministic tie-breaking by score descending,
   normalized name ascending, and canonical `Global_ID` ascending.
-- `POST /api/v2/trips/preview`: not implemented.
+- `POST /api/v2/trips/preview`: implemented on
+  `phase2/batch3-traveler-api-v2-trip-preview` review branch; not merged to
+  production/main until PR #9 is approved, merged, and post-merge validated.
 
 ## New Phase 2 Planning Artifacts
 
@@ -213,7 +225,7 @@ Updated in this batch:
 
 Status:
 
-`APPROVED - DOCUMENTATION PENDING MERGE`
+`IMPLEMENTED ON REVIEW BRANCH - NOT MERGED`
 
 Authoritative documents:
 
@@ -234,12 +246,40 @@ Integrated canonical documents:
 - `docs/rebuild/WORKLOG.md`
 
 Design approval has been granted through `APPROVED PHASE 2 BATCH 3`.
-Documentation must be merged and post-merge validated before runtime
-implementation begins. Runtime implementation has not started.
+Runtime implementation exists on PR #9 review branch and has not merged.
+Production/main runtime remains at the merged Phase 2 Batch 2 baseline until
+PR #9 is merged and post-merge validation passes.
 
 No frontend or mobile Batch 3 work has started.
 
 ## Build/Test Status
+
+Phase 2 Batch 3 implementation branch validation observed during the
+implementation task:
+
+- Baseline main SHA: `03bcc2ba90be7aa2618b5381f763ac1933469deb`.
+- Branch: `phase2/batch3-traveler-api-v2-trip-preview`.
+- `npm.cmd ci`: PASS.
+- `npm.cmd ls --omit=dev --all`: PASS, no ELSPROBLEMS.
+- `npm.cmd audit --omit=dev`: PASS, 0 vulnerabilities.
+- `npm.cmd audit --omit=dev --json`: PASS, total vulnerabilities `0`.
+- Batch 3 focused test file:
+  `tests/phase2/phase2TravelerApiV2Batch3.test.js`.
+- `node --test tests/phase2/phase2TravelerApiV2Batch3.test.js`: PASS,
+  10 tests, 10 passed, 0 failed.
+- `npm.cmd test`: PASS, 38 tests total, 37 passed, 0 failed, 1 skipped.
+- The skipped test remains the existing guarded Phase 1 disposable PostGIS
+  integration test when DB integration env vars are absent.
+- OpenAPI JSON parse after Batch 3 update: PASS.
+- OpenAPI SHA-256:
+  `0cf59e434e270cee80154ac20cf4c32b14c4147b6f8d174364ea93caae326034`.
+- Canonical CSV SHA-256 remains
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Canonical application POIs remain `4166`.
+- CSV remains the default runtime.
+- PostgreSQL/PostGIS remains explicit opt-in.
+- Endpoint smoke coverage for `POST /api/v2/trips/preview`: PASS in local
+  CSV-default child-process tests.
 
 Phase 2 Batch 2 validation:
 
@@ -266,8 +306,9 @@ Phase 2 Batch 2 validation:
 
 ## Risks
 
-- Batch 2 intentionally implements only standalone recommendation v2.
-  Itinerary preview v2 remains unimplemented until Phase 2 Batch 3 approval.
+- Batch 3 trip preview exists only on PR #9 review branch at the time of this
+  record; production/main remains at the merged Batch 2 runtime until review,
+  merge, and post-merge validation complete.
 - Existing traveler responses include some mojibake display strings; Phase 2
   contract should test structure and semantics first, then handle copy/encoding
   deliberately.
@@ -282,9 +323,9 @@ Phase 2 Batch 2 validation:
 
 ## Next Step
 
-User review of the synchronized backend multi-source documentation Draft PR #5.
+Strict re-audit of PR #9 after targeted Batch 3 corrections.
 
-Do not start Phase 2 Batch 3 until the user explicitly approves it.
+Do not merge PR #9 until strict re-audit passes and the user approves merge.
 
 ## Future Multi-Source POI Direction
 

@@ -176,13 +176,35 @@ function serializeRecommendationItem(recommendation) {
 }
 
 async function getTravelerRecommendations({ query, context, limit, cityId }) {
+  const ranked = await getTravelerRecommendationCandidates({
+    query,
+    context,
+    limit,
+    cityId,
+  });
+  return {
+    recommendations: ranked.recommendations,
+    query: ranked.query,
+    cityId,
+    limit,
+    warnings: ranked.warnings,
+  };
+}
+
+async function getTravelerRecommendationCandidates({
+  query,
+  context,
+  limit,
+  cityId,
+  maxCandidateLimit = MAX_RECOMMENDATION_LIMIT,
+}) {
   const recommendation = await recommendPOIs({
     query,
     context: {
       ...context,
       cityId,
     },
-    limit: MAX_RECOMMENDATION_LIMIT,
+    limit: maxCandidateLimit,
   });
   const ranked = rankRecommendationItems(recommendation.results || []).slice(0, limit);
   return {
@@ -196,6 +218,7 @@ async function getTravelerRecommendations({ query, context, limit, cityId }) {
 
 module.exports = {
   buildReasonCodes,
+  getTravelerRecommendationCandidates,
   getTravelerRecommendations,
   parseRecommendationLimit,
   rankRecommendationItems,

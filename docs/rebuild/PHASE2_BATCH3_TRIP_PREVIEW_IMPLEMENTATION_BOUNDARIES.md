@@ -1,6 +1,6 @@
 # UrbanAgent Phase 2 Batch 3 - Implementation Boundaries
 
-Status: APPROVED - DOCUMENTATION PENDING MERGE - NOT IMPLEMENTED
+Status: IMPLEMENTED ON REVIEW BRANCH - NOT MERGED
 
 Updated: 2026-08-01
 
@@ -166,7 +166,7 @@ No database rollback should be necessary because Batch 3 must not add migrations
 
 ## 10. Approval State
 
-Implementation has not started.
+Implementation exists on PR #9 review branch and has not merged. Production/main runtime remains at the merged Phase 2 Batch 2 baseline until PR #9 is merged and post-merge validation passes.
 
 Design approval has been granted through:
 
@@ -194,3 +194,33 @@ Before a future Batch 3 PR can be considered ready:
 - no Batch 4 route exists.
 
 This boundary document does not authorize implementation.
+
+## 12. Implementation Review Record
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Date: 2026-08-01.
+
+The implementation task was explicitly approved by the user through:
+
+`APPROVED PHASE 2 BATCH 3`
+
+Implemented branch:
+
+`phase2/batch3-traveler-api-v2-trip-preview`
+
+Boundary audit:
+
+- Allowed Traveler API v2 route implementation: used.
+- Allowed stateless trip-preview service logic: used.
+- Allowed v2 router mounting: used.
+- Allowed focused Phase 2 Batch 3 tests and fixtures: used.
+- Allowed OpenAPI contract update: used.
+- Allowed truthful Phase 2 documentation records: used.
+- Forbidden persistence, saved-trip, edit, replan, stop mutation, feedback,
+  authentication, frontend, mobile, new migrations, package dependencies,
+  second-city, external provider, production database, Firebase production,
+  generated model artifact, and research model weight changes: not used.
+
+The implementation is not merged and must pass final review before any
+post-merge validation or later batch begins.
