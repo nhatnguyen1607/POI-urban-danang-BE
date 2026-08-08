@@ -2184,3 +2184,104 @@ Mandatory backend HTTP smoke:
   repeated request deterministic: true
 New OpenAPI SHA-256: 5dc88bb27797626e4564c6b324e19ed286ae1239bd03eda8d9c736a3aa892988
 ```
+
+## 2026-08-08 18:20 +07:00 - Integrated Demo Release Branch
+
+Reason:
+
+The standalone frontend demo branch was rejected for the final video-ready
+release. The approved direction is to integrate Traveler API v2
+recommendations and trip preview into the existing main web application,
+preserving login, layout, navigation, `/urban-agent`, map, and current demo
+functionality.
+
+Changed backend files:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/INTEGRATED_DEMO_RELEASE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+package.json
+package-lock.json
+src/modules/travelerApiV2/tripPreview.js
+src/modules/travelerApiV2/tripPreviewValidation.js
+tests/phase2/phase2TravelerApiV2Batch3.test.js
+```
+
+Changed frontend files:
+
+```text
+.env.example
+package.json
+package-lock.json
+src/App.tsx
+src/auth/AuthContext.tsx
+src/auth/authContextValue.ts
+src/pages/auth/AuthPages.tsx
+src/pages/urban-agent/UrbanAgentPage.tsx
+src/utils/apiClient.ts
+```
+
+Commands run:
+
+```text
+git cherry-pick 447ac0f a3e9a09 76f3f0b
+git lfs pull --include="data/canonical/urbanagent_poi_master_v1.csv"
+npm.cmd ci
+npm.cmd install --package-lock-only --ignore-scripts
+npm.cmd install
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd ls --omit=dev --all
+npm.cmd test
+npm.cmd run build
+npx.cmd eslint src/App.tsx src/auth/AuthContext.tsx src/auth/authContextValue.ts src/pages/auth/AuthPages.tsx src/pages/urban-agent/UrbanAgentPage.tsx src/utils/apiClient.ts
+node --check src\modules\travelerApiV2\tripPreview.js
+node --check src\modules\travelerApiV2\tripPreviewValidation.js
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+```
+
+Key conclusions:
+
+- Backend tests pass: `40` total, `39` passed, `0` failed, `1` guarded
+  optional PostGIS skip.
+- Backend production audit passes after narrow `brace-expansion` override
+  update to `5.0.9`.
+- Canonical CSV SHA-256 remains unchanged:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Frontend production build passes.
+- Frontend production audit passes after narrow `react-router-dom` and
+  `protobufjs` remediation.
+- Frontend scoped lint still fails on pre-existing lint debt in existing
+  large files.
+- No original `D:\` repository was modified.
+- No production database, Firebase production, external POI source, external
+  routing provider, PostgreSQL default switch, second city, multi-source
+  implementation, mobile work, or Batch 4 work was started.
+
+Additional script validation:
+
+```text
+C:\Users\ADMIN\UrbanAgent-demo-20260807\start-demo.ps1
+C:\Users\ADMIN\UrbanAgent-demo-20260807\check-demo.ps1
+C:\Users\ADMIN\UrbanAgent-demo-20260807\stop-demo.ps1
+```
+
+Result:
+
+```text
+start-demo.ps1: PASS
+check-demo.ps1: PASS
+stop-demo.ps1: PASS
+recommendationCount: 3
+tripPreview.stops: 5
+tripPreview.day1Date: 2026-08-10
+tripPreview.day2Date: 2026-08-11
+tripPreview.day2Window: 08:00-16:00
+tripPreview.day2EndsBy1600: true
+tripPreview.persisted: false
+tripPreview.tripId: null
+post-cleanup demo processes: none detected
+```

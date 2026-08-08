@@ -475,6 +475,50 @@ Explicit non-decisions:
 - No mobile implementation.
 - No Batch 4 work.
 
+## Decision - Integrated Demo Release 2026-08
+
+Date: 2026-08-08.
+
+Status: `IMPLEMENTED_ON_RELEASE_BRANCH_NOT_MERGED`.
+
+Decision:
+
+Build the final local video-ready demo inside the existing main web
+application instead of shipping a standalone `/demo` page.
+
+Accepted implementation choices:
+
+- Use `/urban-agent` as the canonical demo route.
+- Preserve the existing app shell, login route, role guard, layout,
+  navigation, dashboard, Urban Agent page, and Leaflet route modal.
+- Add a demo-only local auth session controlled by
+  `VITE_DEMO_AUTH_MODE=true`; when disabled, the Firebase auth flow remains
+  unchanged.
+- Use the approved Traveler API v2 endpoints:
+  `POST /api/v2/recommendations` and `POST /api/v2/trips/preview`.
+- Use `trip.date` as the trip start date and expose per-day calendar dates
+  in `trip.days[]`.
+- Preserve backward-compatible `trip.dailyWindow` behavior and optional
+  per-day `trip.dayWindows[]` overrides.
+- Show preview routes on the existing map modal as illustrative polylines
+  only when no road-route geometry is available.
+- Apply narrow dependency security updates needed for the release branch:
+  backend `brace-expansion` override to `5.0.9`; frontend same-major
+  `react-router-dom` update to `7.18.2` and `protobufjs` override to
+  `7.6.5`.
+
+Explicit non-decisions:
+
+- No production Firebase writes.
+- No production or shared database access.
+- No PostgreSQL default-runtime switch.
+- No external routing provider.
+- No external POI provider or multi-source implementation.
+- No second City Pack.
+- No standalone primary `/demo` UI.
+- No trip persistence, saved-trip v2, edit, replan, stop mutation, feedback
+  persistence, mobile work, Batch 4, or Phase 3 work.
+
 ## Decision - Phase 2 Batch 3 Targeted Review Corrections
 
 Date: 2026-08-01.

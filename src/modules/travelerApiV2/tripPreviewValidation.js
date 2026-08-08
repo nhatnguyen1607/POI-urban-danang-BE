@@ -95,7 +95,17 @@ function parseTimeWindow(value, field) {
 function parseDate(value, field) {
   if (value === undefined || value === null || value === '') return { value: null };
   const text = String(value).trim();
-  if (!DATE_PATTERN.test(text) || Number.isNaN(Date.parse(`${text}T00:00:00Z`))) {
+  if (!DATE_PATTERN.test(text)) {
+    return { error: fieldError(field, 'date_YYYY_MM_DD') };
+  }
+  const [year, month, day] = text.split('-').map(Number);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  if (
+    Number.isNaN(parsed.getTime()) ||
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day
+  ) {
     return { error: fieldError(field, 'date_YYYY_MM_DD') };
   }
   return { value: text };

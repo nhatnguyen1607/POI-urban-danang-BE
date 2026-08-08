@@ -1,8 +1,45 @@
 # Current State
 
-Updated: 2026-08-02 10:28:39 +07:00.
+Updated: 2026-08-08 18:20:00 +07:00.
 
 ## Phase
+
+`INTEGRATED_DEMO_RELEASE_BRANCH`
+
+Phase 2 Batch 3 is merged, validated, tagged, and backed up. The current
+video-ready demo work is being prepared on release branch:
+
+`release/integrated-demo-2026-08`
+
+Clean integration clones:
+
+- Backend: `C:\tmp\urbanagent-integrated-backend-20260808-175300`
+- Frontend: `C:\tmp\urbanagent-integrated-frontend-20260808-175300`
+
+This branch integrates the approved Traveler API v2 recommendations and trip
+preview flow into the existing main web application route `/urban-agent`,
+while preserving existing login, layout, navigation, dashboard, Urban Agent
+page, Leaflet map modal, CSV default runtime, and legacy endpoints.
+
+Current validation:
+
+- Backend `npm.cmd test`: PASS, `40` total, `39` passed, `0` failed,
+  `1` guarded optional PostGIS skip.
+- Backend `npm.cmd audit --omit=dev`: PASS, `0` vulnerabilities.
+- Backend JavaScript syntax checks: PASS.
+- Frontend production build: PASS.
+- Frontend `npm.cmd audit --omit=dev`: PASS, `0` vulnerabilities.
+- Frontend scoped lint: FAIL on pre-existing lint debt in existing large
+  files; TypeScript build remains PASS.
+- Canonical CSV SHA-256 unchanged:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+
+No production database, Firebase production, external POI provider, external
+routing provider, PostgreSQL default switch, second city, multi-source
+implementation, mobile work, trip persistence, replan, stop mutation,
+feedback persistence, or Batch 4 work has been started.
+
+## Previous Demo Sprint Backend State
 
 `DEMO_SPRINT_BACKEND_PER_DAY_WINDOWS_BRANCH`
 

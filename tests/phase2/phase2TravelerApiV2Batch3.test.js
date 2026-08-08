@@ -271,6 +271,11 @@ test('Phase 2 Batch 3 demo request validation supports per-day time windows', as
   const result = await buildTripPreview(valid.value);
   assert.equal(result.error, undefined);
   assert.equal(result.trip.days.length, 3);
+  assert.deepEqual(result.trip.days.map((day) => day.date), [
+    '2026-08-15',
+    '2026-08-16',
+    '2026-08-17',
+  ]);
   assert.deepEqual(result.trip.days.map((day) => day.dailyWindow), [
     { start: '09:00', end: '20:00' },
     { start: '11:00', end: '14:00' },

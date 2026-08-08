@@ -217,6 +217,19 @@ function resolveDayWindow(request, dayNumber) {
   };
 }
 
+function addDaysToDate(dateText, dayOffset) {
+  if (!dateText) return null;
+  const [year, month, day] = String(dateText).split('-').map(Number);
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return null;
+  }
+  const date = new Date(Date.UTC(year, month - 1, day + dayOffset));
+  const yyyy = String(date.getUTCFullYear());
+  const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(date.getUTCDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 function addUnscheduled(unscheduled, item) {
   unscheduled.push({
     poiId: item.poiId || null,
@@ -314,7 +327,7 @@ function scheduleCandidates({ candidates, request, mustIncludeIds }) {
     const window = resolveDayWindow(request, dayNumber);
     return {
       dayNumber,
-      date: request.trip.date || null,
+      date: addDaysToDate(request.trip.date, index),
       dailyWindow: window.start && window.end ? { start: window.start, end: window.end } : null,
       feasibilityStatus: 'INFEASIBLE',
       stops: [],
