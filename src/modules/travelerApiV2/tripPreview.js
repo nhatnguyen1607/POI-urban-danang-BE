@@ -184,7 +184,8 @@ function orderCandidatesGeographically(candidates, startLocation) {
 }
 
 function resolveDayWindow(request, dayNumber) {
-  const configured = request.trip.dailyWindow;
+  const configured = (request.trip.dayWindows || []).find((window) => window.dayNumber === dayNumber) ||
+    request.trip.dailyWindow;
   if (configured) {
     const spanMinutes = request.trip.durationMinutes
       ? Math.min(configured.spanMinutes, request.trip.durationMinutes)
@@ -214,6 +215,19 @@ function resolveDayWindow(request, dayNumber) {
     spanMinutes: request.trip.durationMinutes || 480,
     dayNumber,
   };
+}
+
+function addDaysToDate(dateText, dayOffset) {
+  if (!dateText) return null;
+  const [year, month, day] = String(dateText).split('-').map(Number);
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return null;
+  }
+  const date = new Date(Date.UTC(year, month - 1, day + dayOffset));
+  const yyyy = String(date.getUTCFullYear());
+  const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(date.getUTCDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 function addUnscheduled(unscheduled, item) {
@@ -313,7 +327,7 @@ function scheduleCandidates({ candidates, request, mustIncludeIds }) {
     const window = resolveDayWindow(request, dayNumber);
     return {
       dayNumber,
-      date: request.trip.date || null,
+      date: addDaysToDate(request.trip.date, index),
       dailyWindow: window.start && window.end ? { start: window.start, end: window.end } : null,
       feasibilityStatus: 'INFEASIBLE',
       stops: [],

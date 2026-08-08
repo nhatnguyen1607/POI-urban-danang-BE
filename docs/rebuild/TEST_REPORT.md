@@ -1160,3 +1160,171 @@ Safety confirmations:
 - No frontend or mobile files were changed.
 - No persistence, saved-trip, replan, mutation, feedback, second-city,
   multi-source, Batch 4, Phase 3, or later-phase work was started.
+
+## Demo Sprint - Backend Per-Day Time Window Validation
+
+Date: 2026-08-02.
+
+Branch:
+
+`demo/2026-08-07-per-day-windows`
+
+Scope:
+
+- Backward-compatible request parsing for `trip.dailyWindow.startTime` /
+  `endTime` aliases.
+- Optional `trip.dayWindows[]` per-day local time-window overrides.
+- Scheduler uses a per-day override before falling back to `trip.dailyWindow`
+  and then `trip.startTime`.
+- Response remains stateless and grouped by day through `trip.days[]`.
+
+Commands:
+
+```text
+node --check src/modules/travelerApiV2/tripPreviewValidation.js
+node --check src/modules/travelerApiV2/tripPreview.js
+node --check tests/phase2/phase2TravelerApiV2Batch3.test.js
+node -e <OpenAPI JSON parse>
+node --test tests/phase2/phase2TravelerApiV2Batch3.test.js
+npm.cmd test
+npm.cmd audit --omit=dev
+npm.cmd ls --omit=dev --all
+node -e <per-day-window HTTP smoke>
+```
+
+Results:
+
+- JavaScript syntax checks: PASS.
+- OpenAPI JSON parse: PASS.
+- Batch 3 focused tests: PASS, `12` total, `12` passed, `0` failed.
+- Full default test suite: PASS, `40` total, `39` passed, `0` failed,
+  `1` guarded optional PostGIS skip.
+- `npm.cmd audit --omit=dev`: PASS, `0` vulnerabilities.
+- `npm.cmd ls --omit=dev --all`: PASS, no ELSPROBLEMS.
+- OpenAPI SHA-256:
+  `5dc88bb27797626e4564c6b324e19ed286ae1239bd03eda8d9c736a3aa892988`.
+- Canonical CSV SHA-256:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Canonical application POI count remains `4166`.
+
+Per-day-window HTTP smoke:
+
+```text
+POST /api/v2/trips/preview: 200
+stopCount: 5
+requestId: demo_sprint:per-day-windows
+day 1 dailyWindow: 09:00-17:00
+day 2 dailyWindow: 11:00-14:00
+day 3 dailyWindow: 08:30-12:30
+persisted: false
+tripId: null
+```
+
+Safety confirmations:
+
+- Canonical CSV bytes were not modified.
+- CSV remains the default runtime.
+- PostgreSQL/PostGIS remains explicit opt-in.
+- No dependency was added or upgraded.
+- No production/shared database was used.
+- No Firebase production data was touched.
+- No external POI source, routing provider, traffic provider, or live
+  opening-hours provider was queried.
+- No persistence, authentication, trip ownership/history, replan, stop
+  mutation, feedback persistence, second-city, mobile, multi-source, Batch 4,
+  or frontend implementation was started in this backend Part B patch.
+
+## Integrated Demo Release Validation - 2026-08-08
+
+Branch:
+
+`release/integrated-demo-2026-08`
+
+Clean clones:
+
+- Backend: `C:\tmp\urbanagent-integrated-backend-20260808-175300`
+- Frontend: `C:\tmp\urbanagent-integrated-frontend-20260808-175300`
+
+Backend commands and results:
+
+```text
+git lfs pull --include="data/canonical/urbanagent_poi_master_v1.csv": PASS
+npm.cmd ci: PASS
+node --check src\modules\travelerApiV2\tripPreview.js: PASS
+node --check src\modules\travelerApiV2\tripPreviewValidation.js: PASS
+npm.cmd audit --omit=dev: PASS, 0 vulnerabilities
+npm.cmd ls --omit=dev --all: PASS, no ELSPROBLEMS
+npm.cmd test: PASS, 40 total, 39 passed, 0 failed, 1 guarded optional PostGIS skip
+```
+
+Backend dependency note:
+
+- A new `brace-expansion` production advisory was found for `5.0.8`.
+- The release branch applies a narrow override update to `5.0.9`.
+- No `npm audit fix` was run.
+
+Canonical data:
+
+```text
+data/canonical/urbanagent_poi_master_v1.csv SHA-256:
+5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+```
+
+Frontend commands and results:
+
+```text
+npm.cmd ci: PASS
+npm.cmd audit --omit=dev: PASS, 0 vulnerabilities
+npm.cmd run build: PASS
+npx.cmd eslint <changed frontend files>: FAIL
+```
+
+Frontend dependency note:
+
+- `react-router-dom` was updated within major version from `^7.14.2` to
+  `^7.18.2`.
+- `protobufjs` is pinned through an override to `7.6.5`.
+- Production audit is clean.
+- The full dev install still reports dev-only vulnerabilities after `npm ci`;
+  these are outside the production audit gate and no `npm audit fix` was run.
+
+Frontend lint note:
+
+- Scoped ESLint reports pre-existing lint debt in existing large files,
+  including `no-explicit-any`, `set-state-in-effect`, and purity findings.
+- TypeScript production build passes.
+
+Functional coverage added:
+
+- Demo-only local auth path gated by `VITE_DEMO_AUTH_MODE=true`.
+- Existing `/urban-agent` route now exposes v2 recommendation and trip preview
+  controls.
+- Trip start date, 1-7 day selection, default daily windows, and per-day
+  window overrides are available.
+- Preview stops are grouped by actual calendar day.
+- Existing Leaflet route modal can display per-day preview stops with an
+  illustrative polyline and explicit non-road-routing label.
+
+Local demo script validation:
+
+```text
+C:\Users\ADMIN\UrbanAgent-demo-20260807\start-demo.ps1: PASS
+C:\Users\ADMIN\UrbanAgent-demo-20260807\check-demo.ps1: PASS
+C:\Users\ADMIN\UrbanAgent-demo-20260807\stop-demo.ps1: PASS
+backendReachable: true
+frontendRootReachable: true
+loginReachable: true
+recommendationCount: 3
+tripPreview.stops: 5
+tripPreview.status: PARTIAL
+tripPreview.day1Date: 2026-08-10
+tripPreview.day2Date: 2026-08-11
+tripPreview.day2Window: 08:00-16:00
+tripPreview.day2EndsBy1600: true
+tripPreview.persisted: false
+tripPreview.tripId: null
+deterministic: true
+externalProviderUsed: false
+productionConfigActive: false
+post-cleanup demo processes: none detected
+```

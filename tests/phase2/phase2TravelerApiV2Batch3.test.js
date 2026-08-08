@@ -230,6 +230,90 @@ test('Phase 2 Batch 3 request validation is deterministic and bounded', () => {
   assert.equal(valid.value.recommendationOptions.limit, 12);
 });
 
+test('Phase 2 Batch 3 demo request validation supports per-day time windows', async () => {
+  const valid = validateTripPreviewRequest({
+    cityId: DEFAULT_CITY_ID,
+    query: 'lich trinh cafe va diem check in',
+    trip: {
+      date: '2026-08-15',
+      dayCount: 3,
+      transport: 'motorbike',
+      pace: 'balanced',
+      dailyWindow: { startTime: '09:00', endTime: '20:00' },
+      dayWindows: [
+        { dayNumber: 2, startTime: '11:00', endTime: '14:00' },
+        { dayNumber: '3', start: '08:30', end: '12:30' },
+      ],
+    },
+    constraints: {
+      maxStopsPerDay: 2,
+    },
+    recommendationOptions: { limit: 8 },
+  });
+
+  assert.equal(valid.errors, undefined);
+  assert.deepEqual(valid.value.trip.dailyWindow, {
+    start: '09:00',
+    end: '20:00',
+    startMinutes: 540,
+    endMinutes: 1200,
+    spanMinutes: 660,
+  });
+  assert.deepEqual(valid.value.trip.dayWindows.map((window) => ({
+    dayNumber: window.dayNumber,
+    start: window.start,
+    end: window.end,
+  })), [
+    { dayNumber: 2, start: '11:00', end: '14:00' },
+    { dayNumber: 3, start: '08:30', end: '12:30' },
+  ]);
+
+  const result = await buildTripPreview(valid.value);
+  assert.equal(result.error, undefined);
+  assert.equal(result.trip.days.length, 3);
+  assert.deepEqual(result.trip.days.map((day) => day.date), [
+    '2026-08-15',
+    '2026-08-16',
+    '2026-08-17',
+  ]);
+  assert.deepEqual(result.trip.days.map((day) => day.dailyWindow), [
+    { start: '09:00', end: '20:00' },
+    { start: '11:00', end: '14:00' },
+    { start: '08:30', end: '12:30' },
+  ]);
+});
+
+test('Phase 2 Batch 3 per-day time-window validation rejects unsafe overrides', () => {
+  const duplicate = validateTripPreviewRequest({
+    cityId: DEFAULT_CITY_ID,
+    query: 'cafe',
+    trip: {
+      dayCount: 2,
+      dayWindows: [
+        { dayNumber: 1, start: '09:00', end: '12:00' },
+        { dayNumber: 1, start: '13:00', end: '15:00' },
+      ],
+    },
+  });
+  assert.deepEqual(duplicate.errors, [
+    { field: 'trip.dayWindows', rule: 'unique_dayNumber' },
+  ]);
+
+  const outsideDayCount = validateTripPreviewRequest({
+    cityId: DEFAULT_CITY_ID,
+    query: 'cafe',
+    trip: {
+      dayCount: 2,
+      dayWindows: [
+        { dayNumber: 3, start: '09:00', end: '12:00' },
+      ],
+    },
+  });
+  assert.deepEqual(outsideDayCount.errors, [
+    { field: 'trip.dayWindows', rule: 'dayNumber_within_dayCount' },
+  ]);
+});
+
 test('Phase 2 Batch 3 duration and local Haversine policies expose approved versions', () => {
   assert.equal(policyCategoryForPoi({ categoryNormalized: 'cafe' }), 'cafe');
   assert.equal(policyCategoryForPoi({ categoryNormalized: 'restaurant' }), 'restaurant');

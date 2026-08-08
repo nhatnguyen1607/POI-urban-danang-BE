@@ -2065,3 +2065,223 @@ Safety:
 - No runtime JavaScript, tests, fixtures, package files, canonical CSV,
   migrations, environment files, frontend, mobile, database, Firebase,
   external-source, second-city, Batch 4, main push, tag, or PR merge occurred.
+## 2026-08-02 10:28 +07:00 - Demo Sprint Part B Backend Per-Day Windows
+
+Repository clone:
+
+`C:\tmp\urbanagent-demo-backend-20260802-101316`
+
+Branch:
+
+`demo/2026-08-07-per-day-windows`
+
+Read-only original repositories preserved:
+
+- `D:\POI-urban-danang-BE`
+- `D:\POI-urban-danang-FE`
+
+Commands run:
+
+```text
+git status --short --branch
+git branch --show-current
+git rev-parse HEAD
+git rev-parse origin/main
+Get-Content AGENTS.md
+Get-Content URBANAGENT_CODEX_CONTEXT.md
+Get-Content D:\POI-urban-danang-FE\AGENTS.md
+Get-Content D:\POI-urban-danang-FE\PLANNING.md
+Get-Content D:\POI-urban-danang-FE\URBANAGENT_CODEX_CONTEXT.md
+Get-Content D:\POI-urban-danang-FE\package.json
+git switch -c demo/2026-08-07-per-day-windows
+rg -n "dailyWindow|startTime|dayCount|days|scheduleCandidates|validateTripPreviewRequest|TripPreviewRequest|TripPreviewDay" src\modules\travelerApiV2 tests\phase2 docs\rebuild\PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+node --check src\modules\travelerApiV2\tripPreviewValidation.js
+node --check src\modules\travelerApiV2\tripPreview.js
+node --check tests\phase2\phase2TravelerApiV2Batch3.test.js
+node -e <OpenAPI JSON parse>
+node --test tests\phase2\phase2TravelerApiV2Batch3.test.js
+npm.cmd test
+npm.cmd audit --omit=dev
+npm.cmd ls --omit=dev --all
+node -e <per-day-window HTTP smoke>
+Get-FileHash -Algorithm SHA256 docs\rebuild\PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+git diff --name-status
+git diff --stat
+```
+
+Files changed:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/PHASE2_BATCH3_TRIP_PREVIEW_API_CONTRACT.md
+docs/rebuild/PHASE2_TRAVELER_API_V2_OPENAPI_DRAFT.json
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+src/modules/travelerApiV2/tripPreview.js
+src/modules/travelerApiV2/tripPreviewValidation.js
+tests/phase2/phase2TravelerApiV2Batch3.test.js
+```
+
+Implementation summary:
+
+- Preserved existing `trip.dailyWindow.start` / `end` parsing.
+- Added support for `trip.dailyWindow.startTime` / `endTime` aliases.
+- Added optional `trip.dayWindows[]` per-day overrides with unique
+  `dayNumber` from 1 to 7 and `dayNumber` within `trip.dayCount`.
+- Scheduler now resolves a per-day override first, then falls back to
+  `trip.dailyWindow`, then `trip.startTime`.
+- Response remains stateless; each `trip.days[]` item exposes its resolved
+  `dailyWindow`.
+- No trip persistence, mutation, authentication, external routing, external
+  POI source, production DB, Firebase production, second city, mobile, or
+  Batch 4 work was started.
+
+Validation results:
+
+```text
+Batch 3 focused tests: 12 total, 12 passed, 0 failed
+Full backend tests: 40 total, 39 passed, 0 failed, 1 guarded PostGIS skip
+npm audit --omit=dev: 0 vulnerabilities
+npm ls --omit=dev --all: PASS, no ELSPROBLEMS
+Per-day-window HTTP smoke: PASS, 200, 5 stops
+OpenAPI SHA-256: 270fedc98292fab7bb5661609b6b2baf5c72f2139538bd1a9d3045711fb1fd05
+Canonical SHA-256 unchanged: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+Canonical application POIs: 4166
+```
+
+Next recommended action:
+
+Continue the video-ready demo sprint with frontend integration in a fresh
+frontend clone, using the real backend contract and deterministic local demo
+presets. Do not modify the original `D:\` repositories.
+
+## 2026-08-02 10:45 +07:00 - Demo Sprint Part B Backend Window Span Correction
+
+Reason:
+
+The required two-day video demo uses Day 1 `09:00-20:00`, which is an
+11-hour local day window. The first Part B implementation still used the
+earlier 480-minute maximum window span, so the mandatory smoke request was
+correctly rejected as `span_minutes_between_15_and_480`.
+
+Correction:
+
+- Keep `trip.durationMinutes` maximum at `480`.
+- Increase local day-window span validation to `15-960` minutes.
+- Preserve same-day-only windows.
+- Keep per-day overrides stateless and deterministic.
+
+Validation:
+
+```text
+Focused Batch 3 tests after correction: 12 total, 12 passed, 0 failed
+Mandatory backend HTTP smoke:
+  default dailyWindow 09:00-20:00: PASS
+  two-day plan Day 1 09:00-20:00 and Day 2 08:00-16:00: PASS
+  Day 2 latest departure: 10:19
+  Day 2 ends by 16:00: true
+  repeated request deterministic: true
+New OpenAPI SHA-256: 5dc88bb27797626e4564c6b324e19ed286ae1239bd03eda8d9c736a3aa892988
+```
+
+## 2026-08-08 18:20 +07:00 - Integrated Demo Release Branch
+
+Reason:
+
+The standalone frontend demo branch was rejected for the final video-ready
+release. The approved direction is to integrate Traveler API v2
+recommendations and trip preview into the existing main web application,
+preserving login, layout, navigation, `/urban-agent`, map, and current demo
+functionality.
+
+Changed backend files:
+
+```text
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/INTEGRATED_DEMO_RELEASE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+package.json
+package-lock.json
+src/modules/travelerApiV2/tripPreview.js
+src/modules/travelerApiV2/tripPreviewValidation.js
+tests/phase2/phase2TravelerApiV2Batch3.test.js
+```
+
+Changed frontend files:
+
+```text
+.env.example
+package.json
+package-lock.json
+src/App.tsx
+src/auth/AuthContext.tsx
+src/auth/authContextValue.ts
+src/pages/auth/AuthPages.tsx
+src/pages/urban-agent/UrbanAgentPage.tsx
+src/utils/apiClient.ts
+```
+
+Commands run:
+
+```text
+git cherry-pick 447ac0f a3e9a09 76f3f0b
+git lfs pull --include="data/canonical/urbanagent_poi_master_v1.csv"
+npm.cmd ci
+npm.cmd install --package-lock-only --ignore-scripts
+npm.cmd install
+npm.cmd audit --omit=dev
+npm.cmd audit --omit=dev --json
+npm.cmd ls --omit=dev --all
+npm.cmd test
+npm.cmd run build
+npx.cmd eslint src/App.tsx src/auth/AuthContext.tsx src/auth/authContextValue.ts src/pages/auth/AuthPages.tsx src/pages/urban-agent/UrbanAgentPage.tsx src/utils/apiClient.ts
+node --check src\modules\travelerApiV2\tripPreview.js
+node --check src\modules\travelerApiV2\tripPreviewValidation.js
+Get-FileHash -Algorithm SHA256 data\canonical\urbanagent_poi_master_v1.csv
+```
+
+Key conclusions:
+
+- Backend tests pass: `40` total, `39` passed, `0` failed, `1` guarded
+  optional PostGIS skip.
+- Backend production audit passes after narrow `brace-expansion` override
+  update to `5.0.9`.
+- Canonical CSV SHA-256 remains unchanged:
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Frontend production build passes.
+- Frontend production audit passes after narrow `react-router-dom` and
+  `protobufjs` remediation.
+- Frontend scoped lint still fails on pre-existing lint debt in existing
+  large files.
+- No original `D:\` repository was modified.
+- No production database, Firebase production, external POI source, external
+  routing provider, PostgreSQL default switch, second city, multi-source
+  implementation, mobile work, or Batch 4 work was started.
+
+Additional script validation:
+
+```text
+C:\Users\ADMIN\UrbanAgent-demo-20260807\start-demo.ps1
+C:\Users\ADMIN\UrbanAgent-demo-20260807\check-demo.ps1
+C:\Users\ADMIN\UrbanAgent-demo-20260807\stop-demo.ps1
+```
+
+Result:
+
+```text
+start-demo.ps1: PASS
+check-demo.ps1: PASS
+stop-demo.ps1: PASS
+recommendationCount: 3
+tripPreview.stops: 5
+tripPreview.day1Date: 2026-08-10
+tripPreview.day2Date: 2026-08-11
+tripPreview.day2Window: 08:00-16:00
+tripPreview.day2EndsBy1600: true
+tripPreview.persisted: false
+tripPreview.tripId: null
+post-cleanup demo processes: none detected
+```

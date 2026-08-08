@@ -144,9 +144,26 @@ Proposed request shape:
 `trip.dailyWindow`
 
 - Optional object.
-- If present, both `start` and `end` are required local `HH:mm` values.
+- If present, both start and end values are required local `HH:mm` values.
+- Existing `start` / `end` request fields remain supported.
+- Demo-compatible `startTime` / `endTime` aliases are also supported for
+  frontend clients that already model daily windows with those names.
 - `end` must be strictly after `start` on the same day.
-- Window span must be at least 15 minutes and at most 480 minutes.
+- Window span must be at least 15 minutes and at most 960 minutes. This window
+  bound is separate from the existing `trip.durationMinutes` scheduling-budget
+  bound.
+
+`trip.dayWindows`
+
+- Optional array.
+- Maximum: 7 items.
+- Each item overrides `trip.dailyWindow` for one `dayNumber`.
+- `dayNumber` must be unique, 1 to 7, and within `trip.dayCount`.
+- Each item accepts either `start` / `end` or `startTime` / `endTime` local
+  `HH:mm` fields.
+- This field is a backward-compatible demo extension for video-ready
+  multi-day previews. It does not create persisted trips, saved schedules, or
+  editable trip state.
 
 `trip.party`
 
