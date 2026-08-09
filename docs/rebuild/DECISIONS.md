@@ -431,6 +431,39 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Phase 2 Batch 5 Authenticated Trip Persistence
+
+Date: 2026-08-09.
+
+User approval:
+
+`APPROVED PHASE 2 BATCH 5`
+
+Accepted implementation choices:
+
+- Implement the approved saved-trip API under `/api/v2/trips`.
+- Keep `POST /api/v2/trips/preview` stateless and nonpersistent.
+- Derive owner identity only from authenticated request context.
+- Use existing Firebase Auth plus Firestore infrastructure for production
+  saved user trips.
+- Use a guarded nonproduction memory adapter for tests/local smoke only.
+- Preserve CSV as the default POI runtime and PostgreSQL/PostGIS as explicit
+  opt-in.
+- Integrate saved trips into the existing `/urban-agent` experience instead
+  of adding a second planner.
+
+Explicit non-decisions:
+
+- No collaboration/share links.
+- No feedback/rating persistence.
+- No booking/payment.
+- No external routing provider.
+- No external POI source.
+- No second city.
+- No multi-source ingestion.
+- No mobile app.
+- No production Firebase data modification during validation.
+
 ## Decision - Demo Sprint Backend Per-Day Time Windows
 
 Date: 2026-08-02.

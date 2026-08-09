@@ -4,9 +4,17 @@ const { getCityConfig, listCityConfigs } = require('../cities/cityConfig');
 const { sendError, sendSuccess, travelerApiV2Context } = require('./requestContext');
 const { searchTravelerPois } = require('./poiSearch');
 const { getTravelerRecommendations, validateRecommendationRequest } = require('./recommendations');
+const { requireFirebaseAuth } = require('../../middleware/firebaseAuth');
 const { serializeCity, serializeCityStatus, serializePoi } = require('./serializers');
 const { buildTripPreview } = require('./tripPreview');
 const { validateTripPreviewRequest } = require('./tripPreviewValidation');
+const {
+  createSavedTrip,
+  deleteSavedTrip,
+  getSavedTrip,
+  listSavedTrips,
+  updateSavedTrip,
+} = require('./savedTrips');
 
 const router = express.Router();
 
@@ -143,6 +151,76 @@ router.post('/trips/preview', async (req, res) => {
     sendSuccess(req, res, { trip: result.trip }, { cityId: city.cityId });
   } catch (error) {
     sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to create trip preview');
+  }
+});
+
+router.post('/trips', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await createSavedTrip({
+      ownerId: req.user.uid,
+      payload: req.body || {},
+    });
+    sendSuccess(req, res, { trip }, { status: 201, cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể lưu lịch trình.');
+  }
+});
+
+router.get('/trips', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trips = await listSavedTrips(req.user.uid);
+    sendSuccess(req, res, { trips, total: trips.length });
+  } catch (error) {
+    sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể tải danh sách lịch trình.');
+  }
+});
+
+router.get('/trips/:tripId', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await getSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'Không tìm thấy lịch trình đã lưu.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể mở lịch trình đã lưu.');
+  }
+});
+
+router.patch('/trips/:tripId', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await updateSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+      payload: req.body || {},
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'Không tìm thấy lịch trình đã lưu.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể cập nhật lịch trình.');
+  }
+});
+
+router.delete('/trips/:tripId', requireFirebaseAuth, async (req, res) => {
+  try {
+    const deleted = await deleteSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+    });
+    if (!deleted) {
+      sendError(req, res, 404, 'NOT_FOUND', 'Không tìm thấy lịch trình đã lưu.');
+      return;
+    }
+    sendSuccess(req, res, { deleted: true, tripId: req.params.tripId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể xóa lịch trình.');
   }
 });
 
