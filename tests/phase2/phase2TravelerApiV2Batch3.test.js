@@ -757,20 +757,31 @@ test('Phase 2 Batch 3 endpoint rejects invalid preview requests and preserves no
     });
     assert.equal(unauthenticatedSave.statusCode, 401);
 
-    for (const forbiddenRoute of [
+    for (const protectedLifecycleRoute of [
       { method: 'POST', path: '/api/v2/trips/not-a-trip/replan' },
       { method: 'POST', path: '/api/v2/trips/not-a-trip/stops' },
       { method: 'DELETE', path: '/api/v2/trips/not-a-trip/stops/stop_1' },
-      { method: 'POST', path: '/api/v2/feedback' },
     ]) {
       const response = await requestJson({
         port,
-        method: forbiddenRoute.method,
-        path: forbiddenRoute.path,
+        method: protectedLifecycleRoute.method,
+        path: protectedLifecycleRoute.path,
         body: {},
       });
-      assert.equal(response.statusCode, 404, `${forbiddenRoute.method} ${forbiddenRoute.path} must not exist`);
+      assert.equal(
+        response.statusCode,
+        401,
+        `${protectedLifecycleRoute.method} ${protectedLifecycleRoute.path} must require auth`,
+      );
     }
+
+    const feedback = await requestJson({
+      port,
+      method: 'POST',
+      path: '/api/v2/feedback',
+      body: {},
+    });
+    assert.equal(feedback.statusCode, 404, 'POST /api/v2/feedback must not exist');
   } finally {
     await stopServer(child);
   }
