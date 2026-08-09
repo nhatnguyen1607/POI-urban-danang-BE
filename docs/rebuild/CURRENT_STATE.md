@@ -433,3 +433,37 @@ The next source-expansion action requires explicit approval after Phase 2 work
 is safely paused or completed.
 
 Mobile product work has not started.
+
+## Phase 2 Batch 5 State
+
+`PHASE_2_BATCH_5_IMPLEMENTED_REVIEW_BRANCH_NOT_MERGED`
+
+Approved scope:
+
+- authenticated trip persistence,
+- saved-trip list/open/update/delete,
+- owner-only access,
+- `/urban-agent` saved-trip integration.
+
+Implementation branches:
+
+- Backend: `phase2/batch5-trip-persistence`
+- Frontend: `phase2/batch5-trip-persistence`
+
+Persistence:
+
+- Firebase Auth plus Firestore for production saved user trips.
+- Guarded nonproduction memory adapter only for tests/local smoke.
+- POI catalog remains canonical CSV default; PostgreSQL/PostGIS remains
+  explicit opt-in.
+
+Validation:
+
+- Backend `npm.cmd test`: PASS, 40 passed, 0 failed, 1 guarded PostGIS skip.
+- Frontend `npm.cmd run build`: PASS.
+- Frontend scoped lint on `src/utils/apiClient.ts`: PASS.
+- Integrated local HTTP smoke: PASS.
+
+No production database, Firebase production, external source, second city,
+multi-source implementation, mobile work, booking/payment, or Batch 6 work was
+started.

@@ -1328,3 +1328,38 @@ externalProviderUsed: false
 productionConfigActive: false
 post-cleanup demo processes: none detected
 ```
+
+## 2026-08-09 - Phase 2 Batch 5 Authenticated Trip Persistence
+
+Commands:
+
+```text
+npm.cmd test
+npm.cmd run build
+npx.cmd eslint src\utils\apiClient.ts
+local backend/frontend HTTP smoke with URBANAGENT_SAVED_TRIPS_STORE=memory
+```
+
+Results:
+
+```text
+Backend tests: PASS, 40 passed, 0 failed, 1 guarded PostGIS skip
+Frontend build: PASS
+Frontend scoped lint: PASS
+Integrated smoke: PASS
+```
+
+Covered:
+
+- unauthenticated saved-trip requests rejected,
+- create/list/get/update/delete own trip,
+- another user cannot get/update/delete the trip,
+- trip preview remains nonpersistent,
+- recommendations and trip preview remain usable,
+- `/urban-agent` save/list/open/update/delete workflow wired to v2 API.
+
+Not covered:
+
+- No production Firebase/Firestore write was performed.
+- Browser automation was not available in the clean clone; integrated smoke
+  used background backend/frontend servers and HTTP checks.

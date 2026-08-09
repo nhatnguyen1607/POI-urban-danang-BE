@@ -681,7 +681,7 @@ test('Phase 2 Batch 3 endpoint returns v2 envelope, request IDs, and determinist
   }
 });
 
-test('Phase 2 Batch 3 endpoint rejects invalid preview requests and no persistence routes exist', {
+test('Phase 2 Batch 3 endpoint rejects invalid preview requests and preserves nonpersistent preview semantics', {
   timeout: 120000,
 }, async () => {
   const port = 24000 + Math.floor(Math.random() * 1000);
@@ -749,11 +749,15 @@ test('Phase 2 Batch 3 endpoint rejects invalid preview requests and no persisten
     assert.equal(recommendation.statusCode, 200, logs.join('').slice(-1000));
     assert.equal(recommendation.body.data.recommendations.length > 0, true);
 
+    const unauthenticatedSave = await requestJson({
+      port,
+      method: 'POST',
+      path: '/api/v2/trips',
+      body: { title: 'Preview must still require explicit save' },
+    });
+    assert.equal(unauthenticatedSave.statusCode, 401);
+
     for (const forbiddenRoute of [
-      { method: 'POST', path: '/api/v2/trips' },
-      { method: 'GET', path: '/api/v2/trips/not-a-trip' },
-      { method: 'PATCH', path: '/api/v2/trips/not-a-trip' },
-      { method: 'DELETE', path: '/api/v2/trips/not-a-trip' },
       { method: 'POST', path: '/api/v2/trips/not-a-trip/replan' },
       { method: 'POST', path: '/api/v2/trips/not-a-trip/stops' },
       { method: 'DELETE', path: '/api/v2/trips/not-a-trip/stops/stop_1' },

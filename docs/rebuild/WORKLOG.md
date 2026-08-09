@@ -2285,3 +2285,44 @@ tripPreview.persisted: false
 tripPreview.tripId: null
 post-cleanup demo processes: none detected
 ```
+
+## 2026-08-09 +07:00 - Phase 2 Batch 5 Authenticated Trip Persistence
+
+Scope:
+
+- User approved `APPROVED PHASE 2 BATCH 5`.
+- Implemented authenticated saved-trip persistence and `/urban-agent`
+  saved-trip integration.
+
+Changed backend files:
+
+- `src/modules/travelerApiV2/savedTrips.js`
+- `src/modules/travelerApiV2/router.js`
+- `tests/phase2/phase2TravelerApiV2Batch3.test.js`
+- `tests/phase2/phase2TravelerApiV2Batch5.test.js`
+- `docs/rebuild/PHASE2_BATCH5_TRIP_PERSISTENCE_SCOPE.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `docs/rebuild/WORKLOG.md`
+
+Changed frontend files:
+
+- `src/pages/urban-agent/UrbanAgentPage.tsx`
+- `src/utils/apiClient.ts`
+
+Validation:
+
+```text
+Backend npm.cmd test: PASS, 40 passed, 0 failed, 1 guarded PostGIS skip
+Frontend npm.cmd run build: PASS
+Frontend npx.cmd eslint src\utils\apiClient.ts: PASS
+Integrated local HTTP smoke: PASS
+```
+
+Safety:
+
+- No original `D:\` repository was modified.
+- No production database or Firebase production data was touched.
+- No canonical CSV, manifest, POI runtime switch, external POI source,
+  second-city, booking/payment, mobile, or Batch 6 work was started.
