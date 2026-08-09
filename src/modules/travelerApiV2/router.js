@@ -9,10 +9,14 @@ const { serializeCity, serializeCityStatus, serializePoi } = require('./serializ
 const { buildTripPreview } = require('./tripPreview');
 const { validateTripPreviewRequest } = require('./tripPreviewValidation');
 const {
+  addStopToSavedTrip,
   createSavedTrip,
   deleteSavedTrip,
   getSavedTrip,
   listSavedTrips,
+  removeStopFromSavedTrip,
+  reorderSavedTripStops,
+  replanSavedTrip,
   updateSavedTrip,
 } = require('./savedTrips');
 
@@ -205,6 +209,81 @@ router.patch('/trips/:tripId', requireFirebaseAuth, async (req, res) => {
     sendSuccess(req, res, { trip }, { cityId: trip.cityId });
   } catch (error) {
     sendError(req, res, error.status || 500, 'PERSISTENCE_ERROR', 'Không thể cập nhật lịch trình.');
+  }
+});
+
+router.post('/trips/:tripId/replan', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await replanSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'KhÃ´ng tÃ¬m tháº¥y lá»‹ch trÃ¬nh Ä‘Ã£ lÆ°u.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, error.code || 'LIFECYCLE_ERROR', 'KhÃ´ng thá»ƒ táº¡o láº¡i lá»‹ch trÃ¬nh.', {
+      details: error.details || [],
+    });
+  }
+});
+
+router.post('/trips/:tripId/stops', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await addStopToSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+      payload: req.body || {},
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'KhÃ´ng tÃ¬m tháº¥y lá»‹ch trÃ¬nh Ä‘Ã£ lÆ°u.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, error.code || 'LIFECYCLE_ERROR', 'KhÃ´ng thá»ƒ thÃªm Ä‘iá»ƒm dá»«ng.', {
+      details: error.details || [],
+    });
+  }
+});
+
+router.patch('/trips/:tripId/stops/reorder', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await reorderSavedTripStops({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+      payload: req.body || {},
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'KhÃ´ng tÃ¬m tháº¥y lá»‹ch trÃ¬nh Ä‘Ã£ lÆ°u.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, error.code || 'LIFECYCLE_ERROR', 'KhÃ´ng thá»ƒ sáº¯p xáº¿p láº¡i Ä‘iá»ƒm dá»«ng.', {
+      details: error.details || [],
+    });
+  }
+});
+
+router.delete('/trips/:tripId/stops/:stopId', requireFirebaseAuth, async (req, res) => {
+  try {
+    const trip = await removeStopFromSavedTrip({
+      ownerId: req.user.uid,
+      tripId: req.params.tripId,
+      stopId: req.params.stopId,
+    });
+    if (!trip) {
+      sendError(req, res, 404, 'NOT_FOUND', 'KhÃ´ng tÃ¬m tháº¥y lá»‹ch trÃ¬nh Ä‘Ã£ lÆ°u.');
+      return;
+    }
+    sendSuccess(req, res, { trip }, { cityId: trip.cityId });
+  } catch (error) {
+    sendError(req, res, error.status || 500, error.code || 'LIFECYCLE_ERROR', 'KhÃ´ng thá»ƒ xÃ³a Ä‘iá»ƒm dá»«ng.', {
+      details: error.details || [],
+    });
   }
 });
 
