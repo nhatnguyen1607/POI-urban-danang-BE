@@ -2326,3 +2326,68 @@ Safety:
 - No production database or Firebase production data was touched.
 - No canonical CSV, manifest, POI runtime switch, external POI source,
   second-city, booking/payment, mobile, or Batch 6 work was started.
+
+## 2026-08-09 14:49:50 +07:00 - Phase 2 Final Gate
+
+Workspace:
+
+- Clean backend clone:
+  `C:\tmp\urbanagent-phase2-final-be-20260809-144128`
+- Branch: `phase2/final-gates`
+
+Read:
+
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_SCOPE.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_EVALUATION_PLAN.md`
+- `docs/rebuild/PHASE2_TRAVELER_API_V2_CONTRACT_DRAFT.md`
+- `docs/rebuild/CURRENT_STATE.md`
+- `docs/rebuild/DECISIONS.md`
+- `docs/rebuild/TEST_REPORT.md`
+- `tests/phase1/phase1PostgresIntegration.test.js`
+- `tests/phase2/phase2TravelerApiV2Batch5.test.js`
+- `tests/phase2/phase2TravelerApiV2Batch6.test.js`
+- `tests/fixtures/phase2/recommendationQueries.json`
+- `tests/fixtures/phase2/tripPreviewQueries.json`
+
+Commands:
+
+```text
+npm.cmd ci
+node scripts\phase2_final_gate_evaluation.js
+docker --version
+docker compose -f docker-compose.phase1.yml up -d
+docker context ls
+docker --context default version
+node --check scripts\phase2_final_gate_evaluation.js
+npm.cmd test
+npm.cmd audit --omit=dev
+```
+
+Changed files:
+
+```text
+scripts/phase2_final_gate_evaluation.js
+docs/rebuild/PHASE2_FINAL_EXIT_REPORT.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Conclusions:
+
+- Canonical CSV integrity passed with 4166 POIs and the approved SHA-256.
+- CSV remains default runtime and PostgreSQL remains opt-in.
+- Legacy/v2 source counts matched: Google 3946, Foody 225, All 4166.
+- Recommendation and trip-preview final-gate smokes passed.
+- Missing-origin distance/time remains null.
+- Saved-trip replan preserves the same tripId.
+- Feedback persistence is deferred and not implemented in Phase 2.
+- Performance p50/p95 was recorded for documented endpoints.
+- Scientific/offline fixtures remain smoke foundations only; no quality claim
+  was made.
+- Backend tests passed: 42 total, 41 passed, 0 failed, 1 guarded optional
+  PostGIS skip.
+- Production audit passed: 0 vulnerabilities.
+- CSV/PostgreSQL parity remains pending because no Docker daemon was reachable
+  for the disposable PostGIS service.

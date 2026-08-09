@@ -431,6 +431,58 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Phase 2 Feedback Persistence Deferral
+
+Date: 2026-08-09.
+
+Status: `DEFERRED_NOT_IMPLEMENTED_IN_PHASE_2`.
+
+Decision:
+
+Do not implement feedback persistence in Phase 2.
+
+The route:
+
+- `POST /api/v2/trips/:tripId/feedback`
+
+remains a future conditional capability and requires explicit future user
+approval before implementation.
+
+Implications:
+
+- Phase 2 final-gate evaluation must not fail solely because feedback
+  persistence is absent.
+- No fake feedback endpoint may be added to make a checklist pass.
+- No production Firebase or database write is allowed for feedback in Phase 2.
+
+## Decision - Phase 2 Final Gate Classification
+
+Date: 2026-08-09.
+
+Status: `FINAL_GATE_PENDING`.
+
+Decision:
+
+The final Phase 2 gate may be classified as pending when the only missing
+mandatory evidence is unavailable local disposable PostgreSQL/PostGIS
+infrastructure.
+
+Accepted evidence from this run:
+
+- Canonical CSV integrity passed.
+- CSV-default runtime passed.
+- Legacy/v2 compatibility passed in CSV mode.
+- Performance p50/p95 was recorded without numeric threshold claims.
+- Scientific/offline evaluation limitations were documented without quality
+  overclaiming.
+- Backend tests passed.
+
+Pending evidence:
+
+- CSV/PostgreSQL parity in explicit disposable PostgreSQL mode.
+
+No Phase 2 closure claim may be made until that parity gate passes.
+
 ## Decision - Phase 2 Batch 5 Authenticated Trip Persistence
 
 Date: 2026-08-09.
