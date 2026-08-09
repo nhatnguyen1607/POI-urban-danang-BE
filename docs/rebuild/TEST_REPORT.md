@@ -1363,3 +1363,79 @@ Not covered:
 - No production Firebase/Firestore write was performed.
 - Browser automation was not available in the clean clone; integrated smoke
   used background backend/frontend servers and HTTP checks.
+
+## 2026-08-09 - Phase 2 Final Gate
+
+Clean backend clone:
+
+`C:\tmp\urbanagent-phase2-final-be-20260809-144128`
+
+Branch:
+
+`phase2/final-gates`
+
+Commands and results:
+
+```text
+npm.cmd ci: PASS, 0 vulnerabilities
+node --check scripts\phase2_final_gate_evaluation.js: PASS
+node scripts\phase2_final_gate_evaluation.js: PASS
+npm.cmd test: PASS, 42 total, 41 passed, 0 failed, 1 guarded optional PostGIS skip
+npm.cmd audit --omit=dev: PASS, 0 vulnerabilities
+docker compose -f docker-compose.phase1.yml up -d: initially blocked while Docker daemon was stopped; PASS after Docker Desktop daemon started
+node --test tests\phase1\phase1PostgresIntegration.test.js with URBANAGENT_PHASE1_INTEGRATION=true and URBANAGENT_ALLOW_PHASE1_DB_WRITE=true: PASS, 1 total, 1 passed, 0 failed, 0 skipped
+docker compose -f docker-compose.phase1.yml down -v: PASS
+npm.cmd test after final-gate documentation update: PASS, 42 total, 41 passed, 0 failed, 1 guarded optional PostGIS skip
+```
+
+Final-gate smoke results:
+
+```text
+canonical application POIs: 4166
+canonical SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+CSV default runtime: PASS
+PostgreSQL opt-in remains explicit: PASS
+legacy/v2 Google count: 3946
+legacy/v2 Foody count: 225
+legacy/v2 All count: 4166
+recommendation count: 5
+trip preview stops: 3
+missing-origin distance/time: null/null
+saved-trip replan same tripId: PASS
+feedback persistence endpoint: 404 expected, deferred
+```
+
+Performance, CSV-default local mode, 10 runs per endpoint:
+
+```text
+city status p50/p95 ms: 0.43 / 0.87
+POI search first page p50/p95 ms: 56.39 / 60.19
+POI search q p50/p95 ms: 53.05 / 75.28
+recommendation p50/p95 ms: 362.44 / 493.26
+itinerary preview p50/p95 ms: 357.44 / 431.95
+numeric latency threshold: not documented
+```
+
+Scientific/offline evaluation:
+
+```text
+recommendation fixture: phase2-recommendation-smoke-v1
+trip preview fixture: phase2-trip-preview-smoke-v1
+recommendation cases: 1
+trip preview cases: 18
+status: structural fixture only, no recommendation-quality or user-quality claim
+```
+
+CSV/PostgreSQL parity:
+
+```text
+status: PASS
+compose file: docker-compose.phase1.yml
+image: postgis/postgis:16-3.5-alpine
+test: tests/phase1/phase1PostgresIntegration.test.js
+result: 1 total, 1 passed, 0 failed, 0 skipped
+covered: migration, rollback, reapply, import, idempotency, PostgresPoiRepository,
+selected CSV/Postgres POI identity/provenance/null parity, source-filter counts,
+recommendation smoke, itinerary smoke, and CSV default-runtime restoration
+cleanup: disposable container and volume removed
+```
