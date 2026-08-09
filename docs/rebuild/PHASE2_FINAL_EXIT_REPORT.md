@@ -2,11 +2,9 @@
 
 Updated: 2026-08-09 14:49:50 +07:00.
 
-Verdict: `PHASE 2 FINAL GATE PENDING`.
+Verdict: `PHASE 2 CLOSED`.
 
-Phase 2 cannot be declared closed yet because the mandatory CSV/PostgreSQL
-parity gate could not execute: no local Docker daemon was available for the
-approved disposable PostGIS service.
+All mandatory documented Phase 2 final gates have passed.
 
 ## Completed Phase 2 Scope
 
@@ -80,22 +78,35 @@ Traveler runtime smoke:
 
 ## CSV/PostgreSQL Parity
 
-Result: `PENDING`.
+Result: `PASS`.
 
-The existing guarded parity/integration test was not executed in PostgreSQL
-mode because the approved disposable Docker/PostGIS prerequisite was not
-available.
+The existing guarded parity/integration test was executed in PostgreSQL mode
+against the approved disposable Docker/PostGIS service.
 
-Observed Docker blocker:
+Executed setup:
 
-- `docker compose -f docker-compose.phase1.yml up -d`
-- Result: `FAIL`
-- Reason: Docker CLI could not connect to the Docker Desktop Linux engine at
-  `npipe:////./pipe/dockerDesktopLinuxEngine`.
-- The default Docker context also had no reachable daemon at
-  `npipe:////./pipe/docker_engine`.
+- Docker CLI: available.
+- Docker Desktop daemon: started successfully.
+- Docker Compose: available.
+- Compose file: `docker-compose.phase1.yml`
+- Image: `postgis/postgis:16-3.5-alpine`
+- Test command:
+  `node --test tests/phase1/phase1PostgresIntegration.test.js`
+- Required guarded env:
+  `URBANAGENT_PHASE1_INTEGRATION=true`
+- Required write opt-in:
+  `URBANAGENT_ALLOW_PHASE1_DB_WRITE=true`
 
-No PostgreSQL PASS is claimed in this report.
+Observed result:
+
+- `1` test total, `1` passed, `0` failed, `0` skipped.
+- Migration, rollback, reapply, import, idempotency, repository integration,
+  endpoint smoke, and CSV/Postgres representative parity passed through the
+  documented integration test.
+- Verified representative behaviors include source-filter counts, selected POI
+  identity/provenance/null fields, recommendation smoke, itinerary smoke, and
+  CSV default-runtime restoration after explicit PostgreSQL mode.
+- Disposable container and volume were removed after validation.
 
 ## Performance
 
@@ -142,15 +153,10 @@ Result: `PASS`.
 - Skipped test: guarded optional disposable PostGIS integration
 - `npm.cmd audit --omit=dev`: `PASS`, `0 vulnerabilities`
 
-## Remaining Gate
+## Closure
 
-To close Phase 2, rerun the final gate with a working local disposable
-PostGIS environment and execute the CSV/PostgreSQL parity test in explicit
-PostgreSQL mode.
+Phase 2 is closed.
 
-Required prerequisite:
-
-- Docker daemon available for `postgis/postgis:16-3.5-alpine`
-
-When that gate passes and documentation is refreshed with the actual parity
-result, Phase 2 may be declared closed.
+Remaining future work is outside Phase 2 and requires separate approval,
+including feedback persistence, multi-source POI work, external routing,
+second-city support, production PostgreSQL cutover, mobile work, and Phase 3.

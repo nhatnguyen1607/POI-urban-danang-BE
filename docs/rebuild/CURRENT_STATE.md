@@ -470,7 +470,7 @@ started.
 
 ## Phase 2 Final Gate State
 
-`PHASE_2_FINAL_GATE_PENDING`
+`PHASE_2_CLOSED`
 
 Date: 2026-08-09 14:49:50 +07:00.
 
@@ -498,14 +498,16 @@ Validated in the clean final-gate backend clone:
 - Missing-origin null semantics: PASS.
 - Saved-trip replan preserves same tripId: PASS.
 - Feedback persistence: DEFERRED and not implemented in Phase 2.
-- Backend tests: PASS, `42` total, `41` passed, `0` failed, `1` guarded
-  optional PostGIS skip.
+- CSV/PostgreSQL parity: PASS through the existing documented disposable
+  PostGIS integration test, `1` total, `1` passed, `0` failed, `0` skipped.
+- Backend tests before parity close: PASS, `42` total, `41` passed, `0`
+  failed, `1` guarded optional PostGIS skip.
+- Backend tests after final-gate documentation update: PASS, `42` total, `41`
+  passed, `0` failed, `1` guarded optional PostGIS skip.
 - Production audit: PASS, `0 vulnerabilities`.
 
-Pending:
+Cleanup:
 
-- CSV/PostgreSQL parity could not execute because no local Docker daemon was
-  available for the disposable PostGIS service.
+- Disposable PostGIS container and volume were removed after parity validation.
 
-Phase 2 is not declared closed until the disposable PostGIS parity gate is
-rerun and passes.
+Phase 2 is closed.

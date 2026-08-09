@@ -2391,3 +2391,49 @@ Conclusions:
 - Production audit passed: 0 vulnerabilities.
 - CSV/PostgreSQL parity remains pending because no Docker daemon was reachable
   for the disposable PostGIS service.
+
+## 2026-08-09 - Phase 2 Final Gate Parity Closure
+
+Scope:
+
+- Continue only the pending CSV/PostgreSQL parity final gate.
+- Do not redo completed canonical, performance, scientific/offline, legacy, or
+  frontend gates.
+
+Commands:
+
+```text
+docker version
+docker info
+docker compose version
+docker desktop start
+docker info readiness polling, max 90 seconds
+docker compose -f docker-compose.phase1.yml up -d
+node --test tests\phase1\phase1PostgresIntegration.test.js
+node --test tests\phase1\phase1PostgresIntegration.test.js with URBANAGENT_PHASE1_INTEGRATION=true and URBANAGENT_ALLOW_PHASE1_DB_WRITE=true
+docker compose -f docker-compose.phase1.yml down -v
+```
+
+Results:
+
+- Docker CLI: available.
+- Docker Compose: available.
+- Docker Desktop daemon: initially stopped, then started successfully.
+- First parity attempt: guarded failure because
+  `URBANAGENT_ALLOW_PHASE1_DB_WRITE=true` was intentionally required.
+- Guarded parity run with explicit disposable-write opt-in: PASS.
+- CSV/PostgreSQL parity test: `1` total, `1` passed, `0` failed, `0`
+  skipped.
+- Documented representative behaviors covered by the existing integration
+  test: migration, rollback, reapply, import, idempotency,
+  `PostgresPoiRepository`, selected CSV/Postgres POI identity/provenance/null
+  parity, source-filter counts, recommendation smoke, itinerary smoke, and CSV
+  default-runtime restoration.
+- Disposable PostGIS container and volume were removed.
+- No production database or Firebase production data was touched.
+
+Conclusion:
+
+- The only previously pending Phase 2 final gate is closed.
+- Phase 2 may be declared closed after final documentation update and backend
+  test rerun on the changed branch.

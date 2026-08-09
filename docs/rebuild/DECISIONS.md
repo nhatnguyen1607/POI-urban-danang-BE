@@ -459,13 +459,13 @@ Implications:
 
 Date: 2026-08-09.
 
-Status: `FINAL_GATE_PENDING`.
+Status: `PHASE_2_CLOSED`.
 
 Decision:
 
-The final Phase 2 gate may be classified as pending when the only missing
-mandatory evidence is unavailable local disposable PostgreSQL/PostGIS
-infrastructure.
+The final Phase 2 gate may be closed after the missing local disposable
+PostgreSQL/PostGIS infrastructure becomes available and the documented
+CSV/PostgreSQL parity test passes.
 
 Accepted evidence from this run:
 
@@ -476,12 +476,11 @@ Accepted evidence from this run:
 - Scientific/offline evaluation limitations were documented without quality
   overclaiming.
 - Backend tests passed.
+- CSV/PostgreSQL parity passed in explicit disposable PostgreSQL mode.
 
-Pending evidence:
+Final classification:
 
-- CSV/PostgreSQL parity in explicit disposable PostgreSQL mode.
-
-No Phase 2 closure claim may be made until that parity gate passes.
+- `PHASE 2 CLOSED`
 
 ## Decision - Phase 2 Batch 5 Authenticated Trip Persistence
 

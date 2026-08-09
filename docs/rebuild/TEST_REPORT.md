@@ -1382,7 +1382,10 @@ node --check scripts\phase2_final_gate_evaluation.js: PASS
 node scripts\phase2_final_gate_evaluation.js: PASS
 npm.cmd test: PASS, 42 total, 41 passed, 0 failed, 1 guarded optional PostGIS skip
 npm.cmd audit --omit=dev: PASS, 0 vulnerabilities
-docker compose -f docker-compose.phase1.yml up -d: FAIL, Docker daemon unavailable
+docker compose -f docker-compose.phase1.yml up -d: initially blocked while Docker daemon was stopped; PASS after Docker Desktop daemon started
+node --test tests\phase1\phase1PostgresIntegration.test.js with URBANAGENT_PHASE1_INTEGRATION=true and URBANAGENT_ALLOW_PHASE1_DB_WRITE=true: PASS, 1 total, 1 passed, 0 failed, 0 skipped
+docker compose -f docker-compose.phase1.yml down -v: PASS
+npm.cmd test after final-gate documentation update: PASS, 42 total, 41 passed, 0 failed, 1 guarded optional PostGIS skip
 ```
 
 Final-gate smoke results:
@@ -1426,8 +1429,13 @@ status: structural fixture only, no recommendation-quality or user-quality claim
 CSV/PostgreSQL parity:
 
 ```text
-status: PENDING
-reason: Docker CLI exists, but no Docker daemon was reachable at the Docker
-Desktop Linux engine or default Docker context. No PostgreSQL parity PASS is
-claimed.
+status: PASS
+compose file: docker-compose.phase1.yml
+image: postgis/postgis:16-3.5-alpine
+test: tests/phase1/phase1PostgresIntegration.test.js
+result: 1 total, 1 passed, 0 failed, 0 skipped
+covered: migration, rollback, reapply, import, idempotency, PostgresPoiRepository,
+selected CSV/Postgres POI identity/provenance/null parity, source-filter counts,
+recommendation smoke, itinerary smoke, and CSV default-runtime restoration
+cleanup: disposable container and volume removed
 ```
