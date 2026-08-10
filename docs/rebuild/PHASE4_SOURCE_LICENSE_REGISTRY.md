@@ -110,7 +110,30 @@ approvalDecisionReference
   coordinates, freshness, or provider identifiers.
 - Do not scrape competitor products or commercial map pages as POI sources.
 
-## 7. References
+## 7. Stage 4B Dry-Run Registry Observations
+
+Stage 4B uses tiny `NON_CANONICAL_SPIKE_ONLY` fixtures and generated reports
+under:
+
+`data/spikes/phase4/stage4b/`
+
+Observed policy requirements:
+
+- Overture-like records need per-record source/license metadata before any
+  canonical import decision.
+- OSM-like records must remain `OPEN_SHAREALIKE_ISOLATED` until the project
+  accepts ODbL obligations for a derived database.
+- Wikidata-like records can be considered CC0 knowledge enrichment, but QIDs
+  must remain namespaced source identifiers.
+- Wikimedia Commons-like media must not be treated as plain image URLs; every
+  file requires license, author, source URL, attribution, and derivative-use
+  metadata.
+- Google Places was not queried in Stage 4B and remains
+  `REQUEST_TIME_RESTRICTED`.
+
+No Stage 4B record is approved runtime data.
+
+## 8. References
 
 - Overture Places guide:
   https://docs.overturemaps.org/guides/places/
