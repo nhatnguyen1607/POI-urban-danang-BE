@@ -133,7 +133,24 @@ Observed policy requirements:
 
 No Stage 4B record is approved runtime data.
 
-## 8. References
+## 8. Stage 4C Adapter Registry Observations
+
+Stage 4C implements offline sample adapters only:
+
+- `overture` as `OPEN_PERMISSIVE_CANDIDATE`;
+- `osm` as `OPEN_SHAREALIKE_ISOLATED`;
+- `wikidata_wikimedia` as
+  `OPEN_KNOWLEDGE_AND_MEDIA_ATTRIBUTION_REQUIRED`.
+
+The adapter contract version is `phase4-stage4c-v1`.
+
+Each normalized field retains source, source ID, field name, license,
+policy class, attribution, and snapshot reference.
+
+Stage 4C does not approve runtime ingestion, canonical CSV replacement,
+production database writes, Google bulk ingestion, or second-city creation.
+
+## 9. References
 
 - Overture Places guide:
   https://docs.overturemaps.org/guides/places/

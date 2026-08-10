@@ -1,0 +1,38 @@
+{
+  "status": "NON_RUNTIME_STAGE4C_DRY_RUN",
+  "canonical": {
+    "path": "C:\\tmp\\urbanagent-phase4-stage4c-20260810-094019\\data\\canonical\\urbanagent_poi_master_v1.csv",
+    "rows": 4166,
+    "sha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+    "shaMatchesExpected": true
+  },
+  "adapters": [
+    {
+      "source": "overture",
+      "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+      "contractVersion": "phase4-stage4c-v1"
+    },
+    {
+      "source": "osm",
+      "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+      "contractVersion": "phase4-stage4c-v1"
+    },
+    {
+      "source": "wikidata_wikimedia",
+      "policyClass": "OPEN_KNOWLEDGE_AND_MEDIA_ATTRIBUTION_REQUIRED",
+      "contractVersion": "phase4-stage4c-v1"
+    }
+  ],
+  "normalizedRecords": 17,
+  "matchSummary": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 1,
+    "ambiguous": 3,
+    "newCandidates": 9,
+    "invalid": 1,
+    "sourceDuplicates": 1
+  },
+  "reviewQueueItems": 14,
+  "enrichmentCandidates": 4,
+  "runtimeChanged": false
+}

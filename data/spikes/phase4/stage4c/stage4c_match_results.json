@@ -1,0 +1,3136 @@
+{
+  "matches": [
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:anh-quan",
+      "sourceName": "Anh Quan Bakery",
+      "decision": "AMBIGUOUS",
+      "confidence": 0.9848,
+      "reasonCodes": [
+        "chain_branch_collision",
+        "multiple_same_name_nearby_candidates"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_553",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 37.92,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9848
+        },
+        {
+          "canonicalPoiId": "google_maps_555",
+          "canonicalName": "ANH QUÂN BAKERY",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 610.46,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_554",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 650.98,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_557",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1251.46,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_804",
+          "canonicalName": "Anh Quân bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1429.04,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_553",
+        "canonicalName": "Anh Quân Bakery",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 37.92,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9848
+      },
+      "provenance": {
+        "source": "osm",
+        "sourceId": "osm:node:stage4b:anh-quan",
+        "adapter": "osm",
+        "snapshotRef": "stage4b-osm-fixture",
+        "license": "ODbL-like fixture boundary",
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "attribution": "OpenStreetMap contributors",
+        "fields": {
+          "name": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "name",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "category",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "latitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "longitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "address",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "website",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "phone",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "openingHours",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "externalIds",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:anh-quan",
+            "field": "media",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:semi-tea",
+      "sourceName": "Semi Tea Hoa Khanh",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.6903,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_134",
+          "canonicalName": "SÊMI Trà Sữa - Là Trà Đậm Vị - Hòa Khánh",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 9.02,
+          "nameSimilarity": 0.4722,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.6903
+        },
+        {
+          "canonicalPoiId": "foody_1020",
+          "canonicalName": "Mini Tea - Trà Sữa & Ăn Vặt",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 122.11,
+          "nameSimilarity": 0.3704,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.586
+        },
+        {
+          "canonicalPoiId": "google_maps_608",
+          "canonicalName": "Trà Sữa Ông Thọ - Hòa Khánh",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 406.96,
+          "nameSimilarity": 0.52,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5588
+        },
+        {
+          "canonicalPoiId": "google_maps_136",
+          "canonicalName": "Tấm Trà Sữa",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 155.06,
+          "nameSimilarity": 0.3333,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.5513
+        },
+        {
+          "canonicalPoiId": "google_maps_530",
+          "canonicalName": "Ainsi Cafe & Roaster",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 28.54,
+          "nameSimilarity": 0.2222,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.5375
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_134",
+        "canonicalName": "SÊMI Trà Sữa - Là Trà Đậm Vị - Hòa Khánh",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 9.02,
+        "nameSimilarity": 0.4722,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.6903
+      },
+      "provenance": {
+        "source": "osm",
+        "sourceId": "osm:node:stage4b:semi-tea",
+        "adapter": "osm",
+        "snapshotRef": "stage4b-osm-fixture",
+        "license": "ODbL-like fixture boundary",
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "attribution": "OpenStreetMap contributors",
+        "fields": {
+          "name": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "name",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "category",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "latitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "longitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "address",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "website",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "phone",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "openingHours",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "externalIds",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:semi-tea",
+            "field": "media",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:thanh-tam",
+      "sourceName": "Thanh Tam Bakery & Coffee",
+      "decision": "HIGH_CONFIDENCE_MATCH",
+      "confidence": 0.9994,
+      "reasonCodes": [
+        "tight_distance",
+        "strong_name_similarity",
+        "category_compatible"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_77",
+          "canonicalName": "Thanh Tam Bakery and Coffee",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1.45,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9994
+        },
+        {
+          "canonicalPoiId": "google_maps_4858",
+          "canonicalName": "Nhà Tâm An",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 11478.01,
+          "nameSimilarity": 0.6923,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.6215
+        },
+        {
+          "canonicalPoiId": "google_maps_4065",
+          "canonicalName": "Café Thanh Tâm",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 16851.16,
+          "nameSimilarity": 0.6923,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.6215
+        },
+        {
+          "canonicalPoiId": "google_maps_795",
+          "canonicalName": "Cafe Hạnh Ham Học",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 9791.67,
+          "nameSimilarity": 0.6154,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5769
+        },
+        {
+          "canonicalPoiId": "google_maps_1267",
+          "canonicalName": "Coffee Thanh Thảo",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 10087.26,
+          "nameSimilarity": 0.6154,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5769
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_77",
+        "canonicalName": "Thanh Tam Bakery and Coffee",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 1.45,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9994
+      },
+      "provenance": {
+        "source": "osm",
+        "sourceId": "osm:node:stage4b:thanh-tam",
+        "adapter": "osm",
+        "snapshotRef": "stage4b-osm-fixture",
+        "license": "ODbL-like fixture boundary",
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "attribution": "OpenStreetMap contributors",
+        "fields": {
+          "name": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "name",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "category",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "latitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "longitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "address",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "website",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "phone",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "openingHours",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "externalIds",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "osm",
+            "sourceId": "osm:node:stage4b:thanh-tam",
+            "field": "media",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:way:stage4b:han-market",
+      "sourceName": "Han Market",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.464,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_1349",
+          "canonicalName": "Hay marker",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 10262.96,
+          "nameSimilarity": 0.8,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.464
+        },
+        {
+          "canonicalPoiId": "google_maps_1698",
+          "canonicalName": "Nhà hàng Nhà Gỗ Việt Đà Nẵng",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 87.52,
+          "nameSimilarity": 0.3636,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.3759
+        },
+        {
+          "canonicalPoiId": "google_maps_1191",
+          "canonicalName": "Bakery Handmade",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 3422.83,
+          "nameSimilarity": 0.6,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.348
+        },
+        {
+          "canonicalPoiId": "google_maps_979",
+          "canonicalName": "Tê Bar",
+          "canonicalCategory": "nightlife",
+          "distanceMeters": 74.27,
+          "nameSimilarity": 0.3,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.3443
+        },
+        {
+          "canonicalPoiId": "google_maps_2310",
+          "canonicalName": "Nhà hàng Seo Ga Nea",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 128.85,
+          "nameSimilarity": 0.3,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.3225
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_1349",
+        "canonicalName": "Hay marker",
+        "canonicalCategory": "restaurant",
+        "distanceMeters": 10262.96,
+        "nameSimilarity": 0.8,
+        "categoryCompatibility": 0,
+        "addressEvidence": false,
+        "confidence": 0.464
+      },
+      "provenance": {
+        "source": "osm",
+        "sourceId": "osm:way:stage4b:han-market",
+        "adapter": "osm",
+        "snapshotRef": "stage4b-osm-fixture",
+        "license": "ODbL-like fixture boundary",
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "attribution": "OpenStreetMap contributors",
+        "fields": {
+          "name": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "name",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "category",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "latitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "longitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "address",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "website",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "phone",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "openingHours",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "externalIds",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:han-market",
+            "field": "media",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:way:stage4b:my-khe-beach",
+      "sourceName": "Bai bien My Khe",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.2707,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_1434",
+          "canonicalName": "Nhà Hàng Hải Sản - Ơ Kìa",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 3286.02,
+          "nameSimilarity": 0.4667,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2707
+        },
+        {
+          "canonicalPoiId": "google_maps_2222",
+          "canonicalName": "Bải Rạn - Bảy Ban",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 4618.74,
+          "nameSimilarity": 0.4667,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2707
+        },
+        {
+          "canonicalPoiId": "google_maps_988",
+          "canonicalName": "Cơm bún mì Hến",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 7197.33,
+          "nameSimilarity": 0.4667,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2707
+        },
+        {
+          "canonicalPoiId": "google_maps_1294",
+          "canonicalName": "Vân Bún Bò Huế",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 10667.66,
+          "nameSimilarity": 0.4667,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2707
+        },
+        {
+          "canonicalPoiId": "google_maps_325",
+          "canonicalName": "Bánh Bèo Bà Thu",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 16596.03,
+          "nameSimilarity": 0.4667,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2707
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_1434",
+        "canonicalName": "Nhà Hàng Hải Sản - Ơ Kìa",
+        "canonicalCategory": "restaurant",
+        "distanceMeters": 3286.02,
+        "nameSimilarity": 0.4667,
+        "categoryCompatibility": 0,
+        "addressEvidence": false,
+        "confidence": 0.2707
+      },
+      "provenance": {
+        "source": "osm",
+        "sourceId": "osm:way:stage4b:my-khe-beach",
+        "adapter": "osm",
+        "snapshotRef": "stage4b-osm-fixture",
+        "license": "ODbL-like fixture boundary",
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "attribution": "OpenStreetMap contributors",
+        "fields": {
+          "name": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "name",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "category",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "latitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "longitude",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "address",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "website",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "phone",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "openingHours",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "externalIds",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "osm",
+            "sourceId": "osm:way:stage4b:my-khe-beach",
+            "field": "media",
+            "license": "ODbL-like fixture boundary",
+            "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+            "attribution": "OpenStreetMap contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:anh-quan-bakery-a",
+      "sourceName": "Anh Quan Bakery",
+      "decision": "AMBIGUOUS",
+      "confidence": 0.9849,
+      "reasonCodes": [
+        "chain_branch_collision",
+        "multiple_same_name_nearby_candidates"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_553",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 37.8,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9849
+        },
+        {
+          "canonicalPoiId": "google_maps_555",
+          "canonicalName": "ANH QUÂN BAKERY",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 599.4,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_554",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 635.74,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_557",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1264.92,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_804",
+          "canonicalName": "Anh Quân bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1443.63,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_553",
+        "canonicalName": "Anh Quân Bakery",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 37.8,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9849
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:anh-quan-bakery-a",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:anh-quan-bakery-b",
+      "sourceName": "ANH QUAN BAKERY",
+      "decision": "AMBIGUOUS",
+      "confidence": 0.9832,
+      "reasonCodes": [
+        "chain_branch_collision",
+        "multiple_same_name_nearby_candidates"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_553",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 42.12,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9832
+        },
+        {
+          "canonicalPoiId": "google_maps_555",
+          "canonicalName": "ANH QUÂN BAKERY",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 597.13,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_554",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 637.79,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_557",
+          "canonicalName": "Anh Quân Bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1265.99,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        },
+        {
+          "canonicalPoiId": "google_maps_804",
+          "canonicalName": "Anh Quân bakery",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1440.86,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.8
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_553",
+        "canonicalName": "Anh Quân Bakery",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 42.12,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9832
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:anh-quan-bakery-b",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:bo-ne-9-mon",
+      "sourceName": "Bo Ne 9 Mon Fast Food",
+      "decision": "HIGH_CONFIDENCE_MATCH",
+      "confidence": 0.9994,
+      "reasonCodes": [
+        "tight_distance",
+        "strong_name_similarity",
+        "category_compatible"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_103",
+          "canonicalName": "Bò Né 9 Món Fast Food",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 1.46,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9994
+        },
+        {
+          "canonicalPoiId": "google_maps_2217",
+          "canonicalName": "Anh map fastfood",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 8474.65,
+          "nameSimilarity": 0.5714,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5514
+        },
+        {
+          "canonicalPoiId": "foody_231",
+          "canonicalName": "Cao Lầu Lý - Thái Thị Bôi",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 45.78,
+          "nameSimilarity": 0.2174,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.5278
+        },
+        {
+          "canonicalPoiId": "google_maps_1202",
+          "canonicalName": "Trứng Lộn & Sữa Đậu VÂN",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 36.53,
+          "nameSimilarity": 0.2,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.5214
+        },
+        {
+          "canonicalPoiId": "google_maps_1296",
+          "canonicalName": "Bom Ăn Vặt _ H-food",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 2484.19,
+          "nameSimilarity": 0.4762,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.4962
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_103",
+        "canonicalName": "Bò Né 9 Món Fast Food",
+        "canonicalCategory": "restaurant",
+        "distanceMeters": 1.46,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9994
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:bo-ne-9-mon",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:bo-ne-9-mon",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:dragon-bridge",
+      "sourceName": "Dragon Bridge",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.2902,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_2213",
+          "canonicalName": "Dragon Ball Rooftop",
+          "canonicalCategory": "nightlife",
+          "distanceMeters": 461.31,
+          "nameSimilarity": 0.4737,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2902
+        },
+        {
+          "canonicalPoiId": "google_maps_1048",
+          "canonicalName": "SaiGon Brown Coffee",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 10427.92,
+          "nameSimilarity": 0.4615,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2677
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_2213",
+        "canonicalName": "Dragon Ball Rooftop",
+        "canonicalCategory": "nightlife",
+        "distanceMeters": 461.31,
+        "nameSimilarity": 0.4737,
+        "categoryCompatibility": 0,
+        "addressEvidence": false,
+        "confidence": 0.2902
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:dragon-bridge",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:dragon-bridge",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:invalid-coordinates",
+      "sourceName": "Invalid Coordinate Fixture",
+      "decision": "INVALID",
+      "confidence": 0,
+      "reasonCodes": [
+        "invalid_or_missing_coordinates"
+      ],
+      "candidates": [],
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:invalid-coordinates",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:invalid-coordinates",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:my-khe-beach",
+      "sourceName": "My Khe Beach",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.435,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_2643",
+          "canonicalName": "My Khe Beach Hotel",
+          "canonicalCategory": "shopping",
+          "distanceMeters": 1373.7,
+          "nameSimilarity": 0.75,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.435
+        },
+        {
+          "canonicalPoiId": "google_maps_2730",
+          "canonicalName": "Esco Beach",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 432.38,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.317
+        },
+        {
+          "canonicalPoiId": "google_maps_2644",
+          "canonicalName": "Son Of A Beach",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 1437.2,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.29
+        },
+        {
+          "canonicalPoiId": "google_maps_5427",
+          "canonicalName": "Quán mỳ khô Gia Lai",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 2822.72,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.29
+        },
+        {
+          "canonicalPoiId": "google_maps_2636",
+          "canonicalName": "Coffee Huỳnh Gia",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 145.42,
+          "nameSimilarity": 0.25,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.2868
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_2643",
+        "canonicalName": "My Khe Beach Hotel",
+        "canonicalCategory": "shopping",
+        "distanceMeters": 1373.7,
+        "nameSimilarity": 0.75,
+        "categoryCompatibility": 0,
+        "addressEvidence": true,
+        "confidence": 0.435
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:my-khe-beach",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:my-khe-beach",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:semi-tra-sua",
+      "sourceName": "SEMI Tra Sua Hoa Khanh",
+      "decision": "PROBABLE_MATCH",
+      "confidence": 0.782,
+      "reasonCodes": [
+        "nearby_coordinates",
+        "usable_name_similarity",
+        "category_compatible"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_134",
+          "canonicalName": "SÊMI Trà Sữa - Là Trà Đậm Vị - Hòa Khánh",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 1.26,
+          "nameSimilarity": 0.625,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.782
+        },
+        {
+          "canonicalPoiId": "foody_1020",
+          "canonicalName": "Mini Tea - Trà Sữa & Ăn Vặt",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 116.8,
+          "nameSimilarity": 0.4074,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.6096
+        },
+        {
+          "canonicalPoiId": "google_maps_136",
+          "canonicalName": "Tấm Trà Sữa",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 162.31,
+          "nameSimilarity": 0.4091,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.5923
+        },
+        {
+          "canonicalPoiId": "google_maps_608",
+          "canonicalName": "Trà Sữa Ông Thọ - Hòa Khánh",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 413.64,
+          "nameSimilarity": 0.5714,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.586
+        },
+        {
+          "canonicalPoiId": "google_maps_1026",
+          "canonicalName": "Trà sữa Má Chang",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 2691.63,
+          "nameSimilarity": 0.5909,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5627
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_134",
+        "canonicalName": "SÊMI Trà Sữa - Là Trà Đậm Vị - Hòa Khánh",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 1.26,
+        "nameSimilarity": 0.625,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.782
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:semi-tra-sua",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:semi-tra-sua",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:thanh-tam-bakery",
+      "sourceName": "Thanh Tam Bakery and Coffee",
+      "decision": "HIGH_CONFIDENCE_MATCH",
+      "confidence": 0.9998,
+      "reasonCodes": [
+        "tight_distance",
+        "strong_name_similarity",
+        "category_compatible"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_77",
+          "canonicalName": "Thanh Tam Bakery and Coffee",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 0.5,
+          "nameSimilarity": 1,
+          "categoryCompatibility": 1,
+          "addressEvidence": true,
+          "confidence": 0.9998
+        },
+        {
+          "canonicalPoiId": "google_maps_4858",
+          "canonicalName": "Nhà Tâm An",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 11479.21,
+          "nameSimilarity": 0.6923,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.6215
+        },
+        {
+          "canonicalPoiId": "google_maps_4065",
+          "canonicalName": "Café Thanh Tâm",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 16851.46,
+          "nameSimilarity": 0.6923,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.6215
+        },
+        {
+          "canonicalPoiId": "google_maps_795",
+          "canonicalName": "Cafe Hạnh Ham Học",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 9790.41,
+          "nameSimilarity": 0.6154,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5769
+        },
+        {
+          "canonicalPoiId": "google_maps_1267",
+          "canonicalName": "Coffee Thanh Thảo",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 10085.84,
+          "nameSimilarity": 0.6154,
+          "categoryCompatibility": 1,
+          "addressEvidence": false,
+          "confidence": 0.5769
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_77",
+        "canonicalName": "Thanh Tam Bakery and Coffee",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 0.5,
+        "nameSimilarity": 1,
+        "categoryCompatibility": 1,
+        "addressEvidence": true,
+        "confidence": 0.9998
+      },
+      "provenance": {
+        "source": "overture",
+        "sourceId": "overture:stage4b:thanh-tam-bakery",
+        "adapter": "overture",
+        "snapshotRef": "stage4b-overture-fixture",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Overture Maps contributors",
+        "fields": {
+          "name": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "name",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "category",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "latitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "longitude",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "address",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "website",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "phone",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "openingHours",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "externalIds",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:thanh-tam-bakery",
+            "field": "media",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q12074333",
+      "sourceName": "My Khe Beach",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.435,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_2643",
+          "canonicalName": "My Khe Beach Hotel",
+          "canonicalCategory": "shopping",
+          "distanceMeters": 1373.7,
+          "nameSimilarity": 0.75,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.435
+        },
+        {
+          "canonicalPoiId": "google_maps_2730",
+          "canonicalName": "Esco Beach",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 432.38,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.317
+        },
+        {
+          "canonicalPoiId": "google_maps_2644",
+          "canonicalName": "Son Of A Beach",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 1437.2,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.29
+        },
+        {
+          "canonicalPoiId": "google_maps_5427",
+          "canonicalName": "Quán mỳ khô Gia Lai",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 2822.72,
+          "nameSimilarity": 0.5,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.29
+        },
+        {
+          "canonicalPoiId": "google_maps_2636",
+          "canonicalName": "Coffee Huỳnh Gia",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 145.42,
+          "nameSimilarity": 0.25,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2868
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_2643",
+        "canonicalName": "My Khe Beach Hotel",
+        "canonicalCategory": "shopping",
+        "distanceMeters": 1373.7,
+        "nameSimilarity": 0.75,
+        "categoryCompatibility": 0,
+        "addressEvidence": false,
+        "confidence": 0.435
+      },
+      "provenance": {
+        "source": "wikidata",
+        "sourceId": "wikidata:Q12074333",
+        "adapter": "wikidata",
+        "snapshotRef": "stage4b-wikidata-fixture",
+        "license": "CC0 for Wikidata entity data",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Wikidata contributors",
+        "fields": {
+          "name": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "name",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "category",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "latitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "longitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "address",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "website",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "phone",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "openingHours",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "externalIds",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q12074333",
+            "field": "media",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q611855",
+      "sourceName": "Museum of Cham Sculpture",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.3342,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_1851",
+          "canonicalName": "Trà sữa Cloudy",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 27.02,
+          "nameSimilarity": 0.25,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.3342
+        },
+        {
+          "canonicalPoiId": "google_maps_1987",
+          "canonicalName": "Cơm nhà vui",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 27.02,
+          "nameSimilarity": 0.25,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.3342
+        },
+        {
+          "canonicalPoiId": "google_maps_1928",
+          "canonicalName": "Phú An Hotel Đà Nẵng",
+          "canonicalCategory": "shopping",
+          "distanceMeters": 27.02,
+          "nameSimilarity": 0.2083,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.31
+        },
+        {
+          "canonicalPoiId": "google_maps_1626",
+          "canonicalName": "Mangetsu Shochu Bar - Đà Nẵng",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 83.14,
+          "nameSimilarity": 0.2083,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.2876
+        },
+        {
+          "canonicalPoiId": "google_maps_2466",
+          "canonicalName": "Nhà hàng beer Kool Klub",
+          "canonicalCategory": "restaurant",
+          "distanceMeters": 83.14,
+          "nameSimilarity": 0.2083,
+          "categoryCompatibility": 0,
+          "addressEvidence": true,
+          "confidence": 0.2876
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_1851",
+        "canonicalName": "Trà sữa Cloudy",
+        "canonicalCategory": "unknown",
+        "distanceMeters": 27.02,
+        "nameSimilarity": 0.25,
+        "categoryCompatibility": 0,
+        "addressEvidence": true,
+        "confidence": 0.3342
+      },
+      "provenance": {
+        "source": "wikidata",
+        "sourceId": "wikidata:Q611855",
+        "adapter": "wikidata",
+        "snapshotRef": "stage4b-wikidata-fixture",
+        "license": "CC0 for Wikidata entity data",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Wikidata contributors",
+        "fields": {
+          "name": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "name",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "category",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "latitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "longitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "address",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "website",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "phone",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "openingHours",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "externalIds",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q611855",
+            "field": "media",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q726980",
+      "sourceName": "Dragon Bridge",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0.2902,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [
+        {
+          "canonicalPoiId": "google_maps_2213",
+          "canonicalName": "Dragon Ball Rooftop",
+          "canonicalCategory": "nightlife",
+          "distanceMeters": 461.31,
+          "nameSimilarity": 0.4737,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2902
+        },
+        {
+          "canonicalPoiId": "google_maps_1048",
+          "canonicalName": "SaiGon Brown Coffee",
+          "canonicalCategory": "unknown",
+          "distanceMeters": 10427.92,
+          "nameSimilarity": 0.4615,
+          "categoryCompatibility": 0,
+          "addressEvidence": false,
+          "confidence": 0.2677
+        }
+      ],
+      "bestCandidate": {
+        "canonicalPoiId": "google_maps_2213",
+        "canonicalName": "Dragon Ball Rooftop",
+        "canonicalCategory": "nightlife",
+        "distanceMeters": 461.31,
+        "nameSimilarity": 0.4737,
+        "categoryCompatibility": 0,
+        "addressEvidence": false,
+        "confidence": 0.2902
+      },
+      "provenance": {
+        "source": "wikidata",
+        "sourceId": "wikidata:Q726980",
+        "adapter": "wikidata",
+        "snapshotRef": "stage4b-wikidata-fixture",
+        "license": "CC0 for Wikidata entity data",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "attribution": "Wikidata contributors",
+        "fields": {
+          "name": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "name",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "category",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "latitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "longitude",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "address",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "website",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "phone",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "openingHours",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "externalIds",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "wikidata",
+            "sourceId": "wikidata:Q726980",
+            "field": "media",
+            "license": "CC0 for Wikidata entity data",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Wikidata contributors",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikimedia_commons",
+      "sourceId": "commons:file:stage4b:dragon-bridge",
+      "sourceName": "Dragon Bridge media candidate",
+      "decision": "NEW_CANDIDATE",
+      "confidence": 0,
+      "reasonCodes": [
+        "no_credible_canonical_match"
+      ],
+      "candidates": [],
+      "bestCandidate": null,
+      "provenance": {
+        "source": "wikimedia_commons",
+        "sourceId": "commons:file:stage4b:dragon-bridge",
+        "adapter": "wikimedia_commons",
+        "snapshotRef": "stage4b-wikimedia_commons-fixture",
+        "license": "Per-file Commons license required",
+        "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+        "attribution": "File-level author, source URL, and license required",
+        "fields": {
+          "name": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "name",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "category": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "category",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "latitude": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "latitude",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "longitude": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "longitude",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "address": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "address",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "website": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "website",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "phone": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "phone",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "openingHours": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "openingHours",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "externalIds": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "externalIds",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          },
+          "media": {
+            "source": "wikimedia_commons",
+            "sourceId": "commons:file:stage4b:dragon-bridge",
+            "field": "media",
+            "license": "Per-file Commons license required",
+            "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+            "attribution": "File-level author, source URL, and license required",
+            "snapshotRef": null
+          }
+        }
+      },
+      "license": {
+        "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+        "license": "Per-file Commons license required",
+        "attribution": "File-level author, source URL, and license required"
+      }
+    }
+  ],
+  "duplicates": [
+    {
+      "decision": "SOURCE_DUPLICATE",
+      "source": "overture",
+      "sourceIdA": "overture:stage4b:anh-quan-bakery-a",
+      "sourceIdB": "overture:stage4b:anh-quan-bakery-b",
+      "nameA": "Anh Quan Bakery",
+      "nameB": "ANH QUAN BAKERY",
+      "distanceMeters": 4.82,
+      "nameSimilarity": 1,
+      "confidence": 0.98,
+      "reasonCodes": [
+        "same_phone"
+      ],
+      "records": [
+        {
+          "source": "overture",
+          "sourceId": "overture:stage4b:anh-quan-bakery-a",
+          "name": "Anh Quan Bakery",
+          "normalizedName": "anh",
+          "category": "unknown",
+          "sourceCategory": "bakery",
+          "latitude": 16.0645,
+          "longitude": 108.153,
+          "address": "Hoa Khanh, Da Nang",
+          "website": null,
+          "phone": "+842363000003",
+          "openingHours": "Mo-Su 06:00-22:00",
+          "externalIds": {
+            "overture_gers_id": "gers:stage4b:anh-quan-a"
+          },
+          "media": null,
+          "raw": null,
+          "provenance": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-a",
+            "adapter": "overture",
+            "snapshotRef": "stage4b-overture-fixture",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "fields": {
+              "name": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "name",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "category": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "category",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "latitude": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "latitude",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "longitude": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "longitude",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "address": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "address",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "website": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "website",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "phone": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "phone",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "openingHours": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "openingHours",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "externalIds": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "externalIds",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "media": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-a",
+                "field": "media",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              }
+            }
+          },
+          "license": {
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "attribution": "Overture Maps contributors"
+          }
+        },
+        {
+          "source": "overture",
+          "sourceId": "overture:stage4b:anh-quan-bakery-b",
+          "name": "ANH QUAN BAKERY",
+          "normalizedName": "anh",
+          "category": "unknown",
+          "sourceCategory": "bakery",
+          "latitude": 16.06452,
+          "longitude": 108.15304,
+          "address": "Hoa Khanh, Da Nang",
+          "website": null,
+          "phone": "+842363000003",
+          "openingHours": "Mo-Su 06:00-22:00",
+          "externalIds": {
+            "overture_gers_id": "gers:stage4b:anh-quan-b"
+          },
+          "media": null,
+          "raw": null,
+          "provenance": {
+            "source": "overture",
+            "sourceId": "overture:stage4b:anh-quan-bakery-b",
+            "adapter": "overture",
+            "snapshotRef": "stage4b-overture-fixture",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "attribution": "Overture Maps contributors",
+            "fields": {
+              "name": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "name",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "category": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "category",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "latitude": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "latitude",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "longitude": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "longitude",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "address": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "address",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "website": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "website",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "phone": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "phone",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "openingHours": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "openingHours",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "externalIds": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "externalIds",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              },
+              "media": {
+                "source": "overture",
+                "sourceId": "overture:stage4b:anh-quan-bakery-b",
+                "field": "media",
+                "license": "Stage4B fixture; real Overture records require per-source license metadata",
+                "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+                "attribution": "Overture Maps contributors",
+                "snapshotRef": null
+              }
+            }
+          },
+          "license": {
+            "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+            "license": "Stage4B fixture; real Overture records require per-source license metadata",
+            "attribution": "Overture Maps contributors"
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 1,
+    "ambiguous": 3,
+    "newCandidates": 9,
+    "invalid": 1,
+    "sourceDuplicates": 1
+  }
+}
