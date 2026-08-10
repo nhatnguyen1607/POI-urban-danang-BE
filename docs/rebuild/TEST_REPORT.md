@@ -1439,3 +1439,39 @@ selected CSV/Postgres POI identity/provenance/null parity, source-filter counts,
 recommendation smoke, itinerary smoke, and CSV default-runtime restoration
 cleanup: disposable container and volume removed
 ```
+
+## 2026-08-10 - Phase 4 Stage 4E Real Bounded Source Validation
+
+Commands:
+
+```text
+python -m py_compile scripts\phase4_stage4e_prepare_real_snapshots.py
+node --check src\modules\cityPackPreparation\sourceRecord.js
+node --check src\modules\cityPackPreparation\realSnapshot.js
+node --check src\modules\cityPackPreparation\cityPackBuild\cityPackBuilder.js
+node --check scripts\phase4_stage4e_real_source_validation.js
+node --test tests\phase4\phase4Stage4cEntityResolution.test.js tests\phase4\phase4Stage4dCityPackBuild.test.js tests\phase4\phase4Stage4eRealSourceValidation.test.js
+```
+
+Results:
+
+```text
+Syntax checks: PASS
+Focused tests: 22 passed, 0 failed, 0 skipped
+Normalized real bounded records: 76 valid, 0 invalid
+High/probable/ambiguous/new: 6/3/1/66
+Source duplicates: 3
+Review queue: 70
+Candidate build records: 9
+Fixed-snapshot determinism: PASS
+Record provenance: 76/76 complete
+Field provenance: 760/760 complete
+Commons media license metadata: 4/4 complete
+Canonical POIs: 4166
+Canonical SHA-256: 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+Runtime changed: no
+```
+
+Limitation: this is a small, partially canonical-overlap stress sample, not a
+city-wide accuracy benchmark. The Stage 4D manifest does not yet promote
+Commons per-file metadata to separate manifest entries.

@@ -2437,3 +2437,78 @@ Conclusion:
 - The only previously pending Phase 2 final gate is closed.
 - Phase 2 may be declared closed after final documentation update and backend
   test rerun on the changed branch.
+
+## 2026-08-10 14:55:00 +07:00 - Phase 4 Stage 4E
+
+Scope:
+
+- Verify Stage 4D merge.
+- Retrieve small real bounded Overture, OSM, Wikidata, and Commons metadata
+  samples.
+- Run Stage 4C normalization/entity resolution/review queue and Stage 4D
+  candidate build without changing runtime or canonical data.
+
+Read:
+
+```text
+AGENTS.md
+URBANAGENT_CODEX_CONTEXT.md
+docs/rebuild/MULTI_SOURCE_POI_STRATEGY.md
+docs/rebuild/DATA_SOURCE_LICENSE_POLICY.md
+docs/rebuild/DECISIONS.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/PHASE4_STAGE4A_SOURCE_DISCOVERY.md
+docs/rebuild/PHASE4_SOURCE_LICENSE_REGISTRY.md
+docs/rebuild/PHASE4_STAGE4C_ENTITY_RESOLUTION.md
+docs/rebuild/PHASE4_STAGE4D_CITYPACK_BUILD.md
+```
+
+Read-only/source-access commands:
+
+```text
+git fetch origin main --prune
+git merge-base --is-ancestor 1d60fe920fde5011ceaabc1847ae21a32f901516 origin/main
+uvx --from overturemaps overturemaps releases latest
+Overture client bbox query for release 2026-07-22.0
+bounded Overpass queries (dispatcher timeout; no data retained)
+OSM Map API bbox fallback
+Wikidata Query Service wikibase:box query
+Wikimedia Commons imageinfo extmetadata query
+```
+
+Changed files:
+
+```text
+src/modules/cityPackPreparation/sourceRecord.js
+src/modules/cityPackPreparation/realSnapshot.js
+src/modules/cityPackPreparation/cityPackBuild/cityPackBuilder.js
+scripts/phase4_stage4e_prepare_real_snapshots.py
+scripts/phase4_stage4e_real_source_validation.js
+tests/phase4/phase4Stage4eRealSourceValidation.test.js
+docs/rebuild/PHASE4_STAGE4E_REAL_SOURCE_VALIDATION.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+data/spikes/phase4/stage4e/**
+data/citypacks/candidates/danang/stage4e-real-bounded/**
+```
+
+Validation:
+
+```text
+Stage 4C/4D/4E focused tests: 22 passed, 0 failed, 0 skipped
+Canonical count/SHA: 4166 / 5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae
+Candidate build: 9 matched enrichments, 0 approved new candidates
+Determinism: PASS
+```
+
+Conclusions:
+
+- Real schemas exposed and fixed category-normalization and field snapshot
+  provenance bugs.
+- No ambiguous, new, or duplicate record was auto-merged.
+- Overture has the strongest address/phone coverage in this bounded sample;
+  OSM operational fields are sparse; Wikidata/Commons is landmark/media
+  enrichment rather than broad local coverage.
+- Recommended Stage 4F direction is provenance/license hardening only; it was
+  not started.

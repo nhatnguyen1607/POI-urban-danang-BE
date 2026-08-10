@@ -21,18 +21,38 @@ function normalizeName(value) {
     .trim();
 }
 
+function normalizeCategoryText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\u0111/g, 'd')
+    .replace(/\u0110/g, 'd')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9\s_]/g, ' ')
+    .replace(/[_\s]+/g, ' ')
+    .trim();
+}
+
 function normalizeCategory(value) {
-  const raw = normalizeName(value);
+  const raw = normalizeCategoryText(value);
 
   if (!raw) return 'unknown';
   if (/(bakery|banh|bread)/.test(raw)) return 'bakery';
-  if (/(cafe|coffee|tea|tra sua|bubble|milk tea)/.test(raw)) return 'cafe';
-  if (/(restaurant|food|mon|mi quang|bo ne|nhau|seafood)/.test(raw)) return 'restaurant';
+  if (/(cafe|coffee|ca phe|tea room|tra sua|bubble|milk tea)/.test(raw)) return 'cafe';
+  if (/(bar|pub|beer|bia|cocktail|karaoke)/.test(raw)) return 'bar';
+  if (/(restaurant|food|diner|fast food|mon|mi quang|bo ne|quan an|nha hang|nhau|seafood)/.test(raw)) {
+    return 'restaurant';
+  }
+  if (/(hotel|hostel|lodging|accommodation|guest house|khach san|nha nghi)/.test(raw)) {
+    return 'accommodation';
+  }
   if (/(beach|bai bien)/.test(raw)) return 'beach';
   if (/(bridge|cau)/.test(raw)) return 'bridge';
   if (/(museum|bao tang)/.test(raw)) return 'museum';
   if (/(market|cho)/.test(raw)) return 'market';
-  if (/(park|attraction|tourism|landmark)/.test(raw)) return 'attraction';
+  if (/(church|cathedral|temple|pagoda|place of worship|nha tho|chua)/.test(raw)) return 'place_of_worship';
+  if (/(park|garden|attraction|tourism|landmark|historic|artwork)/.test(raw)) return 'attraction';
   if (/(media|photo|image)/.test(raw)) return 'media';
 
   return raw.split(' ')[0] || 'unknown';
@@ -57,7 +77,7 @@ function createFieldProvenance(sourceRecord, fieldName) {
     license: sourceRecord.license?.license || null,
     policyClass: sourceRecord.license?.policyClass || null,
     attribution: sourceRecord.license?.attribution || null,
-    snapshotRef: sourceRecord.snapshotRef || null,
+    snapshotRef: sourceRecord.snapshotRef || sourceRecord.provenance?.snapshotRef || null,
   };
 }
 
@@ -115,6 +135,7 @@ module.exports = {
   createFieldProvenance,
   hasValidCoordinates,
   normalizeCategory,
+  normalizeCategoryText,
   normalizeName,
   normalizeSourceRecord,
   numberOrNull,

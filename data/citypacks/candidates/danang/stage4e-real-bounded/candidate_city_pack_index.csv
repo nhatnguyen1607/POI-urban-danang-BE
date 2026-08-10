@@ -1,0 +1,10 @@
+type,id,source,sourceId,name
+matched_enrichment,google_maps_1671,overture,overture:0c9dc235-1d73-433a-bbb6-33cf3b634217,Kichi Kichi Nguyen Van Linh
+matched_enrichment,google_maps_1696,overture,overture:13f69e9d-6a35-4cca-8f0f-ccf6bb14e6af,Kome's Restaurant
+matched_enrichment,google_maps_1742,osm,osm:node:10598314706,Reply 1988
+matched_enrichment,google_maps_1868,overture,overture:0da358ff-98c2-497a-8426-771a688483fd,Nhà Hàng Chay Tathata - Vegan Restaurant Da Nang
+matched_enrichment,google_maps_1915,osm,osm:node:12345255101,Gé Cafe
+matched_enrichment,google_maps_1915,osm,osm:node:12372805701,Gé Cafe
+matched_enrichment,google_maps_2368,osm,osm:node:12337003901,Mỳ Quảng Cô Sáu
+matched_enrichment,google_maps_2391,osm,osm:node:13286322244,Minori
+matched_enrichment,google_maps_2391,overture,overture:1c22074f-493a-44a5-a7ca-49227212a758,Minori Tea
