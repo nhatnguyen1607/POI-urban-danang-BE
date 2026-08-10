@@ -1,0 +1,18 @@
+source,sourceId,name,hasAddress,hasWebsite,hasPhone,hasOpeningHours,hasExternalIds,hasMedia,licensePolicyClass,attribution
+overture,overture:stage4b:thanh-tam-bakery,Thanh Tam Bakery and Coffee,true,true,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:bo-ne-9-mon,Bo Ne 9 Mon Fast Food,true,false,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:semi-tra-sua,SEMI Tra Sua Hoa Khanh,true,false,false,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:anh-quan-bakery-a,Anh Quan Bakery,true,false,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:anh-quan-bakery-b,ANH QUAN BAKERY,true,false,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:dragon-bridge,Dragon Bridge,true,false,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:my-khe-beach,My Khe Beach,true,false,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:invalid-coordinates,Invalid Coordinate Fixture,true,false,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+osm,osm:node:stage4b:thanh-tam,Thanh Tam Bakery & Coffee,true,true,false,true,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+osm,osm:node:stage4b:semi-tea,Semi Tea Hoa Khanh,true,false,false,true,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+osm,osm:node:stage4b:anh-quan,Anh Quan Bakery,true,false,false,true,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+osm,osm:way:stage4b:han-market,Han Market,true,false,false,true,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+osm,osm:way:stage4b:my-khe-beach,Bai bien My Khe,true,false,false,false,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+wikidata,wikidata:Q726980,Dragon Bridge,true,false,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Wikidata contributors
+wikidata,wikidata:Q12074333,My Khe Beach,true,false,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Wikidata contributors
+wikidata,wikidata:Q611855,Museum of Cham Sculpture,true,true,false,false,true,false,OPEN_PERMISSIVE_CANDIDATE,Wikidata contributors
+wikimedia_commons,commons:file:stage4b:dragon-bridge,Dragon Bridge media candidate,true,false,false,false,true,true,OPEN_MEDIA_ATTRIBUTION_REQUIRED,"File-level author, source URL, and license required"

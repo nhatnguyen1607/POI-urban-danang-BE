@@ -1,0 +1,71 @@
+{
+  "status": "NON_CANONICAL_SPIKE_ONLY",
+  "canonical": {
+    "path": "data/canonical/urbanagent_poi_master_v1.csv",
+    "rows": 4166,
+    "sha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+    "shaMatchesExpected": true
+  },
+  "samples": {
+    "sourceSampleCount": 17,
+    "sourceCounts": {
+      "overture": 8,
+      "osm": 5,
+      "wikidata": 3,
+      "wikimedia_commons": 1
+    },
+    "successfullyNormalized": 17,
+    "invalidOrMissingCoordinates": 1,
+    "addressAvailable": 17,
+    "openingHoursAvailable": 9,
+    "externalIdAvailable": 17
+  },
+  "matches": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 1,
+    "ambiguous": 3,
+    "newCandidates": 9,
+    "invalidOrMissingCoordinates": 1,
+    "duplicateSourceCandidates": 1
+  },
+  "enrichmentCoverage": {
+    "matchedRecords": 4,
+    "addressAvailable": 4,
+    "websiteAvailable": 2,
+    "phoneAvailable": 2,
+    "openingHoursAvailable": 4,
+    "wikidataIdAvailable": 0,
+    "commonsMediaAvailable": 0,
+    "sourceLicenseTracked": 4
+  },
+  "thresholdSensitivity": {
+    "conservative": {
+      "highConfidenceMatches": 3,
+      "probableMatches": 1,
+      "ambiguous": 3,
+      "newCandidates": 9,
+      "invalidOrMissingCoordinates": 1
+    },
+    "balanced": {
+      "highConfidenceMatches": 3,
+      "probableMatches": 0,
+      "ambiguous": 3,
+      "newCandidates": 10,
+      "invalidOrMissingCoordinates": 1
+    },
+    "loose": {
+      "highConfidenceMatches": 3,
+      "probableMatches": 0,
+      "ambiguous": 3,
+      "newCandidates": 10,
+      "invalidOrMissingCoordinates": 1
+    }
+  },
+  "licenseObservations": [
+    "Overture sample rows must preserve per-record source/license metadata before any future canonical import.",
+    "OSM sample rows are license-isolated because ODbL share-alike obligations may affect derived databases.",
+    "Wikidata entity data can be handled as CC0 knowledge enrichment, but source identifiers and statement provenance should remain namespaced.",
+    "Wikimedia Commons media requires file-level license, author, source URL, attribution, and derivative-use metadata.",
+    "Google Places was not queried; it remains request-time/live enrichment only and not canonical offline storage."
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "status": "NON_CANONICAL_SPIKE_ONLY",
+  "description": "Tiny deterministic source-like fixtures for Phase 4 Stage 4B matching dry-run. They are not runtime data and are not a city-scale external source dump.",
+  "licenseNotes": [
+    "Overture rows are source-like fixture records for dry-run behavior and require source/license metadata in any future real sample.",
+    "OSM rows are source-like fixture records and are kept license-isolated because ODbL obligations may apply to real OSM-derived data.",
+    "Wikidata rows use QID-style identifiers and CC0-style knowledge fields in this dry-run fixture.",
+    "Wikimedia Commons media rows must carry file-level license and attribution before any future use."
+  ],
+  "records": [
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:thanh-tam-bakery",
+      "name": "Thanh Tam Bakery and Coffee",
+      "category": "bakery",
+      "latitude": 16.04673,
+      "longitude": 108.24701,
+      "address": "Ngu Hanh Son, Da Nang",
+      "website": "https://thanhtambakery.example",
+      "phone": "+842363000001",
+      "openingHours": "Mo-Su 07:00-21:00",
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:thanh-tam" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:bo-ne-9-mon",
+      "name": "Bo Ne 9 Mon Fast Food",
+      "category": "restaurant",
+      "latitude": 16.06854,
+      "longitude": 108.19639,
+      "address": "Thanh Khe, Da Nang",
+      "website": null,
+      "phone": "+842363000002",
+      "openingHours": "Mo-Su 06:30-14:00",
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:bo-ne-9-mon" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:semi-tra-sua",
+      "name": "SEMI Tra Sua Hoa Khanh",
+      "category": "cafe",
+      "latitude": 16.0701,
+      "longitude": 108.15133,
+      "address": "Lien Chieu, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": "Mo-Su 09:00-22:00",
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:semi-tra-sua" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:anh-quan-bakery-a",
+      "name": "Anh Quan Bakery",
+      "category": "bakery",
+      "latitude": 16.0645,
+      "longitude": 108.153,
+      "address": "Hoa Khanh, Da Nang",
+      "website": null,
+      "phone": "+842363000003",
+      "openingHours": "Mo-Su 06:00-22:00",
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:anh-quan-a" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:anh-quan-bakery-b",
+      "name": "ANH QUAN BAKERY",
+      "category": "bakery",
+      "latitude": 16.06452,
+      "longitude": 108.15304,
+      "address": "Hoa Khanh, Da Nang",
+      "website": null,
+      "phone": "+842363000003",
+      "openingHours": "Mo-Su 06:00-22:00",
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:anh-quan-b" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:dragon-bridge",
+      "name": "Dragon Bridge",
+      "category": "attraction",
+      "latitude": 16.061,
+      "longitude": 108.227,
+      "address": "Hai Chau, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:dragon-bridge" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:my-khe-beach",
+      "name": "My Khe Beach",
+      "category": "beach",
+      "latitude": 16.0617,
+      "longitude": 108.2469,
+      "address": "Son Tra / Ngu Hanh Son, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:my-khe" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "overture",
+      "sourceId": "overture:stage4b:invalid-coordinates",
+      "name": "Invalid Coordinate Fixture",
+      "category": "restaurant",
+      "latitude": null,
+      "longitude": 108.2,
+      "address": "Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "overture_gers_id": "gers:stage4b:invalid" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "Stage4B fixture; real Overture records require per-source license metadata",
+        "attribution": "Overture Maps contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:thanh-tam",
+      "name": "Thanh Tam Bakery & Coffee",
+      "category": "bakery",
+      "latitude": 16.04672,
+      "longitude": 108.24702,
+      "address": "Ngu Hanh Son, Da Nang",
+      "website": "https://thanhtambakery.example",
+      "phone": null,
+      "openingHours": "Mo-Su 07:00-21:00",
+      "externalIdentifiers": { "osm_node_id": "stage4b:node:thanh-tam" },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:semi-tea",
+      "name": "Semi Tea Hoa Khanh",
+      "category": "cafe",
+      "latitude": 16.07012,
+      "longitude": 108.1514,
+      "address": "Lien Chieu, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": "Mo-Su 09:00-22:00",
+      "externalIdentifiers": { "osm_node_id": "stage4b:node:semi" },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:node:stage4b:anh-quan",
+      "name": "Anh Quan Bakery",
+      "category": "bakery",
+      "latitude": 16.0644,
+      "longitude": 108.1531,
+      "address": "Hoa Khanh, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": "Mo-Su 06:00-22:00",
+      "externalIdentifiers": { "osm_node_id": "stage4b:node:anh-quan" },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:way:stage4b:han-market",
+      "name": "Han Market",
+      "category": "market",
+      "latitude": 16.0685,
+      "longitude": 108.224,
+      "address": "Hai Chau, Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": "Mo-Su 06:00-19:00",
+      "externalIdentifiers": { "osm_way_id": "stage4b:way:han-market" },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "osm",
+      "sourceId": "osm:way:stage4b:my-khe-beach",
+      "name": "Bai bien My Khe",
+      "category": "beach",
+      "latitude": 16.06172,
+      "longitude": 108.24695,
+      "address": "Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "osm_way_id": "stage4b:way:my-khe" },
+      "license": {
+        "policyClass": "OPEN_SHAREALIKE_ISOLATED",
+        "license": "ODbL-like fixture boundary",
+        "attribution": "OpenStreetMap contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q726980",
+      "name": "Dragon Bridge",
+      "category": "bridge",
+      "latitude": 16.061,
+      "longitude": 108.227,
+      "address": "Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "wikidata_qid": "Q726980" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q12074333",
+      "name": "My Khe Beach",
+      "category": "beach",
+      "latitude": 16.0617,
+      "longitude": 108.2469,
+      "address": "Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "wikidata_qid": "Q12074333" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikidata",
+      "sourceId": "wikidata:Q611855",
+      "name": "Museum of Cham Sculpture",
+      "category": "museum",
+      "latitude": 16.0606,
+      "longitude": 108.2234,
+      "address": "Hai Chau, Da Nang",
+      "website": "https://chammuseum.vn",
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": { "wikidata_qid": "Q611855" },
+      "license": {
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "license": "CC0 for Wikidata entity data",
+        "attribution": "Wikidata contributors"
+      }
+    },
+    {
+      "source": "wikimedia_commons",
+      "sourceId": "commons:file:stage4b:dragon-bridge",
+      "name": "Dragon Bridge media candidate",
+      "category": "media",
+      "latitude": 16.061,
+      "longitude": 108.227,
+      "address": "Da Nang",
+      "website": null,
+      "phone": null,
+      "openingHours": null,
+      "externalIdentifiers": {
+        "commons_file": "File:Dragon Bridge Da Nang stage4b fixture.jpg",
+        "related_wikidata_qid": "Q726980"
+      },
+      "media": {
+        "type": "photo",
+        "license": "CC BY-SA-style fixture; real file license must be verified",
+        "attribution": "Example author / Wikimedia Commons"
+      },
+      "license": {
+        "policyClass": "OPEN_MEDIA_ATTRIBUTION_REQUIRED",
+        "license": "Per-file Commons license required",
+        "attribution": "File-level author, source URL, and license required"
+      }
+    }
+  ]
+}
