@@ -41,6 +41,14 @@ function overtureToAdapterRecord(record, snapshot) {
     raw: record,
     snapshotRef: snapshot.snapshotRef,
     license: snapshot.license,
+    upstreamSources: (properties.sources || []).map((source) => ({
+      dataset: source.dataset || null,
+      recordId: source.record_id || null,
+      property: source.property || null,
+      licenseName: source.license || null,
+      updateTime: source.update_time || null,
+      confidence: Number.isFinite(source.confidence) ? source.confidence : null,
+    })),
   };
 }
 
@@ -85,8 +93,9 @@ function parseWktPoint(value) {
   return match ? { longitude: Number(match[1]), latitude: Number(match[2]) } : {};
 }
 
-function wikidataToAdapterRecord(record, snapshot) {
+function wikidataToAdapterRecord(record, snapshot, commonsMetadataByTitle = new Map()) {
   const point = parseWktPoint(record.coordinate);
+  const commons = commonsMetadataByTitle.get(record.imageTitle) || null;
   return {
     source: 'wikidata',
     sourceId: `wikidata:${record.qid}`,
@@ -99,9 +108,27 @@ function wikidataToAdapterRecord(record, snapshot) {
     media: record.imageTitle
       ? {
           source: 'wikimedia_commons',
+          sourceId: commons?.pageId
+            ? `commons:page:${commons.pageId}`
+            : `commons:file:${record.imageTitle}`,
+          assetIdentifier: commons?.pageId ? String(commons.pageId) : record.imageTitle,
           title: record.imageTitle,
-          license: record.mediaLicense || null,
-          attribution: record.mediaAttribution || null,
+          mediaReference: commons?.descriptionUrl || null,
+          creator: commons?.artist || record.mediaAttribution || null,
+          licenseName: commons?.licenseShortName || record.mediaLicense || null,
+          licenseUrl: commons?.licenseUrl || null,
+          attributionText: commons
+            ? [commons.artist, commons.credit].filter(Boolean).join(' — ')
+            : record.mediaAttribution || null,
+          attributionUrl: commons?.descriptionUrl || null,
+          sourcePage: commons?.descriptionUrl || null,
+          snapshotRef: commons?._snapshotRef || null,
+          retrievedAt: commons?._retrievedAt || null,
+          policyClass: commons?._policyClass || 'OPEN_MEDIA_ATTRIBUTION_REQUIRED',
+          policyReference: 'docs/rebuild/PHASE4_SOURCE_LICENSE_REGISTRY.md',
+          attributionRequired: commons?.attributionRequired || null,
+          usageTerms: commons?.usageTerms || null,
+          provenanceRelationship: 'wikidata_image_claim_links_commons_file',
         }
       : null,
     raw: record,
@@ -114,11 +141,23 @@ function loadRealSnapshotRecords(paths) {
   const overture = readJson(paths.overture);
   const osm = readJson(paths.osm);
   const wikidata = readJson(paths.wikidata);
+  const commons = paths.commons ? readJson(paths.commons) : null;
+  const commonsMetadataByTitle = new Map(
+    (commons?.records || []).map((record) => [
+      record.title,
+      {
+        ...record,
+        _snapshotRef: commons.snapshotRef,
+        _retrievedAt: commons.retrievedAt,
+        _policyClass: commons.license?.policyClass,
+      },
+    ]),
+  );
 
   return [
     ...overture.records.map((record) => overtureToAdapterRecord(record, overture)),
     ...osm.records.map((record) => osmToAdapterRecord(record, osm)),
-    ...wikidata.records.map((record) => wikidataToAdapterRecord(record, wikidata)),
+    ...wikidata.records.map((record) => wikidataToAdapterRecord(record, wikidata, commonsMetadataByTitle)),
   ].sort((a, b) => {
     if (a.source !== b.source) return a.source.localeCompare(b.source);
     return a.sourceId.localeCompare(b.sourceId);

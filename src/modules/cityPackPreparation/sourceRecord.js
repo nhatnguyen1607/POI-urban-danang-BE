@@ -77,6 +77,9 @@ function createFieldProvenance(sourceRecord, fieldName) {
     license: sourceRecord.license?.license || null,
     policyClass: sourceRecord.license?.policyClass || null,
     attribution: sourceRecord.license?.attribution || null,
+    licenseUrl: sourceRecord.license?.licenseUrl || null,
+    attributionUrl: sourceRecord.license?.attributionUrl || null,
+    policyReference: sourceRecord.license?.policyReference || null,
     snapshotRef: sourceRecord.snapshotRef || sourceRecord.provenance?.snapshotRef || null,
   };
 }
@@ -108,6 +111,12 @@ function normalizeSourceRecord(rawRecord, adapterName) {
       license: rawRecord.license?.license || null,
       policyClass: rawRecord.license?.policyClass || null,
       attribution: rawRecord.license?.attribution || null,
+      licenseUrl: rawRecord.license?.licenseUrl || null,
+      attributionUrl: rawRecord.license?.attributionUrl || null,
+      policyReference: rawRecord.license?.policyReference || null,
+      upstreamSources: Array.isArray(rawRecord.upstreamSources)
+        ? [...rawRecord.upstreamSources]
+        : [],
       fields: {},
     },
     license: rawRecord.license || {},
