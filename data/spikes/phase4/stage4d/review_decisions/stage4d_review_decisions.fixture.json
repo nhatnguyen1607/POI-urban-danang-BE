@@ -1,0 +1,42 @@
+{
+  "status": "NON_RUNTIME_REVIEW_DECISIONS_FIXTURE",
+  "cityId": "da-nang",
+  "decisions": [
+    {
+      "queueId": "AMBIGUOUS:overture:overture:stage4b:anh-quan-bakery-a",
+      "action": "ACCEPT_MATCH",
+      "canonicalPoiId": "google_maps_553",
+      "reviewerNote": "Fixture approval for a known Anh Quan Bakery branch match."
+    },
+    {
+      "queueId": "AMBIGUOUS:overture:overture:stage4b:anh-quan-bakery-b",
+      "action": "DEFER",
+      "reviewerNote": "Duplicate-looking branch evidence remains unresolved."
+    },
+    {
+      "queueId": "AMBIGUOUS:osm:osm:node:stage4b:anh-quan",
+      "action": "DEFER",
+      "reviewerNote": "OSM branch-like record requires human confirmation."
+    },
+    {
+      "queueId": "NEW_CANDIDATE:overture:overture:stage4b:dragon-bridge",
+      "action": "CREATE_NEW",
+      "reviewerNote": "Fixture approval for landmark candidate output only."
+    },
+    {
+      "queueId": "NEW_CANDIDATE:overture:overture:stage4b:my-khe-beach",
+      "action": "DEFER",
+      "reviewerNote": "Beach candidate needs real bounded source validation."
+    },
+    {
+      "queueId": "SOURCE_DUPLICATE:overture:overture:stage4b:anh-quan-bakery-a:overture:stage4b:anh-quan-bakery-b",
+      "action": "MERGE_SOURCE_DUPLICATE",
+      "reviewerNote": "Fixture source duplicate cluster only; no canonical merge."
+    },
+    {
+      "queueId": "INVALID:overture:overture:stage4b:invalid-coordinates",
+      "action": "REJECT_MATCH",
+      "reviewerNote": "Missing coordinate cannot be applied."
+    }
+  ]
+}
