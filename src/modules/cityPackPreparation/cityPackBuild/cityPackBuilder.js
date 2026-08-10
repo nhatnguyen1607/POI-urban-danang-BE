@@ -209,6 +209,7 @@ function buildCandidateCityPack({
   samplePath,
   reviewDecisionPath,
   outputDir,
+  sourceSnapshots = ['stage4b-fixture'],
 }) {
   const canonical = inspectCanonicalDataset(canonicalPath);
   const canonicalPois = readCanonicalPois(canonicalPath);
@@ -324,7 +325,7 @@ function buildCandidateCityPack({
       sha256: canonical.sha256,
       shaMatchesExpected: canonical.shaMatchesExpected,
     },
-    sourceSnapshots: ['stage4b-fixture'],
+    sourceSnapshots: [...sourceSnapshots].sort(),
     matchedEnrichment: matchedEnrichment.sort((a, b) => {
       if (a.canonicalPoiId !== b.canonicalPoiId) return a.canonicalPoiId.localeCompare(b.canonicalPoiId);
       return a.sourceId.localeCompare(b.sourceId);

@@ -1,8 +1,37 @@
 # Current State
 
-Updated: 2026-08-08 18:20:00 +07:00.
+Updated: 2026-08-10 14:55:00 +07:00.
 
-## Phase
+## Current Phase 4 State
+
+`PHASE_4_STAGE_4E_REAL_BOUNDED_VALIDATION_REVIEW_BRANCH`
+
+Branch: `phase4/stage4e-real-source-validation`.
+
+Stage 4D is merged into backend main at
+`30bd6d48f3e490f3be7ab43ce2b3724a0003dca1`. Stage 4E validates small real
+bounded Overture, OSM, Wikidata, and Wikimedia Commons metadata snapshots
+through the existing Stage 4C adapters and Stage 4D candidate build pipeline.
+
+Current Stage 4E result:
+
+- 76 normalized records, 0 invalid.
+- 6 high-confidence matches, 3 probable matches, 1 ambiguous, 66 new
+  candidates, and 3 source-duplicate pairs.
+- 70 review-queue items; no ambiguous/new/duplicate auto-merge.
+- Candidate build: 9 matched enrichments, 0 approved new POIs.
+- Fixed-snapshot build determinism: PASS.
+- Focused Stage 4C/4D/4E tests: 22 passed, 0 failed.
+- Canonical count remains 4166 and canonical SHA-256 remains
+  `5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae`.
+- Runtime, CSV default repository, Firestore, and production databases are
+  unchanged. Google Places is absent.
+
+Recommended next direction, not approved or started: Stage 4F option C,
+provenance/license hardening for per-file Commons metadata and ODbL artifact
+boundaries.
+
+## Previous Integrated Demo Phase
 
 `INTEGRATED_DEMO_RELEASE_BRANCH`
 
