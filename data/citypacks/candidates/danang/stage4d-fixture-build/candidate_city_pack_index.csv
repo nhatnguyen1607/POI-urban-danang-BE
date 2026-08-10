@@ -1,0 +1,7 @@
+type,id,source,sourceId,name
+matched_enrichment,google_maps_103,overture,overture:stage4b:bo-ne-9-mon,Bo Ne 9 Mon Fast Food
+matched_enrichment,google_maps_134,overture,overture:stage4b:semi-tra-sua,SEMI Tra Sua Hoa Khanh
+matched_enrichment,google_maps_553,overture,overture:stage4b:anh-quan-bakery-a,Anh Quan Bakery
+matched_enrichment,google_maps_77,osm,osm:node:stage4b:thanh-tam,Thanh Tam Bakery & Coffee
+matched_enrichment,google_maps_77,overture,overture:stage4b:thanh-tam-bakery,Thanh Tam Bakery and Coffee
+approved_new_candidate,candidate:da-nang:bea617c81f033a33,overture,overture:stage4b:dragon-bridge,Dragon Bridge
