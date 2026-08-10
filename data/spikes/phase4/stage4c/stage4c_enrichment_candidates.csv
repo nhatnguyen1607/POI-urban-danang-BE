@@ -1,0 +1,5 @@
+source,sourceId,canonicalPoiId,canonicalName,hasAddress,hasWebsite,hasPhone,hasOpeningHours,hasExternalIds,hasMedia,policyClass,attribution
+osm,osm:node:stage4b:thanh-tam,google_maps_77,Thanh Tam Bakery and Coffee,true,true,false,true,true,false,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
+overture,overture:stage4b:bo-ne-9-mon,google_maps_103,Bò Né 9 Món Fast Food,true,false,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:semi-tra-sua,google_maps_134,SÊMI Trà Sữa - Là Trà Đậm Vị - Hòa Khánh,true,false,false,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:thanh-tam-bakery,google_maps_77,Thanh Tam Bakery and Coffee,true,true,true,true,true,false,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
