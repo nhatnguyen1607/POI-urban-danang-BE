@@ -39,12 +39,12 @@ function buildReviewQueue({ matches, duplicates }) {
       queueId: `${duplicate.decision}:${duplicate.source}:${duplicate.sourceIdA}:${duplicate.sourceIdB}`,
       decision: duplicate.decision,
       sourceRecord: {
-        source: duplicate.source,
+        source: duplicate.sourceA || duplicate.source,
         sourceId: duplicate.sourceIdA,
         name: duplicate.nameA,
       },
       duplicateRecord: {
-        source: duplicate.source,
+        source: duplicate.sourceB || duplicate.source,
         sourceId: duplicate.sourceIdB,
         name: duplicate.nameB,
       },
@@ -53,6 +53,7 @@ function buildReviewQueue({ matches, duplicates }) {
         confidence: duplicate.confidence,
         distanceMeters: duplicate.distanceMeters,
         nameSimilarity: duplicate.nameSimilarity,
+        categoryCompatibility: duplicate.categoryCompatibility ?? null,
         reasonCodes: duplicate.reasonCodes,
       },
       provenance: duplicate.records.map((record) => record.provenance),
