@@ -73,7 +73,7 @@ function toCsv(rows, headers) {
 
 function writeJson(outputDir, fileName, value) {
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(path.join(outputDir, fileName), `${JSON.stringify(value, null, 2)}\n`);
+  fs.writeFileSync(path.join(outputDir, fileName), `${JSON.stringify(value)}\n`);
 }
 
 function writeCsv(outputDir, fileName, rows, headers) {
