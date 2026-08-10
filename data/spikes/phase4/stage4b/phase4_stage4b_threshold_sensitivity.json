@@ -1,0 +1,23 @@
+{
+  "conservative": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 1,
+    "ambiguous": 3,
+    "newCandidates": 9,
+    "invalidOrMissingCoordinates": 1
+  },
+  "balanced": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 0,
+    "ambiguous": 3,
+    "newCandidates": 10,
+    "invalidOrMissingCoordinates": 1
+  },
+  "loose": {
+    "highConfidenceMatches": 3,
+    "probableMatches": 0,
+    "ambiguous": 3,
+    "newCandidates": 10,
+    "invalidOrMissingCoordinates": 1
+  }
+}

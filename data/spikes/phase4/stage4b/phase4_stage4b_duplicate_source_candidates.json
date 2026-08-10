@@ -1,0 +1,14 @@
+[
+  {
+    "source": "overture",
+    "sourceIdA": "overture:stage4b:anh-quan-bakery-a",
+    "sourceIdB": "overture:stage4b:anh-quan-bakery-b",
+    "nameA": "Anh Quan Bakery",
+    "nameB": "ANH QUAN BAKERY",
+    "distanceMeters": 4.82,
+    "nameSimilarity": 1,
+    "reasonCodes": [
+      "same_phone"
+    ]
+  }
+]

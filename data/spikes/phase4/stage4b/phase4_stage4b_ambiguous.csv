@@ -1,0 +1,4 @@
+source,sourceId,sourceName,canonicalPoiId,canonicalName,distanceMeters,nameSimilarity,categoryCompatibility,addressEvidence,decision,confidence,reasonCodes,licensePolicyClass,attribution
+overture,overture:stage4b:anh-quan-bakery-a,Anh Quan Bakery,google_maps_553,Anh Quân Bakery,37.8,1,1,true,ambiguous,0.9849,chain_branch_collision|multiple_same_name_nearby_candidates,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+overture,overture:stage4b:anh-quan-bakery-b,ANH QUAN BAKERY,google_maps_553,Anh Quân Bakery,42.12,1,1,true,ambiguous,0.9832,chain_branch_collision|multiple_same_name_nearby_candidates,OPEN_PERMISSIVE_CANDIDATE,Overture Maps contributors
+osm,osm:node:stage4b:anh-quan,Anh Quan Bakery,google_maps_553,Anh Quân Bakery,37.92,1,1,true,ambiguous,0.9848,chain_branch_collision|multiple_same_name_nearby_candidates,OPEN_SHAREALIKE_ISOLATED,OpenStreetMap contributors
