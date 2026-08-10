@@ -5,6 +5,10 @@ const path = require('node:path');
 
 const { inspectCanonicalDataset, readCanonicalPois } = require('../canonicalDataset');
 const { runStage4cDryRun } = require('../dryRun');
+const {
+  generateProvenanceLicenseManifest,
+  validateProvenanceLicenseManifest,
+} = require('./provenanceManifest');
 const { loadReviewDecisions, validateReviewDecisions } = require('./reviewDecisionValidator');
 
 const BUILD_VERSION = 'phase4-stage4d-v1';
@@ -56,6 +60,10 @@ function compactProvenance(record) {
     policyClass: record.provenance.policyClass,
     license: record.provenance.license,
     attribution: record.provenance.attribution,
+    licenseUrl: record.provenance.licenseUrl,
+    attributionUrl: record.provenance.attributionUrl,
+    policyReference: record.provenance.policyReference,
+    upstreamSources: record.provenance.upstreamSources,
     fields: record.provenance.fields,
   };
 }
@@ -156,9 +164,8 @@ function validateCandidatePack({ matchedEnrichment, approvedNewCandidates, licen
     }
   }
 
-  if (!licenseManifest.sources.every((source) => source.policyClass && source.attribution !== undefined)) {
-    errors.push({ code: 'INCOMPLETE_LICENSE_MANIFEST' });
-  }
+  const provenanceValidation = validateProvenanceLicenseManifest(licenseManifest);
+  errors.push(...provenanceValidation.errors);
 
   return {
     valid: errors.length === 0,
@@ -167,39 +174,13 @@ function validateCandidatePack({ matchedEnrichment, approvedNewCandidates, licen
 }
 
 function generateLicenseManifest({ normalizedRecords, buildId, cityId }) {
-  const sourceMap = new Map();
-
-  for (const record of normalizedRecords) {
-    const key = `${record.source}:${record.provenance.policyClass}:${record.provenance.license}:${record.provenance.attribution}`;
-    if (!sourceMap.has(key)) {
-      sourceMap.set(key, {
-        source: record.source,
-        snapshotRef: record.provenance.snapshotRef,
-        policyClass: record.provenance.policyClass,
-        license: record.provenance.license,
-        attribution: record.provenance.attribution,
-        sourceIds: [],
-      });
-    }
-    sourceMap.get(key).sourceIds.push(record.sourceId);
-  }
-
-  return {
-    status: CANDIDATE_STATUS,
-    buildVersion: BUILD_VERSION,
+  return generateProvenanceLicenseManifest({
+    normalizedRecords,
     buildId,
     cityId,
-    googlePlacesIncluded: false,
-    sources: [...sourceMap.values()]
-      .map((source) => ({
-        ...source,
-        sourceIds: source.sourceIds.sort(),
-      }))
-      .sort((a, b) => {
-        if (a.source !== b.source) return a.source.localeCompare(b.source);
-        return a.policyClass.localeCompare(b.policyClass);
-      }),
-  };
+    buildVersion: BUILD_VERSION,
+    status: CANDIDATE_STATUS,
+  });
 }
 
 function buildCandidateCityPack({
@@ -418,6 +399,7 @@ module.exports = {
   CANDIDATE_STATUS,
   buildCandidateCityPack,
   candidateId,
+  generateLicenseManifest,
   stableHash,
   validateCandidatePack,
 };

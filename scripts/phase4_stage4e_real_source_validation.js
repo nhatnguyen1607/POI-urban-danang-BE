@@ -69,7 +69,12 @@ function provenanceReport(records) {
     && record.provenance?.attribution
   );
   const mediaRecords = records.filter((record) => record.media);
-  const mediaComplete = mediaRecords.filter((record) => record.media?.license && record.media?.attribution);
+  const mediaComplete = mediaRecords.filter((record) => (
+    (record.media?.licenseName || record.media?.license)
+    && (record.media?.attributionText || record.media?.attribution)
+    && record.media?.source === 'wikimedia_commons'
+    && record.media?.assetIdentifier
+  ));
   const fieldEntries = records.flatMap((record) => Object.values(record.provenance?.fields || {}));
   const completeFields = fieldEntries.filter((field) => (
     field.source
@@ -182,6 +187,7 @@ function runStage4eValidation() {
     overture: path.join(SNAPSHOT_DIR, 'overture_places_2026-07-22.0_bounded.json'),
     osm: path.join(SNAPSHOT_DIR, 'osm_2026-08-10_bounded.json'),
     wikidata: path.join(SNAPSHOT_DIR, 'wikidata_2026-08-10_bounded.json'),
+    commons: path.join(SNAPSHOT_DIR, 'wikimedia_commons_2026-08-10_metadata.json'),
   });
   writeJson(ADAPTER_INPUT_PATH, { records: rawRecords });
 
