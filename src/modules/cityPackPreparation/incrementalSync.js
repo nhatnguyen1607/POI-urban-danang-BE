@@ -59,6 +59,19 @@ function compactExternalIds(value) {
   );
 }
 
+function stableProvenance(value) {
+  const volatileFields = new Set([
+    'acquiredAt',
+    'retrievedAt',
+    'snapshotRef',
+  ]);
+  return Object.fromEntries(
+    Object.entries(value || {})
+      .filter(([field]) => !volatileFields.has(field))
+      .sort(([left], [right]) => left.localeCompare(right)),
+  );
+}
+
 function mediaItems(record) {
   const raw = Array.isArray(record.media) ? record.media : record.media ? [record.media] : [];
   return raw
@@ -99,7 +112,7 @@ function stageFingerprints(record) {
   }));
   const provenance = {
     license: record.license || null,
-    provenance: record.provenance || null,
+    provenance: stableProvenance(record.provenance),
     upstreamSources: record.upstreamSources || record.provenance?.upstreamSources || [],
   };
   return {
@@ -405,6 +418,7 @@ module.exports = {
   recordKey,
   runIncrementalSync,
   stableHash,
+  stableProvenance,
   stageFingerprints,
   writeJsonl,
 };

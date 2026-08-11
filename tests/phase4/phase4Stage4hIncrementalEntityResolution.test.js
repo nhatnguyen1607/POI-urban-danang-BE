@@ -115,6 +115,8 @@ test('Stage 4H fingerprints ignore retrieval timestamps and isolate identity, me
   }));
   assert.equal(first.identityHash, timestampOnly.identityHash);
   assert.equal(first.mediaHash, timestampOnly.mediaHash);
+  assert.equal(first.provenanceHash, timestampOnly.provenanceHash);
+  assert.equal(first.rawContentHash, timestampOnly.rawContentHash);
 
   const mediaChange = stageFingerprints(source({
     media: { mediaId: 'm1', url: 'https://example.test/a.jpg', contentHash: 'changed' },
@@ -156,13 +158,14 @@ test('Stage 4H incremental replay processes only required stages and marks missi
   });
   const statuses = Object.fromEntries(second.state.map((item) => [item.sourceId, item.status]));
   assert.deepEqual(statuses, {
-    a: STATUSES.CHANGED,
+    a: STATUSES.UNCHANGED,
     b: STATUSES.CHANGED,
     c: STATUSES.MISSING,
     d: STATUSES.CHANGED,
     e: STATUSES.NEW,
   });
   assert.equal(second.metrics.resolutionProcessed, 2);
+  assert.equal(second.metrics.skipped, 1);
   assert.equal(second.metrics.mediaInvalidated, 1);
   assert.equal(second.reviewCandidates[0].autoDeleteAuthorized, false);
 

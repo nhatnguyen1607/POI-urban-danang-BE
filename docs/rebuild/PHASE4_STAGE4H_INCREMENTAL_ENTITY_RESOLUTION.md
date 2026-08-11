@@ -115,8 +115,9 @@ delete canonical data. Generated work belongs under the ignored
 `data/spikes/phase4/stage4h/work/` path.
 
 The deterministic A/B replay covers unchanged, identity-changed, new, missing
-and media-changed records. Snapshot B processes two resolution records and one
-changed media asset. Repeating identical Snapshot B performs zero resolution,
+and media-changed records. A retrieval-metadata-only record remains
+`UNCHANGED`; Snapshot B processes two resolution records and one changed media
+asset. Repeating identical Snapshot B performs zero resolution,
 media or provenance work for present records; four records are skipped and the
 historical missing record remains review-only. Interrupted processing resumes
 from sorted completed keys, partial state, failed IDs and processing versions.
