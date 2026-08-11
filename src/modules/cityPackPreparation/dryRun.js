@@ -81,12 +81,18 @@ function writeCsv(outputDir, fileName, rows, headers) {
   fs.writeFileSync(path.join(outputDir, fileName), toCsv(rows, headers));
 }
 
-function runStage4cDryRun({ canonicalPath, samplePath, outputDir }) {
+function runStage4cDryRun({
+  canonicalPath,
+  samplePath,
+  outputDir,
+  resolutionOptions = {},
+  writeOutputs = true,
+}) {
   const canonical = inspectCanonicalDataset(canonicalPath);
   const canonicalPois = readCanonicalPois(canonicalPath);
   const rawRecords = readStage4bFixture(samplePath);
   const normalizedRecords = normalizeWithAdapters(rawRecords);
-  const matchResults = resolveSourceRecords(normalizedRecords, canonicalPois);
+  const matchResults = resolveSourceRecords(normalizedRecords, canonicalPois, undefined, resolutionOptions);
   const reviewQueue = buildReviewQueue(matchResults);
   const enrichmentCandidates = summarizeEnrichmentCandidates(normalizedRecords, matchResults);
 
@@ -105,24 +111,26 @@ function runStage4cDryRun({ canonicalPath, samplePath, outputDir }) {
     runtimeChanged: false,
   };
 
-  writeJson(outputDir, 'stage4c_normalized_records.json', normalizedRecords);
-  writeJson(outputDir, 'stage4c_match_results.json', matchResults);
-  writeJson(outputDir, 'stage4c_review_queue.json', reviewQueue);
-  writeJson(outputDir, 'stage4c_summary.json', summary);
-  writeCsv(outputDir, 'stage4c_enrichment_candidates.csv', enrichmentCandidates, [
-    'source',
-    'sourceId',
-    'canonicalPoiId',
-    'canonicalName',
-    'hasAddress',
-    'hasWebsite',
-    'hasPhone',
-    'hasOpeningHours',
-    'hasExternalIds',
-    'hasMedia',
-    'policyClass',
-    'attribution',
-  ]);
+  if (writeOutputs) {
+    writeJson(outputDir, 'stage4c_normalized_records.json', normalizedRecords);
+    writeJson(outputDir, 'stage4c_match_results.json', matchResults);
+    writeJson(outputDir, 'stage4c_review_queue.json', reviewQueue);
+    writeJson(outputDir, 'stage4c_summary.json', summary);
+    writeCsv(outputDir, 'stage4c_enrichment_candidates.csv', enrichmentCandidates, [
+      'source',
+      'sourceId',
+      'canonicalPoiId',
+      'canonicalName',
+      'hasAddress',
+      'hasWebsite',
+      'hasPhone',
+      'hasOpeningHours',
+      'hasExternalIds',
+      'hasMedia',
+      'policyClass',
+      'attribution',
+    ]);
+  }
 
   return {
     canonical,

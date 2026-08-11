@@ -14,8 +14,43 @@ const { loadReviewDecisions, validateReviewDecisions } = require('./reviewDecisi
 const BUILD_VERSION = 'phase4-stage4d-v1';
 const CANDIDATE_STATUS = 'CANDIDATE_NON_RUNTIME_NOT_CANONICAL';
 
+function* jsonTokens(value, arrayValue = false) {
+  if (value && typeof value.toJSON === 'function') {
+    yield* jsonTokens(value.toJSON(), arrayValue);
+    return;
+  }
+  if (value === null || typeof value !== 'object') {
+    const encoded = JSON.stringify(value);
+    yield encoded === undefined && arrayValue ? 'null' : encoded;
+    return;
+  }
+  if (Array.isArray(value)) {
+    yield '[';
+    for (let index = 0; index < value.length; index += 1) {
+      if (index > 0) yield ',';
+      yield* jsonTokens(value[index], true);
+    }
+    yield ']';
+    return;
+  }
+  yield '{';
+  let first = true;
+  for (const key of Object.keys(value)) {
+    const child = value[key];
+    if (['undefined', 'function', 'symbol'].includes(typeof child)) continue;
+    if (!first) yield ',';
+    first = false;
+    yield JSON.stringify(key);
+    yield ':';
+    yield* jsonTokens(child);
+  }
+  yield '}';
+}
+
 function stableHash(value) {
-  return crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const hash = crypto.createHash('sha256');
+  for (const token of jsonTokens(value)) hash.update(token);
+  return hash.digest('hex');
 }
 
 function candidateId(cityId, sourceId) {
@@ -28,7 +63,20 @@ function readJson(filePath) {
 
 function writeJson(outputDir, fileName, value) {
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(path.join(outputDir, fileName), `${JSON.stringify(value)}\n`);
+  const fileDescriptor = fs.openSync(path.join(outputDir, fileName), 'w');
+  let buffer = '';
+  try {
+    for (const token of jsonTokens(value)) {
+      buffer += token;
+      if (buffer.length >= 1024 * 1024) {
+        fs.writeSync(fileDescriptor, buffer);
+        buffer = '';
+      }
+    }
+    fs.writeSync(fileDescriptor, `${buffer}\n`);
+  } finally {
+    fs.closeSync(fileDescriptor);
+  }
 }
 
 function writeCsv(outputDir, fileName, rows, headers) {
@@ -124,12 +172,12 @@ function isInsideDaNangBounds(record) {
   );
 }
 
-function validateCandidatePack({ matchedEnrichment, approvedNewCandidates, licenseManifest }) {
+function validateCandidatePack({ matchedEnrichment, approvedNewCandidates, proposedNewCandidates = [], licenseManifest }) {
   const errors = [];
   const candidateIds = new Set();
   const canonicalIds = new Set();
 
-  for (const candidate of approvedNewCandidates) {
+  for (const candidate of [...approvedNewCandidates, ...proposedNewCandidates]) {
     if (candidateIds.has(candidate.candidateId)) {
       errors.push({ code: 'DUPLICATE_CANDIDATE_ID', candidateId: candidate.candidateId });
     }
@@ -191,13 +239,18 @@ function buildCandidateCityPack({
   reviewDecisionPath,
   outputDir,
   sourceSnapshots = ['stage4b-fixture'],
+  includeProposedNewCandidates = false,
+  resolutionOptions = {},
+  preparedStage4c = null,
+  writeArtifacts = true,
 }) {
   const canonical = inspectCanonicalDataset(canonicalPath);
   const canonicalPois = readCanonicalPois(canonicalPath);
-  const stage4c = runStage4cDryRun({
+  const stage4c = preparedStage4c || runStage4cDryRun({
     canonicalPath,
     samplePath,
     outputDir: fs.mkdtempSync(path.join(os.tmpdir(), 'urbanagent-stage4d-stage4c-')),
+    resolutionOptions,
   });
   const reviewDocument = readJson(reviewDecisionPath);
   const decisions = loadReviewDecisions(reviewDocument);
@@ -220,6 +273,18 @@ function buildCandidateCityPack({
   const rejectedRecords = [];
   const deferredReviewItems = [];
   const sourceDuplicateGroups = [];
+  const proposedNewCandidates = includeProposedNewCandidates
+    ? stage4c.matchResults.matches
+      .filter((match) => match.decision === 'NEW_CANDIDATE')
+      .map((match) => ({
+        ...buildNewCandidateRecord({
+          cityId,
+          sourceRecord: recordsBySourceId.get(match.sourceId),
+          decisionSource: 'stage4c_review_required_not_approved',
+        }),
+        type: 'proposed_new_candidate',
+      }))
+    : [];
   const autoMatched = stage4c.matchResults.matches.filter((match) =>
     ['HIGH_CONFIDENCE_MATCH', 'PROBABLE_MATCH'].includes(match.decision),
   );
@@ -312,6 +377,9 @@ function buildCandidateCityPack({
       return a.sourceId.localeCompare(b.sourceId);
     }),
     approvedNewCandidates: approvedNewCandidates.sort((a, b) => a.candidateId.localeCompare(b.candidateId)),
+    ...(includeProposedNewCandidates
+      ? { proposedNewCandidates: proposedNewCandidates.sort((a, b) => a.candidateId.localeCompare(b.candidateId)) }
+      : {}),
     sourceDuplicateGroups: sourceDuplicateGroups.sort((a, b) => a.queueId.localeCompare(b.queueId)),
     rejectedRecords: rejectedRecords.sort((a, b) => a.queueId.localeCompare(b.queueId)),
     deferredReviewItems: deferredReviewItems.sort((a, b) => a.queueId.localeCompare(b.queueId)),
@@ -320,6 +388,7 @@ function buildCandidateCityPack({
   const packValidation = validateCandidatePack({
     matchedEnrichment: pack.matchedEnrichment,
     approvedNewCandidates: pack.approvedNewCandidates,
+    proposedNewCandidates: pack.proposedNewCandidates || [],
     licenseManifest,
   });
 
@@ -344,11 +413,16 @@ function buildCandidateCityPack({
     canonicalShaMatchesExpected: canonical.shaMatchesExpected,
     matchedEnriched: pack.matchedEnrichment.length,
     approvedNewCandidates: pack.approvedNewCandidates.length,
+    ...(includeProposedNewCandidates
+      ? { proposedNewCandidates: pack.proposedNewCandidates.length }
+      : {}),
     rejected: pack.rejectedRecords.length,
     deferred: pack.deferredReviewItems.filter((item) => item.reason === 'DEFER').length,
     unresolved: pack.deferredReviewItems.filter((item) => item.reason === 'NO_DECISION').length,
     sourceDuplicateGroups: pack.sourceDuplicateGroups.length,
-    candidateTotal: pack.matchedEnrichment.length + pack.approvedNewCandidates.length,
+    candidateTotal: pack.matchedEnrichment.length
+      + pack.approvedNewCandidates.length
+      + (pack.proposedNewCandidates?.length || 0),
     sourceContributionCounts: stage4c.summary.adapters.reduce((acc, adapter) => {
       acc[adapter.source] = stage4c.normalizedRecords.filter((record) =>
         adapter.source === 'wikidata_wikimedia'
@@ -361,25 +435,34 @@ function buildCandidateCityPack({
     artifactHashes,
   };
 
-  writeJson(outputDir, 'candidate_city_pack.json', pack);
-  writeJson(outputDir, 'license_attribution_manifest.json', licenseManifest);
-  writeJson(outputDir, 'build_summary.json', summary);
-  writeCsv(outputDir, 'candidate_city_pack_index.csv', [
-    ...pack.matchedEnrichment.map((record) => ({
-      type: record.type,
-      id: record.canonicalPoiId,
-      source: record.source,
-      sourceId: record.sourceId,
-      name: record.name,
-    })),
-    ...pack.approvedNewCandidates.map((record) => ({
-      type: record.type,
-      id: record.candidateId,
-      source: record.source,
-      sourceId: record.sourceId,
-      name: record.name,
-    })),
-  ], ['type', 'id', 'source', 'sourceId', 'name']);
+  if (writeArtifacts) {
+    writeJson(outputDir, 'candidate_city_pack.json', pack);
+    writeJson(outputDir, 'license_attribution_manifest.json', licenseManifest);
+    writeJson(outputDir, 'build_summary.json', summary);
+    writeCsv(outputDir, 'candidate_city_pack_index.csv', [
+      ...pack.matchedEnrichment.map((record) => ({
+        type: record.type,
+        id: record.canonicalPoiId,
+        source: record.source,
+        sourceId: record.sourceId,
+        name: record.name,
+      })),
+      ...pack.approvedNewCandidates.map((record) => ({
+        type: record.type,
+        id: record.candidateId,
+        source: record.source,
+        sourceId: record.sourceId,
+        name: record.name,
+      })),
+      ...(pack.proposedNewCandidates || []).map((record) => ({
+        type: record.type,
+        id: record.candidateId,
+        source: record.source,
+        sourceId: record.sourceId,
+        name: record.name,
+      })),
+    ], ['type', 'id', 'source', 'sourceId', 'name']);
+  }
 
   return {
     canonical,
