@@ -3,6 +3,11 @@ const {
   normalizeCategory,
   normalizeName,
 } = require('./sourceRecord');
+const {
+  buildIdentityProfile,
+  normalizeVietnameseText,
+  tokenOverlap,
+} = require('./historicalNormalization');
 
 const DECISIONS = Object.freeze({
   HIGH_CONFIDENCE_MATCH: 'HIGH_CONFIDENCE_MATCH',
@@ -109,6 +114,7 @@ function buildSpatialIndex(records, cellDegrees = 0.01) {
     const preparedRecord = {
       ...record,
       resolutionNormalizedName: normalizeName(record.name),
+      resolutionIdentityProfile: record.resolutionIdentityProfile || buildIdentityProfile(record.name),
     };
     const key = spatialCell(preparedRecord.latitude, preparedRecord.longitude, cellDegrees);
     if (!index.has(key)) index.set(key, []);
@@ -163,6 +169,179 @@ function scoreCandidate(sourceRecord, canonicalPoi, precomputedDistanceMeters = 
     categoryCompatibility: Number(cat.toFixed(2)),
     addressEvidence,
     confidence,
+  };
+}
+
+function tokenSetOverlap(left, right) {
+  if (left.size === 0 || right.size === 0) return 0;
+  const intersection = [...left].filter((token) => right.has(token)).length;
+  return intersection / new Set([...left, ...right]).size;
+}
+
+function normalizedTokenSet(value) {
+  return new Set(normalizeVietnameseText(value).split(' ').filter(Boolean));
+}
+
+function scoreHardenedCandidate(sourceRecord, canonicalPoi, precomputedDistanceMeters = null) {
+  const base = scoreCandidate(sourceRecord, canonicalPoi, precomputedDistanceMeters);
+  const sourceProfile = sourceRecord.resolutionIdentityProfile || buildIdentityProfile(sourceRecord.name);
+  const canonicalProfile = canonicalPoi.resolutionIdentityProfile || buildIdentityProfile(canonicalPoi.name);
+  const fullNameExact = Boolean(
+    sourceProfile.normalized
+    && sourceProfile.normalized === canonicalProfile.normalized
+  );
+  const baseNameExact = Boolean(
+    sourceProfile.baseName
+    && sourceProfile.baseName === canonicalProfile.baseName
+  );
+  const branchConflict = Boolean(
+    sourceProfile.baseName
+    && sourceProfile.baseName === canonicalProfile.baseName
+    && sourceProfile.branchName
+    && canonicalProfile.branchName
+    && tokenOverlap(sourceProfile.branchName, canonicalProfile.branchName) < 0.5
+  );
+  const addressSimilarity = tokenSetOverlap(
+    sourceRecord.resolutionAddressTokens || normalizedTokenSet(sourceRecord.address),
+    canonicalPoi.resolutionAddressTokens || normalizedTokenSet(canonicalPoi.address || canonicalPoi.district),
+  );
+  const categoryKnown = !['unknown', ''].includes(normalizeCategory(sourceRecord.category))
+    && !['unknown', ''].includes(normalizeCategory(canonicalPoi.category));
+  const categoryConflict = categoryKnown && base.categoryCompatibility === 0;
+
+  return {
+    ...base,
+    fullNameExact,
+    baseNameExact,
+    branchConflict,
+    categoryConflict,
+    addressSimilarity: Number(addressSimilarity.toFixed(4)),
+    identityName: sourceProfile.normalized,
+    identityBaseName: sourceProfile.baseName,
+    identityBranchName: sourceProfile.branchName,
+  };
+}
+
+function classifySourceRecordHardened(
+  sourceRecord,
+  candidatePois,
+  thresholds = DEFAULT_THRESHOLDS,
+  options = {},
+) {
+  if (!hasValidCoordinates(sourceRecord)) {
+    return classifySourceRecord(sourceRecord, candidatePois, thresholds, { ...options, hardened: false });
+  }
+
+  const metrics = options.metrics;
+  if (metrics) metrics.candidateComparisons += candidatePois.length;
+  const candidates = candidatePois
+    .filter((poi) => hasValidCoordinates(poi))
+    .map((poi) => ({
+      poi,
+      distanceMeters: haversineMeters(
+        sourceRecord.latitude,
+        sourceRecord.longitude,
+        poi.latitude,
+        poi.longitude,
+      ),
+    }))
+    .filter(({ distanceMeters }) => (
+      options.maxCandidateDistanceMeters == null
+      || distanceMeters <= options.maxCandidateDistanceMeters
+    ))
+    .map(({ poi, distanceMeters }) => scoreHardenedCandidate(sourceRecord, poi, distanceMeters))
+    .filter((candidate) => (
+      candidate.fullNameExact
+      || candidate.baseNameExact
+      || candidate.nameSimilarity >= 0.45
+      || candidate.distanceMeters <= 250
+    ))
+    .sort((left, right) => {
+      if (left.branchConflict !== right.branchConflict) return Number(left.branchConflict) - Number(right.branchConflict);
+      if (left.categoryConflict !== right.categoryConflict) return Number(left.categoryConflict) - Number(right.categoryConflict);
+      if (right.confidence !== left.confidence) return right.confidence - left.confidence;
+      if (left.distanceMeters !== right.distanceMeters) return left.distanceMeters - right.distanceMeters;
+      return left.canonicalPoiId.localeCompare(right.canonicalPoiId);
+    })
+    .slice(0, 5);
+
+  const credible = candidates.filter((candidate) => (
+    !candidate.branchConflict
+    && !candidate.categoryConflict
+    && candidate.categoryCompatibility >= 0.5
+    && (
+      (
+        candidate.nameSimilarity >= thresholds.probableName
+        && candidate.distanceMeters <= thresholds.probableDistanceMeters
+      )
+      || (
+        candidate.fullNameExact
+        && candidate.distanceMeters <= 225
+      )
+      || (
+        candidate.nameSimilarity >= 0.78
+        && candidate.addressSimilarity >= 0.35
+        && candidate.distanceMeters <= 225
+      )
+    )
+  ));
+  const high = credible.filter((candidate) => (
+    candidate.nameSimilarity >= thresholds.highName
+    && candidate.distanceMeters <= thresholds.highDistanceMeters
+    && candidate.categoryCompatibility >= 0.7
+  ));
+  const sourceProfile = sourceRecord.resolutionIdentityProfile || buildIdentityProfile(sourceRecord.name);
+  const branchAwareCredible = sourceProfile.branchName
+    ? credible.filter((candidate) => !candidate.identityBranchName || !candidate.branchConflict)
+    : credible;
+  const chainLikeCollision = branchAwareCredible.filter((candidate) => (
+    candidate.baseNameExact
+    && candidate.distanceMeters <= thresholds.chainCollisionDistanceMeters
+  ));
+
+  let decision = DECISIONS.NEW_CANDIDATE;
+  const reasonCodes = [];
+  const effectiveHigh = sourceProfile.branchName
+    ? high.filter((candidate) => !candidate.branchConflict)
+    : high;
+
+  if (!sourceProfile.branchName && chainLikeCollision.length > 1) {
+    decision = DECISIONS.AMBIGUOUS;
+    reasonCodes.push('chain_branch_collision', 'branch_token_required');
+  } else if (effectiveHigh.length === 1) {
+    decision = DECISIONS.HIGH_CONFIDENCE_MATCH;
+    reasonCodes.push('tight_distance', 'strong_name_similarity', 'category_compatible');
+  } else if (effectiveHigh.length > 1) {
+    decision = DECISIONS.AMBIGUOUS;
+    reasonCodes.push('multiple_high_confidence_candidates');
+  } else if (credible.length === 1) {
+    decision = DECISIONS.PROBABLE_MATCH;
+    reasonCodes.push(
+      credible[0].fullNameExact ? 'exact_name_threshold_edge' : 'nearby_coordinates',
+      'category_compatible',
+    );
+    if (credible[0].addressSimilarity >= 0.35) reasonCodes.push('address_support');
+  } else if (credible.length > 1) {
+    decision = DECISIONS.AMBIGUOUS;
+    reasonCodes.push('multiple_probable_candidates');
+  } else {
+    if (candidates.some((candidate) => candidate.branchConflict)) reasonCodes.push('branch_location_conflict');
+    if (candidates.some((candidate) => candidate.categoryConflict)) reasonCodes.push('incompatible_category');
+    reasonCodes.push('no_credible_canonical_match');
+  }
+
+  return {
+    source: sourceRecord.source,
+    sourceId: sourceRecord.sourceId,
+    sourceName: sourceRecord.name,
+    decision,
+    confidence: candidates[0]?.confidence || 0,
+    reasonCodes,
+    candidates,
+    bestCandidate: candidates[0] || null,
+    provenance: sourceRecord.provenance,
+    license: sourceRecord.license,
+    resolutionVersion: options.resolutionVersion || 'stage4h-v1',
   };
 }
 
@@ -287,18 +466,28 @@ function hasSharedExternalId(left, right) {
   ));
 }
 
-function duplicateEvidence(left, right) {
+function duplicateEvidence(left, right, { hardened = false } = {}) {
   const distanceMeters = haversineMeters(left.latitude, left.longitude, right.latitude, right.longitude);
   const nSim = nameSimilarity(left.name, right.name);
   const samePhone = Boolean(left.phone && right.phone && left.phone === right.phone);
   const sharedExternalId = hasSharedExternalId(left, right);
   const categoryScore = categoryCompatibility(left.category, right.category);
+  const leftProfile = left.resolutionIdentityProfile || buildIdentityProfile(left.name);
+  const rightProfile = right.resolutionIdentityProfile || buildIdentityProfile(right.name);
+  const branchConflict = Boolean(
+    hardened
+    && leftProfile.baseName
+    && leftProfile.baseName === rightProfile.baseName
+    && leftProfile.branchName
+    && rightProfile.branchName
+    && tokenOverlap(leftProfile.branchName, rightProfile.branchName) < 0.5
+  );
   const duplicate = (
     sharedExternalId
-    || (samePhone && distanceMeters <= 150)
-    || (nSim >= 0.92 && categoryScore >= 0.55 && distanceMeters <= 60)
+    || (!branchConflict && samePhone && distanceMeters <= 150)
+    || (!branchConflict && nSim >= 0.92 && categoryScore >= 0.55 && distanceMeters <= 60)
   );
-  return { categoryScore, distanceMeters, duplicate, nSim, samePhone, sharedExternalId };
+  return { branchConflict, categoryScore, distanceMeters, duplicate, nSim, samePhone, sharedExternalId };
 }
 
 function hasConservativeDuplicatePrefilter(left, right) {
@@ -375,7 +564,7 @@ function detectSourceDuplicates(sourceRecords) {
   });
 }
 
-function detectSpatialDuplicates(sourceRecords, { includeCrossSource = true } = {}) {
+function detectSpatialDuplicates(sourceRecords, { includeCrossSource = true, hardened = false } = {}) {
   const evidenceBuckets = new Map();
   const addToBucket = (key, record) => {
     if (!key) return;
@@ -421,7 +610,7 @@ function detectSpatialDuplicates(sourceRecords, { includeCrossSource = true } = 
     if (leftKey === rightKey || !isSupportedDuplicatePair(left, right, includeCrossSource)) return;
     if (findDuplicateRoot(leftKey) === findDuplicateRoot(rightKey)) return;
     if (!hasConservativeDuplicatePrefilter(left, right)) return;
-    const evidence = duplicateEvidence(left, right);
+    const evidence = duplicateEvidence(left, right, { hardened });
     if (evidence.duplicate && unionDuplicateRoots(leftKey, rightKey)) {
       duplicates.push(duplicateResult(left, right, evidence));
     }
@@ -484,23 +673,43 @@ function detectSpatialDuplicates(sourceRecords, { includeCrossSource = true } = 
 }
 
 function resolveSourceRecords(sourceRecords, canonicalPois, thresholds = DEFAULT_THRESHOLDS, options = {}) {
-  const canonicalSpatialIndex = options.useSpatialIndex ? buildSpatialIndex(canonicalPois, 0.01) : null;
-  const matches = sourceRecords
-    .map((record) => classifySourceRecord(
-      record,
-      canonicalSpatialIndex
+  const preparedSourceRecords = options.hardened
+    ? sourceRecords.map((record) => ({
+        ...record,
+        resolutionIdentityProfile: buildIdentityProfile(record.name),
+        resolutionAddressTokens: normalizedTokenSet(record.address),
+      }))
+    : sourceRecords;
+  const preparedCanonicalPois = options.hardened
+    ? canonicalPois.map((record) => ({
+        ...record,
+        resolutionIdentityProfile: buildIdentityProfile(record.name),
+        resolutionAddressTokens: normalizedTokenSet(record.address || record.district),
+      }))
+    : canonicalPois;
+  const canonicalSpatialIndex = options.useSpatialIndex ? buildSpatialIndex(preparedCanonicalPois, 0.01) : null;
+  const metrics = options.metrics || { candidateComparisons: 0 };
+  const matches = preparedSourceRecords
+    .map((record) => {
+      const candidatePois = canonicalSpatialIndex
         ? nearbySpatialRecords(canonicalSpatialIndex, record.latitude, record.longitude, 1)
-        : canonicalPois,
-      thresholds,
-      options,
-    ))
+        : preparedCanonicalPois;
+      if (options.hardened) {
+        return classifySourceRecordHardened(record, candidatePois, thresholds, { ...options, metrics });
+      }
+      metrics.candidateComparisons += candidatePois.length;
+      return classifySourceRecord(record, candidatePois, thresholds, options);
+    })
     .sort((a, b) => {
       if (a.source !== b.source) return a.source.localeCompare(b.source);
       return a.sourceId.localeCompare(b.sourceId);
     });
   const duplicates = options.useSpatialDuplicateIndex
-    ? detectSpatialDuplicates(sourceRecords, { includeCrossSource: options.includeCrossSourceDuplicates !== false })
-    : detectSourceDuplicates(sourceRecords);
+    ? detectSpatialDuplicates(preparedSourceRecords, {
+        includeCrossSource: options.includeCrossSourceDuplicates !== false,
+        hardened: Boolean(options.hardened),
+      })
+    : detectSourceDuplicates(preparedSourceRecords);
 
   return {
     matches,
@@ -512,6 +721,10 @@ function resolveSourceRecords(sourceRecords, canonicalPois, thresholds = DEFAULT
       newCandidates: matches.filter((match) => match.decision === DECISIONS.NEW_CANDIDATE).length,
       invalid: matches.filter((match) => match.decision === DECISIONS.INVALID).length,
       sourceDuplicates: duplicates.length,
+      ...(options.includeMetrics ? {
+        candidateComparisons: metrics.candidateComparisons,
+        naiveCandidateComparisons: sourceRecords.length * canonicalPois.length,
+      } : {}),
     },
   };
 }
@@ -521,12 +734,14 @@ module.exports = {
   DEFAULT_THRESHOLDS,
   categoryCompatibility,
   buildSpatialIndex,
+  classifySourceRecordHardened,
   classifySourceRecord,
   detectSpatialDuplicates,
   detectSourceDuplicates,
   haversineMeters,
   hasSharedExternalId,
   nameSimilarity,
+  normalizeVietnameseText,
   nearbySpatialRecords,
   resolveSourceRecords,
 };

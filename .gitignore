@@ -39,6 +39,7 @@
 /data/synthetic/
 /data/training/
 /data/spikes/phase4/stage4g/cache/
+/data/spikes/phase4/stage4h/work/
 /data/citypacks/candidates/danang/stage4g-full-city/
 
 # Runtime learning artifacts for deployed agent.
