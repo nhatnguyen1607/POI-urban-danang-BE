@@ -33,6 +33,8 @@ const DEFAULT_VERSIONS = Object.freeze({
   multimodalVersion: 'stage4h-cache-v1',
   visionProcessingVersion: 'disabled',
   embeddingVersion: 'not-computed',
+  boundaryVersion: null,
+  boundaryHash: null,
 });
 
 function sortValue(value) {
@@ -173,7 +175,16 @@ function updateMediaRegistry({
   return registry;
 }
 
-function buildStateRecord({ record, previous, snapshotId, versions, resolution, fingerprints, status }) {
+function buildStateRecord({
+  record,
+  previous,
+  snapshotId,
+  versions,
+  resolution,
+  geographicEligibility,
+  fingerprints,
+  status,
+}) {
   return {
     source: record.source,
     sourceId: record.sourceId,
@@ -196,6 +207,9 @@ function buildStateRecord({ record, previous, snapshotId, versions, resolution, 
     resolutionVersion: versions.resolutionVersion,
     provenanceVersion: versions.provenanceVersion,
     multimodalVersion: versions.multimodalVersion,
+    boundaryVersion: versions.boundaryVersion,
+    boundaryHash: versions.boundaryHash,
+    geographicEligibility: geographicEligibility ?? previous?.geographicEligibility ?? null,
     lastProcessedSnapshot: status === STATUSES.UNCHANGED
       ? previous?.lastProcessedSnapshot || snapshotId
       : snapshotId,
@@ -206,6 +220,9 @@ function buildStateRecord({ record, previous, snapshotId, versions, resolution, 
         || previous.multimodalVersion !== versions.multimodalVersion,
       provenance: !previous || previous.provenanceHash !== fingerprints.provenanceHash
         || previous.provenanceVersion !== versions.provenanceVersion,
+      geography: !previous
+        || previous.boundaryVersion !== versions.boundaryVersion
+        || previous.boundaryHash !== versions.boundaryHash,
     },
     multimodalCacheKey: stableHash({
       normalizedContentHash: fingerprints.normalizedContentHash,
@@ -223,6 +240,7 @@ function emptyMetrics(total = 0) {
     resolutionProcessed: 0,
     mediaProcessed: 0,
     provenanceProcessed: 0,
+    geographyProcessed: 0,
     mediaNew: 0,
     mediaInvalidated: 0,
     mediaReused: 0,
@@ -238,6 +256,7 @@ function runIncrementalSync({
   previousMediaRegistry = [],
   versions = {},
   resolveRecord = () => null,
+  classifyGeography = () => null,
   checkpoint = null,
   checkpointEvery = 1000,
   stopAfter = null,
@@ -273,6 +292,8 @@ function runIncrementalSync({
       || previous.resolutionVersion !== resolvedVersions.resolutionVersion
       || previous.provenanceVersion !== resolvedVersions.provenanceVersion
       || previous.multimodalVersion !== resolvedVersions.multimodalVersion
+      || previous.boundaryVersion !== resolvedVersions.boundaryVersion
+      || previous.boundaryHash !== resolvedVersions.boundaryHash
     );
     const status = invalid
       ? STATUSES.INVALID
@@ -290,8 +311,12 @@ function runIncrementalSync({
     const provenanceChanged = !previous
       || previous.provenanceHash !== fingerprints.provenanceHash
       || previous.provenanceVersion !== resolvedVersions.provenanceVersion;
+    const geographyChanged = !previous
+      || previous.boundaryVersion !== resolvedVersions.boundaryVersion
+      || previous.boundaryHash !== resolvedVersions.boundaryHash;
 
     let resolution = null;
+    let geographicEligibility = null;
     if (invalid) metrics.invalid += 1;
     else if (identityChanged) {
       resolution = resolveRecord(record);
@@ -299,6 +324,10 @@ function runIncrementalSync({
     }
     if (mediaChanged) metrics.mediaProcessed += 1;
     if (provenanceChanged) metrics.provenanceProcessed += 1;
+    if (!invalid && geographyChanged) {
+      geographicEligibility = classifyGeography(record, resolvedVersions);
+      metrics.geographyProcessed += 1;
+    }
     if (status === STATUSES.UNCHANGED) metrics.skipped += 1;
     else metrics.processed += 1;
 
@@ -308,6 +337,7 @@ function runIncrementalSync({
       snapshotId,
       versions: resolvedVersions,
       resolution,
+      geographicEligibility,
       fingerprints,
       status,
     }));
