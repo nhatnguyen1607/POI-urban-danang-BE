@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const { normalizeCategory, numberOrNull } = require('./sourceRecord');
 
 const EXPECTED_CANONICAL_SHA =
-  '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae';
+  'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
 
 function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');

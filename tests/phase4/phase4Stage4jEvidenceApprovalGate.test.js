@@ -27,7 +27,7 @@ const BOUNDARY_PATH = path.join(
   ROOT, 'data', 'spikes', 'phase4', 'stage4i', 'boundary',
   'osm-relation-1891418-v72.geojson',
 );
-const EXPECTED_CANONICAL_SHA = '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae';
+const EXPECTED_CANONICAL_SHA = 'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
 const EXPECTED_BOUNDARY_SHA = 'c0db1b84c8fcbc77b1b5cca14ba6d280627f59713db56965bd6198b72e78a84d';
 
 function source(overrides = {}) {
