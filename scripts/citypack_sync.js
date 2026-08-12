@@ -4,6 +4,7 @@ const path = require('node:path');
 const { readCanonicalPois } = require('../src/modules/cityPackPreparation/canonicalDataset');
 const { normalizeWithAdapters } = require('../src/modules/cityPackPreparation/dryRun');
 const { classifySourceRecordHardened } = require('../src/modules/cityPackPreparation/entityResolution');
+const { runAutomatedReviewPolicy } = require('../src/modules/cityPackPreparation/automatedReviewPolicy');
 const {
   DEFAULT_SOURCE_CAPABILITIES,
   SOURCE_CAPABILITIES,
@@ -52,7 +53,21 @@ function validateCapability(capability) {
 function runCli(argv = process.argv.slice(2)) {
   const args = parseArgs(argv);
   if (args.command !== 'sync') {
-    throw new Error('Usage: npm run citypack:sync -- sync --snapshot <json> --snapshot-id <id> [--write-state ...]');
+    throw new Error('Usage: npm run citypack:sync -- sync [--policy auto | --snapshot <json> --snapshot-id <id>]');
+  }
+  if (args.policy === 'auto') {
+    if (!args.policyCases || !args.policyConfig) {
+      throw new Error('--policy auto requires --policy-cases and --policy-config.');
+    }
+    const result = runAutomatedReviewPolicy(
+      readJson(path.resolve(args.policyCases), []),
+      {
+        config: readJson(path.resolve(args.policyConfig)),
+        memory: readJsonl(args.policyMemory ? path.resolve(args.policyMemory) : null),
+      },
+    );
+    if (args.summary) writeJson(path.resolve(args.summary), result);
+    return result;
   }
   if (!args.snapshot || !args.snapshotId) throw new Error('--snapshot and --snapshot-id are required.');
 

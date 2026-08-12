@@ -1,0 +1,37 @@
+{
+  "policyVersion": "stage4l-review-policy-v1",
+  "decisionMemoryVersion": "stage4l-decision-memory-v1",
+  "enrichmentSchemaVersion": "stage4l-enrichment-v1",
+  "allowedAutoAcceptFields": [
+    "address",
+    "phone",
+    "website",
+    "openingHours"
+  ],
+  "lockedFields": [
+    "canonicalId",
+    "name",
+    "coordinates",
+    "latitude",
+    "longitude",
+    "category",
+    "externalIds",
+    "sourceIdentity",
+    "rowIdentity"
+  ],
+  "minimumAutoAcceptConfidence": 0.98,
+  "maximumCoordinateDistanceMeters": 150,
+  "budgets": {
+    "maximumAutoAcceptCases": 100,
+    "maximumAutoAcceptFields": 300,
+    "maximumAutoRejectRate": 0.95,
+    "maximumIdentityInvalidations": 50
+  },
+  "anomalyThresholds": {
+    "maximumChangedRecords": 5000,
+    "maximumNewCandidateRate": 0.7,
+    "minimumInsideBoundaryRate": 0.5,
+    "maximumProvenanceFailureRate": 0.05,
+    "expectedCanonicalSha256": "e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96"
+  }
+}
