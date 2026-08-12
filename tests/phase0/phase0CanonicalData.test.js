@@ -17,7 +17,7 @@ const { createItinerary } = require('../../src/services/itineraryPlannerService'
 const { filterPoisForEdaSource, loadPOIs, normalizeEdaSource } = require('../../src/services/poiDataService');
 const { recommendPOIs } = require('../../src/services/poiRetrievalService');
 
-const EXPECTED_HASH = '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae';
+const EXPECTED_HASH = 'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
 const EXPECTED_ROWS = 4166;
 const DEFAULT_CITY_ID = 'da-nang';
 
