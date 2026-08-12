@@ -53,15 +53,19 @@ function decision(outcome, reasonCodes, reviewCase, additions = {}) {
   };
 }
 
-function evaluateReviewCase(reviewCase, { memory = [], config, versions = DEFAULT_VERSIONS } = {}) {
+function evaluateReviewCase(reviewCase, {
+  memory = [], config, versions = DEFAULT_VERSIONS, materializeReusableApprovals = false,
+} = {}) {
   if (reviewCase.syncStatus === 'UNCHANGED') {
     return decision('SKIP_UNCHANGED', ['unchanged_identity_and_fields'], reviewCase);
   }
 
   const reuse = findReusableDecision(memory, reviewCase, versions);
   if (reuse.reusable) {
-    const additions = safeChanges(reviewCase, config)
-      .filter((change) => reuse.changedFields?.includes(change.field));
+    const additions = safeChanges(reviewCase, config).filter((change) => (
+      reuse.changedFields?.includes(change.field)
+        || (materializeReusableApprovals && reuse.record.approvedFields.includes(change.field))
+    ));
     if (reuse.outcome === 'REUSE_APPROVAL' && additions.length > 0) {
       return decision('AUTO_ACCEPT_SAFE', [
         'entity_approval_reused', 'new_safe_fields_validated_only',
@@ -212,6 +216,7 @@ function runAutomatedReviewPolicy(cases, options) {
     })));
   return {
     status: 'CANDIDATE_NON_RUNTIME_NOT_CANONICAL_POLICY_PLAN',
+    processingVersions: options.versions || DEFAULT_VERSIONS,
     results,
     applyPlan,
     circuitBreaker,

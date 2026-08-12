@@ -3,7 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { inspectCanonicalDataset } = require('../../src/modules/cityPackPreparation/canonicalDataset');
+const {
+  EXPECTED_CANONICAL_SHA,
+  inspectCanonicalDataset,
+} = require('../../src/modules/cityPackPreparation/canonicalDataset');
 const {
   APPLY_OPERATIONS,
   EVIDENCE_CONFIDENCE,
@@ -27,7 +30,6 @@ const BOUNDARY_PATH = path.join(
   ROOT, 'data', 'spikes', 'phase4', 'stage4i', 'boundary',
   'osm-relation-1891418-v72.geojson',
 );
-const EXPECTED_CANONICAL_SHA = 'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
 const EXPECTED_BOUNDARY_SHA = 'c0db1b84c8fcbc77b1b5cca14ba6d280627f59713db56965bd6198b72e78a84d';
 
 function source(overrides = {}) {

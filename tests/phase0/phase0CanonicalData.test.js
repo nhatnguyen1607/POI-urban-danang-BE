@@ -16,8 +16,8 @@ const { normalizePoi } = require('../../src/services/firestorePersistenceService
 const { createItinerary } = require('../../src/services/itineraryPlannerService');
 const { filterPoisForEdaSource, loadPOIs, normalizeEdaSource } = require('../../src/services/poiDataService');
 const { recommendPOIs } = require('../../src/services/poiRetrievalService');
+const { EXPECTED_CANONICAL_SHA } = require('../../src/modules/cityPackPreparation/canonicalDataset');
 
-const EXPECTED_HASH = 'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
 const EXPECTED_ROWS = 4166;
 const DEFAULT_CITY_ID = 'da-nang';
 
@@ -27,7 +27,7 @@ function sha256(filePath) {
 
 test('canonical CSV file is the approved immutable Phase 0 dataset', async () => {
   assert.equal(path.basename(CANONICAL_POI_CSV_PATH), 'urbanagent_poi_master_v1.csv');
-  assert.equal(sha256(CANONICAL_POI_CSV_PATH), EXPECTED_HASH);
+  assert.equal(sha256(CANONICAL_POI_CSV_PATH), EXPECTED_CANONICAL_SHA);
 
   const source = await readCSV(CANONICAL_POI_CSV_PATH);
   assert.equal(source.rows.length, EXPECTED_ROWS);
