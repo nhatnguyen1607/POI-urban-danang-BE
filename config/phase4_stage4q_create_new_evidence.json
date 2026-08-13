@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "stage4q-create-new-evidence-config-v1",
+  "policyVersion": "stage4q-independent-evidence-v1",
+  "evidenceVersion": "stage4q-source-graph-v2",
+  "autoCreateNew": false,
+  "canonicalWrites": 0,
+  "deleteOperations": 0,
+  "runtimeExposure": false,
+  "cityId": "da-nang",
+  "thresholds": {
+    "likelyExistingDistanceMeters": 75,
+    "possibleExistingDistanceMeters": 150,
+    "uncertainExistingDistanceMeters": 300,
+    "likelyExistingNameSimilarity": 0.85,
+    "possibleExistingNameSimilarity": 0.68,
+    "sourceSupportDistanceMeters": 90,
+    "sourceSupportNameSimilarity": 0.72,
+    "strongSourceNameSimilarity": 0.86,
+    "addressSimilarity": 0.72,
+    "freshWithinDays": 400,
+    "staleAfterDays": 800
+  },
+  "review": {
+    "maximumRows": 100,
+    "maximumCanaryRows": 30,
+    "strongHumanReviewRows": 35,
+    "difficultNegativeRows": 35
+  },
+  "soakGate": {
+    "minimumScheduledRuns": 3,
+    "requireDueSourceCheck": true,
+    "requireNoFailures": true,
+    "requireNoStateCorruption": true,
+    "requireNoDuplicatePullRequests": true,
+    "requireHealthyLockRelease": true
+  }
+}
