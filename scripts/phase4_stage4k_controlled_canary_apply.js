@@ -5,8 +5,8 @@ const path = require('node:path');
 const { parseCsv } = require('../src/modules/cityPackPreparation/canonicalDataset');
 const { EXPECTED_CANONICAL_COLUMNS } = require('../src/services/canonicalCsvPoiRepository');
 
-const EXPECTED_BASELINE_SHA = '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae';
-const EXPECTED_ROWS = 4166;
+const EXPECTED_BASELINE_SHA = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
+const EXPECTED_ROWS = 4173;
 const EXPECTED_DECISION_COUNTS = Object.freeze({ APPROVE: 10, REJECT: 5, DEFER: 10 });
 const ALLOWED_MUTATION_FIELDS = Object.freeze(['address', 'phone', 'website']);
 const LOCKED_FIELDS = Object.freeze([

@@ -17,13 +17,26 @@ const STAGE4M_STATE_PATH = path.resolve(
   'danang',
   'stage4m_automation_state.json',
 );
+const STAGE4S_STATE_PATH = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'data',
+  'citypacks',
+  'enrichments',
+  'danang',
+  'stage4s_create_new_state.json',
+);
 
-function resolveExpectedCanonicalSha(statePath = STAGE4M_STATE_PATH) {
-  if (!fs.existsSync(statePath)) return INITIAL_STAGE4M_CANONICAL_SHA;
-  const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+function resolveExpectedCanonicalSha(statePath = null) {
+  const selectedStatePath = statePath || [STAGE4S_STATE_PATH, STAGE4M_STATE_PATH]
+    .find((candidate) => fs.existsSync(candidate));
+  if (!selectedStatePath) return INITIAL_STAGE4M_CANONICAL_SHA;
+  const state = JSON.parse(fs.readFileSync(selectedStatePath, 'utf8'));
   const digest = String(state.canonicalShaAfter || '').toLowerCase();
   if (!/^[a-f0-9]{64}$/.test(digest)) {
-    throw new Error('Invalid Stage 4M canonical SHA in automation state.');
+    throw new Error('Invalid canonical SHA in City Pack state.');
   }
   return digest;
 }
@@ -118,6 +131,7 @@ module.exports = {
   EXPECTED_CANONICAL_SHA,
   INITIAL_STAGE4M_CANONICAL_SHA,
   STAGE4M_STATE_PATH,
+  STAGE4S_STATE_PATH,
   inspectCanonicalDataset,
   parseCsv,
   readCanonicalPois,

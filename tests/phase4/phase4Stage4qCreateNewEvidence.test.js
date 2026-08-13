@@ -33,7 +33,7 @@ const { writeEvidenceJsonl, writeReviewCsv } = require('../../scripts/phase4_sta
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const NOW = '2026-08-13T08:00:00.000Z';
-const CANONICAL_SHA = '39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded';
+const CANONICAL_SHA = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
 
 function record(overrides = {}) {
   const source = overrides.source || 'overture';
@@ -267,7 +267,7 @@ test('AUTO_CREATE_NEW is disabled and canonical integrity is unchanged', () => {
   assert.throws(() => assertResearchOnly({ ...config, autoCreateNew: true }), /AUTO_CREATE_NEW disabled/);
   const canonicalData = inspectCanonicalDataset(path.join(ROOT, 'data', 'canonical',
     'urbanagent_poi_master_v1.csv'));
-  assert.equal(canonicalData.rows, 4166);
+  assert.equal(canonicalData.rows, 4173);
   assert.equal(canonicalData.sha256, CANONICAL_SHA);
   assert.equal(config.canonicalWrites, 0);
   assert.equal(config.deleteOperations, 0);

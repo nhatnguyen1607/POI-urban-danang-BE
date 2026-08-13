@@ -29,7 +29,7 @@ const {
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const NOW = '2026-08-13T06:00:00.000Z';
-const EXPECTED_SHA = '39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded';
+const EXPECTED_SHA = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
 
 function temp(name) {
   return fs.mkdtempSync(path.join(os.tmpdir(), `stage4o-${name}-`));
@@ -137,7 +137,7 @@ test('preflight validates dependencies, D paths, schemas, boundary, canonical, c
   });
   assert.equal(result.ok, true);
   assert.equal(result.prApiMode, 'COMPARE_URL_ONLY');
-  assert.equal(result.canonical.rows, 4166);
+  assert.equal(result.canonical.rows, 4173);
   assert.equal(result.canonical.sha256, EXPECTED_SHA);
   assert.equal(result.checks.find((item) => item.name === 'lock_create_release').ok, true);
 });
@@ -294,7 +294,7 @@ test('no-work runner updates observability without safe mutation or PR', async (
       return { status: 0, stdout: 'STAGE4O_CHILD_OK', stderr: '' };
     }
     return { status: 0, stdout: JSON.stringify({ status: 'NO_SOURCE_CHANGE', runId: 'no-work',
-      discovery: { checks: [] }, canonical: { rows: 4166, sha256: EXPECTED_SHA } }), stderr: '' };
+      discovery: { checks: [] }, canonical: { rows: 4173, sha256: EXPECTED_SHA } }), stderr: '' };
   };
   const result = await runOperational([
     '--operations-config', configPath, '--repository', ROOT,
@@ -340,7 +340,7 @@ test('Task Scheduler canary result parsing distinguishes success, running and fa
 
 test('canonical integrity and runtime-sidecar boundary remain unchanged', () => {
   const canonical = inspectCanonicalDataset(path.join(ROOT, 'data', 'canonical', 'urbanagent_poi_master_v1.csv'));
-  assert.equal(canonical.rows, 4166);
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_SHA);
   assert.equal(operationsConfig.runtimeSidecarEnabled, false);
   assert.equal(operationsConfig.networkMode, 'PREPARED_BOUNDED_SNAPSHOTS');

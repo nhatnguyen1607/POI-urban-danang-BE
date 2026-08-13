@@ -502,9 +502,9 @@ test('successful temp cleanup stays scoped to the supplied Stage 4N directory', 
 
 test('canonical baseline follows merged Stage 4M state and runtime sidecar remains disabled', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
-  assert.equal(canonical.rows, 4166);
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
-  assert.equal(canonical.sha256, '39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded');
+  assert.equal(canonical.sha256, 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4');
   assert.equal(config.runtimeSidecarEnabled, false);
   assert.equal(config.autoCreateCanonicalPoi, false);
   assert.equal(config.autoDeleteCanonicalPoi, false);

@@ -27,7 +27,7 @@ const { inspectCanonicalDataset } = require('../../src/modules/cityPackPreparati
 const { writeCanaryCsv } = require('../../scripts/phase4_stage4p_create_new_policy_research');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const CANONICAL_SHA = '39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded';
+const CANONICAL_SHA = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
 const NOW = '2026-08-13T07:00:00.000Z';
 
 function record(overrides = {}) {
@@ -186,9 +186,9 @@ test('AUTO_CREATE_NEW cannot be enabled by configuration', () => {
   assert.throws(() => assertResearchOnly({ ...config, autoCreateNew: true }), /must remain disabled/);
 });
 
-test('canonical baseline remains immutable at 4166 approved rows', () => {
+test('canonical baseline remains immutable at the current approved rows', () => {
   const canonical = inspectCanonicalDataset(path.join(ROOT, 'data', 'canonical', 'urbanagent_poi_master_v1.csv'));
-  assert.equal(canonical.rows, 4166);
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, CANONICAL_SHA);
   assert.equal(config.canonicalWrites, 0);
   assert.equal(config.runtimeExposure, false);

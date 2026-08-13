@@ -308,8 +308,8 @@ test('Stage 4J identical boundary rerun skips geography and remains deterministi
   assert.equal(repeat.state[0].geographicEligibility, 'INSIDE_DANANG');
 });
 
-test('Stage 4J canonical baseline remains exactly 4166 with approved SHA', () => {
+test('Stage 4J observes the current approved canonical baseline', () => {
   const result = inspectCanonicalDataset(CANONICAL_PATH);
-  assert.equal(result.rows, 4166);
+  assert.equal(result.rows, 4173);
   assert.equal(result.sha256, EXPECTED_CANONICAL_SHA);
 });

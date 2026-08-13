@@ -319,7 +319,7 @@ test('apply is a minimal address-only diff with deterministic sidecar and byte-i
   });
   assert.equal(validation.canonicalAddressChanges, 1);
   assert.equal(validation.sidecarChanges, 1);
-  assert.equal(validation.nonTargetRowsUnchanged, 4165);
+  assert.equal(validation.nonTargetRowsUnchanged, 4172);
   assert.equal(validation.nameChanges + validation.coordinateChanges
     + validation.categoryChanges + validation.externalIdsChanges, 0);
   assert.equal(validation.rollbackCanonicalByteIdentical, true);
@@ -387,12 +387,12 @@ test('canonical expectation follows committed Stage 4M state and rejects malform
   assert.equal(resolveExpectedCanonicalSha(validPath), 'a'.repeat(64));
   const invalidPath = path.join(temp, 'invalid.json');
   fs.writeFileSync(invalidPath, JSON.stringify({ canonicalShaAfter: 'invalid' }));
-  assert.throws(() => resolveExpectedCanonicalSha(invalidPath), /Invalid Stage 4M canonical SHA/);
+  assert.throws(() => resolveExpectedCanonicalSha(invalidPath), /Invalid canonical SHA in City Pack state/);
   fs.rmSync(temp, { recursive: true, force: true });
 });
 
-test('current canonical baseline remains 4166 unique POIs at the state-approved hash', () => {
-  assert.equal(CANONICAL.rows.length, 4166);
-  assert.equal(new Set(CANONICAL.rows.map((row) => row.Global_ID)).size, 4166);
+test('current canonical baseline remains unique at the state-approved hash', () => {
+  assert.equal(CANONICAL.rows.length, 4173);
+  assert.equal(new Set(CANONICAL.rows.map((row) => row.Global_ID)).size, 4173);
   assert.equal(CANONICAL.sha256, EXPECTED_CANONICAL_SHA);
 });

@@ -1,7 +1,66 @@
 {
   "cityId": "da-nang",
-  "contentHash": "2bb10fa42c4be338eea7a034cdab1060c1760fb1159887d8008af9c02560d7bc",
+  "contentHash": "5c65e686665b22faa6a11f57053acc7121a784bf310fa7a812e938792906333c",
   "records": [
+    {
+      "canonicalId": "candidate:da-nang:2a5e1c00c8f0bacf",
+      "canonicalName": "Chi House Danang",
+      "caseId": "CREATE_NEW:overture:overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "dc77b1ccde7744c8ec15190adba5acbfe2b14501965cc5035d4d094f7210c958",
+        "provenance": "7fa19e171cc8ddcf9e0593bb71b1e05e273c8976c1dea8edd3252e3a00107767",
+        "review": "446daa50382dd80a86c5677a1f6baa556ee9115f068a6f25c18e5b859862409f"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+        "upstreamSources": [
+          {
+            "confidence": 0.9927763938903809,
+            "dataset": "meta",
+            "recordId": "101855124944289",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "083aa10787f7411e7187fee9cb3b2c62b1534d7b10b31fd8667be4547098d17e",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "http://chihousedanang.com/"
+    },
     {
       "canonicalId": "google_maps_5247",
       "canonicalName": "Thìa Gỗ Đà Nẵng",
@@ -211,6 +270,65 @@
       "sourceId": "overture:c5cf55fc-8a15-4b6f-b512-23075fc31dd2",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84905053937"
+    },
+    {
+      "canonicalId": "candidate:da-nang:44f30f9baa6b2340",
+      "canonicalName": "Khách Sạn Golden Sea 3",
+      "caseId": "CREATE_NEW:overture:overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "9e618fd6207f27b4ae38f90e1fd437eadf1f6c06ebfca36fe0a4fe31d84ee9b9",
+        "provenance": "a4ad98a282e136369dca9dfa342705e2af9749077e86d14ec44ebe779dd0ed23",
+        "review": "8841c1f4414f1c9d92bc5f97c1278e4443a14b5bc0c23465311c9af5b415fd91"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+        "upstreamSources": [
+          {
+            "confidence": 0.8908278942108154,
+            "dataset": "meta",
+            "recordId": "771440596289669",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "214604f25b7922fef3bf4f2e0af190ed6ca370dd92335e6e5a3717891a1d70e1",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "http://goldensea3hotel.com/"
     },
     {
       "canonicalId": "google_maps_2834",
@@ -549,6 +667,67 @@
       "value": "+84979397156"
     },
     {
+      "canonicalId": "candidate:da-nang:db67529b9f1809c9",
+      "canonicalName": "Alani Sea View Hotel",
+      "caseId": "CREATE_NEW:overture:overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "f04279c14300c5bd1819f6290d74cff4c86c2bd159f7b47db2d1133c95e37e26",
+        "provenance": "9af838f480d8bf7cbf5cdf0dfb175e671fa24986d386b537c609881a816b2353",
+        "review": "9fcb181db6e3df478289adf0ff46f6ce06562e2782af14575f01a8bcac0cf142"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+        "upstreamSources": [
+          {
+            "confidence": 0.9764560461044312,
+            "dataset": "meta",
+            "recordId": "306210873084393",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "5348fb9338af3ad7fc07a7906c3bfdcba0fde7cd94f81476827bce126290158f",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33"
+      }
+    },
+    {
       "canonicalId": "google_maps_5415",
       "canonicalName": "My Coffee",
       "caseId": "MATCH:overture:overture:5cca3fec-c3dd-47fd-b7d2-b3a15a909623",
@@ -801,6 +980,65 @@
       "value": "+84707527017"
     },
     {
+      "canonicalId": "candidate:da-nang:db67529b9f1809c9",
+      "canonicalName": "Alani Sea View Hotel",
+      "caseId": "CREATE_NEW:overture:overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "f04279c14300c5bd1819f6290d74cff4c86c2bd159f7b47db2d1133c95e37e26",
+        "provenance": "9af838f480d8bf7cbf5cdf0dfb175e671fa24986d386b537c609881a816b2353",
+        "review": "9fcb181db6e3df478289adf0ff46f6ce06562e2782af14575f01a8bcac0cf142"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+        "upstreamSources": [
+          {
+            "confidence": 0.9764560461044312,
+            "dataset": "meta",
+            "recordId": "306210873084393",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "745b4b82ec6b4df35cc776d08db93acb657723e9e20f7d266ed272441cb7ebef",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+842363887227"
+    },
+    {
       "canonicalId": "google_maps_450",
       "canonicalName": "Mơ Trà",
       "caseId": "MATCH:overture:overture:0d60418c-cdb7-44f5-8afd-ab55c89deab9",
@@ -883,6 +1121,126 @@
       "sourceId": "overture:7861351d-4f0f-491c-9b8a-9985dedbf02b",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84934911735"
+    },
+    {
+      "canonicalId": "candidate:da-nang:44f30f9baa6b2340",
+      "canonicalName": "Khách Sạn Golden Sea 3",
+      "caseId": "CREATE_NEW:overture:overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "9e618fd6207f27b4ae38f90e1fd437eadf1f6c06ebfca36fe0a4fe31d84ee9b9",
+        "provenance": "a4ad98a282e136369dca9dfa342705e2af9749077e86d14ec44ebe779dd0ed23",
+        "review": "8841c1f4414f1c9d92bc5f97c1278e4443a14b5bc0c23465311c9af5b415fd91"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+        "upstreamSources": [
+          {
+            "confidence": 0.8908278942108154,
+            "dataset": "meta",
+            "recordId": "771440596289669",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "7bbe6a450539302dafe748956dd85f703c32496816fc35d50f7148340fda08b2",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+84905626322"
+    },
+    {
+      "canonicalId": "candidate:da-nang:b7de1964b4ee075e",
+      "canonicalName": "Banh mi & Cafe 43 - Danang (반미 & 커피)",
+      "caseId": "CREATE_NEW:overture:overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "5924105754d1cc05ed7b042a2489e98c3d001cdfa8b11939f92c69aae8b098e1",
+        "provenance": "99404cfab933ba2a694e90ab83465facba9efa96ce376dcfd75d1c90acbb3a08",
+        "review": "60eedb548e7748c4183d399d1cd8fe418c3709b7fcb4ef9a6b15bc2e961e3b4f"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+        "upstreamSources": [
+          {
+            "confidence": 0.9090789556503296,
+            "dataset": "meta",
+            "recordId": "435527566313753",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "82fff34e5a092d25d8ffdd333c4aec60b573e3b5a1d3ddb03df76d8a0962ed8c",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84"
+      }
     },
     {
       "canonicalId": "google_maps_1165",
@@ -1011,6 +1369,65 @@
       "value": "https://maps.app.goo.gl/feHrYhAc6ZkMM7tv7"
     },
     {
+      "canonicalId": "candidate:da-nang:b7de1964b4ee075e",
+      "canonicalName": "Banh mi & Cafe 43 - Danang (반미 & 커피)",
+      "caseId": "CREATE_NEW:overture:overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "5924105754d1cc05ed7b042a2489e98c3d001cdfa8b11939f92c69aae8b098e1",
+        "provenance": "99404cfab933ba2a694e90ab83465facba9efa96ce376dcfd75d1c90acbb3a08",
+        "review": "60eedb548e7748c4183d399d1cd8fe418c3709b7fcb4ef9a6b15bc2e961e3b4f"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+        "upstreamSources": [
+          {
+            "confidence": 0.9090789556503296,
+            "dataset": "meta",
+            "recordId": "435527566313753",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "922870b967ceda97cd1768865f094c2480ee06e2bf8c7b3163cb4dc38e17faa4",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+84392073143"
+    },
+    {
       "canonicalId": "google_maps_2716",
       "canonicalName": "Roost Coffee Roasters | Da Nang",
       "caseId": "MATCH:overture:overture:a4ebc563-8eb9-48ca-b2bd-8b2508318c4e",
@@ -1051,6 +1468,126 @@
       "sourceId": "overture:a4ebc563-8eb9-48ca-b2bd-8b2508318c4e",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84914002628"
+    },
+    {
+      "canonicalId": "candidate:da-nang:2a5e1c00c8f0bacf",
+      "canonicalName": "Chi House Danang",
+      "caseId": "CREATE_NEW:overture:overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "dc77b1ccde7744c8ec15190adba5acbfe2b14501965cc5035d4d094f7210c958",
+        "provenance": "7fa19e171cc8ddcf9e0593bb71b1e05e273c8976c1dea8edd3252e3a00107767",
+        "review": "446daa50382dd80a86c5677a1f6baa556ee9115f068a6f25c18e5b859862409f"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+        "upstreamSources": [
+          {
+            "confidence": 0.9927763938903809,
+            "dataset": "meta",
+            "recordId": "101855124944289",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "98126fe38d160f9aa3a153186f75e43d3ccc94551e760737d3967c24a89d99ba",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+842363823838"
+    },
+    {
+      "canonicalId": "candidate:da-nang:2a5e1c00c8f0bacf",
+      "canonicalName": "Chi House Danang",
+      "caseId": "CREATE_NEW:overture:overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "dc77b1ccde7744c8ec15190adba5acbfe2b14501965cc5035d4d094f7210c958",
+        "provenance": "7fa19e171cc8ddcf9e0593bb71b1e05e273c8976c1dea8edd3252e3a00107767",
+        "review": "446daa50382dd80a86c5677a1f6baa556ee9115f068a6f25c18e5b859862409f"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+        "upstreamSources": [
+          {
+            "confidence": 0.9927763938903809,
+            "dataset": "meta",
+            "recordId": "101855124944289",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "9a95bbd3747f64e4552173f24062a330338ef52d98f1ff64679a3365bd9aa11f",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8"
+      }
     },
     {
       "canonicalId": "google_maps_1614",
@@ -1137,6 +1674,67 @@
       "value": "http://tiktok.com/@kieuthi_68"
     },
     {
+      "canonicalId": "candidate:da-nang:275459616eaeffcc",
+      "canonicalName": "Ocean Villas",
+      "caseId": "CREATE_NEW:overture:overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "e15b36fffa66b9daa4ad511253d7922049fdcd32f946e41bad653ac53296ca51",
+        "provenance": "2954b4c8e7b02d59a59389036d8bcb816909c3eb336d568c3951471d2d98a1c1",
+        "review": "820f5a6d46cf335269a380fb8d9d64832c3c5ae07ec838e7ed7c1e91a276b3de"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+        "upstreamSources": [
+          {
+            "confidence": 0.8718568086624146,
+            "dataset": "meta",
+            "recordId": "348998121843658",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "a4d1a23d818628ab7dff3633ae870bf124fdd668d2d0b9ce2e027c8493f7690a",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548"
+      }
+    },
+    {
       "canonicalId": "google_maps_1603",
       "canonicalName": "Ly's Bakery",
       "caseId": "MATCH:overture:overture:ff3c30b4-6a4e-4c90-965e-60e170533224",
@@ -1179,6 +1777,67 @@
       "value": "+84961329277"
     },
     {
+      "canonicalId": "candidate:da-nang:44f30f9baa6b2340",
+      "canonicalName": "Khách Sạn Golden Sea 3",
+      "caseId": "CREATE_NEW:overture:overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "9e618fd6207f27b4ae38f90e1fd437eadf1f6c06ebfca36fe0a4fe31d84ee9b9",
+        "provenance": "a4ad98a282e136369dca9dfa342705e2af9749077e86d14ec44ebe779dd0ed23",
+        "review": "8841c1f4414f1c9d92bc5f97c1278e4443a14b5bc0c23465311c9af5b415fd91"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+        "upstreamSources": [
+          {
+            "confidence": 0.8908278942108154,
+            "dataset": "meta",
+            "recordId": "771440596289669",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "ab536ca83fbcb4784153d58101165d8507b42b416147e6a6e1a8f178f96dc8d2",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:323c621d-dcd5-42c6-87d5-130126374d17"
+      }
+    },
+    {
       "canonicalId": "google_maps_1738",
       "canonicalName": "Gear Cafe’ And Bistro",
       "caseId": "MATCH:overture:overture:fbacb852-0983-4801-85fe-e345f7c3fce8",
@@ -1219,6 +1878,65 @@
       "sourceId": "overture:fbacb852-0983-4801-85fe-e345f7c3fce8",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84935109770"
+    },
+    {
+      "canonicalId": "candidate:da-nang:275459616eaeffcc",
+      "canonicalName": "Ocean Villas",
+      "caseId": "CREATE_NEW:overture:overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "e15b36fffa66b9daa4ad511253d7922049fdcd32f946e41bad653ac53296ca51",
+        "provenance": "2954b4c8e7b02d59a59389036d8bcb816909c3eb336d568c3951471d2d98a1c1",
+        "review": "820f5a6d46cf335269a380fb8d9d64832c3c5ae07ec838e7ed7c1e91a276b3de"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+        "upstreamSources": [
+          {
+            "confidence": 0.8718568086624146,
+            "dataset": "meta",
+            "recordId": "348998121843658",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "b3c3c3411eb8f4e3a3fc260f6adebabb47256b8484ed4d8af85e1a8f84505a0a",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "http://theoceanvillas.com.vn/"
     },
     {
       "canonicalId": "google_maps_2001",
@@ -1347,6 +2065,67 @@
       "value": "+84775418302"
     },
     {
+      "canonicalId": "candidate:da-nang:c017ebe6c5f87ec2",
+      "canonicalName": "Di tích danh thắng Ngũ Hành Sơn, 81 Huyền Trân Công Chúa, Đà Nẵng",
+      "caseId": "CREATE_NEW:overture:overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "339237ae11a080e07c04eb465787e639633e11ae77c5b637a4b46f46a3d00104",
+        "provenance": "4de72a010c813c56fc68012d43969a24921eb2849ead647183b5fea06bf744a7",
+        "review": "c5c02a3bdd5604cdf0b355473bb6b6312d727eff640baa9abfd09d6c439482e9"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+        "upstreamSources": [
+          {
+            "confidence": 0.8764028549194336,
+            "dataset": "meta",
+            "recordId": "537269249739413",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "c6f6db2776af7fb21dea252f40c887dc8cc8a93335b186af6f9496ca69a90a9c",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb"
+      }
+    },
+    {
       "canonicalId": "google_maps_2055",
       "canonicalName": "NHÀ HÀNG ĐẢO XANH",
       "caseId": "MATCH:overture:overture:41b104e5-8e0d-4525-83ec-778f3490aa69",
@@ -1387,6 +2166,65 @@
       "sourceId": "overture:41b104e5-8e0d-4525-83ec-778f3490aa69",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84905891688"
+    },
+    {
+      "canonicalId": "candidate:da-nang:db67529b9f1809c9",
+      "canonicalName": "Alani Sea View Hotel",
+      "caseId": "CREATE_NEW:overture:overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "f04279c14300c5bd1819f6290d74cff4c86c2bd159f7b47db2d1133c95e37e26",
+        "provenance": "9af838f480d8bf7cbf5cdf0dfb175e671fa24986d386b537c609881a816b2353",
+        "review": "9fcb181db6e3df478289adf0ff46f6ce06562e2782af14575f01a8bcac0cf142"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+        "upstreamSources": [
+          {
+            "confidence": 0.9764560461044312,
+            "dataset": "meta",
+            "recordId": "306210873084393",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "d059d0f5ee366a2f22d9bfd0be9e19598c23d2a269f08f90f1978b07519ee0d5",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "https://alanidananghotel.com/"
     },
     {
       "canonicalId": "google_maps_1165",
@@ -1851,6 +2689,65 @@
       "value": "https://www.instagram.com/_uttichcafe_/?hl=vi"
     },
     {
+      "canonicalId": "candidate:da-nang:671afec933a1917a",
+      "canonicalName": "Kurumi",
+      "caseId": "CREATE_NEW:overture:overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "190f4df1498283a4b684854971d25623b8f0e55fdf468079fad3fd3285263f44",
+        "provenance": "50be717fb203267a7f227e06eb74cbd6e66e1d42b0ec15435dc450189bdaaf38",
+        "review": "41e31e4a99f830a0d75f5d386a03b304785f902347b0df90e16cece60bd08a49"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+        "upstreamSources": [
+          {
+            "confidence": 0.8979472517967224,
+            "dataset": "meta",
+            "recordId": "105468571237389",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "ed7b42c961e4ac2b68e14adaec5a69ca6edf7948be7400a2af7407308119ca55",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+84569844088"
+    },
+    {
       "canonicalId": "google_maps_1145",
       "canonicalName": "Nhà Hàng LÀNG HẢI SẢN",
       "caseId": "MATCH:overture:overture:3bbe6090-ec19-43a8-b922-dd192e62b47c",
@@ -1977,6 +2874,67 @@
       "value": "+842363799679"
     },
     {
+      "canonicalId": "candidate:da-nang:671afec933a1917a",
+      "canonicalName": "Kurumi",
+      "caseId": "CREATE_NEW:overture:overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "externalIds",
+      "fingerprints": {
+        "identity": "190f4df1498283a4b684854971d25623b8f0e55fdf468079fad3fd3285263f44",
+        "provenance": "50be717fb203267a7f227e06eb74cbd6e66e1d42b0ec15435dc450189bdaaf38",
+        "review": "41e31e4a99f830a0d75f5d386a03b304785f902347b0df90e16cece60bd08a49"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+        "upstreamSources": [
+          {
+            "confidence": 0.8979472517967224,
+            "dataset": "meta",
+            "recordId": "105468571237389",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "f47170f5898533eb3d7ad8617b66f89d7b23756fbcb70e2defe657fdda9573da",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": {
+        "overture": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f"
+      }
+    },
+    {
       "canonicalId": "google_maps_332",
       "canonicalName": "Rustic Tea & Coffee",
       "caseId": "MATCH:overture:overture:84b736b1-3612-4adf-9942-2b60d55b9b2d",
@@ -2019,6 +2977,124 @@
       "value": "+84794083945"
     },
     {
+      "canonicalId": "candidate:da-nang:c017ebe6c5f87ec2",
+      "canonicalName": "Di tích danh thắng Ngũ Hành Sơn, 81 Huyền Trân Công Chúa, Đà Nẵng",
+      "caseId": "CREATE_NEW:overture:overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "339237ae11a080e07c04eb465787e639633e11ae77c5b637a4b46f46a3d00104",
+        "provenance": "4de72a010c813c56fc68012d43969a24921eb2849ead647183b5fea06bf744a7",
+        "review": "c5c02a3bdd5604cdf0b355473bb6b6312d727eff640baa9abfd09d6c439482e9"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+        "upstreamSources": [
+          {
+            "confidence": 0.8764028549194336,
+            "dataset": "meta",
+            "recordId": "537269249739413",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "f7261a9023f9851793cb78c04a30375c013807b68c22f3f52b178b03ccb5d959",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "http://nguhanhson.org/"
+    },
+    {
+      "canonicalId": "candidate:da-nang:671afec933a1917a",
+      "canonicalName": "Kurumi",
+      "caseId": "CREATE_NEW:overture:overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "website",
+      "fingerprints": {
+        "identity": "190f4df1498283a4b684854971d25623b8f0e55fdf468079fad3fd3285263f44",
+        "provenance": "50be717fb203267a7f227e06eb74cbd6e66e1d42b0ec15435dc450189bdaaf38",
+        "review": "41e31e4a99f830a0d75f5d386a03b304785f902347b0df90e16cece60bd08a49"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+        "upstreamSources": [
+          {
+            "confidence": 0.8979472517967224,
+            "dataset": "meta",
+            "recordId": "105468571237389",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "f81a226ff0c33e64ba652627c991f2dc737c757f875245d9a3ff2e7f8e529c43",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "https://kurumi.vn/en/locations/danang/menu"
+    },
+    {
       "canonicalId": "google_maps_1480",
       "canonicalName": "Bếp Bà Ngoại - Ram cuốn cải & Hoành thánh chiên - 04 Vũ Trọng Hoàng",
       "caseId": "MATCH:overture:overture:b7b54f66-0735-4c38-94b7-80713b2e3c0a",
@@ -2059,6 +3135,65 @@
       "sourceId": "overture:b7b54f66-0735-4c38-94b7-80713b2e3c0a",
       "status": "CANDIDATE_NON_RUNTIME_NOT_CANONICAL",
       "value": "+84768568678"
+    },
+    {
+      "canonicalId": "candidate:da-nang:c017ebe6c5f87ec2",
+      "canonicalName": "Di tích danh thắng Ngũ Hành Sơn, 81 Huyền Trân Công Chúa, Đà Nẵng",
+      "caseId": "CREATE_NEW:overture:overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "cityId": "da-nang",
+      "decisionMemoryReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+      "decisionSource": "HUMAN",
+      "field": "phone",
+      "fingerprints": {
+        "identity": "339237ae11a080e07c04eb465787e639633e11ae77c5b637a4b46f46a3d00104",
+        "provenance": "4de72a010c813c56fc68012d43969a24921eb2849ead647183b5fea06bf744a7",
+        "review": "c5c02a3bdd5604cdf0b355473bb6b6312d727eff640baa9abfd09d6c439482e9"
+      },
+      "firstSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "lastSeenReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "license": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE"
+      },
+      "policyOutcome": "HUMAN_APPROVED_CREATE_NEW_CANARY",
+      "policyVersion": "stage4s-controlled-create-new-v1",
+      "processingVersion": "stage4s-controlled-create-new-v1",
+      "provenance": {
+        "attribution": "Overture Maps Foundation",
+        "license": "CDLA-Permissive-2.0",
+        "licenseUrl": "https://cdla.dev/permissive-2-0/",
+        "policyClass": "OPEN_PERMISSIVE_CANDIDATE",
+        "retrievedAt": null,
+        "snapshotRef": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+        "source": "overture",
+        "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+        "upstreamSources": [
+          {
+            "confidence": 0.8764028549194336,
+            "dataset": "meta",
+            "recordId": "537269249739413",
+            "updateTime": "2026-07-02T00:00:00.000Z"
+          },
+          {
+            "confidence": null,
+            "dataset": "Overture",
+            "recordId": null,
+            "updateTime": "2026-07-14T20:34:55Z"
+          }
+        ]
+      },
+      "recordId": "fc9cb3de24fcc71b85eae0d386ea6a0672f8d693cf62e3215ba5230fb89f37b3",
+      "rollback": {
+        "action": "REMOVE_CREATED_SIDECAR_RECORD"
+      },
+      "schemaVersion": "stage4l-enrichment-v1",
+      "snapshotReference": "overture-2026-07-22.0-da-nang-full-supported-bbox",
+      "source": "overture",
+      "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+      "status": "CANONICAL_POI_NON_RUNTIME_ENRICHMENT",
+      "value": "+842363836355"
     }
   ],
   "runtimeEnabled": false,
