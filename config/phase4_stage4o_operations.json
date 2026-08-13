@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "stage4o-operations-v1",
+  "taskName": "UrbanAgent POI Scheduled Sync",
+  "schedulerTickHours": 6,
+  "principalMode": "CURRENT_USER_INTERACTIVE",
+  "paths": {
+    "stableRepository": "D:\\UrbanAgent-work\\scheduled-poi-sync",
+    "dataRoot": "D:\\UrbanAgent-data\\stage4o",
+    "artifactRoot": "D:\\UrbanAgent-artifacts\\stage4o-runs",
+    "statusPath": "D:\\UrbanAgent-artifacts\\stage4o-status\\status.json",
+    "logRoot": "D:\\UrbanAgent-artifacts\\stage4o-logs",
+    "tempRoot": "D:\\UrbanAgent-temp\\stage4o"
+  },
+  "sourceCadenceMinutes": {
+    "overture": 10080,
+    "osm": 1440,
+    "wikidata": 4320,
+    "wikimedia_commons": 10080
+  },
+  "timeoutsSeconds": {
+    "childStartup": 60,
+    "metadataCheck": 120,
+    "sourceAcquisition": 7200,
+    "gitOperation": 300,
+    "prOperation": 300,
+    "httpSmoke": 60,
+    "scheduledRun": 14400
+  },
+  "retention": {
+    "successfulRunDays": 30,
+    "failedRunDays": 90,
+    "minimumSuccessfulRuns": 10
+  },
+  "expectedCanonicalRows": 4166,
+  "networkMode": "PREPARED_BOUNDED_SNAPSHOTS",
+  "autoMerge": false,
+  "autoCreateCanonicalPoi": false,
+  "autoDeleteCanonicalPoi": false,
+  "runtimeSidecarEnabled": false,
+  "ciScheduleEnabled": false
+}
