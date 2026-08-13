@@ -274,6 +274,14 @@ function buildHealthStatus({ previous = {}, result = {}, config, manifestPath, s
     lastManifestPath: manifestPath,
     resumeAvailable: result.resumable === true,
     prApiMode: previous.prApiMode || 'COMPARE_URL_ONLY',
+    schedulerSoakStatus: previous.schedulerSoakStatus || null,
+    scheduledRunCount: previous.scheduledRunCount || 0,
+    lastDueSource: previous.lastDueSource || null,
+    lastActualSourceDelta: previous.lastActualSourceDelta || null,
+    lastSafePr: previous.lastSafePr || previous.lastPrUrl || null,
+    pendingEnrichmentExceptions: previous.pendingEnrichmentExceptions
+      ?? previous.lastHumanReviewDeltaCount ?? 0,
+    pendingCreateNewResearchReviewCount: previous.pendingCreateNewResearchReviewCount || 0,
   };
 }
 

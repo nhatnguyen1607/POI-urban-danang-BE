@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "stage4p-create-new-policy-v1",
+  "policyVersion": "stage4p-precision-first-v1",
+  "autoCreateNew": false,
+  "cityId": "da-nang",
+  "soakGate": {
+    "minimumScheduledRuns": 3,
+    "requireDueSourceCheck": true,
+    "requireNoFailures": true,
+    "requireNoStateCorruption": true,
+    "requireNoDuplicatePullRequests": true,
+    "requireHealthyLockRelease": true
+  },
+  "thresholds": {
+    "possibleExistingDistanceMeters": 120,
+    "possibleExistingNameSimilarity": 0.82,
+    "strongAbsenceDistanceMeters": 300,
+    "crossSourceDistanceMeters": 75,
+    "sameSourceDuplicateDistanceMeters": 50,
+    "minimumStrongScore": 0.82,
+    "minimumCanaryScore": 0.9,
+    "freshWithinDays": 365
+  },
+  "canary": {
+    "targetSampleSize": 75,
+    "minimumSampleSize": 50,
+    "maximumSampleSize": 100
+  },
+  "canonicalWrites": 0,
+  "deleteOperations": 0,
+  "runtimeExposure": false
+}
