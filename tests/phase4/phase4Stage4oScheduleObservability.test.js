@@ -14,6 +14,7 @@ const {
   classifyOperationalError,
   cleanupOperationalRetention,
   inspectStaleLock,
+  interpretTaskSchedulerResult,
   runOperationalPreflight,
   selectOperationalLogDeletions,
   summarizeRunStatus,
@@ -319,6 +320,22 @@ test('Task Scheduler helpers are idempotent and never delete project state', () 
   assert.match(uninstall, /Unregister-ScheduledTask/);
   assert.doesNotMatch(uninstall, /Remove-Item|rm\s|rmdir/i);
   assert.match(status, /LastTaskResult/);
+});
+
+test('Task Scheduler canary result parsing distinguishes success, running and failure', () => {
+  assert.deepEqual(interpretTaskSchedulerResult({
+    lastTaskResult: 0,
+    taskState: 'Ready',
+    healthStatus: { lastRunStatus: 'NO_WORK' },
+  }), {
+    state: 'COMPLETED', successful: true, resultCode: 0, runStatus: 'NO_WORK',
+  });
+  assert.equal(interpretTaskSchedulerResult({
+    lastTaskResult: 267009, taskState: 'Running', healthStatus: {},
+  }).state, 'RUNNING');
+  assert.equal(interpretTaskSchedulerResult({
+    lastTaskResult: 1, taskState: 'Ready', healthStatus: { lastRunStatus: 'FAILED' },
+  }).state, 'FAILED');
 });
 
 test('canonical integrity and runtime-sidecar boundary remain unchanged', () => {

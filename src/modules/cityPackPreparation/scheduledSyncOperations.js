@@ -370,6 +370,26 @@ function cleanupOperationalRetention({ artifactRoot, logRoot, now, retention }) 
   return { removedRunDirectories: deletions.length, removedLogs };
 }
 
+function interpretTaskSchedulerResult({ lastTaskResult, taskState, healthStatus }) {
+  if (lastTaskResult === null || lastTaskResult === undefined) {
+    return { state: 'NEVER_RUN', successful: false };
+  }
+  const resultCode = Number(lastTaskResult);
+  if (resultCode === 267009 || String(taskState || '').toLowerCase() === 'running') {
+    return { state: 'RUNNING', successful: false, resultCode };
+  }
+  if (resultCode !== 0) {
+    return { state: 'FAILED', successful: false, resultCode };
+  }
+  const runStatus = healthStatus?.lastRunStatus || 'UNKNOWN';
+  return {
+    state: runStatus === 'FAILED' || runStatus === 'BLOCKED' ? 'FAILED' : 'COMPLETED',
+    successful: runStatus !== 'FAILED' && runStatus !== 'BLOCKED',
+    resultCode,
+    runStatus,
+  };
+}
+
 module.exports = {
   FAILURE_CLASSES,
   SUCCESSFUL_RUN_STATUSES,
@@ -379,6 +399,7 @@ module.exports = {
   commandCheck,
   ensureWritableDirectory,
   inspectStaleLock,
+  interpretTaskSchedulerResult,
   processIsRunning,
   resolvePrApiMode,
   runOperationalPreflight,
