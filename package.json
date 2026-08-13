@@ -27,6 +27,7 @@
     "citypack:self-test": "node scripts/citypack_scheduled_runner.js --self-test",
     "citypack:health": "node scripts/citypack_scheduled_runner.js --health",
     "citypack:create-new-research": "node --max-old-space-size=4096 scripts/phase4_stage4p_create_new_policy_research.js",
+    "citypack:create-new-evidence": "node --max-old-space-size=4096 scripts/phase4_stage4q_create_new_evidence.js",
     "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js"
   },
   "keywords": [],
