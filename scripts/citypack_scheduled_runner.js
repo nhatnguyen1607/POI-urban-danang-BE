@@ -208,6 +208,8 @@ async function runOperational(argv = process.argv.slice(2), dependencies = {}) {
         spawnSyncImpl: dependencies.spawnSyncImpl || spawnSync });
       result = { ...child.result, triggerType: args.triggerType || 'MANUAL',
         runnerStdout: child.stdoutPath, runnerStderr: child.stderrPath, lockInspection };
+      const exceptionArtifactPath = path.join(artifactDir, 'stage4n', 'human_review_delta.json');
+      if (fs.existsSync(exceptionArtifactPath)) result.exceptionArtifactPath = exceptionArtifactPath;
     }
   } catch (error) {
     result = {
@@ -244,7 +246,7 @@ async function runOperational(argv = process.argv.slice(2), dependencies = {}) {
     failureClass: result.failureClass || null,
     sourceChecks: result.discovery?.checks || [],
     deltaCounts: result.deltaCounts || {},
-    safeMutations: result.canonicalMutations || 0,
+    safeMutations: Number(result.canonicalMutations || 0) + Number(result.sidecarMutations || 0),
     humanExceptions: result.exceptions || 0,
     prUrl: result.safeResult?.compareUrl || result.openPr || null,
     manifestPath: written.manifestPath,

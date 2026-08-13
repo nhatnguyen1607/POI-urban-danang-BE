@@ -197,11 +197,13 @@ test('operational manifest and status are concise atomic artifacts', () => {
   const written = writeOperationalResult({
     statusPath, artifactDir, previous: {}, config: operationsConfig,
     result: { runId: 'run-1', status: 'NO_SOURCE_CHANGE', triggerType: 'SCHEDULED',
-      discovery: { checks: [] }, canonical: { sha256: EXPECTED_SHA } },
+      discovery: { checks: [] }, canonical: { sha256: EXPECTED_SHA },
+      lockInspection: { action: 'NO_LOCK' } },
     startedAt: NOW, endedAt: '2026-08-13T06:00:01Z',
   });
   assert.equal(readHealth(statusPath).lastRunStatus, 'NO_WORK');
   assert.equal(JSON.parse(fs.readFileSync(written.manifestPath)).finalStatus, 'NO_WORK');
+  assert.equal(JSON.parse(fs.readFileSync(written.manifestPath)).lockInspection.action, 'NO_LOCK');
   assert.ok(fs.statSync(written.manifestPath).size < 10000);
 });
 
