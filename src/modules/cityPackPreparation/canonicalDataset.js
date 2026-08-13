@@ -1,10 +1,34 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
+const path = require('node:path');
 
 const { normalizeCategory, numberOrNull } = require('./sourceRecord');
 
-const EXPECTED_CANONICAL_SHA =
+const INITIAL_STAGE4M_CANONICAL_SHA =
   'e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96';
+const STAGE4M_STATE_PATH = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'data',
+  'citypacks',
+  'enrichments',
+  'danang',
+  'stage4m_automation_state.json',
+);
+
+function resolveExpectedCanonicalSha(statePath = STAGE4M_STATE_PATH) {
+  if (!fs.existsSync(statePath)) return INITIAL_STAGE4M_CANONICAL_SHA;
+  const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+  const digest = String(state.canonicalShaAfter || '').toLowerCase();
+  if (!/^[a-f0-9]{64}$/.test(digest)) {
+    throw new Error('Invalid Stage 4M canonical SHA in automation state.');
+  }
+  return digest;
+}
+
+const EXPECTED_CANONICAL_SHA = resolveExpectedCanonicalSha();
 
 function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
@@ -92,8 +116,11 @@ function inspectCanonicalDataset(canonicalPath) {
 
 module.exports = {
   EXPECTED_CANONICAL_SHA,
+  INITIAL_STAGE4M_CANONICAL_SHA,
+  STAGE4M_STATE_PATH,
   inspectCanonicalDataset,
   parseCsv,
   readCanonicalPois,
+  resolveExpectedCanonicalSha,
   sha256,
 };
