@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "stage4r-create-new-canary-config-v1",
+  "policyVersion": "stage4r-human-canary-selection-v4",
+  "stage4qPolicyVersion": "stage4q-independent-evidence-v1",
+  "stage4qEvidenceVersion": "stage4q-source-graph-v2",
+  "evaluationReferenceTime": "2026-08-13T00:00:00.000Z",
+  "cityId": "da-nang",
+  "maximumSelected": 26,
+  "minimumPreferred": 20,
+  "categoryTargets": {
+    "foodCafe": 6,
+    "accommodation": 5,
+    "attractionCultural": 5,
+    "shoppingMarket": 4,
+    "otherTraveler": 6
+  },
+  "maximumPerIdentityBase": 2,
+  "maximumPerGeoCell": 5,
+  "geoCellDegrees": 0.02,
+  "duplicateDistanceMeters": 75,
+  "duplicateNameSimilarity": 0.86,
+  "autoCreateNew": false,
+  "canonicalWrites": 0,
+  "deleteOperations": 0,
+  "runtimeExposure": false,
+  "approvedOperationsRequiredDecision": "APPROVE"
+}
