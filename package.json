@@ -23,6 +23,9 @@
     "citypack:sync": "node scripts/citypack_sync.js",
     "citypack:auto-pr": "node scripts/citypack_auto_pr.js",
     "citypack:scheduled-sync": "node scripts/citypack_scheduled_sync.js",
+    "citypack:scheduled-runner": "node scripts/citypack_scheduled_runner.js",
+    "citypack:self-test": "node scripts/citypack_scheduled_runner.js --self-test",
+    "citypack:health": "node scripts/citypack_scheduled_runner.js --health",
     "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js"
   },
   "keywords": [],
