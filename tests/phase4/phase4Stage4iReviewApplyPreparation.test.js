@@ -348,10 +348,10 @@ test('Stage 4I incremental integration skips unchanged and scopes new/changed/ou
   assert.equal(resolutions, 1);
 });
 
-test('Stage 4I leaves the canonical 4166-POI baseline immutable', () => {
+test('Stage 4I leaves the current approved canonical baseline immutable', () => {
   const before = inspectCanonicalDataset(CANONICAL_PATH);
-  assert.equal(before.rows, 4166);
+  assert.equal(before.rows, 4173);
   assert.equal(before.sha256, EXPECTED_CANONICAL_SHA);
-  assert.equal(readCanonicalPois(CANONICAL_PATH).length, 4166);
+  assert.equal(readCanonicalPois(CANONICAL_PATH).length, 4173);
   assert.equal(fs.existsSync(BOUNDARY_PATH), true);
 });

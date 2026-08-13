@@ -3,7 +3,7 @@
   "expectedPolicyVersion": "stage4l-review-policy-v1",
   "expectedBoundaryVersion": "osm-relation-1891418-v72-product-scope-v1",
   "expectedBoundarySha256": "c0db1b84c8fcbc77b1b5cca14ba6d280627f59713db56965bd6198b72e78a84d",
-  "expectedCanonicalRows": 4166,
+  "expectedCanonicalRows": 4173,
   "initialCanonicalSha256": "e1f7fd635087eecb56dac8a2f3ed810f481ff129a12d19332e2d68f08ed56f96",
   "canonicalCoreFields": ["address"],
   "sidecarFields": ["phone", "website", "openingHours", "media"],

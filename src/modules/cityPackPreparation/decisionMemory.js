@@ -87,6 +87,8 @@ function createDecisionRecord({
   evidenceVersion,
   boundaryVersion,
   approvedFields = [],
+  decisionScope = null,
+  applicationStatus = null,
   note = null,
 }) {
   if (!Object.values(DECISION_SOURCES).includes(decisionSource)) {
@@ -97,7 +99,7 @@ function createDecisionRecord({
     throw new Error(`Unsupported human decision: ${decision}`);
   }
 
-  return {
+  const record = {
     schemaVersion: 'stage4l-decision-memory-v1',
     caseId: reviewCase.caseId,
     source: reviewCase.source?.source || reviewCase.source || null,
@@ -105,7 +107,8 @@ function createDecisionRecord({
     canonicalId: reviewCase.canonical?.id || reviewCase.canonicalId || null,
     decision,
     decisionSource,
-    decisionScope: decision === 'APPROVE' ? 'FIELD_SCOPED_ENRICHMENT' : 'CASE_REVIEW',
+    decisionScope: decisionScope
+      || (decision === 'APPROVE' ? 'FIELD_SCOPED_ENRICHMENT' : 'CASE_REVIEW'),
     decisionReference,
     identityFingerprint: buildIdentityFingerprint(reviewCase),
     fieldFingerprints: buildFieldFingerprints(reviewCase),
@@ -128,6 +131,8 @@ function createDecisionRecord({
     reviewEvidenceReference: decisionReference,
     note,
   };
+  if (applicationStatus) record.applicationStatus = applicationStatus;
+  return record;
 }
 
 function findReusableDecision(memory, reviewCase, versions) {

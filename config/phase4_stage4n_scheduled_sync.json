@@ -16,7 +16,7 @@
     "openPrPolicy": "BLOCK_INCOMPATIBLE",
     "branchPrefix": "auto/poi-safe-enrichment"
   },
-  "expectedCanonicalRows": 4166,
+  "expectedCanonicalRows": 4173,
   "networkEnabledByDefault": false,
   "runtimeSidecarEnabled": false,
   "autoMerge": false,

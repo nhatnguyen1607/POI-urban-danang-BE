@@ -37,7 +37,7 @@ const {
 } = require('../../scripts/phase4_stage4r_create_new_canary_review');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const CANONICAL_SHA = '39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded';
+const CANONICAL_SHA = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
 const BOUNDARY = { type: 'Polygon', coordinates: [[
   [108, 15.9], [108.5, 15.9], [108.5, 16.4], [108, 16.4], [108, 15.9],
 ]] };
@@ -292,7 +292,7 @@ test('AUTO_CREATE_NEW remains false and canonical integrity stays exact', () => 
     /AUTO_CREATE_NEW disabled/);
   const canonicalData = inspectCanonicalDataset(path.join(ROOT, 'data', 'canonical',
     'urbanagent_poi_master_v1.csv'));
-  assert.equal(canonicalData.rows, 4166);
+  assert.equal(canonicalData.rows, 4173);
   assert.equal(canonicalData.sha256, CANONICAL_SHA);
   assert.equal(config.canonicalWrites, 0);
   assert.equal(config.deleteOperations, 0);

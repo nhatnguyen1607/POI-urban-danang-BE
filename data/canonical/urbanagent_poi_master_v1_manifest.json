@@ -23,18 +23,18 @@
   },
   "output": {
     "file": "urbanagent_poi_master_v1.csv",
-    "rows": 4166,
+    "rows": 4173,
     "columns": 34,
-    "unique_global_ids": 4166,
+    "unique_global_ids": 4173,
     "missing_names": 0,
-    "missing_images": 60,
-    "missing_primary_rating": 312,
+    "missing_images": 67,
+    "missing_primary_rating": 319,
     "invalid_coordinates": 0,
     "cross_source_merged_rows": 5,
-    "sha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+    "sha256": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4",
     "category_distribution": {
-      "restaurant": 1853,
-      "cafe": 1201,
+      "restaurant": 1854,
+      "cafe": 1202,
       "shopping": 370,
       "bakery": 433,
       "park": 2,
@@ -43,8 +43,11 @@
       "other": 4,
       "lodging": 2,
       "wellness": 1,
-      "service": 1
-    }
+      "service": 1,
+      "accommodation": 4,
+      "attraction": 1
+    },
+    "controlled_create_new_rows": 7
   },
   "quarantine": [
     {

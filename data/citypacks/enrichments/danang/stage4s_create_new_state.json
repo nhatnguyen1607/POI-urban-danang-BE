@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "stage4s-controlled-create-new-state-v1",
+  "status": "APPLIED_TO_FEATURE_BRANCH",
+  "policyVersion": "stage4s-controlled-create-new-v1",
+  "decisionScope": "CREATE_NEW_CANARY",
+  "decisionReference": "stage4r-create-new-canary-decisions:324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+  "decisionSha256": "324ee080a6992df1305bef5f1fe57d9be81c9375b75898258e73c998b89820ed",
+  "planHash": "6df59177ee4cfcec67fc0709069aa1303aa372ac8882873c3ec880b609e633f9",
+  "canonicalRowsBefore": 4166,
+  "canonicalRowsAfter": 4173,
+  "canonicalShaBefore": "39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded",
+  "canonicalShaAfter": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4",
+  "sidecarHashBefore": "2bb10fa42c4be338eea7a034cdab1060c1760fb1159887d8008af9c02560d7bc",
+  "sidecarHashAfter": "5c65e686665b22faa6a11f57053acc7121a784bf310fa7a812e938792906333c",
+  "appliedCaseIds": [
+    "CREATE_NEW:overture:overture:323c621d-dcd5-42c6-87d5-130126374d17",
+    "CREATE_NEW:overture:overture:baeb1bad-8cca-4913-b690-1a447aa818f8",
+    "CREATE_NEW:overture:overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f",
+    "CREATE_NEW:overture:overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb",
+    "CREATE_NEW:overture:overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548",
+    "CREATE_NEW:overture:overture:cef79a6d-be85-4a21-b572-931eaac1fd84",
+    "CREATE_NEW:overture:overture:fb155234-845f-4b7a-bb15-ea88692b6e33"
+  ],
+  "appliedCanonicalIds": [
+    "candidate:da-nang:44f30f9baa6b2340",
+    "candidate:da-nang:2a5e1c00c8f0bacf",
+    "candidate:da-nang:671afec933a1917a",
+    "candidate:da-nang:c017ebe6c5f87ec2",
+    "candidate:da-nang:275459616eaeffcc",
+    "candidate:da-nang:b7de1964b4ee075e",
+    "candidate:da-nang:db67529b9f1809c9"
+  ],
+  "sidecarRecordsCreated": 19,
+  "dropped": [],
+  "autoCreateNew": false,
+  "runtimeSidecarEnabled": false,
+  "runtimeCodeChanged": false,
+  "deletes": 0,
+  "merges": 0,
+  "existingRowMutations": 0,
+  "rollback": {
+    "canonicalSha256": "39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded",
+    "canonicalByteIdentical": true,
+    "sidecarSha256": "269be47326ace9dd9dfbbbe509ba26588f2fdf8838fe95ef766263a0fa8fac98",
+    "sidecarExact": true
+  },
+  "deterministic": true
+}

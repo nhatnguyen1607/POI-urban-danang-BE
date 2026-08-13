@@ -249,7 +249,7 @@ test('Stage 4H source capability model is explicit and conservative', () => {
 
 test('Stage 4H leaves the canonical baseline immutable', () => {
   const before = inspectCanonicalDataset(CANONICAL_PATH);
-  assert.equal(before.rows, 4166);
+  assert.equal(before.rows, 4173);
   assert.equal(before.sha256, EXPECTED_CANONICAL_SHA);
   assert.equal(fs.existsSync(CANONICAL_PATH), true);
 });

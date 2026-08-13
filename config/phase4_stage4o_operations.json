@@ -31,7 +31,7 @@
     "failedRunDays": 90,
     "minimumSuccessfulRuns": 10
   },
-  "expectedCanonicalRows": 4166,
+  "expectedCanonicalRows": 4173,
   "networkMode": "PREPARED_BOUNDED_SNAPSHOTS",
   "autoMerge": false,
   "autoCreateCanonicalPoi": false,
