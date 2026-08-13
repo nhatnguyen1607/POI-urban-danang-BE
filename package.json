@@ -22,6 +22,7 @@
     "phase1:import:canonical": "node scripts/phase1_import_canonical_pois.js",
     "citypack:sync": "node scripts/citypack_sync.js",
     "citypack:auto-pr": "node scripts/citypack_auto_pr.js",
+    "citypack:scheduled-sync": "node scripts/citypack_scheduled_sync.js",
     "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js"
   },
   "keywords": [],

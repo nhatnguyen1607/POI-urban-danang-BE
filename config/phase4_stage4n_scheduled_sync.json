@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "stage4n-scheduled-sync-config-v1",
+  "cityId": "da-nang",
+  "schedulerTickMinutes": 60,
+  "sources": {
+    "overture": { "capability": "SNAPSHOT", "refreshMinutes": 10080, "maxRetries": 3, "baseBackoffMs": 1000 },
+    "osm": { "capability": "POLLING", "refreshMinutes": 1440, "maxRetries": 3, "baseBackoffMs": 1000 },
+    "wikidata": { "capability": "POLLING", "refreshMinutes": 4320, "maxRetries": 3, "baseBackoffMs": 1000 },
+    "wikimedia_commons": { "capability": "POLLING", "refreshMinutes": 10080, "maxRetries": 3, "baseBackoffMs": 1000 }
+  },
+  "lock": { "staleAfterMinutes": 360 },
+  "retention": { "runArtifactsDays": 30, "tempDays": 7, "minimumSuccessfulRuns": 5 },
+  "automation": {
+    "maxAutoCases": 50,
+    "maxFieldMutations": 100,
+    "openPrPolicy": "BLOCK_INCOMPATIBLE",
+    "branchPrefix": "auto/poi-safe-enrichment"
+  },
+  "expectedCanonicalRows": 4166,
+  "networkEnabledByDefault": false,
+  "runtimeSidecarEnabled": false,
+  "autoMerge": false,
+  "autoCreateCanonicalPoi": false,
+  "autoDeleteCanonicalPoi": false
+}
