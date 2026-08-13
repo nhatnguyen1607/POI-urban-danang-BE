@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "phase4-stage4t-closeout-config-v1",
+  "phase": "PHASE_4",
+  "cityId": "da-nang",
+  "officialBaseline": {
+    "rows": 4173,
+    "sha256": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4"
+  },
+  "previousBaseline": {
+    "rows": 4166,
+    "sha256": "39647b29308813a7ec19e4695fd2b95ffa27743db8e8cb46800c45d3a3fe6ded"
+  },
+  "stage4sHead": "f9703c7164ad1b2af4c449e37e954a2ef2167030",
+  "expectedSidecarRecords": 19,
+  "allowedCategories": ["accommodation", "attraction", "cafe", "restaurant"],
+  "canary": [
+    { "caseId": "CREATE_NEW:overture:overture:323c621d-dcd5-42c6-87d5-130126374d17", "canonicalId": "candidate:da-nang:44f30f9baa6b2340", "name": "Kh\u00e1ch S\u1ea1n Golden Sea 3", "category": "accommodation", "sourceId": "overture:323c621d-dcd5-42c6-87d5-130126374d17" },
+    { "caseId": "CREATE_NEW:overture:overture:baeb1bad-8cca-4913-b690-1a447aa818f8", "canonicalId": "candidate:da-nang:2a5e1c00c8f0bacf", "name": "Chi House Danang", "category": "accommodation", "sourceId": "overture:baeb1bad-8cca-4913-b690-1a447aa818f8" },
+    { "caseId": "CREATE_NEW:overture:overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f", "canonicalId": "candidate:da-nang:671afec933a1917a", "name": "Kurumi", "category": "restaurant", "sourceId": "overture:c3fc2861-7b69-443a-a8aa-fa5ef87a548f" },
+    { "caseId": "CREATE_NEW:overture:overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb", "canonicalId": "candidate:da-nang:c017ebe6c5f87ec2", "name": "Di t\u00edch danh th\u1eafng Ng\u0169 H\u00e0nh S\u01a1n, 81 Huy\u1ec1n Tr\u00e2n C\u00f4ng Ch\u00faa, \u0110\u00e0 N\u1eb5ng", "category": "attraction", "sourceId": "overture:c8309b3f-fd0c-4415-a7f0-d47e5b62d8bb" },
+    { "caseId": "CREATE_NEW:overture:overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548", "canonicalId": "candidate:da-nang:275459616eaeffcc", "name": "Ocean Villas", "category": "accommodation", "sourceId": "overture:c85f4f5c-7cee-42e4-bcfb-d91e8cec5548" },
+    { "caseId": "CREATE_NEW:overture:overture:cef79a6d-be85-4a21-b572-931eaac1fd84", "canonicalId": "candidate:da-nang:b7de1964b4ee075e", "name": "Banh mi & Cafe 43 - Danang (\ubc18\ubbf8 & \ucee4\ud53c)", "category": "cafe", "sourceId": "overture:cef79a6d-be85-4a21-b572-931eaac1fd84" },
+    { "caseId": "CREATE_NEW:overture:overture:fb155234-845f-4b7a-bb15-ea88692b6e33", "canonicalId": "candidate:da-nang:db67529b9f1809c9", "name": "Alani Sea View Hotel", "category": "accommodation", "sourceId": "overture:fb155234-845f-4b7a-bb15-ea88692b6e33" }
+  ],
+  "decisionCounts": { "APPROVE": 7, "REJECT": 4, "DEFER": 15 },
+  "autoCreateNew": false,
+  "autoDelete": false,
+  "autoMerge": false,
+  "runtimeSidecarEnabled": false
+}
