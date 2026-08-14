@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "datasetName": "urbanagent_poi_master",
+  "datasetVersion": "v1-stage4s-2026-08-13",
+  "poiCount": 4173,
+  "sha256": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4",
+  "byteSize": 7220189,
+  "runtimePath": "data/canonical/urbanagent_poi_master_v1.csv",
+  "packagingMode": "git-blob",
+  "sourcePhase": "Phase 4 Stage 4S"
+}

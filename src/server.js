@@ -66,9 +66,11 @@ const {
   updateUserRole,
 } = require('./services/firestorePersistenceService');
 const { getFirebaseAdminDiagnostics, getFirestoreDb, isFirebaseAdminReady } = require('./config/firebaseAdmin');
+const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
+const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
@@ -80,7 +82,7 @@ const UPLOAD_DIR = path.join(STORAGE_DIR, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const app = express();
-app.use(cors());
+app.use(cors(createCorsOptions()));
 
 function errorStatus(error) {
   return error?.status || (error?.code === 'FIRESTORE_NOT_CONFIGURED' ? 503 : 500);
@@ -758,14 +760,29 @@ app.get('/api/weather/forecast', async (req, res) => {
 app.use(malformedJsonErrorHandler);
 
 const PORT = process.env.PORT || 7860;
-app.listen(PORT,'0.0.0.0', async () => {
-  console.log(`Backend API running on http://localhost:${PORT}`);
-  
-  // Initialize Expert System at startup
-  try {
-    await initExpertSystem();
-    console.log('[ES] Expert System initialized successfully');
-  } catch (err) {
-    console.error('[ES] Failed to initialize Expert System:', err.message);
-  }
-});
+
+async function startServer(port = PORT) {
+  const runtimeData = await verifyRuntimeDataset();
+  console.log(`[Runtime Data] verified ${runtimeData.poiCount} POIs (${runtimeData.datasetVersion})`);
+
+  return app.listen(port, '0.0.0.0', async () => {
+    console.log(`Backend API running on http://localhost:${port}`);
+
+    // Initialize Expert System at startup
+    try {
+      await initExpertSystem();
+      console.log('[ES] Expert System initialized successfully');
+    } catch (err) {
+      console.error('[ES] Failed to initialize Expert System:', err.message);
+    }
+  });
+}
+
+if (require.main === module) {
+  startServer().catch((error) => {
+    console.error(`[Runtime Data] ${error.code || 'RUNTIME_DATA_VERIFICATION_FAILED'}: ${error.message}`);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { app, startServer };
