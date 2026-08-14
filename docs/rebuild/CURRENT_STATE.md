@@ -578,3 +578,39 @@ Date: 2026-08-14 (+07:00).
   `URBANAGENT_CORS_ALLOWED_ORIGINS`; frontend API URL was already configurable.
 - Frontend changes: none.
 - Next proposed step: Stage 5C staging deployment. Stage 5C has not started.
+## Phase 5 Stage 5C - 2026-08-14
+
+- Status: `STAGING_PREPARED_BLOCKED_BY_PLATFORM_ACCESS`.
+- Stage 5B merged through backend PR #35 at
+  `bcbb4c0ab1cac07040393dd57679a702b63bca2c`.
+- Backend staging container preparation uses lockfile install, build-time data
+  verification, startup verification, and `/api/v2/cities` health checks.
+- Backend platform discovery: Docker/Hugging Face architecture exists, but no
+  Space, deployment record, environment, platform secret, or authenticated
+  Hugging Face session is available.
+- Frontend platform discovery: Vercel integration exists, but the authenticated
+  local account cannot access the UrbanAgent project or configure Preview env.
+- No backend or frontend staging URL was created. Deployed E2E was not run.
+- Local pre-deploy validation passed for 4173 POIs, canonical integrity,
+  recommendation/preview/replan/saved-trip tests, production CORS, backend
+  startup, and frontend production build.
+- Firebase staging credentials are unavailable; saved trips are blocked for
+  staging rather than bypassed.
+- Production was not deployed or modified. Stage 5D has not started.
+## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
+
+- Latest status: `SAFE_AUTO_DEPLOY_PREPARED_FOR_REVIEW`; this supersedes the
+  earlier backend platform-access blocker above.
+- Existing target verified: Hugging Face Docker Space `nhttngy/back-end`, port
+  7860, rollback revision
+  `240c962c170c1b6ddef333863f9692c825808e2c`.
+- Added a deterministic tracked-file payload and GitHub Action. Pushes to main
+  validate automatically; upload remains gated until a first manual dispatch
+  succeeds or `HF_AUTO_DEPLOY_ENABLED=true` is explicitly configured.
+- Runtime legacy LFS assets are excluded; no LFS-managed file is required by
+  the default traveler runtime.
+- Local payload validation: 13 tests passed, payload install/data/startup/CORS
+  passed, 4173 POIs and approved SHA preserved.
+- Remote deployment: not executed. Space variables/secrets were not changed.
+- Next action: branch review, merge, validate main workflow, then first manual
+  dispatch. Stage 5D remains not started.

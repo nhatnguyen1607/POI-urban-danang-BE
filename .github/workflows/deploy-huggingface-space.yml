@@ -1,0 +1,130 @@
+name: Deploy backend to Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: urbanagent-huggingface-space
+  cancel-in-progress: false
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out source without legacy LFS downloads
+        uses: actions/checkout@v6
+        with:
+          lfs: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify approved runtime dataset
+        run: npm run data:verify
+
+      - name: Check runtime syntax
+        run: |
+          node --check src/server.js
+          node --check src/config/firebaseAdmin.js
+          node --check src/config/corsOptions.js
+          node --check scripts/prepare_hf_space_payload.js
+
+      - name: Run focused product and packaging tests
+        env:
+          URBANAGENT_TEST_TEMP_ROOT: ${{ runner.temp }}
+        run: >-
+          node --test
+          tests/phase5/phase5HfDeploymentPackaging.test.js
+          tests/phase5/phase5RuntimeDataPackaging.test.js
+          tests/phase5/phase5ProductE2E.test.js
+          tests/phase2/phase2TravelerApiV2Batch5.test.js
+          tests/phase2/phase2TravelerApiV2Batch6.test.js
+
+      - name: Prepare deterministic runtime-only payload
+        run: node scripts/prepare_hf_space_payload.js --output .hf-deploy
+
+      - name: Validate payload install and data
+        working-directory: .hf-deploy
+        run: |
+          npm ci --omit=dev
+          npm run data:verify
+
+      - name: Smoke-test payload startup and exact-origin CORS
+        working-directory: .hf-deploy
+        env:
+          NODE_ENV: production
+          PORT: '7860'
+          URBANAGENT_CORS_ALLOWED_ORIGINS: https://poi-urban-danang-fe.vercel.app
+        run: |
+          set -euo pipefail
+          npm start > "$RUNNER_TEMP/urbanagent-hf-runtime.log" 2>&1 &
+          server_pid=$!
+          cleanup() { kill "$server_pid" 2>/dev/null || true; }
+          trap cleanup EXIT
+
+          ready=false
+          for attempt in $(seq 1 30); do
+            if node -e "fetch('http://127.0.0.1:7860/api/v2/cities').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            cat "$RUNNER_TEMP/urbanagent-hf-runtime.log"
+            exit 1
+          fi
+
+          node - <<'NODE'
+          const origin = 'https://poi-urban-danang-fe.vercel.app';
+          fetch('http://127.0.0.1:7860/api/v2/cities', { headers: { Origin: origin } })
+            .then((response) => {
+              if (!response.ok) throw new Error(`Health request failed: ${response.status}`);
+              if (response.headers.get('access-control-allow-origin') !== origin) {
+                throw new Error('Exact production frontend origin was not returned by CORS.');
+              }
+            })
+            .catch((error) => {
+              console.error(error.message);
+              process.exit(1);
+            });
+          NODE
+
+      - name: Resolve deployment gate
+        id: deploy-gate
+        shell: bash
+        env:
+          AUTO_DEPLOY_ENABLED: ${{ vars.HF_AUTO_DEPLOY_ENABLED }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ] && [ "$AUTO_DEPLOY_ENABLED" = "true" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "Validation passed; first deployment still requires workflow_dispatch."
+          fi
+
+      - name: Sync runtime payload to existing Hugging Face Space
+        if: steps.deploy-gate.outputs.deploy == 'true'
+        uses: huggingface/hub-sync@v0.2.1
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: nhttngy/back-end
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
+          space_sdk: docker
+          subdirectory: .hf-deploy

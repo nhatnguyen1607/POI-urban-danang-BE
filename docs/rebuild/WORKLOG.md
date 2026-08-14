@@ -2604,3 +2604,44 @@ Results:
 - Frontend source was not changed; production API base URL was already
   environment-configurable.
 - Stage 5C was not started.
+## 2026-08-14 - Phase 5 Stage 5C staging preparation
+
+- Created and merged backend Stage 5B PR #35 using a normal merge commit.
+- Created fresh backend/frontend Stage 5C clones on `D:` and read repository
+  instructions before changes.
+- Inspected Docker, Vercel, environment examples, package scripts, GitHub
+  deployments/environments/workflows, secret and variable names, repository
+  metadata, platform CLIs, and authentication state without reading or printing
+  secret values.
+- Confirmed the intended backend Docker/Hugging Face and frontend Vercel
+  architectures. Found no authenticated backend staging target and no access to
+  the connected UrbanAgent Vercel project.
+- Added narrow backend staging preparation: lockfile production install,
+  build-time data verification, health check, safe Docker context, and staging
+  environment variable names.
+- Ran backend install, data verifier, 12 focused tests, production-config
+  startup/loader/CORS smoke, and frontend install/build. Temporary backend
+  process was stopped.
+- Did not deploy or alter production, DNS, Firebase, canonical data, Phase 4
+  scheduler, or frontend source.
+- Real deployed staging E2E remains blocked by platform access. Stage 5D was not
+  started.
+## 2026-08-14 - Phase 5 Stage 5C safe Hugging Face auto-deploy setup
+
+- Verified the existing public Docker Space `nhttngy/back-end`, app port 7860,
+  running state, and exact rollback revision without reading any secret.
+- Inspected startup imports, runtime file reads, current Space tree, Git LFS
+  paths and sizes, Firebase environment resolution, CORS handling, canonical
+  manifests, product tests, and official Hugging Face GitHub Action guidance.
+- Classified legacy CSVs, model weights/images, Phase 4 data, tests, migrations,
+  Functions and research/config files as outside the required traveler payload.
+- Added a tracked-file allowlist, deterministic payload builder, packaging test,
+  and GitHub workflow targeting only the existing Space.
+- Gated first deployment behind `workflow_dispatch`; push-to-main validation
+  cannot upload until `HF_AUTO_DEPLOY_ENABLED=true` is explicitly configured.
+- Built the payload under `D:\UrbanAgent-temp`, installed locked production
+  dependencies, verified 4173 POIs/SHA, ran 13 focused tests, and passed isolated
+  startup/loader/exact-origin CORS smoke. The temporary server was stopped.
+- Did not execute the workflow, deploy remotely, modify Space variables/secrets,
+  create a Space, mutate canonical data, touch production Firebase, or start
+  Stage 5D.

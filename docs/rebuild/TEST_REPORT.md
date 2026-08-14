@@ -1518,3 +1518,33 @@ replan: 1.6 seconds
   trip-preview stops 6, configured production CORS origin PASS.
 - Canonical SHA-256 remained
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+## Phase 5 Stage 5C - 2026-08-14
+
+- Backend `npm ci`: PASS; 0 production install vulnerabilities reported.
+- Backend `npm run data:verify`: PASS; 4173 POIs, expected SHA, 0 duplicates,
+  0 invalid core records.
+- Backend focused pre-deploy suite: 12 passed, 0 failed.
+- Backend production-config process smoke: PASS; loader 4173, configured CORS
+  origin allowed, unapproved origin not trusted, process stopped.
+- Frontend `npm ci`: PASS; existing 6 advisories reported (1 low, 5 high).
+- Frontend `npm run build`: PASS; existing 1.41 MB chunk warning remains.
+- Docker image build/check: NOT RUN; Docker CLI exists but no local daemon or
+  standard Docker Desktop installation was available.
+- Deployed backend/frontend staging smoke: NOT RUN, blocked by platform access.
+- Deployed traveler scenarios, map, desktop/mobile, errors, cold start,
+  performance, logs, and saved trips: PENDING, not counted as local passes.
+## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
+
+- Runtime payload preparation: PASS; 77 tracked allowlisted files plus one
+  generated SHA manifest, with no LFS pointer or forbidden source directory.
+- Payload deterministic packaging test plus focused product tests: 13 passed,
+  0 failed, 0 skipped.
+- Payload `npm ci --omit=dev`: PASS; 298 packages, 0 vulnerabilities reported.
+- Payload `npm run data:verify`: PASS; 4173 POIs, 7220189 bytes, 0 duplicate
+  canonical IDs, 0 invalid core records, approved SHA matched.
+- Payload production-config startup: PASS on isolated port; exact Vercel origin
+  received CORS permission and an unapproved origin did not.
+- Firebase credentials were not injected into the local smoke process.
+- Local Docker build: NOT RUN because no Docker daemon is available.
+- Hugging Face remote sync: NOT RUN by design; branch review and first manual
+  workflow dispatch remain required.

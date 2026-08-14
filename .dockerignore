@@ -1,0 +1,12 @@
+.git
+.gitignore
+node_modules
+npm-debug.log*
+.env
+.env.*
+!.env.example
+coverage
+storage/uploads/*
+data/raw
+data/spikes
+artifacts/spikes
