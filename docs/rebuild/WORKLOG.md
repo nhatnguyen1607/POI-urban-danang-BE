@@ -2579,3 +2579,28 @@ Results:
 - Canonical bytes, runtime repository selection, production DB/Firebase and
   scheduler policy were not changed.
 - Clean backend deployment remains blocked by exhausted Git LFS budget.
+## 2026-08-14 - Phase 5 Stage 5B runtime data packaging
+
+- Merged validated Stage 5A backend PR #34 and frontend PR #9 using merge commits.
+- Inspected `.gitattributes`, LFS pointer/object state, canonical size/SHA,
+  loader/startup behavior, Docker context, CORS, frontend API URL configuration,
+  environment-variable names, and tracked sensitive-file names without reading
+  secret values.
+- Selected Strategy A because the exact 7220189-byte canonical is suitable for
+  normal Git. Removed only its LFS filter and added `-text`; all other LFS rules
+  were preserved. No history rewrite or canonical reserialization occurred.
+- Added the runtime dataset manifest, read-only verifier, startup fail-closed
+  guard, exact-origin production CORS configuration, and focused tests.
+- Verified the staged Git blob itself reconstructs to the approved SHA and size.
+- Ran data verification, Phase 0 loader checks, product/replan checks,
+  saved-trip/lifecycle checks, and the full backend suite. Results are recorded
+  in `TEST_REPORT.md`.
+- Pushed implementation commit `b068cfcfdf575c1ca69b96f85ef13f5851c2ae8c`.
+- Created remote clean clone
+  `D:\UrbanAgent-temp\stage5b-clean-clone-20260814-114504\backend` with LFS
+  smudge disabled. It independently obtained the normal-Git canonical and passed
+  install, verifier, startup, EDA, recommendation, trip-preview, CORS, replan,
+  and saved-trip validation.
+- Frontend source was not changed; production API base URL was already
+  environment-configurable.
+- Stage 5C was not started.

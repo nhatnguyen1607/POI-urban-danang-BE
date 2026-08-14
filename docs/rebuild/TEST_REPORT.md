@@ -1502,3 +1502,19 @@ recommendation: 1.6-2.3 seconds across five bounded scenarios
 trip preview: 1.5-1.8 seconds
 replan: 1.6 seconds
 ```
+## Phase 5 Stage 5B - 2026-08-14
+
+- `npm.cmd run data:verify`: PASS; 4173 POIs, 0 duplicate canonical IDs,
+  0 invalid core records, expected headers readable, approved size/SHA matched.
+- `node --test tests/phase5/phase5RuntimeDataPackaging.test.js`: 4 passed,
+  0 failed.
+- `node --test tests/phase0/phase0CanonicalData.test.js`: 10 passed, 0 failed.
+- Focused Stage 5A product smoke: 6 passed, 0 failed.
+- Focused saved-trip and lifecycle smoke: 2 passed, 0 failed.
+- Full `npm.cmd test`: 52 total, 51 passed, 0 failed, 1 guarded PostGIS skip.
+- True clean clone with `GIT_LFS_SKIP_SMUDGE=1`: canonical retrieval PASS,
+  `npm ci` PASS, verifier PASS, 12 focused tests PASS.
+- Clean-clone HTTP smoke: startup PASS, EDA 4173, recommendations 6,
+  trip-preview stops 6, configured production CORS origin PASS.
+- Canonical SHA-256 remained
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.

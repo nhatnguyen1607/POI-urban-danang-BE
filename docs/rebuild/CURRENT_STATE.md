@@ -561,3 +561,20 @@ Date: 2026-08-14 (+07:00).
 - Deployment blocker: a clean clone cannot download the canonical CSV because
   the Git LFS budget is exceeded.
 - Next proposed work: `FIX CONCRETE DEPLOYMENT BLOCKER` only.
+## Phase 5 Stage 5B - 2026-08-14
+
+- Status: `PASSED` on branch `phase5/stage5b-runtime-data-packaging`.
+- Stage 5A merged through backend PR #34 (`5da2ee1172e75f1011aa9aa70f8b8bed93bf8ffb`)
+  and frontend PR #9 (`44ba7a323a966cba034df47ede1a57cfcf620c1a`).
+- Canonical runtime data is a normal Git blob, not an LFS pointer.
+- Canonical contract remains 4173 POIs, 7220189 bytes, SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- `npm run data:verify` and startup fail closed on missing, pointer, size, hash,
+  schema, duplicate-ID, or invalid-record failures.
+- True clean clone with LFS smudge disabled passed install, verifier, startup,
+  loader, recommendation, trip-preview, replan, and saved-trip checks.
+- CSV remains the default runtime; PostgreSQL remains explicit opt-in.
+- Production CORS now requires exact origins from
+  `URBANAGENT_CORS_ALLOWED_ORIGINS`; frontend API URL was already configurable.
+- Frontend changes: none.
+- Next proposed step: Stage 5C staging deployment. Stage 5C has not started.
