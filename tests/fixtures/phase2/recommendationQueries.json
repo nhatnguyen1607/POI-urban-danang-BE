@@ -1,6 +1,6 @@
 {
   "fixtureVersion": "phase2-recommendation-smoke-v1",
-  "datasetSha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+  "datasetSha256": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4",
   "notes": [
     "This fixture is a smoke and evaluation-foundation fixture only.",
     "It is not a scored relevance benchmark and must not be used for quality superiority claims."

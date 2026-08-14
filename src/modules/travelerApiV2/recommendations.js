@@ -1,5 +1,6 @@
 const { recommendPOIs } = require('../../services/poiRetrievalService');
 const { normalizeText } = require('../../services/poiDataService');
+const { categoryMatchScore, detectIntents } = require('../../services/intentService');
 const {
   DEFAULT_RECOMMENDATION_LIMIT,
   MAX_RECOMMENDATION_LIMIT,
@@ -113,12 +114,63 @@ function recommendationScore(item) {
   return Number.isFinite(score) ? score : 0;
 }
 
+function recommendationRankingScore(item) {
+  const rawScore = Number(item?.scoreRaw);
+  if (Number.isFinite(rawScore)) return rawScore;
+  return recommendationScore(item) / 100;
+}
+
 function rankRecommendationItems(items = []) {
   return [...items].sort((a, b) => (
-    recommendationScore(b) - recommendationScore(a) ||
+    recommendationRankingScore(b) - recommendationRankingScore(a) ||
     recommendationName(a).localeCompare(recommendationName(b), 'en') ||
     recommendationId(a).localeCompare(recommendationId(b), 'en')
   ));
+}
+
+function normalizedWords(value) {
+  return normalizeText(value)
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function hasExplicitNameMention(item, query) {
+  const queryText = ` ${normalizedWords(query).join(' ')} `;
+  const name = String(item?.poi?.name || item?.name || item?.title || '').split(',')[0];
+  const words = normalizedWords(name);
+  for (let size = Math.min(5, words.length); size >= 3; size -= 1) {
+    for (let index = 0; index <= words.length - size; index += 1) {
+      if (queryText.includes(` ${words.slice(index, index + size).join(' ')} `)) return true;
+    }
+  }
+  return false;
+}
+
+function rankRecommendationItemsForQuery(items = [], query = '', limit = items.length) {
+  const ranked = rankRecommendationItems(items);
+  const result = [];
+  const used = new Set();
+  const add = (item) => {
+    const id = recommendationId(item);
+    if (!id || used.has(id) || result.length >= limit) return false;
+    used.add(id);
+    result.push(item);
+    return true;
+  };
+
+  ranked.filter((item) => hasExplicitNameMention(item, query)).forEach(add);
+  const buckets = detectIntents(query).map((intent) => ranked.filter((item) => (
+    categoryMatchScore(item?.poi || item, intent) === 1
+  )));
+  let bucketIndex = 0;
+  while (result.length < limit && buckets.some((bucket) => bucketIndex < bucket.length)) {
+    buckets.forEach((bucket) => add(bucket[bucketIndex]));
+    bucketIndex += 1;
+  }
+  ranked.forEach(add);
+  return result;
 }
 
 function buildReasonCodes(recommendation) {
@@ -206,7 +258,7 @@ async function getTravelerRecommendationCandidates({
     },
     limit: maxCandidateLimit,
   });
-  const ranked = rankRecommendationItems(recommendation.results || []).slice(0, limit);
+  const ranked = rankRecommendationItemsForQuery(recommendation.results || [], query, limit);
   return {
     recommendations: ranked.map(serializeRecommendationItem),
     query: recommendation.query || query,
@@ -222,6 +274,7 @@ module.exports = {
   getTravelerRecommendations,
   parseRecommendationLimit,
   rankRecommendationItems,
+  rankRecommendationItemsForQuery,
   serializeRecommendationItem,
   validateRecommendationRequest,
 };

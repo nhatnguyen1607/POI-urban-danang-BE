@@ -67,6 +67,7 @@ const {
 } = require('./services/firestorePersistenceService');
 const { getFirebaseAdminDiagnostics, getFirestoreDb, isFirebaseAdminReady } = require('./config/firebaseAdmin');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
+const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -753,6 +754,8 @@ app.get('/api/weather/forecast', async (req, res) => {
     });
   }
 });
+
+app.use(malformedJsonErrorHandler);
 
 const PORT = process.env.PORT || 7860;
 app.listen(PORT,'0.0.0.0', async () => {

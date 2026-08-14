@@ -540,3 +540,24 @@ Cleanup:
 - Disposable PostGIS container and volume were removed after parity validation.
 
 Phase 2 is closed.
+
+## Phase 5 Stage 5A State
+
+`PASSED_WITH_DEPLOYMENT_BLOCKER`
+
+Date: 2026-08-14 (+07:00).
+
+- Backend branch: `phase5/stage5a-product-e2e`.
+- Frontend branch: `phase5/stage5a-product-e2e`.
+- Runtime: `4173` unique POIs, `0` invalid; all seven Stage 4S POIs load.
+- Canonical SHA-256:
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- Five traveler scenarios, itinerary, replan, saved-trip lifecycle, Leaflet
+  synchronization, desktop and mobile browser checks: PASS.
+- Backend tests: `48` total, `47` passed, `0` failed, `1` guarded PostGIS skip.
+- Frontend production build and scoped lint: PASS.
+- CSV remains default; PostgreSQL remains opt-in; production DB and Firebase
+  were not accessed.
+- Deployment blocker: a clean clone cannot download the canonical CSV because
+  the Git LFS budget is exceeded.
+- Next proposed work: `FIX CONCRETE DEPLOYMENT BLOCKER` only.

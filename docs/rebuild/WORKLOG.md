@@ -2512,3 +2512,70 @@ Conclusions:
   enrichment rather than broad local coverage.
 - Recommended Stage 4F direction is provenance/license hardening only; it was
   not started.
+
+## 2026-08-14 10:20:00 +07:00 - Phase 5 Stage 5A
+
+Scope:
+
+- Validate the real traveler product against the 4173-POI runtime.
+- Fix only evidenced product, contract, error-state and deployment-readiness
+  defects.
+
+Read/validation commands:
+
+```text
+git fetch/status/diff in fresh backend and frontend clones
+git lfs pull and git check-attr/check-ignore diagnostics
+npm.cmd ci in both clones
+node --check on changed backend files
+node --test tests/phase5/phase5ProductE2E.test.js
+npm.cmd test
+npm.cmd run build
+npx.cmd eslint src/pages/urban-agent/TripPreviewDayMap.tsx src/utils/apiClient.ts
+local HTTP diagnostics for five traveler scenarios, replan, saved trips and errors
+headless Chrome E2E at desktop and 390x844 mobile viewport
+```
+
+Changed backend files:
+
+```text
+package.json
+src/middleware/malformedJsonError.js
+src/modules/pois/postgresDiagnostics.js
+src/modules/travelerApiV2/recommendations.js
+src/server.js
+src/services/agentMemoryService.js
+src/services/intentService.js
+src/services/poiRetrievalService.js
+src/services/rerankerService.js
+tests/fixtures/phase2/recommendationQueries.json
+tests/fixtures/phase2/tripPreviewQueries.json
+tests/phase1/phase1DataPlatform.test.js
+tests/phase1/phase1PostgresIntegration.test.js
+tests/phase2/phase2TravelerApiV2Batch1.test.js
+tests/phase2/phase2TravelerApiV2Batch2.test.js
+tests/phase2/phase2TravelerApiV2Batch3.test.js
+tests/phase5/phase5ProductE2E.test.js
+docs/rebuild/PHASE5_STAGE5A_PRODUCT_E2E.md
+docs/rebuild/CURRENT_STATE.md
+docs/rebuild/TEST_REPORT.md
+docs/rebuild/WORKLOG.md
+```
+
+Changed frontend files:
+
+```text
+src/pages/urban-agent/TripPreviewDayMap.tsx
+src/pages/urban-agent/UrbanAgentPage.tsx
+src/utils/apiClient.ts
+```
+
+Results:
+
+- Canonical `4173`/SHA and all seven Stage 4S entities: PASS.
+- Five scenarios, replan, saved-trip and browser E2E: PASS.
+- Backend tests: `47` passed, `0` failed, `1` guarded skip.
+- Frontend build and scoped lint: PASS.
+- Canonical bytes, runtime repository selection, production DB/Firebase and
+  scheduler policy were not changed.
+- Clean backend deployment remains blocked by exhausted Git LFS budget.

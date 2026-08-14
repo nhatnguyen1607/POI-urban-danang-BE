@@ -11,8 +11,8 @@ const { getCityConfig, bboxToPolygonWkt } = require('../../src/modules/cities/ci
 const { mapPostgresPoiRow } = require('../../src/modules/pois/postgresPoiRepository');
 
 const DEFAULT_CITY_ID = 'da-nang';
-const EXPECTED_ROWS = 4166;
-const EXPECTED_HASH = '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae';
+const EXPECTED_ROWS = 4173;
+const EXPECTED_HASH = 'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4';
 
 test('Phase 1 migration defines the required PostGIS canonical POI foundation', () => {
   const migrationPath = path.join(__dirname, '..', '..', 'migrations', 'phase1', '001_core_postgis_schema.sql');

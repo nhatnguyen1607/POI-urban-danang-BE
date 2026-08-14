@@ -124,7 +124,7 @@ test('Phase 2 POI serializer preserves canonical public semantics', async () => 
   const repository = new CanonicalCsvPoiRepository();
   const pois = await repository.loadAll();
 
-  assert.equal(pois.length, 4166);
+  assert.equal(pois.length, 4173);
   assert.equal(pois.some((poi) => poi.entityType && poi.entityType !== 'poi'), false);
 
   const merged = pois.find((poi) => poi.source === 'google_maps+foody');
@@ -278,7 +278,7 @@ test('Phase 2 Batch 1 traveler API endpoints expose CSV-backed city and POI cont
     const status = await requestJson({ port, path: `/api/v2/cities/${DEFAULT_CITY_ID}/status` });
     assert.equal(status.statusCode, 200);
     assert.equal(status.body.meta.cityId, DEFAULT_CITY_ID);
-    assert.equal(status.body.data.dataset.applicationPoiCount, 4166);
+    assert.equal(status.body.data.dataset.applicationPoiCount, 4173);
     assert.equal(status.body.data.dataset.contractVersion, CONTRACT_VERSION);
     assert.equal(status.body.data.qualitySummary.adminBoundary.status, 'pending_spatial_join');
 
@@ -356,14 +356,14 @@ test('Phase 2 Batch 1 traveler API endpoints expose CSV-backed city and POI cont
       path: `/api/v2/pois/search?cityId=${DEFAULT_CITY_ID}&source=all&limit=1`,
     });
     assert.equal(all.statusCode, 200);
-    assert.equal(all.body.data.page.total, 4166);
+    assert.equal(all.body.data.page.total, 4173);
 
     const canonical = await requestJson({
       port,
       path: `/api/v2/pois/search?cityId=${DEFAULT_CITY_ID}&source=canonical&limit=1`,
     });
     assert.equal(canonical.statusCode, 200);
-    assert.equal(canonical.body.data.page.total, 4166);
+    assert.equal(canonical.body.data.page.total, 4173);
 
     const detailId = google.body.data.pois[0].id;
     const detail = await requestJson({ port, path: `/api/v2/pois/${detailId}?cityId=${DEFAULT_CITY_ID}` });

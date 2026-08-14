@@ -27,12 +27,12 @@ const { setPoiRepositoryForTests } = require('../../src/services/poiRepository')
 
 const DEFAULT_CITY_ID = 'da-nang';
 const EXPECTED_COUNTS = {
-  poi_entities: 4166,
-  source_records: 4166,
-  external_ids: 8337,
+  poi_entities: 4173,
+  source_records: 4173,
+  external_ids: 8344,
   aliases: 985,
   images: 16246,
-  review_summaries: 4166,
+  review_summaries: 4173,
 };
 
 function requestJson({ port, method = 'GET', path, body, token }) {
@@ -224,7 +224,7 @@ test('Phase 1 disposable Postgres migration/import/rollback/repository integrati
     assert.equal(pgPois.length, csvPois.length);
     assert.equal(filterPoisForEdaSource(pgPois, 'google_maps').length, 3946);
     assert.equal(filterPoisForEdaSource(pgPois, 'foody').length, 225);
-    assert.equal(filterPoisForEdaSource(pgPois, 'all').length, 4166);
+    assert.equal(filterPoisForEdaSource(pgPois, 'all').length, 4173);
 
     const pgMap = byId(pgPois);
     for (const [label, csvPoi] of Object.entries(pickCsvExamples(csvPois))) {
