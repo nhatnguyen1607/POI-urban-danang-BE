@@ -7,6 +7,9 @@ const { getProfile, scoreCategoryPreference, scorePoiPreference } = require('./a
 
 const ROOT_DIR = path.resolve(__dirname, '..', '..');
 const RERANKER_PATH = path.join(ROOT_DIR, 'artifacts', 'reranker', 'agent_reranker_v1.json');
+const MAX_ARTIFACT_DELTA = 0.12;
+const MAX_MEMORY_DELTA = 0.16;
+const MAX_PENALTY_DELTA = 0.24;
 
 let cache = null;
 
@@ -44,8 +47,8 @@ function getCategoryBoost(reranker, poi) {
   }, 0);
 }
 
-function getIntentBoost(reranker, query, poi) {
-  const intents = detectIntents(query);
+function getIntentBoost(reranker, query, poi, queryIntents = null) {
+  const intents = queryIntents || detectIntents(query);
   const intentWeights = reranker?.intentCategoryWeights || {};
   const category = normalizeText(poi.category);
   return intents.reduce((sum, intent) => {
@@ -57,8 +60,8 @@ function getIntentBoost(reranker, query, poi) {
   }, 0);
 }
 
-function getIntentPoiPenalty(reranker, query, poi) {
-  const intents = detectIntents(query);
+function getIntentPoiPenalty(reranker, query, poi, queryIntents = null) {
+  const intents = queryIntents || detectIntents(query);
   const penalties = reranker?.intentPoiPenalties || {};
   return intents.reduce((sum, intent) => {
     return sum + valueFromMap(penalties[intent.id], poi.id);
@@ -71,17 +74,22 @@ function applyReranker(scoredItem, query, context = {}) {
   if (!reranker && !profile) return scoredItem;
 
   const poi = scoredItem.poi;
+  const queryIntents = scoredItem.queryIntents || null;
   const poiBoost = valueFromMap(reranker?.poiWeights, poi.id);
   const categoryBoost = getCategoryBoost(reranker, poi);
-  const intentBoost = getIntentBoost(reranker, query, poi);
-  const penalty = valueFromMap(reranker?.poiPenalties, poi.id) + getIntentPoiPenalty(reranker, query, poi);
+  const intentBoost = getIntentBoost(reranker, query, poi, queryIntents);
+  const penalty = valueFromMap(reranker?.poiPenalties, poi.id)
+    + getIntentPoiPenalty(reranker, query, poi, queryIntents);
   const memoryPoiBoost = scorePoiPreference(profile, poi.id);
   const memoryCategoryBoost = scoreCategoryPreference(profile, poi.category);
   const learningRate = reranker?.learningRate || 0.08;
   const memoryRate = profile?.memoryRate || 0.08;
-  const delta = clamp01((poiBoost + categoryBoost + intentBoost) * learningRate);
-  const memoryDelta = Math.max(-0.32, Math.min(0.32, (memoryPoiBoost + memoryCategoryBoost) * memoryRate));
-  const penaltyDelta = clamp01(penalty * learningRate);
+  const delta = Math.min(MAX_ARTIFACT_DELTA, clamp01((poiBoost + categoryBoost + intentBoost) * learningRate));
+  const memoryDelta = Math.max(
+    -MAX_MEMORY_DELTA,
+    Math.min(MAX_MEMORY_DELTA, (memoryPoiBoost + memoryCategoryBoost) * memoryRate),
+  );
+  const penaltyDelta = Math.min(MAX_PENALTY_DELTA, clamp01(penalty * learningRate));
   const score = clamp01(scoredItem.score + delta + memoryDelta - penaltyDelta);
 
   return {

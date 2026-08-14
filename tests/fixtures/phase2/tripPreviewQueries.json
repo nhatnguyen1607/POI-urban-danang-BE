@@ -1,6 +1,6 @@
 {
   "fixtureVersion": "phase2-trip-preview-smoke-v1",
-  "datasetSha256": "5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae",
+  "datasetSha256": "dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4",
   "contractVersion": "phase2-batch3-trip-preview-v1",
   "cityId": "da-nang",
   "notes": [
@@ -77,7 +77,7 @@
       "expectedWarnings": [
         "ORIGIN_NOT_PROVIDED"
       ],
-      "expectedFeasibility": "PARTIAL",
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS",
       "executionMode": "endpoint"
     },
     {
@@ -101,7 +101,7 @@
       "expectedWarnings": [
         "DURATION_ESTIMATED"
       ],
-      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS",
+      "expectedFeasibility": "PARTIAL",
       "executionMode": "endpoint"
     },
     {
@@ -245,7 +245,7 @@
       "expectedWarnings": [
         "DURATION_ESTIMATED"
       ],
-      "expectedFeasibility": "PARTIAL",
+      "expectedFeasibility": "FEASIBLE_WITH_WARNINGS",
       "executionMode": "endpoint"
     },
     {

@@ -28,7 +28,10 @@ function resetMemoryCache() {
 }
 
 function resolveMemoryKey(context = {}) {
-  return context.userId || context.personaId || context.sessionId || 'global';
+  return context.userId
+    || context.personaId
+    || context.sessionId
+    || (context.useGlobalMemory === true ? 'global' : null);
 }
 
 function getProfile(context = {}) {
@@ -48,7 +51,8 @@ function getProfile(context = {}) {
   const memory = loadMemory();
   if (!memory) return null;
   const key = resolveMemoryKey(context);
-  return memory.profiles[key] || memory.profiles.global || null;
+  if (!key) return null;
+  return memory.profiles[key] || null;
 }
 
 function scoreCategoryPreference(profile, category) {

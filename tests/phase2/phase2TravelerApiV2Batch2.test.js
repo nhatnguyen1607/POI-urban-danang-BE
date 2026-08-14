@@ -91,7 +91,7 @@ test('Phase 2 Batch 2 recommendation fixture is a smoke foundation, not a qualit
   assert.equal(fixture.fixtureVersion, 'phase2-recommendation-smoke-v1');
   assert.equal(
     fixture.datasetSha256,
-    '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae',
+    'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4',
   );
   assert.equal(Array.isArray(fixture.queries), true);
   assert.equal(fixture.queries.length > 0, true);

@@ -1475,3 +1475,30 @@ Runtime changed: no
 Limitation: this is a small, partially canonical-overlap stress sample, not a
 city-wide accuracy benchmark. The Stage 4D manifest does not yet promote
 Commons per-file metadata to separate manifest entries.
+
+## 2026-08-14 - Phase 5 Stage 5A Product E2E
+
+```text
+Canonical loader: PASS, 4173 unique POIs, 0 invalid, Stage 4S 7/7 loadable
+Canonical SHA-256: dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4
+Traveler scenarios: 5 passed, 0 failed
+Recommendation/preview/replan HTTP diagnostics: PASS
+Saved-trip memory-adapter lifecycle and ownership isolation: PASS
+Malformed/empty/unauthenticated errors: PASS, no raw stack exposed
+Backend unavailable browser state: PASS, retry remains available
+Browser E2E desktop/mobile/map: PASS, no final console/runtime errors
+Backend syntax checks: PASS
+npm.cmd test: PASS, 48 total, 47 passed, 0 failed, 1 guarded PostGIS skip
+npm.cmd run build: PASS
+npx.cmd eslint src/pages/urban-agent/TripPreviewDayMap.tsx src/utils/apiClient.ts: PASS
+Clean frontend setup/build: PASS
+Clean backend canonical retrieval: FAIL, Git LFS budget exceeded
+```
+
+Observed local endpoint latency after hot-path optimization:
+
+```text
+recommendation: 1.6-2.3 seconds across five bounded scenarios
+trip preview: 1.5-1.8 seconds
+replan: 1.6 seconds
+```

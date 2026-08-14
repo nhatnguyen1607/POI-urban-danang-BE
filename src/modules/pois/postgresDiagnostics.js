@@ -157,12 +157,12 @@ async function getPhase1DbDiagnostics(pool) {
 
 function assertExpectedPhase1Diagnostics(diagnostics) {
   const expectedCounts = {
-    poi_entities: 4166,
-    source_records: 4166,
-    external_ids: 8337,
+    poi_entities: 4173,
+    source_records: 4173,
+    external_ids: 8344,
     aliases: 985,
     images: 16246,
-    review_summaries: 4166,
+    review_summaries: 4173,
   };
   for (const [key, expected] of Object.entries(expectedCounts)) {
     if (diagnostics.counts[key] !== expected) {

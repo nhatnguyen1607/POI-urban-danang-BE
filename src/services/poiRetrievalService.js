@@ -1,5 +1,5 @@
 const { DEFAULT_CITY_ID, loadPOIs, normalizeText } = require('./poiDataService');
-const { detectIntent, categoryMatchScore } = require('./intentService');
+const { detectIntents, categoryMatchScore } = require('./intentService');
 const {
   clamp01,
   haversineKm,
@@ -108,15 +108,47 @@ function explicitNegativePenalty(poi, context = {}) {
   return keywordHitScore(poi, filters);
 }
 
-function scorePOI(poi, query, context = {}, semanticScore = null) {
+function explicitNameScore(poi, queryText) {
+  const nameWords = normalizeText(String(poi.name || '').split(',')[0])
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (nameWords.length < 3) return 0;
+  for (let size = Math.min(5, nameWords.length); size >= 3; size -= 1) {
+    for (let index = 0; index <= nameWords.length - size; index += 1) {
+      const phrase = nameWords.slice(index, index + size).join(' ');
+      if (queryText.includes(` ${phrase} `)) return clamp01(size / nameWords.length);
+    }
+  }
+  return 0;
+}
+
+function buildQueryAnalysis(query) {
   const normalizedQuery = normalizeText(query);
-  const intent = detectIntent(query);
+  return {
+    normalizedQuery,
+    explicitNameQuery: ` ${normalizedQuery.replace(/[^a-z0-9]+/g, ' ').trim()} `,
+    intents: detectIntents(query),
+  };
+}
+
+function scorePOI(poi, query, context = {}, semanticScore = null, queryAnalysis = null) {
+  const analysis = queryAnalysis || buildQueryAnalysis(query);
+  const { normalizedQuery, intents } = analysis;
+  const intent = intents[0] || null;
   const userLocation = validLocation(context.location);
   const distanceKm = userLocation
     ? haversineKm(userLocation, { lat: poi.lat, lon: poi.lon })
     : null;
   const semantic = keywordScore(normalizedQuery, poi.normalized);
-  const category = categoryMatchScore(poi, intent);
+  const intentCategoryScores = Object.fromEntries(
+    intents.map((detectedIntent) => [detectedIntent.id, categoryMatchScore(poi, detectedIntent)]),
+  );
+  const category = intents.length
+    ? Math.max(...Object.values(intentCategoryScores))
+    : 0.5;
+  const explicitName = explicitNameScore(poi, analysis.explicitNameQuery);
   const rating = ratingScore(poi.rating);
   const distance = distanceKm === null ? 0.5 : distanceScore(distanceKm, context.maxDistanceKm || 14);
   const review = reviewSignal(poi.reviewCount);
@@ -139,7 +171,9 @@ function scorePOI(poi, query, context = {}, semanticScore = null) {
       distance * 0.11 +
       review * 0.08;
   const finalScore = clamp01(
-    baseScore - Math.min(memoryCategoryPenalty * 0.08 + explicitPenalty * 0.16, 0.34),
+    baseScore
+      + explicitName * 0.22
+      - Math.min(memoryCategoryPenalty * 0.08 + explicitPenalty * 0.16, 0.34),
   );
 
   const warnings = [];
@@ -154,6 +188,7 @@ function scorePOI(poi, query, context = {}, semanticScore = null) {
       semantic,
       modelSemantic: hasModelSemantic ? semanticScore : null,
       category,
+      explicitName,
       preference,
       rating,
       distance,
@@ -163,6 +198,8 @@ function scorePOI(poi, query, context = {}, semanticScore = null) {
     },
     warnings,
     intent,
+    queryIntents: intents,
+    intentCategoryScores,
   };
 }
 
@@ -208,16 +245,41 @@ function toRecommendation(scored) {
   };
 }
 
+function selectDiverseScoredItems(items, query, limit) {
+  const result = [];
+  const used = new Set();
+  const add = (item) => {
+    const id = String(item?.poi?.id || '');
+    if (!id || used.has(id) || result.length >= limit) return false;
+    used.add(id);
+    result.push(item);
+    return true;
+  };
+
+  items.filter((item) => item.signals?.explicitName > 0).forEach(add);
+  const buckets = detectIntents(query).map((intent) => items.filter((item) => (
+    item.intentCategoryScores?.[intent.id] === 1
+  )));
+  let bucketIndex = 0;
+  while (result.length < limit && buckets.some((bucket) => bucketIndex < bucket.length)) {
+    buckets.forEach((bucket) => add(bucket[bucketIndex]));
+    bucketIndex += 1;
+  }
+  items.forEach(add);
+  return result;
+}
+
 async function recommendPOIs({ query, context = {}, limit = 8 }) {
   const semanticConfig = context.semanticModel || {};
   const semanticEnabled = semanticConfig.enabled === true;
   const cityId = context.cityId || DEFAULT_CITY_ID;
   const pois = await loadPOIs({ cityId });
+  const queryAnalysis = buildQueryAnalysis(query);
   const candidateLimit = semanticConfig.candidateLimit || 200;
   const semanticCandidates = semanticEnabled
     ? pois
         .filter((poi) => !isPoiDisliked(poi, context))
-        .map((poi) => scorePOI(poi, query, context))
+        .map((poi) => scorePOI(poi, query, context, null, queryAnalysis))
         .map((item) => applyReranker(item, query, context))
         .sort((a, b) => b.score - a.score)
         .slice(0, candidateLimit)
@@ -251,10 +313,10 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
         reason: 'Semantic model tool was not requested.',
         scores: new Map(),
       };
-  const scored = pois
+  const scoredItems = pois
     .filter((poi) => !isPoiDisliked(poi, context))
     .filter((poi) => !semanticTool.available || semanticCandidateIds.has(String(poi.id)))
-    .map((poi) => scorePOI(poi, query, context, semanticTool.scores.get(String(poi.id))))
+    .map((poi) => scorePOI(poi, query, context, semanticTool.scores.get(String(poi.id)), queryAnalysis))
     .map((item) => applyReranker(item, query, context))
     .filter((item) => item.score > 0.08)
     .sort((a, b) => {
@@ -262,9 +324,8 @@ async function recommendPOIs({ query, context = {}, limit = 8 }) {
       if (scoreDelta !== 0) return scoreDelta;
       return (b.reranker?.delta || 0) - (a.reranker?.delta || 0);
     })
-    .filter((item, index, items) => items.findIndex((candidate) => candidate.poi.id === item.poi.id) === index)
-    .slice(0, limit)
-    .map(toRecommendation);
+    .filter((item, index, items) => items.findIndex((candidate) => candidate.poi.id === item.poi.id) === index);
+  const scored = selectDiverseScoredItems(scoredItems, query, limit).map(toRecommendation);
 
   return {
     role: 'traveler',

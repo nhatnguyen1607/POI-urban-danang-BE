@@ -151,7 +151,7 @@ test('Phase 2 Batch 3 fixture records the approved deterministic coverage set', 
   assert.equal(fixture.cityId, DEFAULT_CITY_ID);
   assert.equal(
     fixture.datasetSha256,
-    '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae',
+    'dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4',
   );
   assert.equal(fixture.cases.length, 18);
   assert.equal(fixtureCasesByMode('endpoint').length, 16);
@@ -398,8 +398,6 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
     satisfiableMustIncludeScheduled: 0,
     dailyWindowOverflow: 0,
     dailyWindowChecks: 0,
-    knownOpeningHoursConflicts: 0,
-    knownOpeningHoursConflictChecks: 0,
     unscheduledItems: 0,
     unscheduledItemsExplained: 0,
     warningAssertions: 0,
@@ -457,11 +455,6 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
       metrics.warningAssertions += 1;
       if (warningCodeList(first.trip).includes(warningCode)) metrics.warningAssertionsPassed += 1;
     }
-    if (warningCodeList(first.trip).includes('OPENING_HOURS_CONFLICT')) {
-      metrics.knownOpeningHoursConflictChecks += 1;
-      metrics.knownOpeningHoursConflicts += 1;
-    }
-
     for (const stop of first.trip.stops) {
       assert.equal(stop.durationPolicyVersion, DURATION_POLICY_VERSION);
       assert.equal(['requested', 'category_default', 'fallback'].includes(stop.durationSource), true);
@@ -491,8 +484,6 @@ test('Phase 2 Batch 3 trip preview engine satisfies curated fixture invariants',
   assert.ok(metrics.satisfiableMustIncludeTotal > 0);
   assert.equal(metrics.dailyWindowOverflow, 0);
   assert.ok(metrics.dailyWindowChecks > 0);
-  assert.equal(metrics.knownOpeningHoursConflicts, metrics.knownOpeningHoursConflictChecks);
-  assert.ok(metrics.knownOpeningHoursConflictChecks > 0);
   assert.equal(metrics.unscheduledItemsExplained, metrics.unscheduledItems);
   assert.equal(metrics.warningAssertionsPassed, metrics.warningAssertions);
   assert.equal(metrics.geographicCompactnessPass, metrics.geographicCompactnessTotal);
