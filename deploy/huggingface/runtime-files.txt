@@ -1,0 +1,37 @@
+# Hugging Face Space runtime allowlist. Entries must be tracked by Git.
+.dockerignore
+Dockerfile
+README.md
+package.json
+package-lock.json
+requirements.txt
+
+# Product runtime and startup verification. Phase 4 preparation modules are
+# intentionally absent because npm start does not import them.
+src/server.js
+src/config/
+src/encoder/
+src/expert_system/
+src/infrastructure/db/
+src/middleware/
+src/modules/cities/
+src/modules/pois/
+src/modules/travelerApiV2/
+src/services/
+src/inference.py
+scripts/verify_runtime_dataset.js
+
+# Approved runtime POI data and manifests.
+data/canonical/runtime_dataset_manifest.json
+data/canonical/urbanagent_poi_master_v1.csv
+data/canonical/urbanagent_poi_master_v1_manifest.json
+
+# Runtime scoring memory and deterministic expert-system rules.
+artifacts/memory/agent_memory_v1.json
+artifacts/reranker/agent_reranker_v1.json
+ES-system/rule/
+
+# Small status metadata used by existing API surfaces.
+data/synthetic/urbanagent_synthetic_v1.summary.json
+data/training/agent_representation_pairs_v1.summary.json
+reports/evaluation/learning_loop_eval_latest.json

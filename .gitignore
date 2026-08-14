@@ -2,6 +2,7 @@
 /node_modules/
 /functions/node_modules/
 /functions/lib/
+/.hf-deploy/
 /venv_new/
 /.venv/
 /venv/

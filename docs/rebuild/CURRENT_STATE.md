@@ -597,3 +597,20 @@ Date: 2026-08-14 (+07:00).
 - Firebase staging credentials are unavailable; saved trips are blocked for
   staging rather than bypassed.
 - Production was not deployed or modified. Stage 5D has not started.
+## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
+
+- Latest status: `SAFE_AUTO_DEPLOY_PREPARED_FOR_REVIEW`; this supersedes the
+  earlier backend platform-access blocker above.
+- Existing target verified: Hugging Face Docker Space `nhttngy/back-end`, port
+  7860, rollback revision
+  `240c962c170c1b6ddef333863f9692c825808e2c`.
+- Added a deterministic tracked-file payload and GitHub Action. Pushes to main
+  validate automatically; upload remains gated until a first manual dispatch
+  succeeds or `HF_AUTO_DEPLOY_ENABLED=true` is explicitly configured.
+- Runtime legacy LFS assets are excluded; no LFS-managed file is required by
+  the default traveler runtime.
+- Local payload validation: 13 tests passed, payload install/data/startup/CORS
+  passed, 4173 POIs and approved SHA preserved.
+- Remote deployment: not executed. Space variables/secrets were not changed.
+- Next action: branch review, merge, validate main workflow, then first manual
+  dispatch. Stage 5D remains not started.

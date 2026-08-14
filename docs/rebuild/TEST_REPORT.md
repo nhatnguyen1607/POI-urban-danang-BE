@@ -1533,3 +1533,18 @@ replan: 1.6 seconds
 - Deployed backend/frontend staging smoke: NOT RUN, blocked by platform access.
 - Deployed traveler scenarios, map, desktop/mobile, errors, cold start,
   performance, logs, and saved trips: PENDING, not counted as local passes.
+## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
+
+- Runtime payload preparation: PASS; 77 tracked allowlisted files plus one
+  generated SHA manifest, with no LFS pointer or forbidden source directory.
+- Payload deterministic packaging test plus focused product tests: 13 passed,
+  0 failed, 0 skipped.
+- Payload `npm ci --omit=dev`: PASS; 298 packages, 0 vulnerabilities reported.
+- Payload `npm run data:verify`: PASS; 4173 POIs, 7220189 bytes, 0 duplicate
+  canonical IDs, 0 invalid core records, approved SHA matched.
+- Payload production-config startup: PASS on isolated port; exact Vercel origin
+  received CORS permission and an unapproved origin did not.
+- Firebase credentials were not injected into the local smoke process.
+- Local Docker build: NOT RUN because no Docker daemon is available.
+- Hugging Face remote sync: NOT RUN by design; branch review and first manual
+  workflow dispatch remain required.
