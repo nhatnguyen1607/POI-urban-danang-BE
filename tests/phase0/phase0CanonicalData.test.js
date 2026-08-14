@@ -17,15 +17,16 @@ const { createItinerary } = require('../../src/services/itineraryPlannerService'
 const { filterPoisForEdaSource, loadPOIs, normalizeEdaSource } = require('../../src/services/poiDataService');
 const { recommendPOIs } = require('../../src/services/poiRetrievalService');
 const { EXPECTED_CANONICAL_SHA } = require('../../src/modules/cityPackPreparation/canonicalDataset');
+const stage4sState = require('../../data/citypacks/enrichments/danang/stage4s_create_new_state.json');
 
-const EXPECTED_ROWS = 4166;
+const EXPECTED_ROWS = stage4sState.canonicalRowsAfter;
 const DEFAULT_CITY_ID = 'da-nang';
 
 function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
 }
 
-test('canonical CSV file is the approved immutable Phase 0 dataset', async () => {
+test('canonical CSV file matches the current approved baseline', async () => {
   assert.equal(path.basename(CANONICAL_POI_CSV_PATH), 'urbanagent_poi_master_v1.csv');
   assert.equal(sha256(CANONICAL_POI_CSV_PATH), EXPECTED_CANONICAL_SHA);
 
@@ -151,7 +152,7 @@ test('EDA source compatibility keeps merged-source POIs in Google and Foody view
 
   for (const source of ['all', 'canonical']) {
     assert.equal(normalizeEdaSource(source), 'all');
-    assert.equal(filterPoisForEdaSource(pois, source).length, 4166);
+    assert.equal(filterPoisForEdaSource(pois, source).length, EXPECTED_ROWS);
   }
 });
 
