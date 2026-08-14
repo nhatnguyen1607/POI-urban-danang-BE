@@ -578,3 +578,22 @@ Date: 2026-08-14 (+07:00).
   `URBANAGENT_CORS_ALLOWED_ORIGINS`; frontend API URL was already configurable.
 - Frontend changes: none.
 - Next proposed step: Stage 5C staging deployment. Stage 5C has not started.
+## Phase 5 Stage 5C - 2026-08-14
+
+- Status: `STAGING_PREPARED_BLOCKED_BY_PLATFORM_ACCESS`.
+- Stage 5B merged through backend PR #35 at
+  `bcbb4c0ab1cac07040393dd57679a702b63bca2c`.
+- Backend staging container preparation uses lockfile install, build-time data
+  verification, startup verification, and `/api/v2/cities` health checks.
+- Backend platform discovery: Docker/Hugging Face architecture exists, but no
+  Space, deployment record, environment, platform secret, or authenticated
+  Hugging Face session is available.
+- Frontend platform discovery: Vercel integration exists, but the authenticated
+  local account cannot access the UrbanAgent project or configure Preview env.
+- No backend or frontend staging URL was created. Deployed E2E was not run.
+- Local pre-deploy validation passed for 4173 POIs, canonical integrity,
+  recommendation/preview/replan/saved-trip tests, production CORS, backend
+  startup, and frontend production build.
+- Firebase staging credentials are unavailable; saved trips are blocked for
+  staging rather than bypassed.
+- Production was not deployed or modified. Stage 5D has not started.

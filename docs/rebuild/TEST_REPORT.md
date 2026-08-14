@@ -1518,3 +1518,18 @@ replan: 1.6 seconds
   trip-preview stops 6, configured production CORS origin PASS.
 - Canonical SHA-256 remained
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+## Phase 5 Stage 5C - 2026-08-14
+
+- Backend `npm ci`: PASS; 0 production install vulnerabilities reported.
+- Backend `npm run data:verify`: PASS; 4173 POIs, expected SHA, 0 duplicates,
+  0 invalid core records.
+- Backend focused pre-deploy suite: 12 passed, 0 failed.
+- Backend production-config process smoke: PASS; loader 4173, configured CORS
+  origin allowed, unapproved origin not trusted, process stopped.
+- Frontend `npm ci`: PASS; existing 6 advisories reported (1 low, 5 high).
+- Frontend `npm run build`: PASS; existing 1.41 MB chunk warning remains.
+- Docker image build/check: NOT RUN; Docker CLI exists but no local daemon or
+  standard Docker Desktop installation was available.
+- Deployed backend/frontend staging smoke: NOT RUN, blocked by platform access.
+- Deployed traveler scenarios, map, desktop/mobile, errors, cold start,
+  performance, logs, and saved trips: PENDING, not counted as local passes.
