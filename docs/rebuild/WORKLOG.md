@@ -2661,3 +2661,28 @@ Results:
   resolved that environment-only failure.
 - Did not query a live provider, modify canonical data, access Firebase or a
   database, enable a provider, deploy, or alter CSV-default runtime.
+
+## 2026-08-20 19:38 +07:00 - Stage 5D.1 geocoder release gate
+
+- Read the full PR #37 diff, frontend geocoder/route contract, source license
+  registry, data-source policy, staging deployment record, environment example,
+  server middleware, auth middleware, and public PR metadata.
+- Ran read-only `git status`, `git fetch origin main`, `git diff`, `rg`, GitHub
+  PR metadata requests, environment-variable-name inspection, and syntax checks.
+- Identified three in-scope MEDIUM hardening gaps: no request bound, unrestricted
+  configured hostname, and uncontrolled upstream exception messages. Also
+  corrected misleading unsupported `cityId` metadata and documented safe empty
+  environment variable names.
+- Added HTTPS/hostname validation, request-time rate limiting, controlled errors,
+  Da Nang-only validation, and focused regression tests without adding a cache
+  or dependency.
+- Audited touched frontend analytics: exact GPS coordinates are not persisted by
+  the visit/route event payload, and number-bearing address queries are now
+  redacted before optional search-log writes. Scoped ESLint and production
+  build passed after the privacy fix.
+- Ran focused tests (5 passed), full backend tests (58 total, 57 passed,
+  0 failed, 1 guarded skip), syntax checks, and `git diff --check`.
+- Found no approved `URBANAGENT_GEOCODER_URL` or hostname value in the current
+  staging environment. Stopped at the configuration gate; did not query Photon
+  or another provider, expose a secret, bypass auth, emulate a passing GPS flow,
+  deploy, merge, or modify production/Firebase/canonical data.

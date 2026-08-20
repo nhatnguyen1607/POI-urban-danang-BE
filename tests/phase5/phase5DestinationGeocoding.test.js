@@ -3,13 +3,19 @@ const test = require('node:test');
 
 const {
   photonResult,
+  providerUrl,
   searchDestinations,
 } = require('../../src/services/destinationGeocodingService');
+const { createGeocoderRateLimit } = require('../../src/middleware/geocoderRateLimit');
 
 test('destination geocoder remains disabled without an explicitly configured provider', async () => {
   await assert.rejects(
     () => searchDestinations({ query: '110 Phuoc Tuong 5', endpoint: '' }),
     (error) => error.code === 'GEOCODER_NOT_CONFIGURED' && error.status === 503,
+  );
+  await assert.rejects(
+    () => searchDestinations({ query: 'Hanoi address', cityId: 'ha-noi', endpoint: 'https://provider.invalid/api' }),
+    (error) => error.code === 'UNSUPPORTED_GEOCODER_CITY' && error.status === 400,
   );
 });
 
@@ -18,6 +24,7 @@ test('destination geocoder normalizes bounded request-time Photon results withou
   const results = await searchDestinations({
     query: '110 Phuoc Tuong 5, Da Nang',
     endpoint: 'https://geocoder.invalid/api',
+    allowedHosts: 'geocoder.invalid',
     fetchImpl: async (url) => {
       requestedUrl = url;
       return {
@@ -52,6 +59,59 @@ test('destination geocoder normalizes bounded request-time Photon results withou
   assert.equal(results[0].lon, 108.181);
   assert.equal(Object.hasOwn(results[0], 'poiId'), false);
   assert.equal(results[0].attribution, '© OpenStreetMap contributors');
+});
+
+test('destination geocoder restricts provider URLs and sanitizes upstream failures', async () => {
+  assert.throws(
+    () => providerUrl('http://metadata.internal/api', 'metadata.internal'),
+    (error) => error.code === 'GEOCODER_PROVIDER_NOT_ALLOWED',
+  );
+  assert.throws(
+    () => providerUrl('https://user:secret@photon.komoot.io/api'),
+    (error) => error.code === 'GEOCODER_PROVIDER_NOT_ALLOWED',
+  );
+  await assert.rejects(
+    () => searchDestinations({
+      query: 'Cầu Rồng Đà Nẵng',
+      endpoint: 'https://photon.komoot.io/api',
+      fetchImpl: async () => { throw new Error('secret upstream details'); },
+    }),
+    (error) => error.code === 'GEOCODER_UPSTREAM_FAILED'
+      && !error.message.includes('secret upstream details'),
+  );
+});
+
+test('destination geocoder proxy applies a bounded in-memory request limit', () => {
+  let currentTime = 1_000;
+  const middleware = createGeocoderRateLimit({
+    maxRequests: 2,
+    windowMs: 1_000,
+    now: () => currentTime,
+  });
+  const responses = [];
+  const response = {
+    set: (name, value) => responses.push({ name, value }),
+    status(status) {
+      this.statusCode = status;
+      return this;
+    },
+    json(payload) {
+      this.payload = payload;
+      return this;
+    },
+  };
+  let accepted = 0;
+  middleware({}, response, () => { accepted += 1; });
+  middleware({}, response, () => { accepted += 1; });
+  middleware({}, response, () => { accepted += 1; });
+  assert.equal(accepted, 2);
+  assert.equal(response.statusCode, 429);
+  assert.equal(response.payload.error, 'GEOCODER_RATE_LIMITED');
+  assert.equal(responses[0].name, 'Retry-After');
+
+  currentTime += 1_000;
+  middleware({}, response, () => { accepted += 1; });
+  assert.equal(accepted, 3);
 });
 
 test('destination geocoder rejects invalid coordinates and keeps provider IDs noncanonical', () => {

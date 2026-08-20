@@ -431,6 +431,25 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Harden the disabled Stage 5D.1 geocoder proxy
+
+Date: 2026-08-20.
+
+- Keep destination geocoding disabled until an approved staging endpoint and
+  exact hostname are configured server-side.
+- Permit only HTTPS providers on the configured hostname allowlist; local HTTP
+  remains available only outside production for isolated tests.
+- Bound the public request-time proxy to 30 requests per minute per backend
+  process by default, configurable up to the hard maximum in middleware.
+- Return controlled application errors for timeout, transport, invalid JSON,
+  unsupported city, disallowed provider, and rate-limit conditions.
+- Do not cache provider responses while source cache approval remains absent.
+- Do not expose provider configuration through `VITE_*`, responses, or logs.
+- Redact number-bearing search text before optional frontend analytics writes;
+  live geocoding still receives the user query only for the requested lookup.
+- These safeguards do not approve Photon or any provider for staging/runtime;
+  provider onboarding and real acceptance remain separate gates.
+
 ## Decision - Phase 2 Feedback Persistence Deferral
 
 Date: 2026-08-09.

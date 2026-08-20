@@ -1,4 +1,5 @@
 const DEFAULT_DANANG_BIAS = { lat: 16.0544, lon: 108.2022 };
+const SUPPORTED_CITY_ID = 'da-nang';
 
 function serviceError(message, status, code) {
   const error = new Error(message);
@@ -9,6 +10,39 @@ function serviceError(message, status, code) {
 
 function cleanText(value) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function normalizeCityId(value) {
+  const cityId = cleanText(value) || SUPPORTED_CITY_ID;
+  if (cityId !== SUPPORTED_CITY_ID) {
+    throw serviceError('Destination search currently supports Da Nang only.', 400, 'UNSUPPORTED_GEOCODER_CITY');
+  }
+  return cityId;
+}
+
+function providerUrl(endpoint, allowedHosts = process.env.URBANAGENT_GEOCODER_ALLOWED_HOSTS) {
+  let url;
+  try {
+    url = new URL(endpoint);
+  } catch {
+    throw serviceError('Destination geocoding provider is misconfigured.', 503, 'GEOCODER_INVALID_CONFIG');
+  }
+
+  const hosts = cleanText(allowedHosts || 'photon.komoot.io')
+    .split(',')
+    .map((host) => host.trim().toLowerCase())
+    .filter(Boolean);
+  const localDevelopmentHost = process.env.NODE_ENV !== 'production'
+    && ['127.0.0.1', 'localhost', '::1'].includes(url.hostname.toLowerCase());
+  if (
+    url.username
+    || url.password
+    || (!localDevelopmentHost && url.protocol !== 'https:')
+    || (!localDevelopmentHost && !hosts.includes(url.hostname.toLowerCase()))
+  ) {
+    throw serviceError('Destination geocoding provider is not allowed.', 503, 'GEOCODER_PROVIDER_NOT_ALLOWED');
+  }
+  return url;
 }
 
 function photonResult(feature, index) {
@@ -60,10 +94,13 @@ function photonResult(feature, index) {
 
 async function searchDestinations({
   query,
+  cityId = SUPPORTED_CITY_ID,
   limit = 8,
   fetchImpl = global.fetch,
   endpoint = process.env.URBANAGENT_GEOCODER_URL,
+  allowedHosts = process.env.URBANAGENT_GEOCODER_ALLOWED_HOSTS,
 } = {}) {
+  normalizeCityId(cityId);
   const normalizedQuery = cleanText(query);
   if (normalizedQuery.length < 3 || normalizedQuery.length > 160) {
     throw serviceError('Search query must contain 3 to 160 characters.', 400, 'INVALID_GEOCODE_QUERY');
@@ -80,29 +117,46 @@ async function searchDestinations({
   }
 
   const safeLimit = Math.min(Math.max(Number(limit) || 8, 1), 10);
-  const url = new URL(endpoint);
+  const url = providerUrl(endpoint, allowedHosts);
   url.searchParams.set('q', normalizedQuery);
   url.searchParams.set('limit', String(safeLimit));
   url.searchParams.set('lat', String(DEFAULT_DANANG_BIAS.lat));
   url.searchParams.set('lon', String(DEFAULT_DANANG_BIAS.lon));
   url.searchParams.set('lang', 'vi');
 
-  const response = await fetchImpl(url, {
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': 'UrbanAgent/1.0 (+https://github.com/nhatnguyen1607/POI-urban-danang-BE)',
-    },
-    signal: AbortSignal.timeout(8000),
-  });
+  let response;
+  try {
+    response = await fetchImpl(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'UrbanAgent/1.0 (+https://github.com/nhatnguyen1607/POI-urban-danang-BE)',
+      },
+      signal: AbortSignal.timeout(8000),
+    });
+  } catch (error) {
+    const timedOut = error?.name === 'AbortError' || error?.name === 'TimeoutError';
+    throw serviceError(
+      timedOut ? 'Destination search timed out.' : 'Destination search provider is unavailable.',
+      502,
+      timedOut ? 'GEOCODER_UPSTREAM_TIMEOUT' : 'GEOCODER_UPSTREAM_FAILED',
+    );
+  }
   if (!response.ok) {
     throw serviceError(`Geocoding provider returned ${response.status}.`, 502, 'GEOCODER_UPSTREAM_FAILED');
   }
-  const payload = await response.json();
+  let payload;
+  try {
+    payload = await response.json();
+  } catch {
+    throw serviceError('Destination search provider returned an invalid response.', 502, 'GEOCODER_INVALID_RESPONSE');
+  }
   const features = Array.isArray(payload?.features) ? payload.features : [];
   return features.map(photonResult).filter(Boolean).slice(0, safeLimit);
 }
 
 module.exports = {
   photonResult,
+  normalizeCityId,
+  providerUrl,
   searchDestinations,
 };

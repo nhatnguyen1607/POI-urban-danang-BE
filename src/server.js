@@ -69,6 +69,7 @@ const {
 const { getFirebaseAdminDiagnostics, getFirestoreDb, isFirebaseAdminReady } = require('./config/firebaseAdmin');
 const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
+const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
@@ -98,6 +99,9 @@ app.use('/api/v2', travelerApiV2Router);
 
 const upload = multer({ dest: UPLOAD_DIR });
 const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';
+const geocoderRateLimit = createGeocoderRateLimit({
+  maxRequests: process.env.URBANAGENT_GEOCODER_RATE_LIMIT_PER_MINUTE,
+});
 
 app.get('/api/health/firebase', (req, res) => {
   const db = getFirestoreDb();
@@ -199,25 +203,27 @@ app.get('/api/pois/data-quality', async (req, res) => {
   }
 });
 
-app.get('/api/geocode/search', async (req, res) => {
+app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
   try {
     const results = await searchDestinations({
       query: req.query.q,
+      cityId: req.query.cityId,
       limit: req.query.limit,
     });
     res.json({
       results,
       meta: {
-        cityId: req.query.cityId || DEFAULT_CITY_ID,
+        cityId: DEFAULT_CITY_ID,
         source: 'photon',
         requestTimeOnly: true,
         canonicalDataChanged: false,
       },
     });
   } catch (error) {
-    res.status(error.status || 502).json({
-      error: error.code || 'GEOCODER_FAILED',
-      message: error.message || 'Destination search failed.',
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GEOCODER_FAILED',
+      message: controlledError ? error.message : 'Destination search failed.',
     });
   }
 });

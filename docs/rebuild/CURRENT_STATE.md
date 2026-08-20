@@ -627,3 +627,21 @@ Date: 2026-08-14 (+07:00).
   unchanged.
 - Runtime provider approval/configuration and live address verification remain
   pending; no external query was executed in this batch.
+
+## Phase 5 Stage 5D.1 geocoder release gate - 2026-08-20
+
+- Verdict remains `PARTIAL` at the staging-configuration gate.
+- Full PR #37 review found no committed credential, browser-exposed provider
+  secret, user-controlled outbound URL, fabricated result, or canonical write.
+- Hardened the disabled-by-default proxy with an HTTPS hostname allowlist,
+  bounded global staging rate limit, controlled upstream errors, and explicit
+  Da Nang-only city validation. No response cache was added.
+- Required staging variables are `URBANAGENT_GEOCODER_URL`,
+  `URBANAGENT_GEOCODER_ALLOWED_HOSTS`, and optional
+  `URBANAGENT_GEOCODER_RATE_LIMIT_PER_MINUTE`.
+- No approved provider values are available in the current environment.
+  Provider activation, live address queries, authenticated route E2E, and GPS
+  acceptance were not performed or represented as passing.
+- Frontend PR #12 now redacts number-bearing address queries before optional
+  search analytics persistence; precise GPS coordinates are not written by the
+  touched analytics payloads.

@@ -1547,6 +1547,23 @@ replan: 1.6 seconds
   and invalid-coordinate rejection.
 - Live provider/address verification: NOT RUN; provider approval and runtime
   configuration remain pending.
+
+## Phase 5 Stage 5D.1 geocoder release-gate hardening - 2026-08-20
+
+- Focused geocoder tests: PASS, 5 passed, 0 failed.
+- JavaScript syntax checks: PASS for server, service, and rate limiter.
+- Full backend suite: PASS, 58 total, 57 passed, 0 failed, 1 guarded PostGIS
+  integration skipped.
+- `git diff --check`: PASS.
+- Covered provider allowlist/HTTPS enforcement, credential-bearing URL
+  rejection, sanitized upstream failures, rate limiting, unsupported-city
+  rejection, invalid coordinates, noncanonical IDs, and disabled-by-default
+  behavior.
+- Real staging provider, exact-address, authenticated routing, browser, and GPS
+  checks: NOT RUN because no approved staging geocoder configuration is
+  available. No real query was sent.
+- Frontend privacy change: scoped ESLint PASS, TypeScript/production build PASS,
+  and `git diff --check` PASS; no frontend test script exists.
 ## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
 
 - Runtime payload preparation: PASS; 77 tracked allowlisted files plus one
