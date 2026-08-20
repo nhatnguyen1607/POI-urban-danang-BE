@@ -52,6 +52,7 @@ test('destination geocoder normalizes bounded request-time Photon results withou
   assert.equal(requestedUrl.searchParams.get('q'), '110 Phuoc Tuong 5, Da Nang');
   assert.equal(requestedUrl.searchParams.get('lat'), '16.0544');
   assert.equal(requestedUrl.searchParams.get('lon'), '108.2022');
+  assert.equal(requestedUrl.searchParams.get('lang'), 'default');
   assert.equal(results.length, 1);
   assert.equal(results[0].type, 'address');
   assert.equal(results[0].label, '110 Phước Tường 5');

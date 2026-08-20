@@ -122,7 +122,7 @@ async function searchDestinations({
   url.searchParams.set('limit', String(safeLimit));
   url.searchParams.set('lat', String(DEFAULT_DANANG_BIAS.lat));
   url.searchParams.set('lon', String(DEFAULT_DANANG_BIAS.lon));
-  url.searchParams.set('lang', 'vi');
+  url.searchParams.set('lang', 'default');
 
   let response;
   try {
