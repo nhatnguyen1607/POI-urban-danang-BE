@@ -431,6 +431,25 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Harden the disabled Stage 5D.1 geocoder proxy
+
+Date: 2026-08-20.
+
+- Keep destination geocoding disabled until an approved staging endpoint and
+  exact hostname are configured server-side.
+- Permit only HTTPS providers on the configured hostname allowlist; local HTTP
+  remains available only outside production for isolated tests.
+- Bound the public request-time proxy to 30 requests per minute per backend
+  process by default, configurable up to the hard maximum in middleware.
+- Return controlled application errors for timeout, transport, invalid JSON,
+  unsupported city, disallowed provider, and rate-limit conditions.
+- Do not cache provider responses while source cache approval remains absent.
+- Do not expose provider configuration through `VITE_*`, responses, or logs.
+- Redact number-bearing search text before optional frontend analytics writes;
+  live geocoding still receives the user query only for the requested lookup.
+- These safeguards do not approve Photon or any provider for staging/runtime;
+  provider onboarding and real acceptance remain separate gates.
+
 ## Decision - Phase 2 Feedback Persistence Deferral
 
 Date: 2026-08-09.
@@ -639,6 +658,26 @@ Explicit non-decisions:
 - No PostgreSQL default-runtime switch.
 - No external POI source, routing provider, live opening-hours provider, or
   multi-source implementation.
+
+## Decision - Guarded request-time destination geocoder
+
+Date: 2026-08-20.
+
+Status: `IMPLEMENTED_DISABLED_BY_DEFAULT`.
+
+Decision:
+
+- Add `GET /api/geocode/search` for normalized place/address suggestions.
+- Keep provider activation behind `URBANAGENT_GEOCODER_URL`.
+- Return request-time destination records, not canonical POIs.
+- Never assign an UrbanAgent `poiId` to a generic address.
+- Preserve provider attribution and reject invalid coordinates.
+
+Non-decisions:
+
+- No source is approved for runtime merely by this code existing.
+- No canonical ingestion, persistence, provider payload fixture, production
+  deployment, database/Firebase write, or default-runtime change.
 - No Batch 4 work.
 
 The following approvals remain not granted:

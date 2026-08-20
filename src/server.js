@@ -34,6 +34,7 @@ const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');
 const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
+const { searchDestinations } = require('./services/destinationGeocodingService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { resolvePythonExecutable } = require('./services/semanticModelService');
 const { recordFeedback } = require('./services/feedbackService');
@@ -68,6 +69,7 @@ const {
 const { getFirebaseAdminDiagnostics, getFirestoreDb, isFirebaseAdminReady } = require('./config/firebaseAdmin');
 const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
+const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
@@ -97,6 +99,9 @@ app.use('/api/v2', travelerApiV2Router);
 
 const upload = multer({ dest: UPLOAD_DIR });
 const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';
+const geocoderRateLimit = createGeocoderRateLimit({
+  maxRequests: process.env.URBANAGENT_GEOCODER_RATE_LIMIT_PER_MINUTE,
+});
 
 app.get('/api/health/firebase', (req, res) => {
   const db = getFirestoreDb();
@@ -195,6 +200,31 @@ app.get('/api/pois/data-quality', async (req, res) => {
     res.json(await getPoiDataQualityReport());
   } catch (error) {
     res.status(500).json({ error: 'Failed to read POI data quality report', details: error.message });
+  }
+});
+
+app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
+  try {
+    const results = await searchDestinations({
+      query: req.query.q,
+      cityId: req.query.cityId,
+      limit: req.query.limit,
+    });
+    res.json({
+      results,
+      meta: {
+        cityId: DEFAULT_CITY_ID,
+        source: 'photon',
+        requestTimeOnly: true,
+        canonicalDataChanged: false,
+      },
+    });
+  } catch (error) {
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GEOCODER_FAILED',
+      message: controlledError ? error.message : 'Destination search failed.',
+    });
   }
 });
 
