@@ -614,3 +614,16 @@ Date: 2026-08-14 (+07:00).
 - Remote deployment: not executed. Space variables/secrets were not changed.
 - Next action: branch review, merge, validate main workflow, then first manual
   dispatch. Stage 5D remains not started.
+
+## Phase 5 Stage 5D.1 destination geocoding support - 2026-08-20
+
+- Branch: `phase5/stage5d1-geocoding`.
+- Added a request-time destination-search contract for the traveler map.
+- No geocoder is enabled by default. `URBANAGENT_GEOCODER_URL` is required;
+  otherwise the endpoint fails closed with `GEOCODER_NOT_CONFIGURED`.
+- Photon-shaped responses are normalized without creating UrbanAgent POI IDs.
+- Results remain request-time only and include OpenStreetMap attribution.
+- Canonical data, CSV-default runtime, database, Firebase, and deployment are
+  unchanged.
+- Runtime provider approval/configuration and live address verification remain
+  pending; no external query was executed in this batch.

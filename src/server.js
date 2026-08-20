@@ -34,6 +34,7 @@ const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');
 const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
+const { searchDestinations } = require('./services/destinationGeocodingService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { resolvePythonExecutable } = require('./services/semanticModelService');
 const { recordFeedback } = require('./services/feedbackService');
@@ -195,6 +196,29 @@ app.get('/api/pois/data-quality', async (req, res) => {
     res.json(await getPoiDataQualityReport());
   } catch (error) {
     res.status(500).json({ error: 'Failed to read POI data quality report', details: error.message });
+  }
+});
+
+app.get('/api/geocode/search', async (req, res) => {
+  try {
+    const results = await searchDestinations({
+      query: req.query.q,
+      limit: req.query.limit,
+    });
+    res.json({
+      results,
+      meta: {
+        cityId: req.query.cityId || DEFAULT_CITY_ID,
+        source: 'photon',
+        requestTimeOnly: true,
+        canonicalDataChanged: false,
+      },
+    });
+  } catch (error) {
+    res.status(error.status || 502).json({
+      error: error.code || 'GEOCODER_FAILED',
+      message: error.message || 'Destination search failed.',
+    });
   }
 });
 

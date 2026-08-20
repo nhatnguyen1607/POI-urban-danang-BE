@@ -639,6 +639,26 @@ Explicit non-decisions:
 - No PostgreSQL default-runtime switch.
 - No external POI source, routing provider, live opening-hours provider, or
   multi-source implementation.
+
+## Decision - Guarded request-time destination geocoder
+
+Date: 2026-08-20.
+
+Status: `IMPLEMENTED_DISABLED_BY_DEFAULT`.
+
+Decision:
+
+- Add `GET /api/geocode/search` for normalized place/address suggestions.
+- Keep provider activation behind `URBANAGENT_GEOCODER_URL`.
+- Return request-time destination records, not canonical POIs.
+- Never assign an UrbanAgent `poiId` to a generic address.
+- Preserve provider attribution and reject invalid coordinates.
+
+Non-decisions:
+
+- No source is approved for runtime merely by this code existing.
+- No canonical ingestion, persistence, provider payload fixture, production
+  deployment, database/Firebase write, or default-runtime change.
 - No Batch 4 work.
 
 The following approvals remain not granted:

@@ -1533,6 +1533,20 @@ replan: 1.6 seconds
 - Deployed backend/frontend staging smoke: NOT RUN, blocked by platform access.
 - Deployed traveler scenarios, map, desktop/mobile, errors, cold start,
   performance, logs, and saved trips: PENDING, not counted as local passes.
+
+## Phase 5 Stage 5D.1 destination geocoder - 2026-08-20
+
+- `node --test tests/phase5/phase5DestinationGeocoding.test.js`: PASS,
+  3 passed, 0 failed.
+- `node --check src/services/destinationGeocodingService.js`: PASS.
+- `node --check src/server.js`: PASS.
+- `npm.cmd test`: PASS, 56 total, 55 passed, 0 failed, 1 guarded
+  PostGIS integration skipped.
+- Verified fail-closed behavior without provider configuration, normalized
+  address/place output, no fake POI ID, attribution, Da Nang location bias,
+  and invalid-coordinate rejection.
+- Live provider/address verification: NOT RUN; provider approval and runtime
+  configuration remain pending.
 ## Phase 5 Stage 5C safe auto-deploy continuation - 2026-08-14
 
 - Runtime payload preparation: PASS; 77 tracked allowlisted files plus one

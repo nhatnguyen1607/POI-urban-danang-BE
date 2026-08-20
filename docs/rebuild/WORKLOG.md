@@ -2645,3 +2645,19 @@ Results:
 - Did not execute the workflow, deploy remotely, modify Space variables/secrets,
   create a Space, mutate canonical data, touch production Firebase, or start
   Stage 5D.
+
+## 2026-08-20 18:51 +07:00 - Stage 5D.1 guarded destination geocoder
+
+- Read backend source-governance rules, strategy, license policy, decisions,
+  current state, route contract, server registration, and Phase 5 tests.
+- Added a provider-disabled-by-default request-time destination geocoder and
+  `GET /api/geocode/search`.
+- Added focused tests for fail-closed configuration, address normalization,
+  Da Nang bias, attribution, noncanonical identifiers, and coordinate guards.
+- Focused tests passed 3/3; JavaScript syntax and diff checks passed.
+- Full backend suite passed: 56 total, 55 passed, 0 failed, 1 guarded
+  PostGIS integration skipped. The first sandboxed run could not create the
+  local upload directory; rerunning with workspace filesystem permission
+  resolved that environment-only failure.
+- Did not query a live provider, modify canonical data, access Firebase or a
+  database, enable a provider, deploy, or alter CSV-default runtime.
