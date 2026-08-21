@@ -1,4 +1,5 @@
 const DEFAULT_DANANG_BIAS = { lat: 16.0544, lon: 108.2022 };
+const DEFAULT_GEOCODER_URL = 'https://photon.komoot.io/api';
 const SUPPORTED_CITY_ID = 'da-nang';
 
 function serviceError(message, status, code) {
@@ -97,7 +98,7 @@ async function searchDestinations({
   cityId = SUPPORTED_CITY_ID,
   limit = 8,
   fetchImpl = global.fetch,
-  endpoint = process.env.URBANAGENT_GEOCODER_URL,
+  endpoint = process.env.URBANAGENT_GEOCODER_URL || DEFAULT_GEOCODER_URL,
   allowedHosts = process.env.URBANAGENT_GEOCODER_ALLOWED_HOSTS,
 } = {}) {
   normalizeCityId(cityId);
@@ -155,6 +156,7 @@ async function searchDestinations({
 }
 
 module.exports = {
+  DEFAULT_GEOCODER_URL,
   photonResult,
   normalizeCityId,
   providerUrl,

@@ -2686,3 +2686,32 @@ Results:
   staging environment. Stopped at the configuration gate; did not query Photon
   or another provider, expose a secret, bypass auth, emulate a passing GPS flow,
   deploy, merge, or modify production/Firebase/canonical data.
+
+## 2026-08-21 - Full-route and external-place product hotfix
+
+- Worked only in fresh backend/frontend clones on branches
+  `fix/external-place-resolution-trip-integration` and
+  `fix/full-route-external-place-search-ui-cleanup`; original `D:` working
+  copies remained read-only.
+- Backend changed files: `src/services/destinationGeocodingService.js`,
+  `src/modules/travelerApiV2/tripPreviewValidation.js`,
+  `src/modules/travelerApiV2/tripPreview.js`,
+  `src/modules/travelerApiV2/serializers.js`, and
+  `tests/phase5/phase5ProductHotfix.test.js`.
+- Frontend changed files: `src/pages/dashboard/DashboardPage.tsx`,
+  `src/pages/urban-agent/PoiExperienceLayer.tsx`,
+  `src/pages/urban-agent/TripPreviewDayMap.tsx`,
+  `src/pages/urban-agent/TravelerFullRouteModal.tsx`,
+  `src/pages/urban-agent/UrbanAgentPage.tsx`,
+  `src/pages/urban-agent/tripPlaceBridge.ts`,
+  `src/pages/urban-agent/tripRoadRoutes.ts`, and
+  `src/services/poiExperienceService.ts`.
+- Diagnosed the deployed geocoder failure as `GEOCODER_NOT_CONFIGURED`, then
+  verified bounded live Photon results for accented and unaccented address
+  queries without storing provider payloads.
+- Ran focused tests (3/3), changed-file syntax checks, full backend tests
+  (60 passed, 0 failed, 1 guarded skip), frontend production build, scoped
+  new-file lint, HTTP route/save/replan smoke, and desktop/mobile browser review.
+- Verified 4173 canonical POIs and the approved SHA with no canonical CSV diff.
+  No production database, Firebase, manual deployment, merge, or automatic
+  canonical-creation path was used.

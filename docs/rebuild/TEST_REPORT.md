@@ -1579,3 +1579,27 @@ replan: 1.6 seconds
 - Local Docker build: NOT RUN because no Docker daemon is available.
 - Hugging Face remote sync: NOT RUN by design; branch review and first manual
   workflow dispatch remain required.
+
+## Product hotfix - 2026-08-21
+
+- Changed-backend syntax checks: PASS.
+- Focused temporary-place tests: 3 passed, 0 failed.
+- Full backend suite: 61 total, 60 passed, 0 failed, 1 guarded PostGIS skip.
+- Live local geocoder: PASS for accented and unaccented Phuoc Tuong queries;
+  each returned 7 bounded Photon results.
+- HTTP trip smoke: PASS; all four hard includes scheduled, temporary place
+  scheduled exactly once, request-time provenance exposed, and both daily end
+  times remained before 20:00.
+- Authenticated road-route smoke: 6/6 same-day segments passed; no overnight
+  segment was generated.
+- Memory-store save/replan smoke: PASS; same trip ID retained and the temporary
+  place remained present with `canonical=false`.
+- Frontend TypeScript/production build: PASS. Scoped ESLint for the three new
+  focused files: PASS. Existing large-bundle warning and unrelated legacy lint
+  debt remain.
+- Browser review: PASS at 1440x1000 and 390x844 with no horizontal overflow;
+  all-trip route, day filters, segment selection, search/add, pin fallback,
+  navigation, Grab, and cleaned Map & Data layout were exercised.
+- Canonical integrity: 4173 POIs; SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`;
+  canonical CSV diff empty.
