@@ -7,6 +7,12 @@ const {
 } = require('../../src/services/destinationGeocodingService');
 const { buildTripPreview } = require('../../src/modules/travelerApiV2/tripPreview');
 const { validateTripPreviewRequest } = require('../../src/modules/travelerApiV2/tripPreviewValidation');
+const {
+  createSavedTrip,
+  deleteSavedTrip,
+  getSavedTrip,
+  replanSavedTrip,
+} = require('../../src/modules/travelerApiV2/savedTrips');
 
 function requestWithTemporaryPlace(overrides = {}) {
   return {
@@ -100,4 +106,69 @@ test('product hotfix scheduler includes a temporary place and reports request-ti
     assert.ok(result.trip.stops.some((stop) => stop.poi.globalId === requiredId));
   }
   assert.equal(result.trip.provenance.externalLiveDataUsed, true);
+});
+
+test('product hotfix reloads and replans a saved temporary-place snapshot without a resolver call', async () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+  const previousStore = process.env.URBANAGENT_SAVED_TRIPS_STORE;
+  const previousFetch = global.fetch;
+  const ownerId = `temporary-snapshot-${Date.now()}`;
+  let tripId = null;
+
+  process.env.NODE_ENV = 'test';
+  process.env.URBANAGENT_SAVED_TRIPS_STORE = 'memory';
+
+  try {
+    const validation = validateTripPreviewRequest(requestWithTemporaryPlace());
+    assert.equal(validation.errors, undefined);
+    const preview = await buildTripPreview(validation.value);
+    assert.equal(preview.error, undefined);
+
+    const created = await createSavedTrip({
+      ownerId,
+      payload: {
+        title: 'Temporary place snapshot',
+        request: validation.value,
+        preview: preview.trip,
+        itinerary: preview.trip.stops,
+      },
+    });
+    tripId = created.tripId;
+
+    global.fetch = async () => {
+      throw new Error('External resolver must not be called while loading or replanning a saved snapshot.');
+    };
+
+    const reloaded = await getSavedTrip({ ownerId, tripId });
+    const snapshot = reloaded.request.constraints.temporaryPlaces[0];
+    assert.deepEqual(snapshot, {
+      id: 'temporary:photon:W:123',
+      name: '110 Phước Tường 5',
+      address: '110 Phước Tường 5, Đà Nẵng',
+      category: 'Địa chỉ',
+      lat: 16.038014,
+      lon: 108.1742342,
+      source: 'photon',
+      canonical: false,
+      attribution: '© OpenStreetMap contributors',
+    });
+    assert.ok(reloaded.itinerary.some((stop) => stop.poi.globalId === snapshot.id));
+
+    const replanned = await replanSavedTrip({ ownerId, tripId });
+    assert.equal(replanned.tripId, tripId);
+    assert.deepEqual(replanned.request.constraints.temporaryPlaces[0], snapshot);
+    const scheduled = replanned.itinerary.find((stop) => stop.poi.globalId === snapshot.id);
+    assert.ok(scheduled);
+    assert.equal(scheduled.poi.canonical, false);
+    assert.equal(scheduled.poi.location.lat, snapshot.lat);
+    assert.equal(scheduled.poi.location.lon, snapshot.lon);
+    assert.equal(scheduled.poi.location.hasCoordinates, true);
+  } finally {
+    if (tripId) await deleteSavedTrip({ ownerId, tripId });
+    global.fetch = previousFetch;
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
+    if (previousStore === undefined) delete process.env.URBANAGENT_SAVED_TRIPS_STORE;
+    else process.env.URBANAGENT_SAVED_TRIPS_STORE = previousStore;
+  }
 });

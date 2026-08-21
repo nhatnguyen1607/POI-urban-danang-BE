@@ -663,3 +663,24 @@ Date: 2026-08-14 (+07:00).
   SHA-256 `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
 - No merge or deployment has occurred. Existing automatic canonical creation
   remains disabled.
+
+## Product hotfix final hardening - 2026-08-21
+
+- Status: `HARDENED_ON_REVIEW_BRANCH_NOT_MERGED`.
+- The full-route UI now reports routed-segment coverage. Complete routes retain
+  normal total labels; partial routes label distance/time as calculated values
+  and state how many segments remain unresolved.
+- Temporary-place persistence is covered through create, reload, and same-trip
+  replan with outbound resolver calls blocked. The immutable request snapshot
+  retains temporary ID, name, address, coordinates, source, attribution, and
+  `canonical=false`.
+- External result cards show useful address context, result type/category, and
+  GPS distance when available. Manual-pin fallback and canonical search remain
+  operational when external geocoding fails.
+- Focused backend tests, frontend production build, scoped lint, and browser
+  acceptance at desktop and 390x844 passed. No blocker or high-severity issue
+  remains in this review scope.
+- Canonical runtime remains 4173 POIs at SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- No merge, deployment, canonical write, database/Firebase write, or automatic
+  POI creation occurred.
