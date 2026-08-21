@@ -105,6 +105,39 @@ function buildCandidateFromPoi(poi, rank) {
   };
 }
 
+function temporaryPoiFromRequest(place, cityId) {
+  return {
+    id: place.id,
+    globalId: place.id,
+    cityId,
+    name: place.name,
+    category: place.category || 'Địa điểm đã chọn',
+    categoryNormalized: place.category || 'Địa điểm đã chọn',
+    lat: place.lat,
+    lon: place.lon,
+    hasCoordinates: true,
+    coordinateStatus: 'known',
+    addressCurrent: null,
+    addressRaw: place.address || null,
+    district: null,
+    adminNormalizationStatus: 'request_time_only',
+    openingHoursRaw: null,
+    source: place.source,
+    sourceIds: [],
+    canonical: false,
+    attribution: place.attribution || null,
+  };
+}
+
+function buildCandidateFromTemporaryPoi(poi, rank) {
+  return {
+    ...buildCandidateFromPoi(poi, rank),
+    reason: 'Included because the traveler selected this temporary place.',
+    reasonCodes: ['must_include', 'temporary_place'],
+    selectionSource: 'temporary_place',
+  };
+}
+
 function deduplicateCandidates(candidates, mustIncludeIds) {
   const mustIncludeSet = new Set(mustIncludeIds);
   const byId = new Map();
@@ -311,7 +344,10 @@ function scheduleCandidates({ candidates, request, mustIncludeIds }) {
   const ordered = orderCandidatesGeographically(candidates, request.startLocation);
   const maxStopsPerDay = request.constraints.maxStopsPerDay;
   const totalStopLimit = maxStopsPerDay * request.trip.dayCount;
-  const selected = ordered.slice(0, totalStopLimit);
+  const required = ordered.filter((candidate) => mustIncludeSet.has(candidate.id));
+  const optional = ordered.filter((candidate) => !mustIncludeSet.has(candidate.id));
+  const selectedPool = [...required, ...optional].slice(0, totalStopLimit);
+  const selected = orderCandidatesGeographically(selectedPool, request.startLocation);
   const unscheduled = [];
   const allWarnings = [];
 
@@ -507,13 +543,17 @@ async function buildTripPreview(request) {
 
   const allPois = await loadPOIs({ cityId: request.cityId });
   const poiById = new Map(allPois.map((poi) => [canonicalIdFromPoi(poi), poi]));
+  const temporaryPoiById = new Map((request.constraints.temporaryPlaces || []).map((place) => {
+    const poi = temporaryPoiFromRequest(place, request.cityId);
+    return [poi.globalId, poi];
+  }));
   const excludeSet = new Set(request.constraints.excludePoiIds);
   const mustIncludePois = [];
   const unscheduled = [];
   const baseWarnings = [];
 
   for (const poiId of request.constraints.mustIncludePoiIds) {
-    const poi = poiById.get(poiId);
+    const poi = temporaryPoiById.get(poiId) || poiById.get(poiId);
     if (!poi) {
       addUnscheduled(unscheduled, {
         poiId,
@@ -549,7 +589,11 @@ async function buildTripPreview(request) {
       };
     })
     .filter((candidate) => !excludeSet.has(candidate.id));
-  const mustIncludeCandidates = mustIncludePois.map((poi, index) => buildCandidateFromPoi(poi, -1000 + index));
+  const mustIncludeCandidates = mustIncludePois.map((poi, index) => (
+    poi.canonical === false
+      ? buildCandidateFromTemporaryPoi(poi, -1000 + index)
+      : buildCandidateFromPoi(poi, -1000 + index)
+  ));
   const candidates = deduplicateCandidates([
     ...mustIncludeCandidates,
     ...recommendationCandidates,
@@ -600,7 +644,7 @@ async function buildTripPreview(request) {
         provenance: {
           source: 'canonical',
           datasetVersion: DATASET_VERSION,
-          externalLiveDataUsed: false,
+          externalLiveDataUsed: temporaryPoiById.size > 0,
         },
         contract: {
           version: CONTRACT_VERSION,
@@ -679,9 +723,9 @@ async function buildTripPreview(request) {
       },
       warnings: combinedWarnings,
       provenance: {
-        source: 'canonical',
+        source: temporaryPoiById.size ? 'canonical+request_time_temporary' : 'canonical',
         datasetVersion: DATASET_VERSION,
-        externalLiveDataUsed: false,
+        externalLiveDataUsed: temporaryPoiById.size > 0,
       },
       contract: {
         version: CONTRACT_VERSION,

@@ -171,6 +171,8 @@ function serializePoi(poi) {
   return {
     id: poi.globalId || poi.id,
     globalId: poi.globalId || poi.id,
+    canonical: poi.canonical !== false,
+    temporary: poi.canonical === false,
     cityId: poi.cityId,
     name: poi.name,
     category: poi.category,
@@ -204,6 +206,7 @@ function serializePoi(poi) {
       lastVerifiedAt: null,
       status: 'unknown',
     },
+    attribution: nullIfUnknown(poi.attribution),
     warnings: buildWarnings(poi),
   };
 }

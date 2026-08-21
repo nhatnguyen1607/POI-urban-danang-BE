@@ -2686,3 +2686,53 @@ Results:
   staging environment. Stopped at the configuration gate; did not query Photon
   or another provider, expose a secret, bypass auth, emulate a passing GPS flow,
   deploy, merge, or modify production/Firebase/canonical data.
+
+## 2026-08-21 - Full-route and external-place product hotfix
+
+- Worked only in fresh backend/frontend clones on branches
+  `fix/external-place-resolution-trip-integration` and
+  `fix/full-route-external-place-search-ui-cleanup`; original `D:` working
+  copies remained read-only.
+- Backend changed files: `src/services/destinationGeocodingService.js`,
+  `src/modules/travelerApiV2/tripPreviewValidation.js`,
+  `src/modules/travelerApiV2/tripPreview.js`,
+  `src/modules/travelerApiV2/serializers.js`, and
+  `tests/phase5/phase5ProductHotfix.test.js`.
+- Frontend changed files: `src/pages/dashboard/DashboardPage.tsx`,
+  `src/pages/urban-agent/PoiExperienceLayer.tsx`,
+  `src/pages/urban-agent/TripPreviewDayMap.tsx`,
+  `src/pages/urban-agent/TravelerFullRouteModal.tsx`,
+  `src/pages/urban-agent/UrbanAgentPage.tsx`,
+  `src/pages/urban-agent/tripPlaceBridge.ts`,
+  `src/pages/urban-agent/tripRoadRoutes.ts`, and
+  `src/services/poiExperienceService.ts`.
+- Diagnosed the deployed geocoder failure as `GEOCODER_NOT_CONFIGURED`, then
+  verified bounded live Photon results for accented and unaccented address
+  queries without storing provider payloads.
+- Ran focused tests (3/3), changed-file syntax checks, full backend tests
+  (60 passed, 0 failed, 1 guarded skip), frontend production build, scoped
+  new-file lint, HTTP route/save/replan smoke, and desktop/mobile browser review.
+- Verified 4173 canonical POIs and the approved SHA with no canonical CSV diff.
+  No production database, Firebase, manual deployment, merge, or automatic
+  canonical-creation path was used.
+
+## 2026-08-21 13:50 +07:00 - Final product-hotfix hardening
+
+- Fetched backend/frontend refs and verified `origin/main` remained the branch
+  merge base with no baseline advancement or conflict.
+- Audited route aggregation, result-card context, geocoder outbound controls,
+  temporary-place request snapshots, saved-trip normalization, reload, and
+  replan flow.
+- Changed frontend route summaries to distinguish complete totals from partial
+  calculated values and added explicit routed-segment coverage.
+- Added address/type/GPS context to result cards without exposing raw provider
+  payloads, and added a non-Firebase test that blocks outbound fetch while a
+  temporary snapshot is saved, reloaded, and replanned.
+- Ran JavaScript syntax checks, 10 focused backend tests, frontend production
+  build, scoped ESLint, canonical verifier, and diff checks.
+- Ran local HTTP/browser acceptance with one forced route failure, all four
+  required Photon queries, canonical search, geocoder-failure fallback,
+  save/reload/replan, real route calculation, desktop, and 390x844 mobile.
+- Result: all scoped release gates passed; blocker 0, high 0. No canonical,
+  production database, Firebase, merge, deployment, Base44, or AUTO_CREATE_NEW
+  operation occurred.

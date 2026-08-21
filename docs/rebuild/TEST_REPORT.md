@@ -1579,3 +1579,52 @@ replan: 1.6 seconds
 - Local Docker build: NOT RUN because no Docker daemon is available.
 - Hugging Face remote sync: NOT RUN by design; branch review and first manual
   workflow dispatch remain required.
+
+## Product hotfix - 2026-08-21
+
+- Changed-backend syntax checks: PASS.
+- Focused temporary-place tests: 3 passed, 0 failed.
+- Full backend suite: 61 total, 60 passed, 0 failed, 1 guarded PostGIS skip.
+- Live local geocoder: PASS for accented and unaccented Phuoc Tuong queries;
+  each returned 7 bounded Photon results.
+- HTTP trip smoke: PASS; all four hard includes scheduled, temporary place
+  scheduled exactly once, request-time provenance exposed, and both daily end
+  times remained before 20:00.
+- Authenticated road-route smoke: 6/6 same-day segments passed; no overnight
+  segment was generated.
+- Memory-store save/replan smoke: PASS; same trip ID retained and the temporary
+  place remained present with `canonical=false`.
+- Frontend TypeScript/production build: PASS. Scoped ESLint for the three new
+  focused files: PASS. Existing large-bundle warning and unrelated legacy lint
+  debt remain.
+- Browser review: PASS at 1440x1000 and 390x844 with no horizontal overflow;
+  all-trip route, day filters, segment selection, search/add, pin fallback,
+  navigation, Grab, and cleaned Map & Data layout were exercised.
+- Canonical integrity: 4173 POIs; SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`;
+  canonical CSV diff empty.
+
+## Product hotfix final hardening - 2026-08-21
+
+- Relevant backend suite: PASS, 10 passed, 0 failed. Covered geocoder guards,
+  temporary-place validation/scheduling, memory-store save/reload/replan,
+  owner-only lifecycle routes, and resolver-independent snapshot recovery.
+- Changed-backend syntax checks and `git diff --check`: PASS.
+- Frontend `npm.cmd run build`: PASS. Existing large-chunk warning remains.
+- Scoped ESLint for `TravelerFullRouteModal.tsx`, `tripRoadRoutes.ts`, and
+  `tripPlaceBridge.ts`: PASS. The broader legacy `PoiExperienceLayer.tsx`
+  still reports three pre-existing errors and one warning outside the changed
+  result-card block; unrelated lint debt was not modified.
+- Browser complete-route case: PASS, 6/6 segments with normal total labels.
+- Browser forced-failure case: PASS, 5/6 segments; partial distance/time labels,
+  explicit coverage note, and dashed fallback without fabricated metrics.
+- Coverage filtering: PASS for day 1, day 2, and all days; no overnight segment.
+- External search: PASS, 7 results for each required accented/unaccented exact
+  and generic Phuoc Tuong query. Cards displayed address and type context.
+- Geocoder failure simulation: PASS; canonical `Cafe Phương` results and manual
+  pin fallback remained available.
+- Temporary-place E2E: PASS; saved request snapshot reloaded, routed, and
+  replanned under the same trip ID with `canonical=false`.
+- Mobile 390x844: PASS; no horizontal overflow in route summary or search cards.
+- `npm.cmd run data:verify`: PASS, 4173 POIs, zero duplicate IDs, zero invalid
+  core records, approved SHA unchanged; canonical CSV diff empty.

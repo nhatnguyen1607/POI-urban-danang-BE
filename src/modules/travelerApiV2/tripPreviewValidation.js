@@ -3,6 +3,7 @@ const {
   MAX_TRIP_PREVIEW_RECOMMENDATION_LIMIT,
   TRIP_PREVIEW_PACE_DEFAULT_STOPS,
 } = require('./constants');
+const { getCityConfig } = require('../cities/cityConfig');
 
 const SUPPORTED_CITY_ID = 'da-nang';
 const TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -12,6 +13,8 @@ const PACES = new Set(['relaxed', 'balanced', 'packed']);
 const BUDGETS = new Set(['budget', 'moderate', 'premium', 'unknown']);
 const MAX_DAY_WINDOWS = 7;
 const MAX_TIME_WINDOW_SPAN_MINUTES = 960;
+const MAX_TEMPORARY_PLACES = 20;
+const TEMPORARY_PLACE_SOURCES = new Set(['photon', 'manual_pin', 'request_time_geocoder']);
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -152,6 +155,88 @@ function uniqueStringArray(value, { field, max }) {
   return { value: result };
 }
 
+function boundedString(value, { field, min = 0, max }) {
+  const text = String(value || '').trim();
+  if (text.length < min || text.length > max) {
+    return { error: fieldError(field, `string_length_${min}_to_${max}`) };
+  }
+  return { value: text };
+}
+
+function parseTemporaryPlaces(value, cityId) {
+  if (value === undefined || value === null) return { value: [] };
+  if (!Array.isArray(value)) return { errors: [fieldError('constraints.temporaryPlaces', 'array')] };
+  if (value.length > MAX_TEMPORARY_PLACES) {
+    return { errors: [fieldError('constraints.temporaryPlaces', `maximum_${MAX_TEMPORARY_PLACES}`)] };
+  }
+
+  const city = getCityConfig(cityId);
+  const errors = [];
+  const seen = new Set();
+  const result = [];
+
+  value.forEach((item, index) => {
+    const field = `constraints.temporaryPlaces[${index}]`;
+    if (!isPlainObject(item)) {
+      errors.push(fieldError(field, 'object'));
+      return;
+    }
+    const id = boundedString(item.id, { field: `${field}.id`, min: 8, max: 160 });
+    const name = boundedString(item.name, { field: `${field}.name`, min: 1, max: 180 });
+    const address = boundedString(item.address, { field: `${field}.address`, max: 360 });
+    const category = boundedString(item.category, { field: `${field}.category`, max: 120 });
+    const attribution = boundedString(item.attribution, { field: `${field}.attribution`, max: 240 });
+    const location = isPlainObject(item.location) ? item.location : item;
+    const lat = Number(location.lat);
+    const lon = Number(location.lon ?? location.lng);
+    const source = String(item.source || 'request_time_geocoder').trim();
+
+    if (id.error) errors.push(id.error);
+    if (name.error) errors.push(name.error);
+    if (address.error) errors.push(address.error);
+    if (category.error) errors.push(category.error);
+    if (attribution.error) errors.push(attribution.error);
+    if (id.value && !id.value.startsWith('temporary:')) {
+      errors.push(fieldError(`${field}.id`, 'temporary_id_prefix'));
+    }
+    if (id.value && seen.has(id.value)) {
+      errors.push(fieldError('constraints.temporaryPlaces', 'unique_id'));
+    }
+    if (item.canonical === true) errors.push(fieldError(`${field}.canonical`, 'must_be_false'));
+    if (!TEMPORARY_PLACE_SOURCES.has(source)) {
+      errors.push(fieldError(`${field}.source`, 'enum_photon_manual_pin_request_time_geocoder'));
+    }
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
+      errors.push(fieldError(`${field}.lat`, 'number_between_-90_and_90'));
+    }
+    if (!Number.isFinite(lon) || lon < -180 || lon > 180) {
+      errors.push(fieldError(`${field}.lon`, 'number_between_-180_and_180'));
+    }
+    if (city?.bbox && Number.isFinite(lat) && Number.isFinite(lon) && (
+      lat < city.bbox.south || lat > city.bbox.north || lon < city.bbox.west || lon > city.bbox.east
+    )) {
+      errors.push(fieldError(`${field}.location`, 'within_city_pack_bounds'));
+    }
+
+    if (!id.error && !name.error && Number.isFinite(lat) && Number.isFinite(lon) && TEMPORARY_PLACE_SOURCES.has(source)) {
+      seen.add(id.value);
+      result.push({
+        id: id.value,
+        name: name.value,
+        address: address.value,
+        category: category.value || 'Địa điểm đã chọn',
+        lat,
+        lon,
+        source,
+        canonical: false,
+        attribution: attribution.value || null,
+      });
+    }
+  });
+
+  return errors.length ? { errors } : { value: result };
+}
+
 function validateTripPreviewRequest(body = {}) {
   const errors = [];
   if (!isPlainObject(body)) {
@@ -283,6 +368,19 @@ function validateTripPreviewRequest(body = {}) {
   });
   if (exclude.error) errors.push(exclude.error);
 
+  const temporaryPlaces = parseTemporaryPlaces(safeConstraints.temporaryPlaces, cityId);
+  if (temporaryPlaces.errors) errors.push(...temporaryPlaces.errors);
+  const temporaryIds = (temporaryPlaces.value || []).map((place) => place.id);
+  const includedIds = mustInclude.value || [];
+  const excludedIds = exclude.value || [];
+  if (temporaryIds.some((id) => excludedIds.includes(id))) {
+    errors.push(fieldError('constraints.temporaryPlaces', 'must_not_overlap_excludePoiIds'));
+  }
+  const requiredPoiIds = Array.from(new Set([...includedIds, ...temporaryIds]));
+  if (requiredPoiIds.length > 20) {
+    errors.push(fieldError('constraints.mustIncludePoiIds', 'maximum_20_including_temporary_places'));
+  }
+
   const recommendationOptions = body.recommendationOptions === undefined ? {} : body.recommendationOptions;
   if (!isPlainObject(recommendationOptions)) errors.push(fieldError('recommendationOptions', 'object'));
   const safeRecommendationOptions = isPlainObject(recommendationOptions) ? recommendationOptions : {};
@@ -319,9 +417,10 @@ function validateTripPreviewRequest(body = {}) {
       preferences: isPlainObject(body.preferences) ? body.preferences : {},
       constraints: {
         maxStopsPerDay: maxStops.value || defaultMaxStopsPerDay,
-        mustIncludePoiIds: mustInclude.value,
-        excludePoiIds: exclude.value,
+        mustIncludePoiIds: requiredPoiIds,
+        excludePoiIds: excludedIds,
         maxDistanceKm: maxDistance.value,
+        temporaryPlaces: temporaryPlaces.value || [],
       },
       recommendationOptions: {
         limit: recommendationLimit.value || DEFAULT_TRIP_PREVIEW_RECOMMENDATION_LIMIT,
@@ -333,6 +432,7 @@ function validateTripPreviewRequest(body = {}) {
 module.exports = {
   MAX_DAY_WINDOWS,
   MAX_TIME_WINDOW_SPAN_MINUTES,
+  MAX_TEMPORARY_PLACES,
   TIME_PATTERN,
   validateTripPreviewRequest,
 };

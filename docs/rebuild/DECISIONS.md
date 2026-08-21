@@ -431,6 +431,33 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Request-time external destinations in trip preview
+
+Date: 2026-08-21.
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Decision:
+
+- Use the public Photon endpoint as the default request-time resolver for the
+  explicitly approved product hotfix, while retaining the environment override
+  and existing outbound URL guards.
+- Accept at most 20 validated temporary places in a trip-preview request. IDs
+  must use the `temporary:` namespace, coordinates must be valid and within the
+  Da Nang City Pack bounds, and source attribution is preserved.
+- Automatically include a supplied temporary place as a hard request
+  constraint, while keeping it `canonical=false` through serialization,
+  scheduling, save, and replan.
+- Prioritize all feasible hard includes before optional recommendations, then
+  apply the existing geographic ordering policy.
+
+Non-decisions:
+
+- No canonical creation, ingestion, cache, provider payload persistence,
+  production database/Firebase write, second city, or runtime repository
+  switch.
+- No road provider or routing engine was added; the UI reuses `/api/route`.
+
 ## Decision - Harden the disabled Stage 5D.1 geocoder proxy
 
 Date: 2026-08-20.
