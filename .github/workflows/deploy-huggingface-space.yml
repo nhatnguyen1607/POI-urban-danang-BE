@@ -109,6 +109,11 @@ jobs:
         env:
           AUTO_DEPLOY_ENABLED: ${{ vars.HF_AUTO_DEPLOY_ENABLED }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ] && [ -z "$AUTO_DEPLOY_ENABLED" ]; then
+            echo "::error::Repository Actions variable HF_AUTO_DEPLOY_ENABLED is not configured."
+            exit 1
+          fi
+
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"
           elif [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ] && [ "$AUTO_DEPLOY_ENABLED" = "true" ]; then
