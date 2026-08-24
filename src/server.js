@@ -34,7 +34,11 @@ const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');
 const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
-const { searchDestinations } = require('./services/destinationGeocodingService');
+const {
+  autocompleteGooglePlaces,
+  resolveDestinationSearch,
+  resolveGooglePlace,
+} = require('./services/destinationGeocodingService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { resolvePythonExecutable } = require('./services/semanticModelService');
 const { recordFeedback } = require('./services/feedbackService');
@@ -205,25 +209,67 @@ app.get('/api/pois/data-quality', async (req, res) => {
 
 app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
   try {
-    const results = await searchDestinations({
+    const response = await resolveDestinationSearch({
       query: req.query.q,
       cityId: req.query.cityId,
       limit: req.query.limit,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
     });
     res.json({
-      results,
-      meta: {
-        cityId: DEFAULT_CITY_ID,
-        source: 'photon',
-        requestTimeOnly: true,
-        canonicalDataChanged: false,
-      },
+      results: response.results,
+      meta: response.meta,
     });
   } catch (error) {
     const controlledError = Boolean(error?.status && error?.code);
     res.status(controlledError ? error.status : 502).json({
       error: controlledError ? error.code : 'GEOCODER_FAILED',
       message: controlledError ? error.message : 'Destination search failed.',
+    });
+  }
+});
+
+app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
+  try {
+    const suggestions = await autocompleteGooglePlaces({
+      input: req.query.q,
+      sessionToken: req.query.sessionToken,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
+    });
+    res.json({ suggestions, meta: { source: 'google_places', requestTimeOnly: true } });
+  } catch (error) {
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GOOGLE_AUTOCOMPLETE_FAILED',
+      message: controlledError ? error.message : 'Place autocomplete failed.',
+    });
+  }
+});
+
+app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
+  try {
+    const result = await resolveGooglePlace({
+      placeId: req.params.placeId,
+      sessionToken: req.query.sessionToken,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
+    });
+    res.json({ result, meta: { source: 'google_places', requestTimeOnly: true } });
+  } catch (error) {
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GOOGLE_PLACE_DETAILS_FAILED',
+      message: controlledError ? error.message : 'Place details failed.',
     });
   }
 });

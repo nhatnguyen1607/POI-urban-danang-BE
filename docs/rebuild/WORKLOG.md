@@ -2736,3 +2736,34 @@ Results:
 - Result: all scoped release gates passed; blocker 0, high 0. No canonical,
   production database, Firebase, merge, deployment, Base44, or AUTO_CREATE_NEW
   operation occurred.
+
+## 2026-08-24 - Google Maps Platform search and address precision upgrade
+
+- Continued only in the existing clean backend/frontend hotfix clones; the
+  original `D:` repositories remained untouched.
+- Read the hotfix request, repository state, Google Maps Platform official
+  documentation, geocoder/search service, traveler discovery UI, temporary
+  place validation, saved-trip recovery path, environment examples, and current
+  Phase 5 records.
+- Added Google-first request-time Text Search, Nearby Search, Autocomplete,
+  Place Details, and Geocoding boundaries with minimal fields, bounded results,
+  separate server/browser keys, and Photon/OpenStreetMap fallback.
+- Added intent classification, reliable-origin resolution, explicit no-GPS
+  near-me failure, deterministic 3/5/10 km expansion, 20 km cap, distance-aware
+  ranking, rooftop-only exact acceptance, approximate-address confirmation,
+  and Google/canonical display deduplication.
+- Added a Google-compliant discovery map boundary while retaining Leaflet only
+  for canonical/Photon/manual content when Google content is absent. Existing
+  OSRM routing was not changed.
+- Preserved provider Place ID and request-time policy metadata through temporary
+  place validation and saved-trip frontend recovery without canonicalizing the
+  result or storing raw Google payloads.
+- Commands run: `node --test` for two focused Phase 5 files, `npm.cmd test`,
+  `npm.cmd run data:verify`, backend `node --check`, frontend
+  `npm.cmd run build`, scoped ESLint, `git diff --check`, and local background
+  browser smoke with Chrome at desktop/mobile sizes.
+- Results: focused 16/16 passed; full backend 68 passed, 0 failed, 1 guarded
+  skip; frontend build/lint passed; browser fallback smoke passed; canonical
+  4173/SHA unchanged.
+- Google keys were absent. No live Google request, production DB/Firebase write,
+  deployment, merge, Base44 work, or automatic canonical creation occurred.

@@ -88,6 +88,25 @@ test('product hotfix validates temporary places without turning them into canoni
   assert.ok(fabricatedCanonical.errors.some((error) => error.field.endsWith('.canonical')));
 });
 
+test('product hotfix preserves request-time Google identity without promoting provider content', () => {
+  const request = requestWithTemporaryPlace({
+    id: 'temporary:google:ChIJ-example',
+    source: 'request_time_geocoder',
+    attribution: 'Google Maps',
+    providerPlaceId: 'ChIJ-example',
+    providerContentPolicy: 'request_time_only',
+  });
+  const validation = validateTripPreviewRequest(request);
+
+  assert.equal(validation.errors, undefined);
+  const normalized = validation.value.constraints.temporaryPlaces[0];
+  assert.equal(normalized.name, request.constraints.temporaryPlaces[0].name);
+  assert.equal(normalized.providerPlaceId, 'ChIJ-example');
+  assert.equal(normalized.providerContentPolicy, 'request_time_only');
+  assert.equal(normalized.source, 'request_time_geocoder');
+  assert.equal(normalized.canonical, false);
+});
+
 test('product hotfix scheduler includes a temporary place and reports request-time provenance', async () => {
   const request = requestWithTemporaryPlace();
   request.trip.dayCount = 2;

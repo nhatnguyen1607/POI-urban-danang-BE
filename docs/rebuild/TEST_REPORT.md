@@ -1628,3 +1628,26 @@ replan: 1.6 seconds
 - Mobile 390x844: PASS; no horizontal overflow in route summary or search cards.
 - `npm.cmd run data:verify`: PASS, 4173 POIs, zero duplicate IDs, zero invalid
   core records, approved SHA unchanged; canonical CSV diff empty.
+
+## Google Maps Platform search upgrade - 2026-08-24
+
+- Focused backend tests: PASS, 16 passed, 0 failed.
+- Full backend suite: PASS, 69 total, 68 passed, 0 failed, 1 guarded PostGIS
+  integration skipped.
+- Backend syntax and diff checks: PASS.
+- Frontend TypeScript/production build: PASS; existing large-chunk warning only.
+- Scoped ESLint for the new Google map, search service, and trip-place bridge:
+  PASS, 0 errors and 0 warnings.
+- Canonical verifier: PASS, 4173 POIs, 0 duplicate IDs, 0 invalid core rows,
+  SHA-256 `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- Mocked Google contract tests: PASS for intent classification, reliable-GPS
+  guard, 3/5/10 km radius expansion, out-of-radius rejection, address component
+  matching, rooftop-only silent confirmation, false-exact rejection,
+  autocomplete session/field bounds, Place Details, and provider Place ID
+  preservation.
+- Local browser fallback smoke: PASS at 1440x1000 and 390x844. The no-GPS
+  near-me prompt, manual-pin mode, discovery map, and no-horizontal-overflow
+  checks passed.
+- Live Google tests: NOT RUN. `GOOGLE_MAPS_SERVER_API_KEY` and
+  `VITE_GOOGLE_MAPS_API_KEY` were not configured; no production success is
+  claimed.

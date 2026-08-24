@@ -684,3 +684,25 @@ Date: 2026-08-14 (+07:00).
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
 - No merge, deployment, canonical write, database/Firebase write, or automatic
   POI creation occurred.
+
+## Google Maps Platform search upgrade - 2026-08-24
+
+- Status: `GOOGLE_MAPS_PLATFORM_CONFIGURATION_REQUIRED` on the existing
+  product-hotfix review branches; no merge or deployment occurred.
+- Google Places (New) Text Search, Nearby Search, Autocomplete, Place Details,
+  and Google Geocoding are implemented behind separate browser/server key
+  boundaries. Photon/OpenStreetMap remains the bounded fallback.
+- Query intent, search-origin priority, 3/5/10 km category expansion, 20 km
+  normal-search cap, deterministic distance-aware ranking, exact rooftop
+  validation, approximate-address pin confirmation, and provider identity
+  preservation are covered by mock tests.
+- The discovery map uses Google Maps JavaScript API only when configured to
+  display Google content. Existing OSRM route/navigation behavior is unchanged.
+- Full backend suite: 69 total, 68 passed, 0 failed, 1 guarded PostGIS skip.
+  Frontend production build and scoped lint passed; local desktop/mobile
+  fallback smoke passed.
+- Canonical runtime remains 4173 POIs at SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- Next action: configure restricted staging keys, enable Maps JavaScript API,
+  Places API (New), and Geocoding API, then run the required live Google test
+  matrix before merge or deployment.

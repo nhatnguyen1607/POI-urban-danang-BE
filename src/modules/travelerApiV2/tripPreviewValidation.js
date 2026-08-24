@@ -15,6 +15,7 @@ const MAX_DAY_WINDOWS = 7;
 const MAX_TIME_WINDOW_SPAN_MINUTES = 960;
 const MAX_TEMPORARY_PLACES = 20;
 const TEMPORARY_PLACE_SOURCES = new Set(['photon', 'manual_pin', 'request_time_geocoder']);
+const PROVIDER_CONTENT_POLICIES = new Set(['request_time_only', 'first_party_confirmed']);
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -186,6 +187,11 @@ function parseTemporaryPlaces(value, cityId) {
     const address = boundedString(item.address, { field: `${field}.address`, max: 360 });
     const category = boundedString(item.category, { field: `${field}.category`, max: 120 });
     const attribution = boundedString(item.attribution, { field: `${field}.attribution`, max: 240 });
+    const providerPlaceId = boundedString(item.providerPlaceId, {
+      field: `${field}.providerPlaceId`,
+      max: 256,
+    });
+    const providerContentPolicy = String(item.providerContentPolicy || '').trim();
     const location = isPlainObject(item.location) ? item.location : item;
     const lat = Number(location.lat);
     const lon = Number(location.lon ?? location.lng);
@@ -196,6 +202,10 @@ function parseTemporaryPlaces(value, cityId) {
     if (address.error) errors.push(address.error);
     if (category.error) errors.push(category.error);
     if (attribution.error) errors.push(attribution.error);
+    if (providerPlaceId.error) errors.push(providerPlaceId.error);
+    if (providerContentPolicy && !PROVIDER_CONTENT_POLICIES.has(providerContentPolicy)) {
+      errors.push(fieldError(`${field}.providerContentPolicy`, 'enum_request_time_only_first_party_confirmed'));
+    }
     if (id.value && !id.value.startsWith('temporary:')) {
       errors.push(fieldError(`${field}.id`, 'temporary_id_prefix'));
     }
@@ -230,6 +240,8 @@ function parseTemporaryPlaces(value, cityId) {
         source,
         canonical: false,
         attribution: attribution.value || null,
+        ...(providerPlaceId.value ? { providerPlaceId: providerPlaceId.value } : {}),
+        ...(providerContentPolicy ? { providerContentPolicy } : {}),
       });
     }
   });
