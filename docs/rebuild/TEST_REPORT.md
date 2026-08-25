@@ -1651,3 +1651,27 @@ replan: 1.6 seconds
 - Live Google tests: NOT RUN. `GOOGLE_MAPS_SERVER_API_KEY` and
   `VITE_GOOGLE_MAPS_API_KEY` were not configured; no production success is
   claimed.
+
+## Phase 5 Admin authentication foundation - 2026-08-25
+
+- Backend Admin security matrix: PASS, 10 passed, 0 failed. Covered missing and
+  invalid tokens, missing/false/true Admin claim, sanitized errors, normal
+  non-Admin authenticated access, safe paginated users, read-only capabilities,
+  POI summary, health, blocked writes, no self-elevation route, and rejection of
+  the former local Admin token/URL manipulation.
+- Full backend suite: PASS, 79 total, 78 passed, 0 failed, 1 guarded PostGIS
+  integration skipped.
+- Backend JavaScript syntax and `git diff --check`: PASS.
+- Frontend scoped ESLint: PASS for all changed TypeScript/TSX files.
+- Frontend TypeScript and production build: PASS. The existing large main-chunk
+  warning remains pre-existing technical debt; Admin remains a lazy chunk.
+- Browser security smoke: PASS. Legacy Admin localStorage values plus Admin query
+  parameters redirected to `/admin/login`, rendered zero Admin shells, rendered
+  zero JourneyPreloaders, and had zero horizontal overflow at 390 px.
+- Traveler runtime smoke: PASS. `/urban-agent` rendered, recommendations returned
+  3 results, and trip preview returned 3 stops.
+- Live Firebase Admin-user acceptance: not run; no production credential or user
+  was used. Firebase verifier and `listUsers()` behavior were exercised with the
+  approved mocked-token test path.
+- Google provider regression: PASS through the full Phase 5 suite. Live status
+  remains `GOOGLE_LIVE_CONFIGURATION_PENDING`.

@@ -51,22 +51,17 @@ const {
   ensureUserDocument,
   getCustomerProfile,
   getAgentMemory,
-  listAdminReviews,
   listBusinessAnalyses,
-  listUsers,
   listPois,
   listSellerConcepts,
   listItineraries,
   listSellerBusinesses,
   saveBusinessAnalysis,
-  saveAdminReview,
   saveAgentMemory,
   saveCustomerProfile,
   saveItinerary,
   saveSellerConcept,
   saveSellerBusiness,
-  updatePoiStatus,
-  updateUserStatus,
   upsertPoi,
   updateUserRole,
 } = require('./services/firestorePersistenceService');
@@ -75,6 +70,7 @@ const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
 const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
+const { createAdminRouter } = require('./modules/admin/adminRouter');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
 
@@ -99,6 +95,7 @@ app.use(express.json({
   skip: (req) => req.is('multipart/form-data')
 }));
 
+app.use('/api/admin', createAdminRouter());
 app.use('/api/v2', travelerApiV2Router);
 
 const upload = multer({ dest: UPLOAD_DIR });
@@ -664,54 +661,6 @@ app.post('/api/agent/feedback', requireFirebaseAuth, async (req, res) => {
   } catch (error) {
     console.error('[Agent Feedback Error]', error);
     res.status(errorStatus(error)).json({ error: 'Failed to record feedback', details: error.message });
-  }
-});
-
-app.get('/api/admin/reviews', requireFirebaseAuth, async (req, res) => {
-  try {
-    const reviews = await listAdminReviews({ status: req.query.status, limit: req.query.limit });
-    res.json({ reviews });
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to list admin reviews', details: error.message });
-  }
-});
-
-app.post('/api/admin/reviews', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await saveAdminReview({
-      ...req.body,
-      reviewerId: req.user.uid,
-    });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to save admin review', details: error.message });
-  }
-});
-
-app.get('/api/admin/users', requireFirebaseAuth, async (req, res) => {
-  try {
-    const users = await listUsers({ limit: req.query.limit, role: req.query.role, status: req.query.status });
-    res.json({ users });
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to list users', details: error.message });
-  }
-});
-
-app.post('/api/admin/users/:uid/status', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await updateUserStatus({ uid: req.params.uid, status: req.body.status });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to update user status', details: error.message });
-  }
-});
-
-app.post('/api/admin/pois/:poiId/status', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await updatePoiStatus({ poiId: req.params.poiId, status: req.body.status, verified: req.body.verified });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to update POI status', details: error.message });
   }
 });
 

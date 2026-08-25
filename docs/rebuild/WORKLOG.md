@@ -2767,3 +2767,38 @@ Results:
   4173/SHA unchanged.
 - Google keys were absent. No live Google request, production DB/Firebase write,
   deployment, merge, Base44 work, or automatic canonical creation occurred.
+
+## 2026-08-25 - Trusted Admin authentication foundation
+
+- Resolved the actual remote baselines without modifying the dirty original
+  backend working copy. Backend source was
+  `fix/external-place-resolution-trip-integration` at `772a40c`; frontend source
+  was `phase5/base44-ui-integration` at accepted commit `86b741c`.
+- Backend changed files: `src/middleware/firebaseAuth.js`,
+  `src/middleware/adminAuth.js`, `src/middleware/adminRateLimit.js`,
+  `src/modules/admin/adminRouter.js`, `src/server.js`,
+  `scripts/set-admin-claim.js`, `tests/phase5/phase5AdminAuth.test.js`,
+  `docs/ADMIN_AUTH_SETUP.md`, and the required rebuild records.
+- Frontend changed files: `src/App.tsx`, `src/auth/AuthContext.tsx`,
+  `src/auth/authContextValue.ts`, `src/services/firebase.ts`,
+  `src/utils/apiClient.ts`, `src/pages/auth/AuthPages.tsx`,
+  `src/pages/admin/AdminRouteGuard.tsx`, `src/pages/admin/AdminShell.tsx`,
+  `src/pages/admin/AdminViews.tsx`, `src/pages/admin/adminData.ts`,
+  `src/pages/admin/admin.css`, and `docs/ADMIN_CAPABILITY_MATRIX.md`.
+- Reused the existing Firebase Admin initialization and bearer verification,
+  added a strict no-fallback verifier plus exact `admin: true` authorization,
+  centralized rate limiting, and read-only identity/capability/users/POI/health
+  routes. Removed legacy hardcoded Admin-token handling and obsolete Admin write
+  routes.
+- Replaced frontend local Admin authority and hardcoded credentials with a
+  centralized backend-verifying guard. Connected Users, Overview, POI summary,
+  System, and Integrations to protected real contracts while leaving unknown
+  metrics as `—`.
+- Commands run: backend `node --check`, focused Admin tests, full `npm.cmd test`,
+  frontend scoped ESLint, `npm.cmd run build`, `git diff --check`, background
+  HTTP smoke, and headless Chrome desktop/mobile authorization smoke.
+- Results: Admin tests 10/10; full backend 78 passed, 0 failed, 1 guarded skip;
+  frontend lint/build passed; browser attack regression and traveler smoke
+  passed. Runtime recommendation and preview counts were 3 and 3.
+- No production Firebase/database access, credential output, canonical change,
+  Google live call, merge, deployment, or Admin write was performed.
