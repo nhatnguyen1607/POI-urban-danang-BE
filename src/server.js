@@ -34,7 +34,11 @@ const { recommendPOIs } = require('./services/poiRetrievalService');
 const { createItinerary } = require('./services/itineraryPlannerService');
 const { scoreBusinessLocations } = require('./services/businessLocationScorer');
 const { getForecast } = require('./services/weatherService');
-const { searchDestinations } = require('./services/destinationGeocodingService');
+const {
+  autocompleteGooglePlaces,
+  resolveDestinationSearch,
+  resolveGooglePlace,
+} = require('./services/destinationGeocodingService');
 const { estimateMatrix } = require('./services/routeMatrixService');
 const { resolvePythonExecutable } = require('./services/semanticModelService');
 const { recordFeedback } = require('./services/feedbackService');
@@ -47,22 +51,17 @@ const {
   ensureUserDocument,
   getCustomerProfile,
   getAgentMemory,
-  listAdminReviews,
   listBusinessAnalyses,
-  listUsers,
   listPois,
   listSellerConcepts,
   listItineraries,
   listSellerBusinesses,
   saveBusinessAnalysis,
-  saveAdminReview,
   saveAgentMemory,
   saveCustomerProfile,
   saveItinerary,
   saveSellerConcept,
   saveSellerBusiness,
-  updatePoiStatus,
-  updateUserStatus,
   upsertPoi,
   updateUserRole,
 } = require('./services/firestorePersistenceService');
@@ -71,6 +70,7 @@ const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
 const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
+const { createAdminRouter } = require('./modules/admin/adminRouter');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
 
@@ -95,6 +95,7 @@ app.use(express.json({
   skip: (req) => req.is('multipart/form-data')
 }));
 
+app.use('/api/admin', createAdminRouter());
 app.use('/api/v2', travelerApiV2Router);
 
 const upload = multer({ dest: UPLOAD_DIR });
@@ -205,25 +206,67 @@ app.get('/api/pois/data-quality', async (req, res) => {
 
 app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
   try {
-    const results = await searchDestinations({
+    const response = await resolveDestinationSearch({
       query: req.query.q,
       cityId: req.query.cityId,
       limit: req.query.limit,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
     });
     res.json({
-      results,
-      meta: {
-        cityId: DEFAULT_CITY_ID,
-        source: 'photon',
-        requestTimeOnly: true,
-        canonicalDataChanged: false,
-      },
+      results: response.results,
+      meta: response.meta,
     });
   } catch (error) {
     const controlledError = Boolean(error?.status && error?.code);
     res.status(controlledError ? error.status : 502).json({
       error: controlledError ? error.code : 'GEOCODER_FAILED',
       message: controlledError ? error.message : 'Destination search failed.',
+    });
+  }
+});
+
+app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
+  try {
+    const suggestions = await autocompleteGooglePlaces({
+      input: req.query.q,
+      sessionToken: req.query.sessionToken,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
+    });
+    res.json({ suggestions, meta: { source: 'google_places', requestTimeOnly: true } });
+  } catch (error) {
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GOOGLE_AUTOCOMPLETE_FAILED',
+      message: controlledError ? error.message : 'Place autocomplete failed.',
+    });
+  }
+});
+
+app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
+  try {
+    const result = await resolveGooglePlace({
+      placeId: req.params.placeId,
+      sessionToken: req.query.sessionToken,
+      lat: req.query.lat,
+      lon: req.query.lon,
+      accuracy: req.query.accuracy,
+      originSource: req.query.originSource,
+      googleMapCompliant: req.query.googleMapCompliant === 'true',
+    });
+    res.json({ result, meta: { source: 'google_places', requestTimeOnly: true } });
+  } catch (error) {
+    const controlledError = Boolean(error?.status && error?.code);
+    res.status(controlledError ? error.status : 502).json({
+      error: controlledError ? error.code : 'GOOGLE_PLACE_DETAILS_FAILED',
+      message: controlledError ? error.message : 'Place details failed.',
     });
   }
 });
@@ -618,54 +661,6 @@ app.post('/api/agent/feedback', requireFirebaseAuth, async (req, res) => {
   } catch (error) {
     console.error('[Agent Feedback Error]', error);
     res.status(errorStatus(error)).json({ error: 'Failed to record feedback', details: error.message });
-  }
-});
-
-app.get('/api/admin/reviews', requireFirebaseAuth, async (req, res) => {
-  try {
-    const reviews = await listAdminReviews({ status: req.query.status, limit: req.query.limit });
-    res.json({ reviews });
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to list admin reviews', details: error.message });
-  }
-});
-
-app.post('/api/admin/reviews', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await saveAdminReview({
-      ...req.body,
-      reviewerId: req.user.uid,
-    });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to save admin review', details: error.message });
-  }
-});
-
-app.get('/api/admin/users', requireFirebaseAuth, async (req, res) => {
-  try {
-    const users = await listUsers({ limit: req.query.limit, role: req.query.role, status: req.query.status });
-    res.json({ users });
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to list users', details: error.message });
-  }
-});
-
-app.post('/api/admin/users/:uid/status', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await updateUserStatus({ uid: req.params.uid, status: req.body.status });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to update user status', details: error.message });
-  }
-});
-
-app.post('/api/admin/pois/:poiId/status', requireFirebaseAuth, async (req, res) => {
-  try {
-    const result = await updatePoiStatus({ poiId: req.params.poiId, status: req.body.status, verified: req.body.verified });
-    res.json(result);
-  } catch (error) {
-    res.status(errorStatus(error)).json({ error: 'Failed to update POI status', details: error.message });
   }
 });
 

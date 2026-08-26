@@ -1628,3 +1628,50 @@ replan: 1.6 seconds
 - Mobile 390x844: PASS; no horizontal overflow in route summary or search cards.
 - `npm.cmd run data:verify`: PASS, 4173 POIs, zero duplicate IDs, zero invalid
   core records, approved SHA unchanged; canonical CSV diff empty.
+
+## Google Maps Platform search upgrade - 2026-08-24
+
+- Focused backend tests: PASS, 16 passed, 0 failed.
+- Full backend suite: PASS, 69 total, 68 passed, 0 failed, 1 guarded PostGIS
+  integration skipped.
+- Backend syntax and diff checks: PASS.
+- Frontend TypeScript/production build: PASS; existing large-chunk warning only.
+- Scoped ESLint for the new Google map, search service, and trip-place bridge:
+  PASS, 0 errors and 0 warnings.
+- Canonical verifier: PASS, 4173 POIs, 0 duplicate IDs, 0 invalid core rows,
+  SHA-256 `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- Mocked Google contract tests: PASS for intent classification, reliable-GPS
+  guard, 3/5/10 km radius expansion, out-of-radius rejection, address component
+  matching, rooftop-only silent confirmation, false-exact rejection,
+  autocomplete session/field bounds, Place Details, and provider Place ID
+  preservation.
+- Local browser fallback smoke: PASS at 1440x1000 and 390x844. The no-GPS
+  near-me prompt, manual-pin mode, discovery map, and no-horizontal-overflow
+  checks passed.
+- Live Google tests: NOT RUN. `GOOGLE_MAPS_SERVER_API_KEY` and
+  `VITE_GOOGLE_MAPS_API_KEY` were not configured; no production success is
+  claimed.
+
+## Phase 5 Admin authentication foundation - 2026-08-25
+
+- Backend Admin security matrix: PASS, 10 passed, 0 failed. Covered missing and
+  invalid tokens, missing/false/true Admin claim, sanitized errors, normal
+  non-Admin authenticated access, safe paginated users, read-only capabilities,
+  POI summary, health, blocked writes, no self-elevation route, and rejection of
+  the former local Admin token/URL manipulation.
+- Full backend suite: PASS, 79 total, 78 passed, 0 failed, 1 guarded PostGIS
+  integration skipped.
+- Backend JavaScript syntax and `git diff --check`: PASS.
+- Frontend scoped ESLint: PASS for all changed TypeScript/TSX files.
+- Frontend TypeScript and production build: PASS. The existing large main-chunk
+  warning remains pre-existing technical debt; Admin remains a lazy chunk.
+- Browser security smoke: PASS. Legacy Admin localStorage values plus Admin query
+  parameters redirected to `/admin/login`, rendered zero Admin shells, rendered
+  zero JourneyPreloaders, and had zero horizontal overflow at 390 px.
+- Traveler runtime smoke: PASS. `/urban-agent` rendered, recommendations returned
+  3 results, and trip preview returned 3 stops.
+- Live Firebase Admin-user acceptance: not run; no production credential or user
+  was used. Firebase verifier and `listUsers()` behavior were exercised with the
+  approved mocked-token test path.
+- Google provider regression: PASS through the full Phase 5 suite. Live status
+  remains `GOOGLE_LIVE_CONFIGURATION_PENDING`.

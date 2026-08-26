@@ -6,6 +6,18 @@ function getBearerToken(req) {
   return match ? match[1] : '';
 }
 
+function attachVerifiedUser(req, decoded) {
+  req.firebaseUser = decoded;
+  req.user = {
+    uid: decoded.uid,
+    email: decoded.email,
+    name: decoded.name,
+    picture: decoded.picture,
+    role: decoded.role || decoded.claims?.role || 'customer',
+    authMode: 'firebase',
+  };
+}
+
 function decodeJwtPayloadUnsafe(token) {
   try {
     const payload = token.split('.')[1];
@@ -22,18 +34,6 @@ function allowDevAuthFallback() {
   return process.env.NODE_ENV !== 'production' && process.env.DISABLE_DEV_AUTH_FALLBACK !== 'true';
 }
 
-function attachLocalAdmin(req) {
-  req.firebaseUser = { uid: 'local-admin', email: 'admin', role: 'admin', localAdmin: true };
-  req.user = {
-    uid: 'local-admin',
-    email: 'admin',
-    name: 'Admin',
-    picture: null,
-    role: 'admin',
-    authMode: 'local-admin-dev-token',
-  };
-}
-
 function attachDevUserFromToken(req, token) {
   const decoded = decodeJwtPayloadUnsafe(token) || {};
   const uid = decoded.user_id || decoded.sub || decoded.uid || 'local-dev-user';
@@ -48,25 +48,28 @@ function attachDevUserFromToken(req, token) {
   };
 }
 
-async function verifyFirebaseToken(req, res, next, { required }) {
+async function verifyFirebaseToken(req, res, next, {
+  required,
+  allowFallback = true,
+  sanitizeErrors = false,
+  authProvider = getFirebaseAuth,
+  readinessProvider = isFirebaseAdminReady,
+}) {
   const token = getBearerToken(req);
   if (!token) {
     if (!required) return next();
+    if (sanitizeErrors) return res.status(401).json({ error: 'authentication_required' });
     return res.status(401).json({ error: 'Firebase ID token required' });
   }
 
-  if (token === 'local-admin-dev-token' && allowDevAuthFallback()) {
-    attachLocalAdmin(req);
-    return next();
-  }
-
-  const auth = getFirebaseAuth();
-  if (!auth || !isFirebaseAdminReady()) {
-    if (token && allowDevAuthFallback()) {
+  const auth = authProvider();
+  if (!auth || !readinessProvider()) {
+    if (allowFallback && token && allowDevAuthFallback()) {
       attachDevUserFromToken(req, token);
       return next();
     }
     if (!required) return next();
+    if (sanitizeErrors) return res.status(503).json({ error: 'firebase_auth_unavailable' });
     return res.status(503).json({
       error: 'Firebase Admin SDK is not configured',
       details: 'Set FIREBASE_SERVICE_ACCOUNT_JSON, FIREBASE_SERVICE_ACCOUNT_BASE64, or GOOGLE_APPLICATION_CREDENTIALS.',
@@ -75,18 +78,27 @@ async function verifyFirebaseToken(req, res, next, { required }) {
 
   try {
     const decoded = await auth.verifyIdToken(token);
-    req.firebaseUser = decoded;
-    req.user = {
-      uid: decoded.uid,
-      email: decoded.email,
-      name: decoded.name,
-      picture: decoded.picture,
-      role: decoded.role || decoded.claims?.role || 'customer',
-    };
+    attachVerifiedUser(req, decoded);
     return next();
   } catch (error) {
+    if (sanitizeErrors) return res.status(401).json({ error: 'invalid_firebase_token' });
     return res.status(401).json({ error: 'Invalid Firebase ID token', details: error.message });
   }
+}
+
+function createVerifiedFirebaseAuth({
+  authProvider = getFirebaseAuth,
+  readinessProvider = isFirebaseAdminReady,
+} = {}) {
+  return function verifiedFirebaseAuth(req, res, next) {
+    return verifyFirebaseToken(req, res, next, {
+      required: true,
+      allowFallback: false,
+      sanitizeErrors: true,
+      authProvider,
+      readinessProvider,
+    });
+  };
 }
 
 function optionalFirebaseAuth(req, res, next) {
@@ -97,7 +109,12 @@ function requireFirebaseAuth(req, res, next) {
   return verifyFirebaseToken(req, res, next, { required: true });
 }
 
+const requireVerifiedFirebaseAuth = createVerifiedFirebaseAuth();
+
 module.exports = {
+  createVerifiedFirebaseAuth,
+  getBearerToken,
   optionalFirebaseAuth,
   requireFirebaseAuth,
+  requireVerifiedFirebaseAuth,
 };

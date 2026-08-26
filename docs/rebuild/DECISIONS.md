@@ -431,6 +431,36 @@ The following approvals remain not granted:
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 
+## Decision - Trusted read-only Admin authorization boundary
+
+Date: 2026-08-25.
+
+Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+
+Decision:
+
+- Use the single Firebase Admin app already owned by the backend.
+- Authorize Admin only from a verified Firebase ID token containing the exact
+  custom claim `admin: true`.
+- Keep traveler development fallback behavior separate from the strict Admin
+  verifier; unverified development tokens can never reach Admin handlers.
+- Protect the complete `/api/admin/*` namespace centrally with strict
+  authentication, `requireAdmin`, and per-identity rate limiting.
+- Keep the first Admin backend foundation read-only. Unsupported writes return
+  `405 admin_api_read_only`.
+- Bootstrap or revoke the claim only through the local operator script; there
+  is no public self-elevation endpoint.
+- Let the frontend role remain navigation/display state only. The Admin UI is
+  mounted only after `/api/admin/me` succeeds.
+- Keep global trip reads, analytics, logs, Agent telemetry, user mutation, POI
+  mutation, and server configuration unavailable until separately approved.
+
+Non-decisions:
+
+- No production Firebase user or data was changed.
+- No custom role hierarchy, public claim-management API, Admin write API,
+  deployment, merge, canonical-data change, or Google live activation.
+
 ## Decision - Request-time external destinations in trip preview
 
 Date: 2026-08-21.

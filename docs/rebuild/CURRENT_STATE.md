@@ -684,3 +684,48 @@ Date: 2026-08-14 (+07:00).
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
 - No merge, deployment, canonical write, database/Firebase write, or automatic
   POI creation occurred.
+
+## Google Maps Platform search upgrade - 2026-08-24
+
+- Status: `GOOGLE_MAPS_PLATFORM_CONFIGURATION_REQUIRED` on the existing
+  product-hotfix review branches; no merge or deployment occurred.
+- Google Places (New) Text Search, Nearby Search, Autocomplete, Place Details,
+  and Google Geocoding are implemented behind separate browser/server key
+  boundaries. Photon/OpenStreetMap remains the bounded fallback.
+- Query intent, search-origin priority, 3/5/10 km category expansion, 20 km
+  normal-search cap, deterministic distance-aware ranking, exact rooftop
+  validation, approximate-address pin confirmation, and provider identity
+  preservation are covered by mock tests.
+- The discovery map uses Google Maps JavaScript API only when configured to
+  display Google content. Existing OSRM route/navigation behavior is unchanged.
+- Full backend suite: 69 total, 68 passed, 0 failed, 1 guarded PostGIS skip.
+  Frontend production build and scoped lint passed; local desktop/mobile
+  fallback smoke passed.
+- Canonical runtime remains 4173 POIs at SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+- Next action: configure restricted staging keys, enable Maps JavaScript API,
+  Places API (New), and Geocoding API, then run the required live Google test
+  matrix before merge or deployment.
+
+## Phase 5 Admin authentication foundation - 2026-08-25
+
+- Status: `IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED`.
+- Backend branch: `phase5/admin-backend-foundation`, based on the latest remote
+  `fix/external-place-resolution-trip-integration` at
+  `772a40c243c85bebee3be4492731f15a7ff8949c`.
+- Frontend branch remains `phase5/base44-ui-integration`, starting from accepted
+  commit `86b741c50138be1f747081de957a9704218118b3`.
+- `/api/admin/*` now requires a verified Firebase ID token and the trusted
+  custom claim `admin: true`; client roles, local storage, URL state, and local
+  development tokens cannot authorize Admin.
+- The Admin namespace is read-only and provides identity, capabilities,
+  paginated Firebase Auth users, canonical POI summary, and safe health state.
+- The frontend Admin guard verifies `/api/admin/me` before mounting any Admin
+  content. The old hardcoded/local Admin login mechanism has been removed.
+- Backend suite: 79 total, 78 passed, 0 failed, 1 guarded PostGIS skip. Frontend
+  production build and scoped lint passed. Browser negative-authorization and
+  traveler smoke passed; no live Firebase Admin account was used.
+- Google provider implementation is preserved and remains
+  `GOOGLE_LIVE_CONFIGURATION_PENDING`.
+- No merge, deployment, production Firebase access, canonical data change, or
+  Admin write capability occurred.
