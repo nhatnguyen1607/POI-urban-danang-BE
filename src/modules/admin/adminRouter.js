@@ -3,14 +3,23 @@ const { getFirebaseAuth, getFirestoreDb, isFirebaseAdminReady } = require('../..
 const { requireAdmin } = require('../../middleware/adminAuth');
 const { createAdminRateLimit } = require('../../middleware/adminRateLimit');
 const { requireVerifiedFirebaseAuth } = require('../../middleware/firebaseAuth');
-const { getPoiDataQualityReport } = require('../../services/poiDataService');
+const { getPoiDataQualityReport, loadPOIs } = require('../../services/poiDataService');
+const {
+  getAdminOverview,
+  getAdminPoi,
+  getAdminTrip,
+  listAdminFeedback,
+  listAdminPois,
+  listAdminTrips,
+} = require('./adminReadService');
 
 const ADMIN_CAPABILITIES = Object.freeze({
   identity: { read: true },
   users: { read: true, write: false },
   pois: { read: true, write: false },
-  trips: { read: false, write: false },
-  analytics: { read: false },
+  trips: { read: true, write: false },
+  feedback: { read: true, write: false },
+  analytics: { read: true },
   agentTelemetry: { read: false },
   integrations: { read: true, write: false },
   health: { read: true },
@@ -53,8 +62,15 @@ function createAdminRouter({
   }),
   authProvider = getFirebaseAuth,
   qualityProvider = getPoiDataQualityReport,
+  poiProvider = loadPOIs,
   firebaseReadyProvider = isFirebaseAdminReady,
   firestoreProvider = getFirestoreDb,
+  overviewProvider = getAdminOverview,
+  poiListProvider = listAdminPois,
+  poiDetailProvider = getAdminPoi,
+  tripListProvider = listAdminTrips,
+  tripDetailProvider = getAdminTrip,
+  feedbackProvider = listAdminFeedback,
 } = {}) {
   const router = express.Router();
 
@@ -89,6 +105,18 @@ function createAdminRouter({
     }
   });
 
+  router.get('/overview', async (req, res) => {
+    try {
+      const overview = await overviewProvider({
+        auth: authProvider(),
+        db: firestoreProvider(),
+      });
+      return res.json(overview);
+    } catch {
+      return res.status(503).json({ error: 'admin_overview_unavailable' });
+    }
+  });
+
   router.get('/pois/summary', async (req, res) => {
     try {
       const quality = await qualityProvider();
@@ -110,6 +138,68 @@ function createAdminRouter({
       });
     } catch {
       return res.status(503).json({ error: 'admin_poi_summary_unavailable' });
+    }
+  });
+
+  router.get('/pois', async (req, res) => {
+    try {
+      const pois = await poiProvider();
+      return res.json(poiListProvider({
+        pois,
+        query: req.query.query,
+        category: req.query.category,
+        source: req.query.source,
+        limit: req.query.limit,
+        offset: req.query.offset,
+      }));
+    } catch {
+      return res.status(503).json({ error: 'admin_poi_list_unavailable' });
+    }
+  });
+
+  router.get('/pois/:poiId', async (req, res) => {
+    try {
+      const pois = await poiProvider();
+      const poi = poiDetailProvider({ pois, poiId: req.params.poiId });
+      if (!poi) return res.status(404).json({ error: 'admin_poi_not_found' });
+      return res.json({ poi });
+    } catch {
+      return res.status(503).json({ error: 'admin_poi_detail_unavailable' });
+    }
+  });
+
+  router.get('/trips', async (req, res) => {
+    try {
+      return res.json(await tripListProvider({
+        db: firestoreProvider(),
+        limit: req.query.limit,
+      }));
+    } catch {
+      return res.status(503).json({ error: 'admin_trip_list_unavailable' });
+    }
+  });
+
+  router.get('/trips/:tripId', async (req, res) => {
+    try {
+      const trip = await tripDetailProvider({
+        db: firestoreProvider(),
+        tripId: req.params.tripId,
+      });
+      if (!trip) return res.status(404).json({ error: 'admin_trip_not_found' });
+      return res.json({ trip });
+    } catch {
+      return res.status(503).json({ error: 'admin_trip_detail_unavailable' });
+    }
+  });
+
+  router.get('/feedback', async (req, res) => {
+    try {
+      return res.json(await feedbackProvider({
+        db: firestoreProvider(),
+        limit: req.query.limit,
+      }));
+    } catch {
+      return res.status(503).json({ error: 'admin_feedback_unavailable' });
     }
   });
 

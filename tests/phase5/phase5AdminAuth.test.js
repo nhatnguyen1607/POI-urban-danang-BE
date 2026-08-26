@@ -70,6 +70,32 @@ function createTestApp() {
     }),
     firebaseReadyProvider: () => true,
     firestoreProvider: () => ({}),
+    overviewProvider: async () => ({
+      counts: {
+        users: { value: 3, exact: true },
+        trips: { value: 2, exact: true },
+        feedback: { value: 4, exact: true },
+      },
+      recentActivity: [{ id: 'trip:trip-1', type: 'trip', label: 'Beach day', ownerId: 'traveler-1', occurredAt: '2026-08-25T01:00:00.000Z' }],
+    }),
+    poiProvider: async () => [{
+      id: 'poi-1',
+      globalId: 'poi-1',
+      name: 'Safe Cafe',
+      category: 'Cafe',
+      address: 'Da Nang',
+      source: 'canonical',
+      rating: null,
+      reviewCount: null,
+      lat: 16.05,
+      lon: 108.2,
+      raw: { privatePayload: 'must-not-leak' },
+    }],
+    tripListProvider: async () => ({ trips: [{ tripId: 'trip-1', ownerId: 'traveler-1', title: 'Beach day', dayCount: 2, stopCount: 4 }] }),
+    tripDetailProvider: async ({ tripId }) => tripId === 'trip-1'
+      ? { tripId, ownerId: 'traveler-1', title: 'Beach day', dayCount: 2, stopCount: 4, stops: [] }
+      : null,
+    feedbackProvider: async () => ({ feedback: [{ eventId: 'event-1', userId: 'traveler-1', eventType: 'poi_useful', rating: 5, message: 'Helpful' }] }),
   }));
   return app;
 }
@@ -170,9 +196,41 @@ test('Admin capability, POI summary, and health endpoints expose only read-only 
     ]);
     assert.equal(capabilities.capabilities.users.read, true);
     assert.equal(capabilities.capabilities.users.write, false);
-    assert.equal(capabilities.capabilities.trips.read, false);
+    assert.equal(capabilities.capabilities.trips.read, true);
+    assert.equal(capabilities.capabilities.feedback.read, true);
     assert.equal(pois.canonicalCount, 4173);
     assert.equal(health.services.googleMaps.status, 'GOOGLE_LIVE_CONFIGURATION_PENDING');
+  });
+});
+
+test('Admin demo read endpoints expose real safe summaries without raw provider payloads', async () => {
+  await withServer(async (baseUrl) => {
+    const responses = await Promise.all([
+      get(baseUrl, '/api/admin/overview', 'admin'),
+      get(baseUrl, '/api/admin/pois?query=cafe', 'admin'),
+      get(baseUrl, '/api/admin/pois/poi-1', 'admin'),
+      get(baseUrl, '/api/admin/trips', 'admin'),
+      get(baseUrl, '/api/admin/trips/trip-1', 'admin'),
+      get(baseUrl, '/api/admin/feedback', 'admin'),
+    ]);
+    assert.deepEqual(responses.map((response) => response.status), [200, 200, 200, 200, 200, 200]);
+    const [overview, pois, poi, trips, trip, feedback] = await Promise.all(responses.map((response) => response.json()));
+    assert.equal(overview.counts.users.value, 3);
+    assert.equal(pois.total, 1);
+    assert.equal(pois.pois[0].poiId, 'poi-1');
+    assert.equal(poi.poi.rating, null);
+    assert.equal(trips.trips[0].ownerId, 'traveler-1');
+    assert.equal(trip.trip.tripId, 'trip-1');
+    assert.equal(feedback.feedback[0].rating, 5);
+    assert.ok(!JSON.stringify({ overview, pois, poi, trips, trip, feedback }).includes('privatePayload'));
+  });
+});
+
+test('Admin detail endpoints return sanitized 404 responses', async () => {
+  await withServer(async (baseUrl) => {
+    const response = await get(baseUrl, '/api/admin/trips/missing', 'admin');
+    assert.equal(response.status, 404);
+    assert.deepEqual(await response.json(), { error: 'admin_trip_not_found' });
   });
 });
 
