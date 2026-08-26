@@ -7,11 +7,13 @@ const {
   googleGeocodeResult,
   parseAddressQuery,
   photonResult,
+  photonResultMatchesQuery,
   providerUrl,
   resolveDestinationSearch,
   resolveGooglePlace,
   resolveSearchOrigin,
   searchDestinations,
+  validateSearchQuery,
 } = require('../../src/services/destinationGeocodingService');
 const { createGeocoderRateLimit } = require('../../src/middleware/geocoderRateLimit');
 
@@ -24,6 +26,48 @@ test('destination geocoder remains disabled without an explicitly configured pro
     () => searchDestinations({ query: 'Hanoi address', cityId: 'ha-noi', endpoint: 'https://provider.invalid/api' }),
     (error) => error.code === 'UNSUPPORTED_GEOCODER_CITY' && error.status === 400,
   );
+});
+
+test('destination search rejects nonsense before any upstream request and preserves valid Vietnamese queries', async () => {
+  const invalid = ['', '   ', '@@@invalid@@@', '!!!', '####'];
+  let upstreamCalls = 0;
+  for (const query of invalid) {
+    assert.equal(validateSearchQuery(query).valid, false);
+    await assert.rejects(
+      () => resolveDestinationSearch({
+        query,
+        fetchImpl: async () => { upstreamCalls += 1; throw new Error('must not run'); },
+      }),
+      (error) => error.code === 'INVALID_GEOCODE_QUERY'
+        && error.status === 400
+        && error.message === 'Vui l\u00f2ng nh\u1eadp t\u00ean \u0111\u1ecba \u0111i\u1ec3m ho\u1eb7c \u0111\u1ecba ch\u1ec9 h\u1ee3p l\u1ec7.',
+    );
+  }
+  assert.equal(upstreamCalls, 0);
+
+  for (const query of [
+    '110 Ph\u01b0\u1edbc T\u01b0\u1eddng 5',
+    '110 phuoc tuong 5',
+    'C\u1ea7u R\u1ed3ng',
+    'Highlands Coffee B\u1ea1ch \u0110\u1eb1ng',
+    '\u00c0la Cafe',
+    '43 B\u1ea1ch \u0110\u1eb1ng',
+    '7 Bridges',
+  ]) {
+    assert.equal(validateSearchQuery(query).valid, true, query);
+  }
+});
+
+test('Photon relevance filter drops unrelated provider results without exact matching', () => {
+  assert.equal(photonResultMatchesQuery('C\u1ea7u R\u1ed3ng', {
+    label: 'C\u1ea7u R\u1ed3ng', address: '\u0110\u00e0 N\u1eb5ng', category: 'attraction',
+  }), true);
+  assert.equal(photonResultMatchesQuery('\u00c0la Cafe', {
+    label: 'A La Coffee', address: 'H\u1ea3i Ch\u00e2u, \u0110\u00e0 N\u1eb5ng', category: 'cafe',
+  }), true);
+  assert.equal(photonResultMatchesQuery('C\u1ea7u R\u1ed3ng', {
+    label: 'Invalidkyrkog\u00e5rden', address: 'Sweden', category: 'cemetery',
+  }), false);
 });
 
 test('destination geocoder normalizes bounded request-time Photon results without POI IDs', async () => {

@@ -15,6 +15,7 @@ src/expert_system/
 src/infrastructure/db/
 src/middleware/
 src/modules/cities/
+src/modules/admin/
 src/modules/pois/
 src/modules/travelerApiV2/
 src/services/

@@ -43,6 +43,52 @@ function foldText(value) {
     .trim();
 }
 
+function validateSearchQuery(value) {
+  const query = cleanText(value);
+  if (query.length < 3 || query.length > 160) {
+    return { valid: false, query, reason: 'length' };
+  }
+  const compact = query.replace(/\s/gu, '');
+  const meaningful = compact.match(/[\p{L}\p{N}]/gu) || [];
+  const letters = compact.match(/\p{L}/gu) || [];
+  const hasExcessiveSymbolRun = /[^\p{L}\p{N}\s]{3,}/u.test(query);
+  const meaningfulRatio = compact.length ? meaningful.length / compact.length : 0;
+  const valid = meaningful.length >= 2
+    && letters.length >= 2
+    && meaningfulRatio >= 0.55
+    && !hasExcessiveSymbolRun;
+  return { valid, query, reason: valid ? null : 'content' };
+}
+
+function requireValidSearchQuery(value) {
+  const validation = validateSearchQuery(value);
+  if (!validation.valid) {
+    throw serviceError(
+      'Vui lòng nhập tên địa điểm hoặc địa chỉ hợp lệ.',
+      400,
+      'INVALID_GEOCODE_QUERY',
+    );
+  }
+  return validation.query;
+}
+
+const RELEVANCE_STOP_WORDS = new Set([
+  'da', 'nang', 'danang', 'viet', 'nam', 'thanh', 'pho', 'duong', 'street', 'road',
+]);
+
+function relevanceTokens(value) {
+  return foldText(value)
+    .split(' ')
+    .filter((token) => token.length >= 2 && !RELEVANCE_STOP_WORDS.has(token));
+}
+
+function photonResultMatchesQuery(query, result) {
+  const tokens = relevanceTokens(query);
+  if (!tokens.length) return false;
+  const candidate = foldText([result.label, result.address, result.category].filter(Boolean).join(' '));
+  return tokens.some((token) => candidate.includes(token));
+}
+
 function normalizeCityId(value) {
   const cityId = cleanText(value) || SUPPORTED_CITY_ID;
   if (cityId !== SUPPORTED_CITY_ID) {
@@ -380,10 +426,7 @@ async function searchDestinations({
   allowedHosts = process.env.URBANAGENT_GEOCODER_ALLOWED_HOSTS,
 } = {}) {
   normalizeCityId(cityId);
-  const normalizedQuery = cleanText(query);
-  if (normalizedQuery.length < 3 || normalizedQuery.length > 160) {
-    throw serviceError('Search query must contain 3 to 160 characters.', 400, 'INVALID_GEOCODE_QUERY');
-  }
+  const normalizedQuery = requireValidSearchQuery(query);
   if (!endpoint) throw serviceError('Destination geocoding is not configured.', 503, 'GEOCODER_NOT_CONFIGURED');
   if (typeof fetchImpl !== 'function') {
     throw serviceError('Geocoding transport is unavailable.', 503, 'GEOCODER_TRANSPORT_UNAVAILABLE');
@@ -418,6 +461,7 @@ async function searchDestinations({
   }
   return (Array.isArray(payload?.features) ? payload.features : [])
     .map(photonResult).filter(Boolean)
+    .filter((result) => photonResultMatchesQuery(normalizedQuery, result))
     .map((result) => ({ ...result, distanceMeters: haversineMeters(origin, result) }))
     .filter((result) => result.distanceMeters <= maxDistanceM)
     .slice(0, safeLimit);
@@ -438,10 +482,7 @@ async function resolveDestinationSearch({
   photonAllowedHosts = process.env.URBANAGENT_GEOCODER_ALLOWED_HOSTS,
 } = {}) {
   normalizeCityId(cityId);
-  const normalizedQuery = cleanText(query);
-  if (normalizedQuery.length < 3 || normalizedQuery.length > 160) {
-    throw serviceError('Search query must contain 3 to 160 characters.', 400, 'INVALID_GEOCODE_QUERY');
-  }
+  const normalizedQuery = requireValidSearchQuery(query);
   const intent = classifySearchIntent(normalizedQuery);
   const origin = resolveSearchOrigin({ query: normalizedQuery, lat, lon, accuracy, originSource });
   const safeLimit = Math.min(Math.max(Number(limit) || 8, 1), 10);
@@ -515,8 +556,9 @@ async function autocompleteGooglePlaces({
   fetchImpl = global.fetch,
   googleApiKey = process.env.GOOGLE_MAPS_SERVER_API_KEY,
 } = {}) {
-  const query = cleanText(input);
-  if (query.length < 3 || query.length > 160) return [];
+  const validation = validateSearchQuery(input);
+  if (!validation.valid) return [];
+  const query = validation.query;
   if (!cleanText(googleApiKey) || googleMapCompliant !== true) {
     throw serviceError('Google Maps Platform configuration is required.', 503, 'GOOGLE_MAPS_PLATFORM_CONFIGURATION_REQUIRED');
   }
@@ -597,10 +639,14 @@ module.exports = {
   normalizeCityId,
   parseAddressQuery,
   photonResult,
+  photonResultMatchesQuery,
   providerUrl,
+  relevanceTokens,
+  requireValidSearchQuery,
   resolveDestinationSearch,
   resolveGooglePlace,
   resolveSearchOrigin,
   searchDestinations,
   streetMatches,
+  validateSearchQuery,
 };

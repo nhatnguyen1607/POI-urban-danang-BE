@@ -56,6 +56,29 @@ function listTrackedRuntimeFiles(entries) {
   return tracked;
 }
 
+function localDependencyCandidates(importer, request) {
+  const base = path.posix.normalize(path.posix.join(path.posix.dirname(importer), request));
+  return [base, `${base}.js`, `${base}.json`, `${base}/index.js`];
+}
+
+function assertLocalDependencyClosure(trackedFiles) {
+  const tracked = new Set(trackedFiles.map((file) => file.replaceAll('\\', '/')));
+  const missing = [];
+  for (const importer of tracked) {
+    if (!importer.endsWith('.js')) continue;
+    const source = fs.readFileSync(path.join(SOURCE_ROOT, importer), 'utf8');
+    const localRequire = /require\(\s*['"](\.{1,2}\/[^'"]+)['"]\s*\)/g;
+    for (const match of source.matchAll(localRequire)) {
+      const candidates = localDependencyCandidates(importer, match[1]);
+      const existing = candidates.find((candidate) => fs.existsSync(path.join(SOURCE_ROOT, candidate)));
+      if (existing && !tracked.has(existing)) missing.push(`${importer} -> ${existing}`);
+    }
+  }
+  if (missing.length) {
+    throw new Error(`Runtime payload omits local dependencies:\n${missing.sort().join('\n')}`);
+  }
+}
+
 function isGitLfsPointer(filePath) {
   const descriptor = fs.openSync(filePath, 'r');
   try {
@@ -97,6 +120,7 @@ function prepareRuntimePayload({ outputPath, manifestPath = DEFAULT_MANIFEST_PAT
 
   const entries = readRuntimeEntries(manifestPath);
   const trackedFiles = listTrackedRuntimeFiles(entries);
+  assertLocalDependencyClosure(trackedFiles);
   fs.mkdirSync(resolvedOutput, { recursive: false });
 
   const files = trackedFiles.map((file) => copyTrackedFile(file, resolvedOutput));
@@ -140,6 +164,7 @@ if (require.main === module) {
 module.exports = {
   DEFAULT_MANIFEST_PATH,
   SOURCE_ROOT,
+  assertLocalDependencyClosure,
   listTrackedRuntimeFiles,
   prepareRuntimePayload,
   readRuntimeEntries,

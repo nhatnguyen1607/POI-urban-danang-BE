@@ -4,6 +4,12 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
+const {
+  assertLocalDependencyClosure,
+  listTrackedRuntimeFiles,
+  readRuntimeEntries,
+} = require('../../scripts/prepare_hf_space_payload');
+
 const { createCorsOptions, parseAllowedOrigins } = require('../../src/config/corsOptions');
 const { CanonicalCsvPoiRepository } = require('../../src/services/canonicalCsvPoiRepository');
 const {
@@ -21,6 +27,19 @@ function corsDecision(options, origin) {
     options.origin(origin, (error, allowed) => resolve({ error, allowed }));
   });
 }
+
+test('HF runtime manifest includes Admin and closes every static local dependency', () => {
+  const tracked = listTrackedRuntimeFiles(readRuntimeEntries());
+  assert.ok(tracked.includes('src/modules/admin/adminRouter.js'));
+  assert.ok(tracked.includes('src/modules/admin/adminReadService.js'));
+  assert.doesNotThrow(() => assertLocalDependencyClosure(tracked));
+  assert.throws(
+    () => assertLocalDependencyClosure(
+      tracked.filter((file) => file !== 'src/modules/admin/adminReadService.js'),
+    ),
+    /adminRouter\.js -> src\/modules\/admin\/adminReadService\.js/,
+  );
+});
 
 test('Stage 5B runtime manifest verifies exact canonical bytes and data quality', async () => {
   const result = await verifyRuntimeDataset();
