@@ -55,8 +55,7 @@ function scoreArea(items, concept) {
 
   return {
     ...summary,
-    score: Math.round(opportunity * 100),
-    scoreRaw: opportunity,
+    _internalRankScore: opportunity,
     signals: {
       demandProxy,
       competitionPenalty,
@@ -94,14 +93,18 @@ async function scoreBusinessLocations({ concept, limit = 6 }) {
   const areas = Array.from(groups.entries())
     .filter(([, items]) => items.length >= 4)
     .map(([key, items]) => ({ id: key, ...scoreArea(items, concept) }))
-    .sort((a, b) => b.scoreRaw - a.scoreRaw)
-    .slice(0, limit);
+    .sort((a, b) => b._internalRankScore - a._internalRankScore)
+    .slice(0, limit)
+    .map(({ _internalRankScore, ...area }, index) => ({
+      ...area,
+      rankingPosition: index + 1,
+    }));
 
   return {
     role: 'business',
     concept,
     areas,
-    note: 'Day la demand proxy tu du lieu POI/review/rating/cum dia diem, khong phai mat do khach that.',
+    note: 'Các khu vực được sắp xếp để hỗ trợ khảo sát. Đây là bằng chứng mô tả, không phải điểm đầu tư hay khuyến nghị tài chính.',
   };
 }
 

@@ -204,6 +204,8 @@ function publicPoiFromRecommendation(recommendation) {
     district: recommendation.district || null,
     rating: recommendation.rating ?? null,
     reviewCount: recommendation.reviewCount ?? null,
+    openingHoursRaw: recommendation.openingHoursRaw || null,
+    lastVerifiedAt: recommendation.lastVerifiedAt || null,
     imageUrls: recommendation.imageUrls || [],
     imageUrl: recommendation.imageUrl || null,
     source: recommendation.source || null,
@@ -212,6 +214,8 @@ function publicPoiFromRecommendation(recommendation) {
     aliasGlobalIds: recommendation.aliasGlobalIds || [],
     mergeStatus: recommendation.mergeStatus || null,
     dataQualityFlags: recommendation.dataQualityFlags || [],
+    attribution: recommendation.attribution || null,
+    canonical: recommendation.canonical !== false,
   };
 }
 

@@ -3,6 +3,7 @@ const InferenceEngine = require('./backward_chaining');
 const FuzzyLogic = require('./fuzzy_logic');
 const POIDensityEngine = require('./poi_density_engine');
 const { fetchWeatherData } = require('./weather_service');
+const { osrmGuard } = require('../infrastructure/external/providerGuards');
 
 // ============================================================================
 //  HỆ CHUYÊN GIA TỔNG HỢP (Expert System Facade)
@@ -37,7 +38,10 @@ async function fetchOSRMRoute(originLat, originLng, destLat, destLng) {
   // Use alternatives=3 to get up to 3 alternative routes
   const url = `https://router.project-osrm.org/route/v1/driving/${originLng},${originLat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true&annotations=true&alternatives=3`;
 
-  const response = await fetch(url);
+  const response = await osrmGuard.execute(
+    `${originLat},${originLng}:${destLat},${destLng}`,
+    ({ signal }) => fetch(url, { signal }),
+  );
   if (!response.ok) {
     throw new Error(`OSRM API error: ${response.status}`);
   }
@@ -150,5 +154,6 @@ module.exports = {
   ReteNetwork,
   InferenceEngine,
   FuzzyLogic,
-  POIDensityEngine
+  POIDensityEngine,
+  fetchOSRMRoute,
 };

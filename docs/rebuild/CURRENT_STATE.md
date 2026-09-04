@@ -729,3 +729,15 @@ Date: 2026-08-14 (+07:00).
   `GOOGLE_LIVE_CONFIGURATION_PENDING`.
 - No merge, deployment, production Firebase access, canonical data change, or
   Admin write capability occurred.
+
+## Phase 6 trust/freshness/reliability - 2026-09-04
+
+- Status: IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED.
+- Canonical identity remains unchanged at 4173 POIs; CSV remains the default
+  runtime. Live evidence is a separate overlay.
+- Traveler trust labels, neutral B2B evidence semantics, per-client limits,
+  and guarded external-provider boundaries are implemented.
+- Official live hotel availability and partner status remain unavailable
+  without approved credentials and provider acceptance.
+- Local load baseline completed without errors or timeouts; this is not a
+  production-capacity claim.
