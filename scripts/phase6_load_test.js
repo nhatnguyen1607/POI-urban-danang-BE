@@ -22,6 +22,7 @@ async function main() {
   let errors = 0;
   let rateLimited = 0;
   let timeouts = 0;
+  let cacheHits = 0;
   const started = performance.now();
   async function worker() {
     while (next < profile.requests) {
@@ -32,6 +33,7 @@ async function main() {
           signal: AbortSignal.timeout(10_000),
         });
         if (response.status === 429) rateLimited += 1;
+        if (response.headers.get('X-Cache') === 'HIT') cacheHits += 1;
         if (!response.ok) errors += 1;
         await response.arrayBuffer();
       } catch (error) {
@@ -56,6 +58,8 @@ async function main() {
     errors,
     rateLimited,
     timeouts,
+    cacheHits,
+    peakConcurrency: profile.concurrency,
   }));
 }
 
