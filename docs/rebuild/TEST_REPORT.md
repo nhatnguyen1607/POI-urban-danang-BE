@@ -1697,3 +1697,31 @@ replan: 1.6 seconds
   remained responsive with HTTP 200 on the cities endpoint.
 - Scope limitation: local CSV-backed single-process baseline only; no public
   provider, production DB, Firebase, or live partner endpoint was exercised.
+
+## Phase 6 pre-merge targeted reliability gate - 2026-09-04
+
+- Backend syntax checks: PASS.
+- Targeted Phase 6 reliability/trust tests: 12 passed, 0 failed.
+- Full backend suite: 96 total, 95 passed, 0 failed, 1 guarded PostGIS skip.
+- HF runtime dependency closure: 6 passed, 0 failed; the new middleware is
+  covered by the existing `src/middleware/` runtime allowlist.
+- Frontend Phase 6 tests: 4 passed, 0 failed. Scoped ESLint and production build
+  passed; the existing large-chunk warning remains.
+- Controlled local admission spike: 240 requests, concurrency 30, 16 completed,
+  0 HTTP 429, 224 HTTP 503, 0 timeout; p50 9.4 ms, p95 115.4 ms, p99 123.7 ms;
+  max active 8, max pending 0, post-spike health responsive.
+- Identical-request proof: 20 clients, 1 underlying provider execution, 19
+  coalesced followers, and 1 follow-up cache hit. Logged keys were hashed; raw
+  coordinates, query history, and auth-like test data were absent.
+- Google audit: 54 backend and 11 frontend source-reference lines remain for
+  optional legacy integration/configuration. Runtime state is
+  `GOOGLE_PLACES_OPTIONAL_DISABLED`; an explicit enable flag plus credential is
+  required. Controlled startup/search/recommendation/preview/route/trust flow
+  observed zero Google network requests.
+- Trust regressions: stale restaurant hours remained reference-only; hotel
+  availability remained unverified/handoff-only; equal-strength conflict was
+  explicit; GPS report created non-canonical evidence; forbidden B2B phrases
+  were absent from user-facing source output.
+- Canonical verifier: PASS, 4173 POIs, SHA-256
+  `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
+  `AUTO_CREATE_NEW` remains false.

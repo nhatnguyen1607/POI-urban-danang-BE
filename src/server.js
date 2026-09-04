@@ -71,6 +71,7 @@ const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/fire
 const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
 const { createEndpointRateLimit } = require('./middleware/endpointRateLimit');
+const { createEndpointConcurrencyLimit } = require('./middleware/endpointConcurrencyLimit');
 const {
   googlePlacesGuard,
   photonGuard,
@@ -86,6 +87,7 @@ const MODEL_DIR = path.join(ROOT_DIR, 'artifacts', 'model');
 const LEGACY_MODEL_DIR = path.join(ROOT_DIR, 'model');
 const STORAGE_DIR = path.join(ROOT_DIR, 'storage');
 const UPLOAD_DIR = path.join(STORAGE_DIR, 'uploads');
+const GOOGLE_PLACES_ENABLED = process.env.URBANAGENT_GOOGLE_PLACES_ENABLED === 'true';
 
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
@@ -114,11 +116,33 @@ const routeRateLimit = createEndpointRateLimit({
   maxRequests: process.env.URBANAGENT_ROUTE_RATE_LIMIT_PER_MINUTE || 30,
 });
 
+const searchAdmission = createEndpointConcurrencyLimit({
+  name: 'poi_search',
+  maxActive: process.env.URBANAGENT_SEARCH_MAX_ACTIVE || 12,
+});
+const plannerAdmission = createEndpointConcurrencyLimit({
+  name: 'planner',
+  maxActive: process.env.URBANAGENT_PLANNER_MAX_ACTIVE || 8,
+});
+const agentAdmission = createEndpointConcurrencyLimit({
+  name: 'agent',
+  maxActive: process.env.URBANAGENT_AGENT_MAX_ACTIVE || 6,
+});
+const routeAdmission = createEndpointConcurrencyLimit({
+  name: 'route',
+  maxActive: process.env.URBANAGENT_ROUTE_MAX_ACTIVE || 6,
+});
+
 app.use('/api/admin', createAdminRouter());
 app.use('/api/v2/recommendations', plannerRateLimit);
+app.use('/api/v2/recommendations', plannerAdmission);
 app.use('/api/v2/trips/preview', plannerRateLimit);
+app.use('/api/v2/trips/preview', plannerAdmission);
+app.use('/api/v2/pois/search', searchAdmission);
 app.use('/api/v2', travelerApiV2Router);
 app.use('/api/agent', agentRateLimit);
+app.use('/api/agent', agentAdmission);
+app.use('/api/route', routeAdmission);
 
 const upload = multer({ dest: UPLOAD_DIR });
 const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';
@@ -236,7 +260,7 @@ app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
       lon: req.query.lon,
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
-      googleMapCompliant: req.query.googleMapCompliant === 'true',
+      googleMapCompliant: GOOGLE_PLACES_ENABLED && req.query.googleMapCompliant === 'true',
     };
     const guard = searchInput.googleMapCompliant && process.env.GOOGLE_MAPS_SERVER_API_KEY
       ? googlePlacesGuard
@@ -257,6 +281,12 @@ app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
 
 app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
   try {
+    if (!GOOGLE_PLACES_ENABLED || !process.env.GOOGLE_MAPS_SERVER_API_KEY) {
+      return res.status(503).json({
+        error: 'GOOGLE_MAPS_PLATFORM_CONFIGURATION_REQUIRED',
+        message: 'Google Places is an optional disabled integration.',
+      });
+    }
     const autocompleteInput = {
       input: req.query.q,
       sessionToken: req.query.sessionToken,
@@ -264,7 +294,7 @@ app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
       lon: req.query.lon,
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
-      googleMapCompliant: req.query.googleMapCompliant === 'true',
+      googleMapCompliant: GOOGLE_PLACES_ENABLED && req.query.googleMapCompliant === 'true',
     };
     const suggestions = await googlePlacesGuard.execute(
       JSON.stringify(autocompleteInput),
@@ -282,6 +312,12 @@ app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
 
 app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
   try {
+    if (!GOOGLE_PLACES_ENABLED || !process.env.GOOGLE_MAPS_SERVER_API_KEY) {
+      return res.status(503).json({
+        error: 'GOOGLE_MAPS_PLATFORM_CONFIGURATION_REQUIRED',
+        message: 'Google Places is an optional disabled integration.',
+      });
+    }
     const placeInput = {
       placeId: req.params.placeId,
       sessionToken: req.query.sessionToken,
@@ -289,7 +325,7 @@ app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
       lon: req.query.lon,
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
-      googleMapCompliant: req.query.googleMapCompliant === 'true',
+      googleMapCompliant: GOOGLE_PLACES_ENABLED && req.query.googleMapCompliant === 'true',
     };
     const result = await googlePlacesGuard.execute(
       JSON.stringify(placeInput),
@@ -805,7 +841,10 @@ app.get('/api/weather/forecast', async (req, res) => {
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
       return res.status(400).json({ error: 'Missing lat/lon' });
     }
-    const result = await weatherGuard.execute(`${lat},${lon}`, () => getForecast({ lat, lon }));
+    const result = await weatherGuard.execute(
+      `${lat},${lon}`,
+      ({ signal }) => getForecast({ lat, lon, signal }),
+    );
     res.json(result);
   } catch (error) {
     res.status(502).json({

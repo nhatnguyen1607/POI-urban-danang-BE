@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
+const { EventEmitter } = require('node:events');
 
 const {
   EVIDENCE_LEVELS,
@@ -15,6 +16,8 @@ const {
 const { buildLiveStatusOverlay } = require('../../src/modules/trust/liveStatusOverlay');
 const { createProviderResilience } = require('../../src/infrastructure/external/providerResilience');
 const { createEndpointRateLimit } = require('../../src/middleware/endpointRateLimit');
+const { createEndpointConcurrencyLimit } = require('../../src/middleware/endpointConcurrencyLimit');
+const { resolveDestinationSearch } = require('../../src/services/destinationGeocodingService');
 const { evidenceFromFeedback, sanitizeFeedback } = require('../../src/services/feedbackService');
 const { scoreBusinessLocations } = require('../../src/services/businessLocationScorer');
 const { generateLocalInsight } = require('../../src/services/businessInsightGenerator');
@@ -81,19 +84,31 @@ test('only GPS-verified traveler status feedback becomes non-canonical evidence'
 
 test('provider guard coalesces and caches identical requests', async () => {
   let calls = 0;
-  const guard = createProviderResilience({ provider: 'test', cacheTtlMs: 1000, maxRetries: 0 });
+  const events = [];
+  const guard = createProviderResilience({
+    provider: 'test',
+    cacheTtlMs: 1000,
+    maxRetries: 0,
+    logger: (event) => events.push(event),
+  });
   const operation = async () => {
     calls += 1;
     await new Promise((resolve) => setTimeout(resolve, 15));
     return { ok: true };
   };
-  const [first, second] = await Promise.all([guard.execute('same', operation), guard.execute('same', operation)]);
-  const third = await guard.execute('same', operation);
-  assert.deepEqual(first, second);
-  assert.deepEqual(second, third);
+  const identical = await Promise.all(Array.from({ length: 20 }, () => guard.execute(
+    'private:16.0544,108.2022:auth-token-must-not-leak',
+    operation,
+  )));
+  const followUp = await guard.execute('private:16.0544,108.2022:auth-token-must-not-leak', operation);
+  assert.ok(identical.every((value) => value.ok));
+  assert.deepEqual(followUp, identical[0]);
   assert.equal(calls, 1);
-  assert.equal(guard.snapshot().coalesced, 1);
+  assert.equal(guard.snapshot().coalesced, 19);
   assert.equal(guard.snapshot().cacheHits, 1);
+  const operationalLog = JSON.stringify(events);
+  assert.doesNotMatch(operationalLog, /16\.0544|108\.2022|auth-token-must-not-leak|private:/);
+  assert.match(operationalLog, /keyHash/);
 });
 
 test('provider guard retries transient failures and opens its circuit', async () => {
@@ -138,6 +153,80 @@ test('provider guard enforces timeout and bounded concurrency', async () => {
   await held;
 });
 
+test('provider circuit allows only one half-open probe', async () => {
+  let currentTime = 1_000;
+  const guard = createProviderResilience({
+    provider: 'half-open',
+    maxRetries: 0,
+    circuitFailureThreshold: 1,
+    circuitResetMs: 100,
+    now: () => currentTime,
+  });
+  await assert.rejects(guard.execute('failure', async () => { throw new Error('down'); }));
+  currentTime += 101;
+  let releaseProbe;
+  const probe = guard.execute('probe', () => new Promise((resolve) => { releaseProbe = resolve; }));
+  await assert.rejects(guard.execute('second-probe', async () => 'not-run'), { code: 'PROVIDER_CIRCUIT_OPEN' });
+  releaseProbe('healthy');
+  assert.equal(await probe, 'healthy');
+  assert.equal(guard.snapshot().circuitState, 'CLOSED');
+});
+
+test('endpoint admission has bounded active work, no pending queue, and fails fast with 503', () => {
+  const limiter = createEndpointConcurrencyLimit({ maxActive: 2, retryAfterSeconds: 3, logger: () => {} });
+  const response = () => {
+    const res = new EventEmitter();
+    res.headers = {};
+    res.set = (key, value) => { res.headers[key] = value; return res; };
+    res.status = (status) => { res.statusCode = status; return res; };
+    res.json = (payload) => { res.payload = payload; return res; };
+    return res;
+  };
+  const first = response();
+  const second = response();
+  assert.equal(limiter({}, first, () => 'first'), 'first');
+  assert.equal(limiter({}, second, () => 'second'), 'second');
+  const rejected = response();
+  limiter({}, rejected, () => 'must-not-run');
+  assert.equal(rejected.statusCode, 503);
+  assert.equal(rejected.headers['Retry-After'], '3');
+  assert.equal(rejected.payload.error, 'CAPACITY_EXHAUSTED');
+  assert.deepEqual(limiter.snapshot(), {
+    name: 'endpoint', maxActive: 2, maxPending: 0, active: 2, pending: 0, peakActive: 2, rejected: 1,
+  });
+  first.emit('finish');
+  second.emit('close');
+  assert.equal(limiter.snapshot().active, 0);
+});
+
+test('normal destination search without Google credentials calls Photon only', async () => {
+  const urls = [];
+  const result = await resolveDestinationSearch({
+    query: 'Cầu Rồng',
+    googleApiKey: '',
+    googleMapCompliant: false,
+    fetchImpl: async (url) => {
+      urls.push(String(url));
+      return {
+        ok: true,
+        json: async () => ({
+          features: [{
+            geometry: { coordinates: [108.227, 16.061] },
+            properties: {
+              osm_type: 'W', osm_id: 1, name: 'Cầu Rồng', city: 'Đà Nẵng', country: 'Việt Nam',
+            },
+          }],
+        }),
+      };
+    },
+  });
+  assert.equal(result.meta.googleConfigured, false);
+  assert.equal(result.meta.source, 'photon');
+  assert.equal(urls.length, 1);
+  assert.match(urls[0], /photon\.komoot\.io/);
+  assert.doesNotMatch(urls[0], /(?:places|maps)\.googleapis\.com/);
+});
+
 test('endpoint limiter returns 429 and Retry-After without exposing client identity', () => {
   let time = 1000;
   const middleware = createEndpointRateLimit({ maxRequests: 1, windowMs: 10_000, now: () => time, key: () => 'secret-user' });
@@ -177,4 +266,8 @@ test('business output uses neutral evidence ranking and a verification checklist
   assert.equal(Array.isArray(insight.verification_checklist), true);
   assert.equal('recommended_actions' in insight, false);
   assert.doesNotMatch(JSON.stringify(insight), /\bscore(?:d|s)?\s+\d+\/100/i);
+  assert.doesNotMatch(
+    JSON.stringify(insight),
+    /investment score|nên đầu tư|nên mở|best place to invest|recommended investment/i,
+  );
 });

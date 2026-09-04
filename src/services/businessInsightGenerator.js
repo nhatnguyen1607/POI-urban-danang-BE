@@ -12,7 +12,7 @@ function topNames(items, limit = 3) {
 function buildInsightPrompt({ concept, evidence, language }) {
   return {
     system:
-      'You are a grounded data-to-text writer for Danang UrbanAgent AI. Only verbalize the provided EVIDENCE_JSON. Do not invent places, investment scores, streets, or customer density. Never provide investment advice.',
+      'You are a grounded data-to-text writer for Danang UrbanAgent AI. Only verbalize the provided EVIDENCE_JSON. Do not invent places, numeric ratings, streets, or customer density. Never provide financial advice.',
     user: {
       concept,
       language,
@@ -139,7 +139,7 @@ async function generateBusinessInsights({ concept, limit = 5, language = 'vi' })
     stagePipeline: [
       { id: 1, name: 'Business Concept Input', status: 'complete' },
       { id: 2, name: 'Concept Parser', status: 'complete', output: parsedConstraints },
-      { id: 3, name: 'Candidate Area Ranker', status: 'complete', safeguard: 'Internal ordering only; no user-facing investment score.' },
+      { id: 3, name: 'Candidate Area Ranker', status: 'complete', safeguard: 'Internal ordering only; no user-facing numeric rating.' },
       { id: 4, name: 'Evidence Pack Builder', status: 'complete', safeguard: 'Evidence IDs are attached to every table row and POI.' },
       { id: 5, name: 'Business Insight Generator', status: 'complete', safeguard: 'LLM/data-to-text may only interpret evidence JSON.' },
       { id: 6, name: 'Report Dashboard', status: 'ready' },

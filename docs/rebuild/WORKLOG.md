@@ -2817,3 +2817,32 @@ Results:
   the two new runtime module directories.
 - No canonical write, production provider call, database/Firebase write,
   deployment, merge, or provider credential use occurred.
+
+## 2026-09-04 - Phase 6 pre-merge targeted reliability gate
+
+- Continued on the existing backend/frontend Phase 6 branches and PRs only.
+- Audited endpoint/provider concurrency, pending work, timeouts, circuit
+  recovery, rate limiting, request coalescing, cache behavior, key privacy, and
+  every Google Places/Maps source reference in both applications.
+- Added fail-fast active-work admission to POI search, planner, agent, and route
+  endpoint classes. No pending queue is used; over-capacity work returns 503
+  with Retry-After, while per-client quota violations remain 429.
+- Restricted HALF_OPEN recovery to one probe and expanded the focused test to
+  20 identical requests, one upstream execution, 19 coalesced followers, a
+  follow-up cache hit, and hashed-only operational keys.
+- Made Google Places/Maps require an explicit enable flag plus credential in
+  both FE and BE. A controlled no-credential flow used mocked non-Google
+  providers and observed zero Google hosts.
+- Controlled spike result: 240 requests, 16 successful, 224 HTTP 503, 0 HTTP
+  429, 0 timeout; p50/p95/p99 9.4/115.4/123.7 ms; active max 8, pending max 0,
+  health responsive after spike.
+- The first full-suite packaging check exposed that the new untracked
+  middleware was not yet visible to the Git-based HF payload closure. After
+  staging that file under the existing runtime allowlist, packaging passed 6/6
+  and the final full backend suite passed 95/95 applicable tests with one
+  guarded PostGIS skip.
+- Frontend Phase 6 tests passed 4/4; scoped lint and production build passed.
+  Canonical verification remained 4173 POIs at the approved SHA and
+  `AUTO_CREATE_NEW=false`.
+- No production provider, production database, Firebase, deployment, merge,
+  Google credential, or Google Billing operation was used.

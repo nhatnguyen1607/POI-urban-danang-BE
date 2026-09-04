@@ -1,6 +1,6 @@
-async function getForecast({ lat, lon }) {
+async function getForecast({ lat, lon, signal }) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,weather_code&hourly=precipitation_probability&timezone=Asia%2FBangkok&forecast_days=1`;
-  const response = await fetch(url);
+  const response = await fetch(url, { signal });
   if (!response.ok) {
     throw new Error(`Open-Meteo error: ${response.status}`);
   }

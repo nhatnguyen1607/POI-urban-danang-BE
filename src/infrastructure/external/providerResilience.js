@@ -59,6 +59,7 @@ function createProviderResilience({
   let consecutiveFailures = 0;
   let circuitState = 'CLOSED';
   let openedAt = 0;
+  let halfOpenProbeActive = false;
   const stats = {
     calls: 0, successes: 0, failures: 0, timeouts: 0, cacheHits: 0,
     coalesced: 0, concurrencyRejected: 0, circuitRejected: 0, retries: 0, peakConcurrency: 0,
@@ -77,9 +78,18 @@ function createProviderResilience({
   }
 
   function checkCircuit() {
+    if (circuitState === 'HALF_OPEN') {
+      if (!halfOpenProbeActive) {
+        halfOpenProbeActive = true;
+        return;
+      }
+      stats.circuitRejected += 1;
+      throw operationalError(`${name} is temporarily unavailable.`, 'PROVIDER_CIRCUIT_OPEN', 503, 1);
+    }
     if (circuitState !== 'OPEN') return;
     if (now() - openedAt >= settings.circuitResetMs) {
       circuitState = 'HALF_OPEN';
+      halfOpenProbeActive = true;
       return;
     }
     stats.circuitRejected += 1;
@@ -111,6 +121,7 @@ function createProviderResilience({
           const result = await attempt(operation, attemptIndex);
           consecutiveFailures = 0;
           circuitState = 'CLOSED';
+          halfOpenProbeActive = false;
           stats.successes += 1;
           emit('success', startedAt, { attempts: attemptIndex + 1, keyHash });
           return result;
@@ -130,6 +141,7 @@ function createProviderResilience({
         circuitState = 'OPEN';
         openedAt = now();
       }
+      halfOpenProbeActive = false;
       emit(error?.code === 'PROVIDER_TIMEOUT' ? 'timeout' : 'failure', startedAt, {
         code: error?.code || 'PROVIDER_FAILED',
         keyHash,
@@ -176,9 +188,9 @@ function createProviderResilience({
 
   return {
     execute,
-    snapshot: () => ({ provider: name, ...settings, ...stats, active, inFlight: inFlight.size, cacheEntries: cache.size, circuitState }),
+    snapshot: () => ({ provider: name, ...settings, ...stats, active, inFlight: inFlight.size, cacheEntries: cache.size, circuitState, halfOpenProbeActive }),
     reset: () => {
-      inFlight.clear(); cache.clear(); active = 0; consecutiveFailures = 0; circuitState = 'CLOSED'; openedAt = 0;
+      inFlight.clear(); cache.clear(); active = 0; consecutiveFailures = 0; circuitState = 'CLOSED'; openedAt = 0; halfOpenProbeActive = false;
       Object.keys(stats).forEach((key) => { stats[key] = 0; });
     },
   };
