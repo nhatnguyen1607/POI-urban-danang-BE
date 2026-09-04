@@ -428,6 +428,26 @@ This approval does not authorize:
 
 The following approvals remain not granted:
 
+## Decision - Phase 6 evidence and reliability boundary
+
+Date: 2026-09-04.
+
+Status: IMPLEMENTED_ON_REVIEW_BRANCH_NOT_MERGED.
+
+- Canonical POIs describe stable identity; time-sensitive observations live in
+  an independent evidence overlay with explicit TTL and provenance.
+- Only fresh verified evidence can support a current-status claim. Conflicts,
+  staleness, unknown hours, and unknown accommodation availability remain
+  visible.
+- Verified traveler arrival/feedback is evidence, not authority to rewrite
+  canonical data.
+- Business outputs are descriptive decision-support evidence and verification
+  checklists, not investment scores or financial advice.
+- External providers use bounded reliability controls and are unavailable when
+  credentials are absent. No partner capability is simulated.
+
+The pre-existing approval list below remains historical project context:
+
 - `APPROVED MULTI-SOURCE POI SPIKE`
 - `APPROVED DATA SOURCE LICENSE POLICY`
 

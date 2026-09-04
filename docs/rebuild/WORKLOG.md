@@ -2802,3 +2802,18 @@ Results:
   passed. Runtime recommendation and preview counts were 3 and 3.
 - No production Firebase/database access, credential output, canonical change,
   Google live call, merge, deployment, or Admin write was performed.
+
+## 2026-09-04 - Phase 6 trust, freshness, and reliability hardening
+
+- Added evidence/freshness/conflict semantics and a non-mutating live-status
+  overlay; integrated GPS-verified status feedback as separate evidence.
+- Added provider bulkheads, timeout, bounded retry, circuit breaker, cache,
+  request coalescing, structured operational events, and endpoint rate limits.
+- Replaced user-facing B2B investment scoring/action language with observable
+  evidence, limitations, ranking position, and verification checklists.
+- Added compact traveler trust details and consistent HTTP 429 handling.
+- Added focused backend/frontend tests and safe local smoke/ramp/spike profiles.
+- Updated the HF runtime allowlist after deployment-closure tests identified
+  the two new runtime module directories.
+- No canonical write, production provider call, database/Firebase write,
+  deployment, merge, or provider credential use occurred.

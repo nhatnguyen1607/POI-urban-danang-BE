@@ -70,6 +70,12 @@ const { createCorsOptions } = require('./config/corsOptions');
 const { optionalFirebaseAuth, requireFirebaseAuth } = require('./middleware/firebaseAuth');
 const { createGeocoderRateLimit } = require('./middleware/geocoderRateLimit');
 const { malformedJsonErrorHandler } = require('./middleware/malformedJsonError');
+const { createEndpointRateLimit } = require('./middleware/endpointRateLimit');
+const {
+  googlePlacesGuard,
+  photonGuard,
+  weatherGuard,
+} = require('./infrastructure/external/providerGuards');
 const { createAdminRouter } = require('./modules/admin/adminRouter');
 const { travelerApiV2Router } = require('./modules/travelerApiV2/router');
 const { verifyRuntimeDataset } = require('./services/runtimeDatasetVerifier');
@@ -95,8 +101,24 @@ app.use(express.json({
   skip: (req) => req.is('multipart/form-data')
 }));
 
+const plannerRateLimit = createEndpointRateLimit({
+  name: 'planner',
+  maxRequests: process.env.URBANAGENT_PLANNER_RATE_LIMIT_PER_MINUTE || 45,
+});
+const agentRateLimit = createEndpointRateLimit({
+  name: 'agent',
+  maxRequests: process.env.URBANAGENT_AGENT_RATE_LIMIT_PER_MINUTE || 60,
+});
+const routeRateLimit = createEndpointRateLimit({
+  name: 'route',
+  maxRequests: process.env.URBANAGENT_ROUTE_RATE_LIMIT_PER_MINUTE || 30,
+});
+
 app.use('/api/admin', createAdminRouter());
+app.use('/api/v2/recommendations', plannerRateLimit);
+app.use('/api/v2/trips/preview', plannerRateLimit);
 app.use('/api/v2', travelerApiV2Router);
+app.use('/api/agent', agentRateLimit);
 
 const upload = multer({ dest: UPLOAD_DIR });
 const GUEST_ITINERARY_PREVIEW_ENABLED = process.env.FEATURE_GUEST_ITINERARY_PREVIEW === 'true';
@@ -206,7 +228,7 @@ app.get('/api/pois/data-quality', async (req, res) => {
 
 app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
   try {
-    const response = await resolveDestinationSearch({
+    const searchInput = {
       query: req.query.q,
       cityId: req.query.cityId,
       limit: req.query.limit,
@@ -215,7 +237,11 @@ app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
       googleMapCompliant: req.query.googleMapCompliant === 'true',
-    });
+    };
+    const guard = searchInput.googleMapCompliant && process.env.GOOGLE_MAPS_SERVER_API_KEY
+      ? googlePlacesGuard
+      : photonGuard;
+    const response = await guard.execute(JSON.stringify(searchInput), () => resolveDestinationSearch(searchInput));
     res.json({
       results: response.results,
       meta: response.meta,
@@ -231,7 +257,7 @@ app.get('/api/geocode/search', geocoderRateLimit, async (req, res) => {
 
 app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
   try {
-    const suggestions = await autocompleteGooglePlaces({
+    const autocompleteInput = {
       input: req.query.q,
       sessionToken: req.query.sessionToken,
       lat: req.query.lat,
@@ -239,7 +265,11 @@ app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
       googleMapCompliant: req.query.googleMapCompliant === 'true',
-    });
+    };
+    const suggestions = await googlePlacesGuard.execute(
+      JSON.stringify(autocompleteInput),
+      () => autocompleteGooglePlaces(autocompleteInput),
+    );
     res.json({ suggestions, meta: { source: 'google_places', requestTimeOnly: true } });
   } catch (error) {
     const controlledError = Boolean(error?.status && error?.code);
@@ -252,7 +282,7 @@ app.get('/api/geocode/autocomplete', geocoderRateLimit, async (req, res) => {
 
 app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
   try {
-    const result = await resolveGooglePlace({
+    const placeInput = {
       placeId: req.params.placeId,
       sessionToken: req.query.sessionToken,
       lat: req.query.lat,
@@ -260,7 +290,11 @@ app.get('/api/geocode/place/:placeId', geocoderRateLimit, async (req, res) => {
       accuracy: req.query.accuracy,
       originSource: req.query.originSource,
       googleMapCompliant: req.query.googleMapCompliant === 'true',
-    });
+    };
+    const result = await googlePlacesGuard.execute(
+      JSON.stringify(placeInput),
+      () => resolveGooglePlace(placeInput),
+    );
     res.json({ result, meta: { source: 'google_places', requestTimeOnly: true } });
   } catch (error) {
     const controlledError = Boolean(error?.status && error?.code);
@@ -732,7 +766,7 @@ app.post('/api/recommend', upload.single('image'), (req, res) => {
 // ============================================================================
 //  EXPERT SYSTEM: Route Finding + Validation
 // ============================================================================
-app.post('/api/route', requireFirebaseAuth, async (req, res) => {
+app.post('/api/route', routeRateLimit, requireFirebaseAuth, async (req, res) => {
   try {
     const { origin, destination } = req.body;
 
@@ -771,7 +805,7 @@ app.get('/api/weather/forecast', async (req, res) => {
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
       return res.status(400).json({ error: 'Missing lat/lon' });
     }
-    const result = await getForecast({ lat, lon });
+    const result = await weatherGuard.execute(`${lat},${lon}`, () => getForecast({ lat, lon }));
     res.json(result);
   } catch (error) {
     res.status(502).json({

@@ -49,7 +49,7 @@ function buildAreaEvidence(area, areaPois, concept) {
     areaId: area.id,
     concept,
     center,
-    score: area.score,
+    rankingPosition: area.rankingPosition,
     signals: area.signals,
     rawCounts: {
       poiTotalInArea: area.totalPOIs,

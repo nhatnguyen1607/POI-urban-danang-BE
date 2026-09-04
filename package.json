@@ -31,7 +31,8 @@
     "citypack:create-new-canary-review": "node --max-old-space-size=4096 scripts/phase4_stage4r_create_new_canary_review.js",
     "citypack:create-new-canary-apply": "node --max-old-space-size=4096 scripts/phase4_stage4s_controlled_create_new_canary.js",
     "data:verify": "node scripts/verify_runtime_dataset.js",
-    "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js tests/phase5/*.test.js"
+    "test": "node --test tests/phase0/*.test.js tests/phase1/*.test.js tests/phase2/*.test.js tests/phase5/*.test.js tests/phase6/*.test.js",
+    "load:phase6": "node scripts/phase6_load_test.js"
   },
   "keywords": [],
   "author": "",

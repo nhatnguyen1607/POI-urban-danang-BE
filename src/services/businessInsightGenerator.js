@@ -12,7 +12,7 @@ function topNames(items, limit = 3) {
 function buildInsightPrompt({ concept, evidence, language }) {
   return {
     system:
-      'You are a grounded data-to-text writer for Danang UrbanAgent AI. Only verbalize the provided EVIDENCE_JSON. Do not invent places, counts, scores, streets, or customer density.',
+      'You are a grounded data-to-text writer for Danang UrbanAgent AI. Only verbalize the provided EVIDENCE_JSON. Do not invent places, investment scores, streets, or customer density. Never provide investment advice.',
     user: {
       concept,
       language,
@@ -42,7 +42,7 @@ function generateLocalInsight(area, language = 'vi') {
 
   if (language === 'en') {
     return {
-      summary: `This area scores ${area.score}/100. The opportunity is supported by a ${pct(signals.demandProxy)} demand proxy, ${pct(signals.conceptFit)} concept fit, and ${evidence.rawCounts.poiTotalInArea} POIs in the local cluster.`,
+      summary: `This is candidate area ${area.rankingPosition}. Its observable evidence includes ${evidence.rawCounts.poiTotalInArea} POIs, a ${pct(signals.demandProxy)} demand proxy, and ${pct(signals.conceptFit)} concept fit. These are screening signals, not investment advice.`,
       area_potential: `The strongest category signals are ${topCategories.map((item) => `${item.category} (${item.count})`).join(', ') || 'not enough category evidence'}. This suggests the area already has commercial activity that can support the concept, but the signal remains a proxy from POI/review/rating data.`,
       complementary_poi_analysis: complementary.length
         ? `Complementary POIs include ${topNames(complementary).join(', ')}. These nearby categories can create cross-visits and make the area more useful for the target concept.`
@@ -53,10 +53,10 @@ function generateLocalInsight(area, language = 'vi') {
           : 'Direct competition is not high in the current evidence pack.',
         ...routeWarnings.map((item) => item.warning),
       ],
-      recommended_actions: [
-        'Survey rent and frontage quality before deciding.',
-        'Validate peak-hour accessibility and parking.',
-        'Collect live opening-hour and footfall evidence before investment.',
+      verification_checklist: [
+        'Verify rent and frontage quality independently.',
+        'Verify peak-hour accessibility and parking on site.',
+        'Collect current opening-hour and footfall evidence before making a decision.',
       ],
       used_evidence_ids: evidenceIds,
       missing_evidence: ['real footfall', 'rent price', 'live traffic', 'opening hours'],
@@ -64,7 +64,7 @@ function generateLocalInsight(area, language = 'vi') {
   }
 
   return {
-    summary: `Khu vực này đạt ${area.score}/100. Điểm mạnh đến từ demand proxy ${pct(signals.demandProxy)}, độ khớp concept ${pct(signals.conceptFit)} và ${evidence.rawCounts.poiTotalInArea} POI trong cụm dữ liệu hiện có.`,
+    summary: `Đây là khu vực khảo sát số ${area.rankingPosition}. Bằng chứng quan sát gồm ${evidence.rawCounts.poiTotalInArea} POI, demand proxy ${pct(signals.demandProxy)} và độ khớp concept ${pct(signals.conceptFit)}. Đây không phải điểm đầu tư hoặc tư vấn tài chính.`,
     area_potential: `Các danh mục nổi bật là ${topCategories.map((item) => `${item.category} (${item.count})`).join(', ') || 'chưa đủ bằng chứng danh mục'}. Điều này cho thấy khu vực đã có hoạt động thương mại nền, nhưng đây vẫn là tín hiệu nhu cầu ước lượng từ POI/review/rating.`,
     complementary_poi_analysis: complementary.length
       ? `POI bổ trợ đáng chú ý gồm ${topNames(complementary).join(', ')}. Những điểm này có thể tạo luồng ghé chéo và làm concept dễ được phát hiện hơn.`
@@ -75,10 +75,10 @@ function generateLocalInsight(area, language = 'vi') {
         : 'Cạnh tranh trực tiếp chưa cao trong evidence pack hiện tại.',
       ...routeWarnings.map((item) => item.warning),
     ],
-    recommended_actions: [
-      'Khảo sát giá thuê, mặt tiền và khả năng đỗ xe.',
-      'Kiểm tra accessibility vào giờ cao điểm.',
-      'Bổ sung dữ liệu giờ mở cửa, traffic sống và footfall thật trước khi ra quyết định đầu tư.',
+    verification_checklist: [
+      'Tự xác minh giá thuê, mặt tiền và khả năng đỗ xe.',
+      'Xác minh khả năng tiếp cận tại hiện trường vào giờ cao điểm.',
+      'Bổ sung bằng chứng hiện hành về giờ mở cửa và lượng khách trước khi ra quyết định.',
     ],
     used_evidence_ids: evidenceIds,
     missing_evidence: ['mật độ khách thật', 'giá thuê', 'traffic thời gian thực', 'giờ mở cửa đầy đủ'],
@@ -89,7 +89,7 @@ function collectAllowedTokens(area) {
   const evidence = area.evidence;
   return new Set([
     area.id,
-    String(area.score),
+    String(area.rankingPosition),
     ...evidence.topCategories.flatMap((item) => [item.category, String(item.count), item.evidenceId]),
     ...evidence.complementaryPOIs.flatMap((item) => [item.name, item.category, item.poiId, item.evidenceId]),
     ...evidence.competitors.flatMap((item) => [item.name, item.category, item.poiId, item.evidenceId]),
@@ -139,7 +139,7 @@ async function generateBusinessInsights({ concept, limit = 5, language = 'vi' })
     stagePipeline: [
       { id: 1, name: 'Business Concept Input', status: 'complete' },
       { id: 2, name: 'Concept Parser', status: 'complete', output: parsedConstraints },
-      { id: 3, name: 'Candidate Area Scorer', status: 'complete', safeguard: 'Mathematical scoring only; no LLM text.' },
+      { id: 3, name: 'Candidate Area Ranker', status: 'complete', safeguard: 'Internal ordering only; no user-facing investment score.' },
       { id: 4, name: 'Evidence Pack Builder', status: 'complete', safeguard: 'Evidence IDs are attached to every table row and POI.' },
       { id: 5, name: 'Business Insight Generator', status: 'complete', safeguard: 'LLM/data-to-text may only interpret evidence JSON.' },
       { id: 6, name: 'Report Dashboard', status: 'ready' },

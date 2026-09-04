@@ -13,11 +13,13 @@ src/config/
 src/encoder/
 src/expert_system/
 src/infrastructure/db/
+src/infrastructure/external/
 src/middleware/
 src/modules/cities/
 src/modules/admin/
 src/modules/pois/
 src/modules/travelerApiV2/
+src/modules/trust/
 src/services/
 src/inference.py
 scripts/verify_runtime_dataset.js

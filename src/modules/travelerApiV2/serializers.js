@@ -4,6 +4,7 @@ const {
   DATASET_VERSION,
   PHASE2_CITY_STATUS,
 } = require('./constants');
+const { buildLiveStatusOverlay } = require('../trust/liveStatusOverlay');
 
 function knownStatus(value) {
   return value === null || value === undefined || value === '' ? 'unknown' : 'known';
@@ -135,7 +136,7 @@ function buildWarnings(poi) {
   const warnings = [];
   if (!poi.addressCurrent && !poi.addressRaw) warnings.push('address_unknown');
   if (!poi.openingHoursRaw) warnings.push('opening_hours_unknown');
-  warnings.push('freshness_unknown');
+  if (!poi.lastVerifiedAt) warnings.push('freshness_unknown');
   if (poi.rating === null || poi.rating === undefined) warnings.push('rating_unknown');
   if (poi.reviewCount === null || poi.reviewCount === undefined) warnings.push('review_count_unknown');
   return warnings;
@@ -168,6 +169,7 @@ function serializeRating(poi) {
 }
 
 function serializePoi(poi) {
+  const trust = buildLiveStatusOverlay(poi);
   return {
     id: poi.globalId || poi.id,
     globalId: poi.globalId || poi.id,
@@ -201,11 +203,8 @@ function serializePoi(poi) {
       mergeStatus: poi.mergeStatus || null,
       dataQualityFlags: poi.dataQualityFlags || [],
     },
-    freshness: {
-      observedAt: null,
-      lastVerifiedAt: null,
-      status: 'unknown',
-    },
+    freshness: trust.freshness,
+    trust,
     attribution: nullIfUnknown(poi.attribution),
     warnings: buildWarnings(poi),
   };

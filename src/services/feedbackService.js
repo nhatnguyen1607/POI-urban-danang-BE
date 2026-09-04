@@ -1,4 +1,5 @@
 const { requireFirestoreDb } = require('../config/firebaseAdmin');
+const { evidenceFromVerifiedUserReport } = require('../modules/trust/evidence');
 
 function cleanString(value, max = 1200) {
   return String(value || '').trim().slice(0, max);
@@ -17,8 +18,20 @@ function normalizeEventType(eventType) {
     remove_from_itinerary: 'remove_from_itinerary',
     agent_run_business_insight: 'business_insight_run',
     itinerary_saved: 'itinerary_saved',
+    poi_status_report: 'poi_status_report',
   };
   return aliases[eventType] || cleanString(eventType || 'unknown', 80);
+}
+
+function evidenceFromFeedback(event) {
+  if (event.eventType !== 'poi_status_report' || !event.poiId) return null;
+  return evidenceFromVerifiedUserReport({
+    poiId: event.poiId,
+    status: event.payload?.status,
+    observedAt: event.payload?.observedAt,
+    verifiedArrival: event.payload?.verifiedGps === true,
+    userId: event.userId,
+  });
 }
 
 function sanitizeFeedback(input = {}) {
@@ -79,11 +92,13 @@ async function updateAgentMemoryFromEvent(db, event) {
 
 async function recordFeedback(input) {
   const event = sanitizeFeedback(input);
+  const evidence = evidenceFromFeedback(event);
   const db = requireFirestoreDb();
   const ref = db.collection('agentEvents').doc();
   await ref.set({
     eventId: ref.id,
     ...event,
+    evidence,
   });
   await updateAgentMemoryFromEvent(db, event);
   return {
@@ -97,4 +112,6 @@ async function recordFeedback(input) {
 
 module.exports = {
   recordFeedback,
+  evidenceFromFeedback,
+  sanitizeFeedback,
 };
