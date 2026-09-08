@@ -8,6 +8,7 @@ const { requireFirebaseAuth } = require('../../middleware/firebaseAuth');
 const { serializeCity, serializeCityStatus, serializePoi } = require('./serializers');
 const { buildTripPreview } = require('./tripPreview');
 const { validateTripPreviewRequest } = require('./tripPreviewValidation');
+const { partnerService } = require('../partners/partnerService');
 const {
   addStopToSavedTrip,
   createSavedTrip,
@@ -97,6 +98,29 @@ router.get('/pois/:poiId', async (req, res) => {
     sendSuccess(req, res, { poi: serializePoi(poi) }, { cityId: city.cityId });
   } catch (error) {
     sendError(req, res, 500, 'INTERNAL_ERROR', 'Failed to read POI detail');
+  }
+});
+
+router.get('/pois/:poiId/partner-state', async (req, res) => {
+  try {
+    const city = requireSupportedCity(req, res);
+    if (!city) return;
+    const { pois } = await loadPOIsForEdaSource({ cityId: city.cityId, source: 'all' });
+    const poi = pois.find((item) => item.globalId === req.params.poiId || item.id === req.params.poiId);
+    if (!poi) return sendError(req, res, 404, 'NOT_FOUND', 'POI not found.', { cityId: city.cityId });
+    const guestCount = req.query.guestCount ? Number(req.query.guestCount) : null;
+    if (guestCount !== null && (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > 20)) {
+      return sendError(req, res, 400, 'VALIDATION_ERROR', 'guestCount must be an integer between 1 and 20');
+    }
+    const partnerState = await partnerService.resolve(poi, {
+      requestedDates: req.query.checkIn || req.query.checkOut
+        ? { checkIn: req.query.checkIn || null, checkOut: req.query.checkOut || null }
+        : null,
+      guestCount,
+    });
+    return sendSuccess(req, res, { partnerState }, { cityId: city.cityId });
+  } catch {
+    return sendError(req, res, 503, 'PROVIDER_UNAVAILABLE', 'Partner status is temporarily unavailable');
   }
 });
 

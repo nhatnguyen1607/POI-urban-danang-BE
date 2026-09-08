@@ -17,6 +17,7 @@ src/infrastructure/external/
 src/middleware/
 src/modules/cities/
 src/modules/admin/
+src/modules/partners/
 src/modules/pois/
 src/modules/travelerApiV2/
 src/modules/trust/

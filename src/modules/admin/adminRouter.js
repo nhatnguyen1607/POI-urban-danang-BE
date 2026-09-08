@@ -4,6 +4,7 @@ const { requireAdmin } = require('../../middleware/adminAuth');
 const { createAdminRateLimit } = require('../../middleware/adminRateLimit');
 const { requireVerifiedFirebaseAuth } = require('../../middleware/firebaseAuth');
 const { getPoiDataQualityReport, loadPOIs } = require('../../services/poiDataService');
+const { partnerService } = require('../partners/partnerService');
 const {
   getAdminOverview,
   getAdminPoi,
@@ -71,6 +72,8 @@ function createAdminRouter({
   tripListProvider = listAdminTrips,
   tripDetailProvider = getAdminTrip,
   feedbackProvider = listAdminFeedback,
+  partnerStatusProvider = () => partnerService.registry.list(),
+  merchantClaimProvider = () => partnerService.merchants.list(),
 } = {}) {
   const router = express.Router();
 
@@ -202,6 +205,14 @@ function createAdminRouter({
       return res.status(503).json({ error: 'admin_feedback_unavailable' });
     }
   });
+
+  router.get('/partners/status', (req, res) => res.json({ providers: partnerStatusProvider() }));
+
+  router.get('/merchant-claims', (req, res) => res.json({
+    claims: merchantClaimProvider(),
+    mutation: 'MERCHANT_CLAIM_MANUAL_VERIFICATION_REQUIRED',
+    autoVerification: false,
+  }));
 
   router.get('/health', async (req, res) => {
     try {

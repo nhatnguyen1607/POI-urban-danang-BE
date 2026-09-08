@@ -9,6 +9,8 @@ const {
   getFreshnessState,
   resolveEvidenceConflict,
 } = require('./evidence');
+const { providerEvidence, merchantEvidence } = require('../partners/operationalStateResolver');
+const { PROVIDER_RESULT_STATUSES } = require('../partners/providerContract');
 
 function normalizedCategory(poi = {}) {
   return String(poi.categoryNormalized || poi.category || '').toLowerCase();
@@ -51,9 +53,19 @@ function trustMessage({ resolved, hasHours, accommodation }) {
   return 'Chưa xác minh trạng thái hiện tại.';
 }
 
-function buildLiveStatusOverlay(poi = {}, { evidence = [], now = new Date(), policy = getFreshnessPolicy() } = {}) {
+function buildLiveStatusOverlay(poi = {}, {
+  evidence = [], providerResults = [], merchant = null, handoff = null,
+  now = new Date(), policy = getFreshnessPolicy(),
+} = {}) {
   const baseEvidence = canonicalEvidence(poi, policy);
-  const resolved = resolveEvidenceConflict([baseEvidence, ...evidence], now);
+  const partnerEvidence = providerResults.map(providerEvidence);
+  const verifiedMerchantEvidence = merchantEvidence(merchant);
+  const resolved = resolveEvidenceConflict([
+    baseEvidence,
+    ...partnerEvidence,
+    ...(verifiedMerchantEvidence ? [verifiedMerchantEvidence] : []),
+    ...evidence,
+  ], now);
   const hasHours = Boolean(String(poi.openingHoursRaw || '').trim());
   const accommodation = isAccommodation(poi);
   const selected = resolved.selected;
@@ -62,6 +74,24 @@ function buildLiveStatusOverlay(poi = {}, { evidence = [], now = new Date(), pol
   const currentStatusVerified = freshnessState === FRESHNESS_STATES.FRESH
     && !resolved.conflict
     && selected?.status !== EVIDENCE_STATUSES.UNKNOWN;
+  const availabilityResult = providerResults.find((item) => [
+    PROVIDER_RESULT_STATUSES.AVAILABLE,
+    PROVIDER_RESULT_STATUSES.SOLD_OUT,
+    PROVIDER_RESULT_STATUSES.UNAVAILABLE,
+  ].includes(item.status));
+  const availabilityFreshness = availabilityResult?.validUntil
+    && new Date(availabilityResult.validUntil).getTime() >= new Date(now).getTime()
+    ? FRESHNESS_STATES.FRESH
+    : availabilityResult ? FRESHNESS_STATES.STALE : FRESHNESS_STATES.UNKNOWN;
+  const availabilityState = !accommodation
+    ? 'NOT_APPLICABLE'
+    : resolved.conflict
+      ? PROVIDER_RESULT_STATUSES.CONFLICT
+      : availabilityResult && availabilityFreshness === FRESHNESS_STATES.FRESH
+        ? availabilityResult.status
+        : availabilityResult
+          ? PROVIDER_RESULT_STATUSES.STALE
+          : 'UNVERIFIED';
   return {
     status: resolved.status,
     freshnessState,
@@ -75,9 +105,16 @@ function buildLiveStatusOverlay(poi = {}, { evidence = [], now = new Date(), pol
       currentStatusClaimAllowed: currentStatusVerified && resolved.status === EVIDENCE_STATUSES.OPEN,
     },
     availability: {
-      state: accommodation ? 'UNVERIFIED' : 'NOT_APPLICABLE',
+      state: availabilityState,
       handoffRequired: accommodation,
+      providerStatus: providerResults[0]?.status || PROVIDER_RESULT_STATUSES.PROVIDER_UNAVAILABLE,
+      providerName: availabilityResult?.providerName || null,
+      observedAt: availabilityResult?.observedAt || null,
+      validUntil: availabilityResult?.validUntil || null,
+      price: availabilityResult?.price ?? null,
+      currency: availabilityResult?.currency || null,
     },
+    handoff,
     decision: {
       eligible: ![
         EVIDENCE_STATUSES.CLOSED,
