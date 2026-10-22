@@ -33,7 +33,15 @@ const googlePlacesGuard = createProviderResilience({
   logger: structuredLogger,
 });
 
+function isTransientOsrmError(error) {
+  return ['OSRM_NETWORK', 'PROVIDER_TIMEOUT'].includes(error?.code)
+    || (error?.code === 'OSRM_HTTP' && [500, 502, 503, 504].includes(error.upstreamStatus));
+}
+
 const osrmGuard = createProviderResilience({
+  // Fail fast on 429 (no immediate retry), NoRoute, invalid queries and parse errors.
+  isTransient: isTransientOsrmError,
+  isFailure: error => isTransientOsrmError(error) || error?.upstreamStatus === 429,
   provider: 'osrm',
   maxConcurrency: envNumber('URBANAGENT_OSRM_MAX_CONCURRENCY', 6),
   timeoutMs: envNumber('URBANAGENT_OSRM_TIMEOUT_MS', 10_000),

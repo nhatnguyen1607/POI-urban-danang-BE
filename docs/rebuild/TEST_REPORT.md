@@ -1725,3 +1725,133 @@ replan: 1.6 seconds
 - Canonical verifier: PASS, 4173 POIs, SHA-256
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
   `AUTO_CREATE_NEW` remains false.
+
+
+## Route body consumption hotfix - 2026-10-22
+
+- Scope: existing POST /api/route only; no merge or deployment.
+- Reproduced the exact original exception using HEAD code and a real Fetch
+  Response: `Body is unusable: Body has already been read`.
+- Root cause in original expert_system.js lines 41-49: osrmGuard cached and
+  coalesced a Response, then each caller invoked response.json(). The guard
+  returns the same value at providerResilience.js lines 165/170 and caches it
+  at line 181. No repeated request-body consumption was found: express.json
+  parses once; auth/admission/rate middleware and handlers use req.body.
+- Parse and validate OSRM inside the guarded operation; consume text once and
+  JSON.parse the result. Only successful parsed route values enter the cache;
+  body reading is now covered by the guard timeout. No clone required.
+- Preserve successful route shape and legacy provider-error HTTP 500 with
+  {error, details}. Details distinguish HTTP status plus upstream JSON code/
+  message, NoRoute, network and parse errors; timeout retains PROVIDER_TIMEOUT.
+  Invalid numeric/range coordinates return 400; zero is valid.
+- Existing itinerary, POI/external search, Firebase auth and frontend fallback
+  code unchanged. Frontend tripRoadRoutes.ts catches errors per leg inside
+  Promise.all; routeVisuals.ts retains dashed fallback rendering.
+- Changed: src/expert_system/expert_system.js, src/server.js,
+  tests/phase6/routeBodyRegression.test.js, and these three project records.
+- Regression suite: 15/15 PASS, including real HTTP endpoint concurrent
+  success/failure, same-key concurrent/cache reuse, distinct legs, single
+  body read, OSRM HTTP 400/429/500/503, NoRoute, invalid JSON/schema,
+  network cause, zero/invalid coordinates and body timeout.
+- Validation: node --check for both runtime files and git diff --check PASS.
+  Backend has no root build/lint script (plain CommonJS runtime).
+- Remaining risks: no live Hugging Face/OSRM/Firebase validation performed;
+  tests mock upstream services and use existing local auth fallback. Existing
+  generic guard may retry deterministic OSRM errors once; weather fallback
+  behavior and startup initialization race remain outside this body fix.
+- Status: implemented locally, awaiting review; not merged or deployed.
+
+- Final full-suite result: `npm.cmd test` PASS, 122 tests total, 121 passed,
+  0 failed, 1 guarded disposable-PostGIS integration skip (not configured).
+
+
+## Final OSRM routing review - 2026-10-22
+
+Verdict: MERGE_READY for the isolated routing patch; deployment is not authorized.
+
+Repository/provenance:
+- Workspace: D:/UrbanAgent-work/current/backend.
+- Remote: https://github.com/nhatnguyen1607/POI-urban-danang-BE.git.
+- Original branch feat/phase6-p1-partner-readiness contained unrelated commit
+  d8bc55e (12 files, 757 insertions vs local origin/main). Isolated all uncommitted
+  hotfix changes onto fix/osrm-response-body from local origin/main at
+  9c7b21cf695bdf88769b9ce6b9946404a56f7025. No commit/push/merge/deploy.
+- Workflow .github/workflows/deploy-huggingface-space.yml deploys main's
+  runtime-only payload to nhttngy/back-end. Payload generator records this
+  repository and sourceCommit in runtime_deployment_manifest.json.
+- WARNING: live HF API/manifest read failed (web inaccessible and local network
+  connection failed). Current remote main and deployed SHA are NOT verified.
+  Check deployment manifest and latest successful Actions run before rollout.
+
+Findings and minimal corrections:
+- Original Response cache/coalescing/body reuse is eliminated at
+  expert_system.js:58-107: exactly one text read at line 65 per fetched body;
+  only parsed validated route arrays can enter cache. No clone needed.
+- BLOCKER FIXED: deterministic NoRoute/400/parse errors were retried and counted
+  toward a shared circuit, potentially blocking valid legs. providerGuards.js:36-44
+  now defines OSRM-only transient and outage classification. Retry only network,
+  timeout and HTTP 500/502/503/504; 429 fails fast with original status in details.
+- providerResilience.js:44,142 adds an optional failure-classification predicate;
+  default true preserves all other provider behavior. NoRoute/invalid payloads
+  do not poison the OSRM circuit. Existing retry clamp 0..3 remains, default 1.
+- BLOCKER FIXED: release workflow omitted routing regressions; added the test
+  file to existing pre-deploy test command at workflow line 50.
+- INFO: cache key preserves ordered origin/destination; profile/options are
+  fixed. Reverse direction/different destination are separately tested. Cache
+  TTL defaults to 10 minutes; rejected promises never enter cache and inFlight
+  cleanup executes on failure. Concurrent duplicate requests share parsed values.
+- INFO: numeric finite/range validation, zero coordinates, success geometry/
+  distance/duration/steps and frontend contract verified; provider errors retain
+  legacy HTTP 500 with error/details, invalid coordinates return 400.
+- No edits to itinerary, POI retrieval/data, external place search, Firebase,
+  weather, frontend or dashed fallback. Shared guard defaults remain unchanged.
+- WARNING: pre-existing unbounded weather fetch and expert-system initialization
+  race remain outside this scoped fix; no live provider/Firebase/browser test.
+
+Files changed (9):
+- src/expert_system/expert_system.js
+- src/server.js
+- src/infrastructure/external/providerGuards.js
+- src/infrastructure/external/providerResilience.js
+- tests/phase6/routeBodyRegression.test.js (new; include in eventual commit)
+- .github/workflows/deploy-huggingface-space.yml
+- docs/rebuild/CURRENT_STATE.md
+- docs/rebuild/WORKLOG.md
+- docs/rebuild/TEST_REPORT.md
+
+Validation:
+- Routing regressions: 22/22 PASS (included in full suite on isolated branch).
+- Final npm.cmd test on fix/osrm-response-body: 118 total, 117 PASS, 0 FAIL,
+  1 guarded disposable PostGIS SKIP. Earlier 128/129 result included unrelated
+  partner tests; earlier 121/122 preceded review corrections.
+- Full suite includes HF dependency-closure/data-packaging checks, Firebase
+  auth regressions, itinerary compatibility and provider resilience tests.
+- node --check: all four modified runtime JS files PASS.
+- git diff --check PASS; only Git CRLF normalization notices. No root build/lint
+  script; Node 20 image build and Actions execution still required before rollout.
+
+Deploy/smoke plan (requires approval, not executed):
+1. Verify current GitHub main and live HF runtime_deployment_manifest.json;
+   record last-known-good Space revision, source commit, runtime hashes and config.
+2. Commit only this patch on isolated branch, PR/review, run full and workflow
+   packaging tests on final rebased merge candidate; inspect Node 20 CI result.
+3. Check HF_AUTO_DEPLOY_ENABLED before merge: merging main may auto-deploy.
+   Coordinate approval before merging or invoking main workflow_dispatch.
+4. After approved rollout: verify Space build/RUNNING and manifest source SHA;
+   GET /api/v2/cities and production-origin CORS; unauthenticated route must 401.
+5. With valid Firebase token: valid Da Nang route; repeat same route (cache hit);
+   duplicate concurrent and distinct concurrent legs; verify finite distance/
+   duration and LineString geometry, alternatives/steps and frontend rendering.
+6. Test invalid coordinates ->400, controlled NoRoute ->legacy 500 details and
+   dashed fallback, one failed leg alongside a successful leg. Simulate network/
+   timeout/429/5xx/invalid payload in staging only; inspect bounded retries and
+   no body-already-read errors. Do not overload public OSRM to induce failures.
+
+Rollback plan (requires approval, not executed):
+- Stop further release syncs; restore last-known-good HF payload/revision recorded
+  before rollout or revert only the hotfix commit on GitHub main and run the
+  approved pipeline. Do not reset unrelated application/data changes.
+- Preserve Space secrets/config, canonical data and Firebase unchanged. Rebuild
+  and rerun health/auth/route/CORS/fallback smoke checks. Rollback to the original
+  routing implementation can reintroduce the known body-cache defect; keep the
+  frontend fallback available and monitor route errors while preparing a fix.
