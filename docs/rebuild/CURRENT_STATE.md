@@ -871,3 +871,79 @@ Rollback plan (requires approval, not executed):
   and rerun health/auth/route/CORS/fallback smoke checks. Rollback to the original
   routing implementation can reintroduce the known body-cache defect; keep the
   frontend fallback available and monitor route errors while preparing a fix.
+
+
+## OSRM pre-merge integration - 2026-10-22
+
+Verdict: PRE_MERGE_READY. Rollout remains blocked pending deployment-gate
+value verification and explicit rollout approval; no production mutation occurred.
+
+- Confirmed repository origin nhatnguyen1607/POI-urban-danang-BE and branch
+  fix/osrm-response-body. Initial HEAD was 9c7b21cf695bdf88769b9ce6b9946404a56f7025.
+- Staged and committed exactly the existing 9 hotfix files (including previously
+  untracked routeBodyRegression.test.js) as local safety commit 5545782.
+- Fetched origin/main; live GitHub branch API independently confirmed
+  be6d21ae31dfc9c74f7e4b56e87a23e4df10342a, containing PR #43.
+- Rebased without conflicts. Routing code commit is now
+  1d35f26c6fae51b5e9e5c507a12d7034772edc90. range-diff reports identical patch.
+  origin/main is an ancestor. All 12 files changed by PR #43 are byte-identical
+  to fetched main; providerGuards/providerResilience/expert_system/server had
+  no upstream PR #43 edits. No itinerary/provider/Firebase behavior was overwritten.
+- A separate local documentation commit records these results; total final
+  integration delta remains the same 9 files, with 1 code + 1 records commit.
+
+Validation after rebase:
+- Node 20.20.2: full suite 129 total, 128 PASS, 0 FAIL, 1 guarded PostGIS SKIP.
+- npm.cmd test on default Node 24.11.1: same 128 PASS, 0 FAIL, 1 SKIP.
+- Focused Node 20 routing/HF packaging/Firebase auth/itinerary lifecycle suite:
+  42/42 PASS, including all 22 routing regressions.
+- Node 20 syntax PASS: four modified runtime files plus firebaseAdmin,
+  corsOptions and prepare_hf_space_payload.
+- Runtime dataset verification on Node 20 PASS: 4173 POIs, no duplicate IDs or
+  invalid core records, SHA dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4.
+- git diff origin/main...HEAD --check PASS.
+- Windows/Node 20 npm script literal test globs do not expand. Used the exact
+  same phase0/1/2/5/6 file set expanded in PowerShell for the Node 20 full run;
+  Linux workflow shell expands those globs. No package/lockfile edits made.
+- Initial sandbox npm exec attempt hit registry EACCES; used the separately
+  acquired Node 20 binary directly. All reported final test runs completed.
+
+Live HF provenance (read-only public GETs):
+- Space nhttngy/back-end API revision and runtime.sha both
+  c1256ba477fb368fdc79c87b0ce48df445f457fb; runtime.stage RUNNING.
+- Retrieved runtime_deployment_manifest.json pinned to that exact revision:
+  sourceRepository nhatnguyen1607/POI-urban-danang-BE,
+  sourceCommit be6d21ae31dfc9c74f7e4b56e87a23e4df10342a,
+  targetSpace nhttngy/back-end. Re-read API confirmed unchanged runtime revision.
+- Source commit was verified from the manifest, NOT inferred from RUNNING.
+  Hotfix has not been deployed. These observations supersede prior network-
+  blocked HF provenance warnings and prior isolated-branch test counts.
+
+Deployment gate:
+- Push to main runs validation. Sync occurs only after prior steps succeed and
+  HF_AUTO_DEPLOY_ENABLED is exactly 'true'. Empty variable makes the push gate
+  fail; other nonempty values skip sync. workflow_dispatch on main enables sync
+  regardless of the variable, after preceding validation succeeds.
+- Current variable value UNKNOWN: GitHub connector rejects the Actions variables
+  endpoint as unsupported. No credential or secret extraction attempted.
+- ROLLOUT_BLOCKED pending read-only confirmation in GitHub Settings > Secrets
+  and variables > Actions > Variables (or an authorized gh api read), review of
+  auto-sync exposure, and explicit rollout approval. No workflow was dispatched.
+
+Next actions, not executed:
+1. Approve pushing the isolated branch/opening PR; re-fetch main before final
+   PR validation. Review only the 9-file delta; require Node 20 CI and packaging.
+2. Verify HF_AUTO_DEPLOY_ENABLED before approving merge; a main push may deploy.
+3. Preserve last-known-good HF revision c1256ba477fb368fdc79c87b0ce48df445f457fb
+   and the pinned manifest as rollback evidence; record config without secrets.
+4. After separate rollout approval: verify new sourceCommit/runtime revision,
+   health/CORS/401, valid route and repeated/cache/concurrent requests, mixed
+   failed/successful legs, finite distance/duration and geometry, frontend
+   dashed fallback. Simulate provider outages only in staging.
+5. If production fails: stop further syncs through approved release controls,
+   restore that known-good runtime payload/revision or revert only hotfix code
+   via the approved pipeline; keep PR #43, secrets, data and Firebase config.
+   Recheck health/auth/CORS/routes. Old revision retains the original body bug.
+
+No push, PR creation, merge, workflow_dispatch, production deploy, canonical
+CSV modification, Firebase operation or out-of-scope source change performed.
