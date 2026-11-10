@@ -1725,3 +1725,39 @@ replan: 1.6 seconds
 - Canonical verifier: PASS, 4173 POIs, SHA-256
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
   `AUTO_CREATE_NEW` remains false.
+
+
+## 2026-11-10 — NaviGo bounded repository maintenance audit
+
+Fresh FE/BE main SHAs verified through GitHub and full clone history. All original
+branches and user workspace changes preserved. See docs/maintenance/ for branch
+inventory, technology/runtime distinctions, gaps, tests and cleanup manifest.
+Restored reviewed OSRM code/tests from 1d35f26; fixed matrix walk/zero longitude;
+aligned six City Pack live-baseline expectations with approved Stage4T 4173 POIs.
+Canonical bytes/hash, model weights, master context, production configuration and
+deploy workflow unchanged. No deployment or remote branch deletion performed.
+PRs remain subject to verification/review and production deployment prohibition.
+
+Final maintenance checks: BE 403 tests / 388 PASS / 0 FAIL / 15 guarded SKIP; FE build and 19 tests PASS; Functions build PASS. Existing FE lint: 98 errors / 2 warnings. Live E2E NOT VERIFIED. Main preserved; no deploy or branch deletion.
+
+
+## Remote publication blocked — verified connector response
+
+Final verdict: **BLOCKED_BY_PERMISSIONS**.
+
+- FE GitHub Git Trees create call returned HTTP 403: Resource not accessible by integration.
+- BE GitHub Git Blobs create call returned HTTP 403: Resource not accessible by integration.
+- Repository metadata advertised push=true, but the actual object-write operations
+  are denied. No inference is made that repository-owner permission is missing;
+  the connected integration's effective write capability is insufficient.
+- No remote branch or commit was created; no push, PR creation, merge, workflow
+  dispatch, production deployment or deletion occurred. No PR URL exists.
+- Two local integration branches contain the reviewable changes. Patch files and
+  prepared PR descriptions are available in the enclosing navigo-audit directory.
+- FE main remains 3914e1c7b335deccb3d7c2c8162cac2dacb9864e;
+  BE main remains be6d21ae31dfc9c74f7e4b56e87a23e4df10342a.
+- To publish, restore effective Contents write and Pull requests write access for
+  the GitHub integration to both named repositories. Do not bypass repository
+  protection or use force push. Recheck current main before publishing.
+- Even after access is restored, main merge would trigger deployment. This task
+  prohibits automatic production deploy; no automatic merge is proposed.

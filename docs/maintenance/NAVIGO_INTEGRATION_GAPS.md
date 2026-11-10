@@ -1,0 +1,17 @@
+# NaviGo integration gaps
+
+| Component | FE implementation | BE implementation | Runtime status | Missing integration | Tests | Required action |
+|---|---|---|---|---|---|---|
+| OSRM body reuse | Route modal calls /api/route | Main cached Fetch Response | Fixed on integration branch | Main still needs reviewed PR | 22 regression PASS | Review bounded five-file restoration |
+| Matrix transport | Planner uses walk enum | Matrix checked walking only | Fixed on integration branch | Main uses wrong speed for walk | 2 regression PASS | Merge after checks/review |
+| Per-day windows | Main sends dayWindows, start/end aliases | Main contains feature and tests | Already integrated | No runtime gap | Existing batch3 tests | Keep main; demo branch is patch-equivalent |
+| Old demo UI | /demo redirects to /urban-agent | v2 contracts active | Superseded | No case for restoring 796-line old screen | FE build / unit tests | Preserve branch; do not merge old App routing |
+| City Pack regression baseline | No client change | Six old assertions still demand 4166 | Corrected to approved live 4173 | Phase4 not in npm test | Full Phase4 run | Keep immutable hash checks and historical summary values |
+| Semantic checkpoint path | User can request V4 | inference expects artifacts/model; only legacy model LFS path tracked | NOT VERIFIED / unavailable in package | Validated model bundle + index + versioned contract absent | No real checkpoint inference | Separate artifact packaging/evaluation task; do not fabricate weights |
+| Missing modality / semantic precision | Text/image query UI exists | Gate already has availability mask and keyword boost | Code present | No external zero-shot evaluation proving category accuracy | NOT VERIFIED | Evaluate retrieval by category and domain before changing model behavior |
+| Firebase persistence | Auth / save / feedback UI | Firebase services and Functions | Local contracts tested | Real Firebase login/write/emulator flow not exercised | Functions build PASS; real E2E NOT VERIFIED | Isolated configured environment required |
+| PostGIS | Consumes common API | Opt-in repository/migrations | Default CSV | No disposable DB available | 1 guarded SKIP | Run explicit disposable PostGIS integration before any cutover |
+| Partner product | /seller pages | Registry and provider contracts | Contracts implemented | Official partner credentials/request adapters not proven | Mock contracts tested | Verify provider in approved environment; retain honest handoff wording |
+| FE quality | Application builds | N/A | Build PASS | Baseline ESLint has 98 errors / 2 warnings | FAIL | Separate lint cleanup with behavioral review; rules not disabled |
+| Automation / deployment | Vercel status success on main | push-main Hugging Face deploy workflow | Main merge can deploy | User forbids automatic production deployment in this task | Source workflow + GitHub checks | Leave PR unmerged; no workflow bypass or dispatch |
+| Documentation drift | Shared old context mirrored | MASTER_PLAN/CURRENT_STATE headers describe old phases | Historical records mixed with current | Old 4166 facts conflict with Stage4T manifest | Verifier PASS | Add dated maintenance record; do not rewrite master context |

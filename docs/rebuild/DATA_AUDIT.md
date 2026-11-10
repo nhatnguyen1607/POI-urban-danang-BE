@@ -138,3 +138,15 @@ Still intentionally scoped:
 - Missing `place_id` must not be invented from `RestaurantID`.
 - Missing rating/review count must remain null/unknown, not `0`.
 - Missing opening hours, phone, website, operating status, source freshness, and price must not be fabricated.
+
+
+## 2026-11-10 — NaviGo bounded repository maintenance audit
+
+Fresh FE/BE main SHAs verified through GitHub and full clone history. All original
+branches and user workspace changes preserved. See docs/maintenance/ for branch
+inventory, technology/runtime distinctions, gaps, tests and cleanup manifest.
+Restored reviewed OSRM code/tests from 1d35f26; fixed matrix walk/zero longitude;
+aligned six City Pack live-baseline expectations with approved Stage4T 4173 POIs.
+Canonical bytes/hash, model weights, master context, production configuration and
+deploy workflow unchanged. No deployment or remote branch deletion performed.
+PRs remain subject to verification/review and production deployment prohibition.
