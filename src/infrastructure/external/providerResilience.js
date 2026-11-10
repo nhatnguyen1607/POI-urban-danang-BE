@@ -41,6 +41,7 @@ function createProviderResilience({
   random = Math.random,
   logger = () => {},
   isTransient = defaultTransient,
+  isFailure = () => true,
 } = {}) {
   const name = String(provider || 'external_provider').replace(/[^a-z0-9_-]/gi, '_');
   const settings = {
@@ -136,7 +137,13 @@ function createProviderResilience({
       throw operationalError(`${name} failed.`, 'PROVIDER_FAILED');
     } catch (error) {
       stats.failures += 1;
-      consecutiveFailures += 1;
+      // Providers may distinguish an unavailable service from a valid negative
+      // answer (e.g. OSRM NoRoute); defaults preserve all other providers.
+      if (isFailure(error)) consecutiveFailures += 1;
+      else {
+        consecutiveFailures = 0;
+        circuitState = 'CLOSED';
+      }
       if (consecutiveFailures >= settings.circuitFailureThreshold) {
         circuitState = 'OPEN';
         openedAt = now();

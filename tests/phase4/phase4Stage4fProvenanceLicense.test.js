@@ -143,7 +143,8 @@ test('Stage 4F excludes Google from the candidate manifest', () => {
 test('Stage 4F keeps the canonical baseline intact', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
 
-  assert.equal(canonical.rows, 4166);
+  // Stage 4T promoted the live canonical baseline; historical artifacts remain unchanged.
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
   assert.equal(first.summary.runtimeChanged, false);
 });

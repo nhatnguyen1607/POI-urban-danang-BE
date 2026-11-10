@@ -59,7 +59,7 @@ test('Stage 4D builds a valid non-runtime candidate City Pack', () => {
   const result = runBuild();
 
   assert.equal(result.summary.status, 'CANDIDATE_NON_RUNTIME_NOT_CANONICAL');
-  assert.equal(result.summary.canonicalBaselineCount, 4166);
+  assert.equal(result.summary.canonicalBaselineCount, 4173);
   assert.equal(result.summary.canonicalSha256, EXPECTED_CANONICAL_SHA);
   assert.equal(result.summary.matchedEnriched, 5);
   assert.equal(result.summary.approvedNewCandidates, 1);
@@ -186,6 +186,7 @@ test('Stage 4D keeps canonical dataset integrity unchanged', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
 
   assert.equal(before, after);
-  assert.equal(canonical.rows, 4166);
+  // Stage 4T promoted the live canonical baseline; historical artifacts remain unchanged.
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
 });

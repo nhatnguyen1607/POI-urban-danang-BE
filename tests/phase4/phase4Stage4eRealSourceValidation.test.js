@@ -81,6 +81,7 @@ test('Stage 4E leaves canonical data unchanged', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
 
   assert.equal(canonicalHashBeforeValidation, after);
-  assert.equal(canonical.rows, 4166);
+  // Stage 4T promoted the live canonical baseline; historical artifacts remain unchanged.
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
 });

@@ -1,11 +1,11 @@
 const { haversineKm } = require('./scoringUtils');
 
 function estimateMatrix({ origin, destinations = [], transport = 'motorbike' }) {
-  const speed = transport === 'walking' ? 4.5 : transport === 'car' ? 28 : 22;
+  const speed = ['walk', 'walking'].includes(transport) ? 4.5 : transport === 'car' ? 28 : 22;
   return destinations.map((destination) => {
     const distanceKm = haversineKm(
-      { lat: origin.lat, lon: origin.lon || origin.lng },
-      { lat: destination.lat, lon: destination.lon || destination.lng },
+      { lat: origin.lat, lon: origin.lon ?? origin.lng },
+      { lat: destination.lat, lon: destination.lon ?? destination.lng },
     );
     return {
       destination,

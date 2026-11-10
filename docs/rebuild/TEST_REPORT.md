@@ -1725,3 +1725,66 @@ replan: 1.6 seconds
 - Canonical verifier: PASS, 4173 POIs, SHA-256
   `dcb404cc8b5c7a9b5fd70df63039ab8f828c504270e22b12a671fa4ed61583f4`.
   `AUTO_CREATE_NEW` remains false.
+
+
+## 2026-11-10 — NaviGo bounded repository maintenance audit
+
+Fresh FE/BE main SHAs verified through GitHub and full clone history. All original
+branches and user workspace changes preserved. See docs/maintenance/ for branch
+inventory, technology/runtime distinctions, gaps, tests and cleanup manifest.
+Restored reviewed OSRM code/tests from 1d35f26; fixed matrix walk/zero longitude;
+aligned six City Pack live-baseline expectations with approved Stage4T 4173 POIs.
+Canonical bytes/hash, model weights, master context, production configuration and
+deploy workflow unchanged. No deployment or remote branch deletion performed.
+PRs remain subject to verification/review and production deployment prohibition.
+
+Final maintenance checks: BE 403 tests / 388 PASS / 0 FAIL / 15 guarded SKIP; FE build and 19 tests PASS; Functions build PASS. Existing FE lint: 98 errors / 2 warnings. Live E2E NOT VERIFIED. Main preserved; no deploy or branch deletion.
+
+
+## Remote publication blocked — verified connector response
+
+Final verdict: **BLOCKED_BY_PERMISSIONS**.
+
+- FE GitHub Git Trees create call returned HTTP 403: Resource not accessible by integration.
+- BE GitHub Git Blobs create call returned HTTP 403: Resource not accessible by integration.
+- Repository metadata advertised push=true, but the actual object-write operations
+  are denied. No inference is made that repository-owner permission is missing;
+  the connected integration's effective write capability is insufficient.
+- No remote branch or commit was created; no push, PR creation, merge, workflow
+  dispatch, production deployment or deletion occurred. No PR URL exists.
+- Two local integration branches contain the reviewable changes. Patch files and
+  prepared PR descriptions are available in the enclosing navigo-audit directory.
+- FE main remains 3914e1c7b335deccb3d7c2c8162cac2dacb9864e;
+  BE main remains be6d21ae31dfc9c74f7e4b56e87a23e4df10342a.
+- To publish, restore effective Contents write and Pull requests write access for
+  the GitHub integration to both named repositories. Do not bypass repository
+  protection or use force push. Recheck current main before publishing.
+- Even after access is restored, main merge would trigger deployment. This task
+  prohibits automatic production deploy; no automatic merge is proposed.
+
+
+## 2026-11-10 - NaviGo Git CLI publication recovery
+
+Both original integration commits were normally pushed to integration/navigo-audit-2026-11-10; main unchanged. PR creation still blocked: connected GitHub app returns 403 on both PR-create calls, and gh is unavailable. FE build + 19 tests PASS; main/integration lint identical (98 errors, 2 warnings; zero regression). BE rerun: 403 total, 388 PASS, 0 FAIL, 15 existing SKIP. Functions build PASS; canonical 4173-POI bytes/hash unchanged; twelve generated Phase4 outputs restored to exact pre-test bytes. No runtime, baseline or fixture changes in recovery. All technology inventory modules retained; real model/Firebase/PostGIS/browser/live-provider E2E unverified. No branch deletion, force push, main push, merge, workflow dispatch or production deploy. Full evidence: docs/maintenance/NAVIGO_PUBLICATION_RECOVERY.md.
+
+
+## Current final-integration status - 2026-11-10
+
+The original integration branches have been pushed. Earlier statements that they exist only locally describe the initial blocked attempt and are superseded by this section and NAVIGO_PUBLICATION_RECOVERY.md.
+
+GitHub CLI 2.103.3 is now installed. Secure interactive browser authentication has been started; no credentials were exported. The GitHub connector still returns 403 on PR creation. PR creation, branch-protection reads and safe remote CI dispatch await CLI authentication; no PR or merge is claimed.
+
+FE remains documentation-only. Baseline lint remains FAIL (98 errors, 2 warnings), identical to main with zero new diagnostics; prior FE build/19 tests and BE full-suite/Functions/dataset results remain valid because runtime source is unchanged.
+
+BE OSRM runtime files and routeBodyRegression tests are identical to fix/osrm-response-body. Its previously omitted workflow test invocation is now restored, and routeMatrixRegression is included as well. Focused configured test command rerun: 38 PASS, 0 FAIL, 0 SKIP. Production triggers/guards unchanged. workflow_dispatch against the integration ref takes the no-deploy branch; dispatch against main can deploy and is prohibited in this task.
+
+Production merge is gated: backend main push may deploy when HF_AUTO_DEPLOY_ENABLED=true; main workflow_dispatch always deploys. FE Vercel production settings are not yet verified. No merge without evidence that production is unaffected or separate approval.
+
+Verified full-ref Git bundle backups and ref manifests: D:/CD1_finance/navigo-audit/backups-final-integration/. Both bundles record complete history and pass git bundle verify. All original branch names/SHAs match existing audit evidence: FE 21/21, BE 49/49 unchanged. Current remote branches FE 22, BE 50 including integration branches. Deleted: 0; retained: 72. Cleanup deferred until integration is merged/verified and deployment usage is proven safe. Keep fix/osrm-response-body, clean and unique demo branches.
+
+Technology inventory retained: orchestration, retrieval/recommendation/reranker, memory/feedback, Rete/backward chaining/Fuzzy Logic, itinerary/OSRM, Firebase/Auth/Functions, business scoring and City Pack/provenance. Real checkpoint runtime integration remains unverified. Canonical 4173-POI data and historical 4166 artifacts are unchanged.
+
+
+## 2026-11-10 - Final PR publication and production gate
+
+GitHub CLI login completed via Windows keyring. FE PR #21 and BE PR #44 created draft then Ready for Review, MERGEABLE/CLEAN with no review requests/reviews/unresolved threads at check time. BE safe integration-ref workflow run 42798289516 SUCCESS, 38/38 tests and payload/startup/CORS validation PASS; production sync SKIPPED. OSRM branch source/tests equivalent; missing workflow invocation restored plus matrix tests. main unchanged. HF_AUTO_DEPLOY_ENABLED=true and FE main Production deployment evidence block merge without separate approval. No merge, main push, production deploy, force push or branch deletion. All 70 original branch tips unchanged; 72 current branches preserved; full-ref bundles verified under navigo-audit/backups-final-integration. Existing full local suite/lint/Functions/data results retained, no source/data/fixture changes beyond existing integration. See docs/maintenance/NAVIGO_FINAL_INTEGRATION.md for exact evidence and limits.

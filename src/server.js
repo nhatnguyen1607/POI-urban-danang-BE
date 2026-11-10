@@ -804,9 +804,9 @@ app.post('/api/recommend', upload.single('image'), (req, res) => {
 // ============================================================================
 app.post('/api/route', routeRateLimit, requireFirebaseAuth, async (req, res) => {
   try {
-    const { origin, destination } = req.body;
+    const { origin, destination } = req.body || {};
 
-    if (!origin || !destination || !origin.lat || !origin.lng || !destination.lat || !destination.lng) {
+    if (!origin || !destination || origin.lat == null || origin.lng == null || destination.lat == null || destination.lng == null) {
       return res.status(400).json({ error: 'Missing origin or destination coordinates' });
     }
 
@@ -818,7 +818,7 @@ app.post('/api/route', routeRateLimit, requireFirebaseAuth, async (req, res) => 
     res.json(result);
   } catch (error) {
     console.error('[ES Route Error]', error);
-    res.status(500).json({ error: 'Failed to find route', details: error.message });
+    res.status(error.code === 'INVALID_ROUTE_COORDINATES' ? 400 : 500).json({ error: 'Failed to find route', details: error.message });
   }
 });
 

@@ -123,7 +123,8 @@ test('Stage 4C dry-run output is deterministic for fixed fixtures', () => {
 test('Stage 4C keeps canonical dataset integrity unchanged', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
 
-  assert.equal(canonical.rows, 4166);
+  // Stage 4T promoted the live canonical baseline; historical artifacts remain unchanged.
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
   assert.equal(canonical.shaMatchesExpected, true);
 });

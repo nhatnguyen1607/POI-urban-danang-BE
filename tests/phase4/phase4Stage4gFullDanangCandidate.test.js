@@ -157,9 +157,11 @@ test('Stage 4G metadata records deterministic non-runtime artifacts only', () =>
 test('Stage 4G leaves the canonical baseline immutable', () => {
   const canonical = inspectCanonicalDataset(CANONICAL_PATH);
 
-  assert.equal(canonical.rows, 4166);
+  // Stage 4T promoted the live canonical baseline; historical artifacts remain unchanged.
+  assert.equal(canonical.rows, 4173);
   assert.equal(canonical.sha256, EXPECTED_CANONICAL_SHA);
   assert.equal(summary.canonical.rows, 4166);
-  assert.equal(summary.canonical.sha256, EXPECTED_CANONICAL_SHA);
+  // This committed Stage 4G summary predates the seven-POI Stage 4S canary.
+  assert.equal(summary.canonical.sha256, '5cc6ba843e6c93cb0b5403a03c5557f06a2e5d34a74340b4d0b4d6262035f7ae');
   assert.equal(summary.canonical.path, 'data/canonical/urbanagent_poi_master_v1.csv');
 });

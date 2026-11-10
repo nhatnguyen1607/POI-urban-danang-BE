@@ -31,6 +31,21 @@ async function initExpertSystem() {
   return { reteNetwork, engine, FuzzyLogic, poiEngine };
 }
 
+function routeError(code, message, cause) {
+  const error = new Error(message, cause ? { cause } : undefined);
+  error.code = code;
+  // Keep legacy /api/route HTTP/error shape; category is carried in details.
+  return error;
+}
+
+function validateRouteCoordinates(originLat, originLng, destLat, destLng) {
+  if (![originLat, originLng, destLat, destLng].every(value => typeof value === 'number' && Number.isFinite(value))
+    || Math.abs(originLat) > 90 || Math.abs(destLat) > 90
+    || Math.abs(originLng) > 180 || Math.abs(destLng) > 180) {
+    throw routeError('INVALID_ROUTE_COORDINATES', 'Invalid origin or destination coordinates');
+  }
+}
+
 /**
  * Fetch real driving route from OSRM public API
  */
@@ -38,26 +53,55 @@ async function fetchOSRMRoute(originLat, originLng, destLat, destLng) {
   // Use alternatives=3 to get up to 3 alternative routes
   const url = `https://router.project-osrm.org/route/v1/driving/${originLng},${originLat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true&annotations=true&alternatives=3`;
 
-  const response = await osrmGuard.execute(
+  validateRouteCoordinates(originLat, originLng, destLat, destLng);
+  // Cache/coalesce parsed values, never a single-use Fetch Response.
+  return osrmGuard.execute(
     `${originLat},${originLng}:${destLat},${destLng}`,
-    ({ signal }) => fetch(url, { signal }),
+    async ({ signal }) => {
+      let response;
+      let raw;
+      try {
+        response = await fetch(url, { signal });
+        raw = await response.text();
+      } catch (cause) {
+        throw routeError('OSRM_NETWORK', `OSRM network failure: ${cause.message}`, cause);
+      }
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (cause) {
+        if (response.ok) throw routeError('OSRM_PARSE', 'OSRM returned invalid JSON', cause);
+      }
+      if (!response.ok) {
+        const error = routeError('OSRM_HTTP', `OSRM HTTP ${response.status}${data?.code ? ` (${data.code})` : ''}${data?.message ? `: ${data.message}` : ''}`);
+        error.upstreamStatus = response.status;
+        throw error;
+      }
+      if (data?.code !== 'Ok') {
+        throw routeError(data?.code === 'NoRoute' ? 'OSRM_NO_ROUTE' : 'OSRM_SERVICE',
+          `OSRM ${data?.code || 'Unknown'}${data?.message ? `: ${data.message}` : ''}`);
+      }
+      if (!Array.isArray(data.routes) || data.routes.length === 0) {
+        throw routeError('OSRM_NO_ROUTE', 'OSRM NoRoute: no routes returned');
+      }
+      if (data.routes.some(route => !route || !Number.isFinite(route.distance) || route.distance < 0
+        || !Number.isFinite(route.duration) || route.duration < 0
+        || route.geometry?.type !== 'LineString' || !Array.isArray(route.geometry.coordinates)
+        || route.geometry.coordinates.length < 2
+        || route.geometry.coordinates.some(point => !Array.isArray(point) || point.length < 2
+          || !Number.isFinite(point[0]) || Math.abs(point[0]) > 180
+          || !Number.isFinite(point[1]) || Math.abs(point[1]) > 90)
+        || !Array.isArray(route.legs?.[0]?.steps))) {
+        throw routeError('OSRM_PARSE', 'OSRM returned an invalid route payload');
+      }
+      return data.routes.map(route => ({
+        geometry: route.geometry,
+        distance: route.distance,
+        duration: route.duration,
+        steps: route.legs[0].steps,
+      }));
+    },
   );
-  if (!response.ok) {
-    throw new Error(`OSRM API error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) {
-    throw new Error('No route found by OSRM');
-  }
-
-  // Return array of routes
-  return data.routes.map(route => ({
-    geometry: route.geometry,
-    distance: route.distance,
-    duration: route.duration,
-    steps: route.legs[0].steps,
-  }));
 }
 
 /**
@@ -69,6 +113,7 @@ async function fetchOSRMRoute(originLat, originLng, destLat, destLng) {
  * @returns {Object} Route + ES validation results
  */
 async function findOptimalRoute(originLat, originLng, destLat, destLng) {
+  validateRouteCoordinates(originLat, originLng, destLat, destLng);
   if (!reteNetwork.loaded) {
     await reteNetwork.load();
   }
@@ -156,4 +201,5 @@ module.exports = {
   FuzzyLogic,
   POIDensityEngine,
   fetchOSRMRoute,
+  validateRouteCoordinates,
 };
