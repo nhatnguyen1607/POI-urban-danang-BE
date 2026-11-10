@@ -2882,3 +2882,8 @@ Final verdict: **BLOCKED_BY_PERMISSIONS**.
   protection or use force push. Recheck current main before publishing.
 - Even after access is restored, main merge would trigger deployment. This task
   prohibits automatic production deploy; no automatic merge is proposed.
+
+
+## 2026-11-10 - NaviGo Git CLI publication recovery
+
+Both original integration commits were normally pushed to integration/navigo-audit-2026-11-10; main unchanged. PR creation still blocked: connected GitHub app returns 403 on both PR-create calls, and gh is unavailable. FE build + 19 tests PASS; main/integration lint identical (98 errors, 2 warnings; zero regression). BE rerun: 403 total, 388 PASS, 0 FAIL, 15 existing SKIP. Functions build PASS; canonical 4173-POI bytes/hash unchanged; twelve generated Phase4 outputs restored to exact pre-test bytes. No runtime, baseline or fixture changes in recovery. All technology inventory modules retained; real model/Firebase/PostGIS/browser/live-provider E2E unverified. No branch deletion, force push, main push, merge, workflow dispatch or production deploy. Full evidence: docs/maintenance/NAVIGO_PUBLICATION_RECOVERY.md.
