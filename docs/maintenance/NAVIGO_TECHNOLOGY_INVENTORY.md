@@ -1,3 +1,11 @@
+## Current final-integration status - 2026-11-10
+
+Integration branches are published. GitHub CLI 2.103.3 is now securely authenticated via Windows keyring; PR creation and remote checks are in progress. Earlier local-only/permission verdicts below are historical. See [final integration record](NAVIGO_FINAL_INTEGRATION.md) for current tests, technology preservation, backups and deployment gates. No merge or cleanup performed.
+
+---
+
+## Historical audit record (superseded where noted above)
+
 # NaviGo technology inventory
 
 | Component | Implementation / evidence | Runtime classification and limit |

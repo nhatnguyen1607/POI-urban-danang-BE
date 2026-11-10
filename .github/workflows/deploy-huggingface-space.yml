@@ -47,6 +47,8 @@ jobs:
           URBANAGENT_TEST_TEMP_ROOT: ${{ runner.temp }}
         run: >-
           node --test
+          tests/phase6/routeBodyRegression.test.js
+          tests/phase6/routeMatrixRegression.test.js
           tests/phase5/phase5HfDeploymentPackaging.test.js
           tests/phase5/phase5RuntimeDataPackaging.test.js
           tests/phase5/phase5ProductE2E.test.js
