@@ -1,6 +1,13 @@
-## Current final-integration status - 2026-11-10
+## Current final status - 2026-11-10
 
-Integration branches are published. GitHub CLI 2.103.3 is now securely authenticated via Windows keyring; PR creation and remote checks are in progress. Earlier local-only/permission verdicts below are historical. See [final integration record](NAVIGO_FINAL_INTEGRATION.md) for current tests, technology preservation, backups and deployment gates. No merge or cleanup performed.
+**Verdict: BLOCKED_BY_PRODUCTION_DEPLOYMENT_GATE.**
+
+- [FE PR #21](https://github.com/nhatnguyen1607/POI-urban-danang-FE/pull/21) and [BE PR #44](https://github.com/nhatnguyen1607/POI-urban-danang-BE/pull/44) are OPEN, Ready for Review, MERGEABLE/CLEAN. No merge performed; no merge SHA.
+- GitHub CLI 2.103.3 securely authenticated as Vuz14 via Windows keyring. PRs were created through CLI after duplicate checks. Earlier connector 403 / local-only / no-PR verdicts are historical and superseded.
+- FE Vercel preview success. [BE safe integration-ref CI](https://github.com/nhatnguyen1607/POI-urban-danang-BE/actions/runs/42798289516) SUCCESS: 38/38 focused tests, payload install/data/startup/CORS validation PASS; Hugging Face sync SKIPPED. No absent-checks-as-PASS claim.
+- HF_AUTO_DEPLOY_ENABLED=true: backend main merge triggers production deployment. Existing FE main has a Vercel deployment labeled Production; integration deploys Preview. Production changes were not authorized, so both PRs remain unmerged.
+- No branch deleted. All 70 original branch names/SHAs retained; 72 current branches including 2 integrations. Verified full-ref bundle backups and cleanup manifest under D:/CD1_finance/navigo-audit/backups-final-integration/.
+- Full quality, review/protection, OSRM equivalence, technology and cleanup evidence: [final integration record](NAVIGO_FINAL_INTEGRATION.md).
 
 ---
 
